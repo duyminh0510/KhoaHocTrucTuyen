@@ -1,28 +1,51 @@
 package com.duantn.entitys;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Table(name = "DanhMuc")
-public class DanhMuc implements Serializable {
+@Table(name = "danhmuc")
+public class DanhMuc {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer danhmucId;
 
-    @Column(name = "TenDanhMuc", nullable = false)
+    @Column(nullable = false)
     private String tenDanhMuc;
 
-    @CreationTimestamp
-    @Column(name = "ngay_tao", updatable = false)
-    private LocalDateTime ngayTao;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ngayTao = new Date();
+
+    // Getter & Setter
+    public Integer getDanhmucId() {
+        return danhmucId;
+    }
+
+    public void setDanhmucId(Integer danhmucId) {
+        this.danhmucId = danhmucId;
+    }
+
+    public String getTenDanhMuc() {
+        return tenDanhMuc;
+    }
+
+    public void setTenDanhMuc(String tenDanhMuc) {
+        this.tenDanhMuc = tenDanhMuc;
+    }
+
+    public Date getNgayTao() {
+        return ngayTao;
+    }
+
+    public void setNgayTao(Date ngayTao) {
+        this.ngayTao = ngayTao;
+    }
 }

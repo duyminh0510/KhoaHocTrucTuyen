@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách danh mục</title>
+  </head>
+  <body>
+    <h1>Danh sách danh mục</h1>
+
+    <a th:href="@{/danhmuc/add}">Thêm danh mục mới</a>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên danh mục</th>
+          <th>Ngày tạo</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="dm : ${danhmucs}">
+          <td th:text="${dm.danhmucId}">1</td>
+          <td th:text="${dm.tenDanhMuc}">Tên danh mục</td>
+          <td th:text="${#dates.format(dm.ngayTao, 'dd/MM/yyyy HH:mm')}">
+            Ngày tạo
+          </td>
+          <td>
+            <a th:href="@{/danhmuc/edit/{id}(id=${dm.danhmucId})}">Sửa</a>
+            <form
+              th:action="@{/danhmuc/delete/{id}(id=${dm.danhmucId})}"
+              method="post"
+              style="display: inline-block"
+              onsubmit="return confirm('Bạn có chắc muốn xoá danh mục này?');"
+            >
+              <button type="submit">Xoá</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

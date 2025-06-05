@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sửa danh mục</title>
+  </head>
+  <body>
+    <h1>Sửa danh mục</h1>
+
+    <form
+      th:action="@{/danhmuc/edit/{id}(id=${danhmuc.danhmucId})}"
+      th:object="${danhmuc}"
+      method="post"
+    >
+      <label>Tên danh mục:</label>
+      <input
+        type="text"
+        th:field="*{tenDanhMuc}"
+        placeholder="Tên danh mục"
+        required
+      />
+      <button type="submit">Cập nhật</button>
+    </form>
+
+    <a th:href="@{/danhmuc}">Quay lại danh sách</a>
+  </body>
+</html>
