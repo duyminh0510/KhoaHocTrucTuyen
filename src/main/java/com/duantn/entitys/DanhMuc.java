@@ -1,17 +1,24 @@
 package com.duantn.entitys;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import lombok.*;
 
 @Entity
-@Table(name = "danhmuc")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "danh_muc")
 public class DanhMuc {
 
     @Id
@@ -21,31 +28,11 @@ public class DanhMuc {
     @Column(nullable = false)
     private String tenDanhMuc;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ngayTao = new Date();
+    @CreationTimestamp
+    @Column(name = "ngay_tao", updatable = false)
+    private LocalDateTime ngayTao;
 
-    // Getter & Setter
-    public Integer getDanhmucId() {
-        return danhmucId;
-    }
-
-    public void setDanhmucId(Integer danhmucId) {
-        this.danhmucId = danhmucId;
-    }
-
-    public String getTenDanhMuc() {
-        return tenDanhMuc;
-    }
-
-    public void setTenDanhMuc(String tenDanhMuc) {
-        this.tenDanhMuc = tenDanhMuc;
-    }
-
-    public Date getNgayTao() {
-        return ngayTao;
-    }
-
-    public void setNgayTao(Date ngayTao) {
-        this.ngayTao = ngayTao;
-    }
+    @UpdateTimestamp
+    @Column(name = "ngay_cap_nhat")
+    private LocalDateTime ngayCapNhat;
 }

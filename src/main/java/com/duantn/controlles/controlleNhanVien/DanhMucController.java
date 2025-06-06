@@ -1,12 +1,9 @@
-package com.duantn.controlles;
+package com.duantn.controlles.controlleNhanVien;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import com.duantn.entitys.DanhMuc;
 import com.duantn.services.DanhMucService;
 
@@ -23,8 +20,8 @@ public class DanhMucController {
     @GetMapping
     public String listDanhMuc(Model model) {
         model.addAttribute("danhmucs", danhMucService.findAll());
-        model.addAttribute("danhmuc", new DanhMuc()); // form thêm mới
-        return "danhmuc";
+        model.addAttribute("danhmuc", new DanhMuc());
+        return "views/gdienNhanVien/danhmuc";
     }
 
     @PostMapping("/add")
@@ -35,13 +32,13 @@ public class DanhMucController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        DanhMuc dm = danhMucService.findById(id);
-        if (dm == null) {
+        DanhMuc danhMuc = danhMucService.findById(id);
+        if (danhMuc == null) {
             return "redirect:/danhmuc";
         }
-        model.addAttribute("danhmuc", dm);
+        model.addAttribute("danhmuc", danhMuc);
         model.addAttribute("danhmucs", danhMucService.findAll());
-        return "danhmuc";
+        return "views/gdienNhanVien/danhmuc";
     }
 
     @PostMapping("/edit")
