@@ -3,6 +3,8 @@ package com.duantn.entitys;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,9 @@ import lombok.*;
 @Builder
 @Table(name = "BinhLuan")
 public class BinhLuan implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer binhluanId;
@@ -20,7 +25,8 @@ public class BinhLuan implements Serializable {
     @Column(name = "NoiDung", nullable = false)
     private String noiDung;
 
-    @Column(name = "NgayBinhLuan", nullable = false)
+    @CreationTimestamp
+    @Column(name = "NgayBinhLuan", nullable = false, updatable = false)
     private LocalDateTime ngayBinhLuan;
 
     @ManyToOne

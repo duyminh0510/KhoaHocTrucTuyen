@@ -26,11 +26,16 @@ public class ChungChi implements Serializable {
     @Column(name = "DuongDanFile", nullable = false)
     private String duongDanFile;
 
-    @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private Account accounts;
+    @Column(name = "tenKhoaHoc")
+    private String tenKhoaHoc;
+
+    @Column(name = "maHocVien")
+    private Integer maHocVien;
+
+    @Column(name = "tenHocVien")
+    private String tenHocVien;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private Course courses;
+    @JoinColumn(name = "danghocId", nullable = false)
+    private DangHoc danghoc;
 }

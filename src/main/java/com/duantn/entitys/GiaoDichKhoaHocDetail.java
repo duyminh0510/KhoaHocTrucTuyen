@@ -1,6 +1,7 @@
 package com.duantn.entitys;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,14 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "GiaoDichKhoaHoc_Detail")
-public class GiaoDichKhoaHoc_Detail implements Serializable {
+@Table(name = "GiaoDichKhoaHocDetail")
+public class GiaoDichKhoaHocDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "DonGia", nullable = false)
-    private Double donGia;
+    @Column(name = "dongia", precision = 12, scale = 2, nullable = false)
+    private BigDecimal dongia;
 
     @ManyToOne
     @JoinColumn(name = "giaodichId", nullable = false)

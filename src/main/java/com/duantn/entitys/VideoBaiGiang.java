@@ -12,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -21,20 +21,18 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "CauHoi")
-public class CauHoi implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "VideoBaiGiang")
+public class VideoBaiGiang implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cauHoiId;
+    private Integer Id;
 
-    @Column(name = "cauHoiSo")
-    private Integer cauHoiSo;
+    @Column(name = "tenBaiTap")
+    private String url_video;
 
-    @Column(name = "tenCauHoi")
-    private String tenCauHoi;
+    @Column(name = "mota")
+    private String mota;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
@@ -44,11 +42,10 @@ public class CauHoi implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
-    @Column(name = "trangthai")
-    private Boolean trangthai;
+    @Column(name = "trangThai")
+    private Boolean trangThai;
 
-    @ManyToOne
-    @JoinColumn(name = "tracnghiemId", nullable = false)
-    private BaiTracNghiem baiTracNghiem;
-
+    @OneToOne
+    @JoinColumn(name = "baiGiangId", unique = true)
+    private BaiGiang baiGiang;
 }

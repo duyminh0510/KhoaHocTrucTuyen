@@ -21,18 +21,24 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "BaiTap")
-public class BaiTap implements Serializable {
+@Table(name = "Chuong")
+public class Chuong implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer baiTapId;
+    @Column(name = "chuongId")
+    private Integer chuongId;
 
-    @Column(name = "tenBaiTap")
-    private String tenBaiTap;
+    @Column(name = "tenchuong")
+    private String tenchuong;
 
-    @Column(name = "trangThai")
-    private Boolean trangThai;
+    @Column(name = "mota")
+    private String mota;
+
+    @Column(name = "thutuchuong")
+    private Integer thutuchuong;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
@@ -42,7 +48,11 @@ public class BaiTap implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
+    @Column(name = "trangthai")
+    private Boolean trangthai;
+
     @ManyToOne
-    @JoinColumn(name = "baiGiangId")
-    private BaiGiang baiGiang;
+    @JoinColumn(name = "courseId", nullable = false)
+    private Course courses;
+
 }

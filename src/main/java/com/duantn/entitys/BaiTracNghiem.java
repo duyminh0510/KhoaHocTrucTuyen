@@ -12,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -21,20 +21,17 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "CauHoi")
-public class CauHoi implements Serializable {
+@Table(name = "BaiTracNghiem")
+public class BaiTracNghiem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cauHoiId;
+    private Integer tracnghiemId;
 
-    @Column(name = "cauHoiSo")
-    private Integer cauHoiSo;
-
-    @Column(name = "tenCauHoi")
-    private String tenCauHoi;
+    @Column(name = "tenbai")
+    private String tenbai;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
@@ -47,8 +44,8 @@ public class CauHoi implements Serializable {
     @Column(name = "trangthai")
     private Boolean trangthai;
 
-    @ManyToOne
-    @JoinColumn(name = "tracnghiemId", nullable = false)
-    private BaiTracNghiem baiTracNghiem;
+    @OneToOne
+    @JoinColumn(name = "baiGiangId", unique = true)
+    private BaiGiang baiGiang;
 
 }

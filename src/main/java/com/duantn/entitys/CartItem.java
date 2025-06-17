@@ -1,7 +1,10 @@
 package com.duantn.entitys;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,9 +20,10 @@ public class CartItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "DonGia", nullable = false)
-    private Double donGia;
+    @Column(name = "dongia", precision = 12, scale = 2, nullable = false)
+    private BigDecimal dongia;
 
+    @CreationTimestamp
     @Column(name = "NgayThem", nullable = false)
     private LocalDateTime ngayThem;
 
