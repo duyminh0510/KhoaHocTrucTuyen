@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Globaledu Login</title>
+  </head>
+
+  <body>
+    <main class="login">
+      <section>
+        <div class="container-fluid" style="margin-top: 65px;">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100">
+            <!-- Cột hình ảnh -->
+            <div
+              class="col-md-6 d-flex justify-content-center align-items-center">
+              <img th:src="@{/photos/logodangnhap.png}"
+                class="img-fluid custom-img" alt="Học tập online">
+            </div>
+            <!-- Form đăng nhập -->
+            <div class="col-md-6">
+              <div style="width: 100%; max-width: 450px;">
+                <h2 class="text-center mb-4">🔑 Đăng nhập để tiếp tục học tập
+                  nào bạn</h2>
+                <form action="/login/form" method="post">
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control"
+                      placeholder="Nhập email" autocomplete="off">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" name="password" class="form-control"
+                      placeholder="Nhập mật khẩu" autocomplete="new-password">
+                  </div>
+                  <div style="color: red">
+                    <p th:text="${error}"></p>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-primary w-100">Đăng nhập</button>
+                  </div>
+                  <div class="text-center mt-3">
+                    <div class="d-flex align-items-center text-center my-3">
+                      <hr class="flex-grow-1 me-2">
+                      <p class="mb-0">Tùy chọn đăng nhập khác:</p>
+                      <hr class="flex-grow-1 ms-2">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                      <a href="#" class="btn-google" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Đăng nhập bằng Google">
+                        <img th:src="@{/photos/google.png}"
+                          alt="Đăng nhập với Google">
+                      </a>
+                    </div>
+
+                  </div>
+                  <div class="text-center mt-3">
+                    <p>Không có tài khoản? <a style="text-decoration: none;"
+                        href="#">Đăng ký</a></p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
+  </body>
+
+</html>

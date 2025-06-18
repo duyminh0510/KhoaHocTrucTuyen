@@ -28,7 +28,7 @@ public class VideoBaiGiang implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    @Column(name = "tenBaiTap")
+    @Column(name = "url_video")
     private String url_video;
 
     @Column(name = "mota")

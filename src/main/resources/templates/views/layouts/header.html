@@ -1,14 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <meta charset="UTF-8" />
+        <title>Header GlobalEdu</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        /* Top bar */
+        
+        .top-bar {
+            background-color: #0b1c36;
+            color: white;
+            padding: 4px 20px;
+            font-size: 14px;
+        }
+        
+        .top-bar h6 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        /* Header chính */
+        
+        .header-main {
+            background-color: #fff;
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container img.logo-img {
+            height: 80px;
+            width: auto;
+            display: block;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            /* hoặc điều chỉnh tùy theo ý bạn */
+            height: 40px;
+            object-fit: cover;
+            /* đảm bảo ảnh không bị méo */
+            border-radius: 50%;
+            /* làm tròn thành hình tròn */
+            display: block;
+            margin: 0 auto;
+            /* căn giữa theo chiều ngang */
+        }
+        /* Thanh tìm kiếm */
+        
+        .search-bar {
+            flex-grow: 1;
+            max-width: 400px;
+            margin: 0 20px;
+        }
+        
+        .search-wrapper {
+            position: relative;
+        }
+        
+        .search-wrapper input {
+            width: 100%;
+            border: 1px solid #cccccc !important;
+            background-color: #e5e5e5;
+            padding: 6px 32px 6px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .search-wrapper input:focus {
+            outline: none;
+        }
+        
+        .search-wrapper i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: gray;
+        }
+        /* Icon + text bên phải */
+        
+        .icon-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .icon-group i {
+            font-size: 18px;
+            color: #0b1c36;
+            cursor: pointer;
+        }
+        
+        .icon-group span {
+            font-size: 14px;
+            color: #0b1c36;
+        }
+        /* Nav dưới */
+        
+        nav.bottom-nav {
+            background-color: #0b1c36;
+            padding: 4px 20px;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .bottom-nav .menu-icon {
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        .bottom-nav .menu-container {
+            display: flex;
+            gap: 17px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .bottom-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 30px;
+        }
+        
+        .bottom-nav a:hover {
+            background-color: white;
+            color: black;
+            border-radius: 15px;
+        }
+        
+        .bottom-nav a.active {
+            background-color: white;
+            color: black;
+            border-radius: 15px;
+            padding: 0px 5px;
+        }
+        
+        .icon-link {
+            text-decoration: none;
+        }
+    </style>
     </head>
 
     <body>
-        <h1>header</h1>
+
+        <!-- Top bar -->
+        <div class="top-bar d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Chào mừng bạn đến với hệ thống học tập trực tuyến!
+            </h6>
+            <div>
+                <i class="fas fa-phone text-info"></i> 035 593 0136
+                <i class="fas fa-envelope text-primary ms-3"></i>
+                duantotnghiep@gmail.com
+            </div>
+        </div>
+
+        <!-- Main header -->
+        <div class="header-main">
+            <!-- Logo -->
+            <div class="d-flex align-items-center logo-container">
+                <a th:href="@{/}">
+                    <img th:src="@{/photos/logochinh.png}" alt="Logo"
+                        class="logo-img me-2" />
+                </a>
+            </div>
+
+            <!-- Search -->
+            <div class="search-bar">
+                <div class="search-wrapper">
+                    <input type="text"
+                        placeholder="Tìm kiếm với Globaledu..." />
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <!-- Icons -->
+            <div class="icon-group">
+                <a th:href="@{/khoa-hoc-cua-toi}" class="icon-link">
+                    <span>KHÓA HỌC CỦA TÔI</span>
+                </a>
+                <a th:href="@{/yeu-thich}" class="icon-link">
+                    <i class="fas fa-heart text-danger"></i>
+                </a>
+                <a th:href="@{/gio-hang}" class="icon-link">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <a th:href="@{/thong-bao}" class="icon-link">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a th:href="@{/tai-khoan}" class="icon-link">
+                    <img th:src="@{/photos/avartar.jpg}" alt="Avatar người dùng"
+                        class="user-avatar" />
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Bottom menu -->
+        <nav class="bottom-nav">
+            <div class="menu-icon">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="menu-container">
+                <a href="#">CNTT & PHẦN MỀM</a>
+                <a href="#">ENGLISH</a>
+                <a href="#">KINH TẾ</a>
+                <a href="#">TRANG CHỦ</a>
+                <a href="#">GIỚI THIỆU</a>
+                <a href="#">CHÍNH TRỊ & PHÁP LUẬT</a>
+                <a href="#">QTKD & MARKETING</a>
+                <a href="#">Phát triển cá nhân</a>
+                <a href="#">Thiết kế đồ họa</a>
+
+                <a th:href="@{/}"
+                    th:classappend="${currentUri == '/'} ? 'active' : ''">
+                    KINH TẾ
+                </a>
+            </div>
+        </nav>
+
     </body>
 
 </html>

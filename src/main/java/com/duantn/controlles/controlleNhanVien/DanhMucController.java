@@ -1,4 +1,4 @@
-package com.duantn.controlles.controlleNhanVien;
+package com.duantn.controlles.controllenhanvien;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
