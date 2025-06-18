@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/auth")
 public class LoginController {
 
     @Autowired
@@ -37,30 +38,9 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("account", new Account());
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String handleRegister(
-            @ModelAttribute("account") Account account,
-            Model model) {
-
-        Account created = accountService.register(account);
-
-        if (created == null) {
-            model.addAttribute("error", "Email đã tồn tại!");
-            return "register";
-        }
-
-        return "redirect:/login";
-    }
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 }
