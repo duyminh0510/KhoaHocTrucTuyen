@@ -1,4 +1,4 @@
-package com.duantn.controlles;
+package com.duantn.controlles.controllechung;
 
 import com.duantn.dtos.GiangVienRegistrationDto;
 import com.duantn.entitys.Account;

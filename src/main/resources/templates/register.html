@@ -1,49 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-  <title>Đăng ký tài khoản</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+  <head>
+    <title>Đăng ký tài khoản</title>
+    <meta charset="UTF-8">
+  </head>
 
-<body>
-  <h2>Đăng ký tài khoản mới</h2>
+  <body>
+    <main>
+      <h2>Đăng ký tài khoản mới</h2>
 
-  <form th:action="@{/auth/register}" th:object="${user}" method="post">
-    <div>
-      <label>Họ tên:</label>
-      <input type="text" th:field="*{name}" placeholder="Họ và tên" />
-      <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-    </div>
+      <form th:action="@{/auth/register}" th:object="${user}" method="post">
+        <div>
+          <label>Họ tên:</label>
+          <input type="text" th:field="*{name}" placeholder="Họ và tên" />
+          <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
 
-    <div>
-      <label>Email:</label>
-      <input type="email" th:field="*{email}" placeholder="Email" />
-      <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-    </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" th:field="*{email}" placeholder="Email" />
+          <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
 
-    <div>
-      <label>Số điện thoại:</label>
-      <input type="text" th:field="*{phone}" placeholder="Số điện thoại" />
-      <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
-    </div>
+        <div>
+          <label>Số điện thoại:</label>
+          <input type="text" th:field="*{phone}" placeholder="Số điện thoại" />
+          <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+        </div>
 
-    <div>
-      <label>Mật khẩu:</label>
-      <input type="password" th:field="*{password}" placeholder="Mật khẩu" />
-      <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-    </div>
+        <div>
+          <label>Mật khẩu:</label>
+          <input type="password" th:field="*{password}"
+            placeholder="Mật khẩu" />
+          <div th:if="${#fields.hasErrors('password')}"
+            th:errors="*{password}"></div>
+        </div>
 
-    <button type="submit">Đăng ký</button>
-  </form>
+        <button type="submit">Đăng ký</button>
+      </form>
 
-  <div th:if="${success}">
-    <p th:text="${success}" style="color:green;"></p>
-  </div>
+      <div th:if="${success}">
+        <p th:text="${success}" style="color:green;"></p>
+      </div>
 
-  <p>Bạn đã có tài khoản? <a th:href="@{/auth/login}">Đăng nhập</a></p>
+      <p>Bạn đã có tài khoản? <a th:href="@{/auth/login}">Đăng nhập</a></p>
 
-</body>
+    </main>
+
+  </body>
 
 </html>

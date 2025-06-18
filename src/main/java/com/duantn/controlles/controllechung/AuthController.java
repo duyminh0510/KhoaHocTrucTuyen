@@ -1,4 +1,4 @@
-package com.duantn.controlles;
+package com.duantn.controlles.controllechung;
 
 import com.duantn.dtos.UserRegistrationDto;
 import com.duantn.entitys.Account;
@@ -121,7 +121,7 @@ public class AuthController {
         tokenRepository.delete(token);
         session.removeAttribute("pendingUser");
 
-        return "redirect:/auth/login";
+        return "redirect:/login";
     }
 
 }

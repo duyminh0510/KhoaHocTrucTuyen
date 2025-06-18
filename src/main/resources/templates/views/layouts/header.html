@@ -1,11 +1,12 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
     <head>
         <meta charset="UTF-8" />
-        <title>Header GlobalEdu</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Header GlobalEdu</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <style>
         body {
@@ -17,8 +18,12 @@
         .top-bar {
             background-color: #0b1c36;
             color: white;
-            padding: 4px 20px;
+            padding: 6px 20px;
             font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
         .top-bar h6 {
@@ -26,15 +31,28 @@
             font-size: 14px;
             font-weight: normal;
         }
+        
+        .top-bar .contact {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            align-items: center;
+        }
+        
+        .top-bar .contact i {
+            margin-right: 5px;
+            color: #00bfff;
+        }
         /* Header chính */
         
         .header-main {
             background-color: #fff;
             padding: 0 20px;
-            height: 70px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         
         .logo-container img.logo-img {
@@ -45,15 +63,17 @@
         
         .user-avatar {
             width: 40px;
-            /* hoặc điều chỉnh tùy theo ý bạn */
             height: 40px;
             object-fit: cover;
-            /* đảm bảo ảnh không bị méo */
             border-radius: 50%;
-            /* làm tròn thành hình tròn */
             display: block;
-            margin: 0 auto;
-            /* căn giữa theo chiều ngang */
+        }
+        /* Avatar link căn giữa */
+        
+        .icon-link.avatar-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         /* Thanh tìm kiếm */
         
@@ -153,19 +173,23 @@
         .icon-link {
             text-decoration: none;
         }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+        }
     </style>
     </head>
 
     <body>
-
         <!-- Top bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <h6 class="mb-0">Chào mừng bạn đến với hệ thống học tập trực tuyến!
-            </h6>
-            <div>
-                <i class="fas fa-phone text-info"></i> 035 593 0136
-                <i class="fas fa-envelope text-primary ms-3"></i>
-                duantotnghiep@gmail.com
+        <div class="top-bar">
+            <h6>Chào mừng bạn đến với hệ thống học tập trực tuyến!</h6>
+            <div class="contact">
+                <span><i class="fas fa-phone"></i>035 593 0136</span>
+                <span><i
+                        class="fas fa-envelope"></i>duantotnghiep@gmail.com</span>
             </div>
         </div>
 
@@ -202,14 +226,11 @@
                 <a th:href="@{/thong-bao}" class="icon-link">
                     <i class="fas fa-bell"></i>
                 </a>
-                <a th:href="@{/tai-khoan}" class="icon-link">
+                <a th:href="@{/tai-khoan}" class="icon-link avatar-link">
                     <img th:src="@{/photos/avartar.jpg}" alt="Avatar người dùng"
                         class="user-avatar" />
-
                 </a>
-
             </div>
-
         </div>
 
         <!-- Bottom menu -->
@@ -227,143 +248,11 @@
                 <a href="#">QTKD & MARKETING</a>
                 <a href="#">Phát triển cá nhân</a>
                 <a href="#">Thiết kế đồ họa</a>
-
                 <a th:href="@{/}"
-                    th:classappend="${currentUri == '/'} ? 'active' : ''">
-                    KINH TẾ
-                </a>
+                    th:classappend="${currentUri == '/'} ? 'active' : ''">KINH
+                    TẾ</a>
             </div>
         </nav>
-
     </body>
-=======
-<!-- templates/fragments/header.html -->
-<div th:fragment="header">
-    <style>
-        /* CSS giữ nguyên như bạn đã viết */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
 
-        .top-bar {
-            background-color: #1d2939;
-            color: white;
-            font-size: 14px;
-            padding: 8px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-bar .right span {
-            margin-left: 15px;
-        }
->>>>>>> 6167dc0c9113ce285e6d0f0142867a23dbe71d02
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: white;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .search-bar {
-            flex-grow: 1;
-            margin: 0 30px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 90%;
-            padding: 10px 40px 10px 15px;
-            border: 1px solid #ccc;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-        }
-
-        .search-bar button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .header-buttons a {
-            margin-left: 10px;
-            padding: 8px 12px;
-            border: 1px solid #1d2939;
-            background-color: white;
-            color: #1d2939;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .header-buttons a:hover {
-            background-color: #1d2939;
-            color: white;
-        }
-
-        .header-buttons .highlight {
-            background-color: #1d2939;
-            color: white;
-        }
-    </style>
-
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div>Welcome to our website!</div>
-        <div class="right">
-            <span>📞 035 593 0136</span>
-            <span>📧 duantotnghiep@gmail.com</span>
-        </div>
-    </div>
-
-    <!-- Main Header -->
-    <div class="main-header">
-        <div class="logo">
-            <img src="/images/logo.png" alt="Globaledu Logo">
-            <strong style="color: #2d4b78; font-size: 18px;">GLOBALEDU</strong>
-        </div>
-
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm với Globaledu">
-            <button>🔍</button>
-        </div>
-
-        <div class="header-buttons">
-            <a href="/about">Về chúng tôi</a>
-            <a href="/cart">🛒</a>
-            <a th:href="@{/instructor/register}">Dạy trên GLOBALEDU</a>
-
-
-            <!-- Kiểm tra session -->
-            <span th:if="${session.studentName != null}">
-                <a th:text="'Xin chào, ' + ${session.studentName}" href="/dashboard"></a>
-                <a href="/logout">Đăng xuất</a>
-            </span>
-            <span th:unless="${session.studentName != null}">
-                <a th:href="@{/auth/login}">Đăng nhập</a>
-                <a th:href="@{/auth/register}" class="highlight">Đăng ký</a>
-            </span>
-        </div>
-    </div>
-</div>
+</html>
