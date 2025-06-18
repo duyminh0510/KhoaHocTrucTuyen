@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="vi" th:fragment="view(content, title)">
+
+<head th:replace="~{/views/gdienNhanVien/layout/headerNhanVien}">
+    <title th:replace="${title}">Hello</title>
+</head>
+
+<body>
+    <!-- <header th:replace="~{/views/gdienNhanVien/layout/navNhanVien}"></header> -->
+    <!-- <nav></nav> -->
+    <main th:replace="${content}">
+        <h1>Content</h1>
+    </main>
+    <!-- <div th:replace="~{/views/gdienNhanVien/layout/footerNhanVien}"></div> -->
+</body>
+
+</html>
