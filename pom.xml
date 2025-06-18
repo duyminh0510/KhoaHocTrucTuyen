@@ -89,8 +89,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+<<<<<<< HEAD
 
 		
+=======
+>>>>>>> 6167dc0c9113ce285e6d0f0142867a23dbe71d02
 	</dependencies>
 
 	<build>
