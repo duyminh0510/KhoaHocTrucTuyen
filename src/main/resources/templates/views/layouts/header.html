@@ -1,14 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
+  <!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Header</title>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
+    <link rel="stylesheet" th:href="@{/css/Admin/header.css}" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div th:fragment="adminHeader">
+        <div class="contact-info">
+          <span><img th:src="@{/icon/phone.png}" alt="" /> 035 593 0136</span>
+          <a href="mailto:duanlotnghiep@gmail.com"
+            ><img th:src="@{/icon/mail.png}" alt="" /><i
+              class="fas fa-envelope"
+            ></i>
+            duanlotnghiep@gmail.com
+          </a>
+        </div>
+        <div>
+          <div class="logo-section">
+          <img
+            th:src="@{/photos/logo22 (1).png}"
+            alt="Biểu tượng Globaledu"
+            class="logo"
+          />
 
-    <body>
-        <h1>header</h1>
-    </body>
+          <span>GLOBALEDU</span>
+        </div>
+        <div class="search-bar">
+          <input type="text" placeholder="Tìm kiếm với Globaledu" />
+          <button><i class="fas fa-search"></i></button>
+        </div>
 
+        <div class="user-actions">
+          <i class="fas fa-bell"></i>
+          <div class="user-profile">
+            <i class="fas fa-user-circle"></i>
+          </div>
+        </div>
+        </div>
+        
+      </div>
+    </header>
+    <script>
+      // ... script của header ...
+    </script>
+    </div>
+  </body>
 </html>
