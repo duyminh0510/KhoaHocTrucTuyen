@@ -38,7 +38,11 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        String redirectUrl = "/"; // trang mặc định
+        for (GrantedAuthority authority : authorities) {
+            System.out.println("Granted Authority: " + authority.getAuthority());
+        }
+
+        String redirectUrl = "/";
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
@@ -56,7 +60,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 redirectUrl = "/nhanvien";
                 break;
             }
-            System.out.println("Đăng nhập với quyền: " + role);
         }
 
         response.sendRedirect(redirectUrl);

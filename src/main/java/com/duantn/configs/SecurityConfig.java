@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/css/**", "/js/**", "/photos/**", "/favicon.ico")
                                                 .permitAll()
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
                                                 .requestMatchers("/giangvien/**").hasRole("GIANGVIEN")
                                                 .requestMatchers("/nhanvien/**").hasRole("NHANVIEN")
                                                 .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
@@ -56,6 +56,7 @@ public class SecurityConfig {
                 return new BCryptPasswordEncoder();
         }
 
+        @SuppressWarnings("removal")
         @Bean
         public AuthenticationManager authManager(HttpSecurity http) throws Exception {
                 return http.getSharedObject(AuthenticationManagerBuilder.class)

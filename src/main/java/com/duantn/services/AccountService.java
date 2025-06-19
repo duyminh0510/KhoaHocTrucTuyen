@@ -1,6 +1,6 @@
 package com.duantn.services;
 
-import com.duantn.entitys.Account;
+import com.duantn.entities.Account;
 
 public interface AccountService {
     Account login(String email, String password);
