@@ -1,20 +1,18 @@
-body {
+body.login {
     background-color: #f8f9fa;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
 }
 
-.bg-white {
-    width: 75%;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.custom-img {
+.login .custom-img {
     max-width: 80%;
     height: auto;
 }
 
-h2 {
+.login h2 {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
     font-weight: bold;
@@ -24,12 +22,12 @@ h2 {
     -webkit-text-fill-color: transparent;
 }
 
-.btn-primary {
+.login .btn-primary {
     background-color: #213252;
     border: none;
 }
 
-.btn-google img {
+.login .btn-google img {
     width: 50px;
     height: auto;
     display: block;
@@ -37,5 +35,36 @@ h2 {
     cursor: pointer;
     border: 1px solid rgb(184, 184, 184);
     background-color: rgb(232, 226, 226);
-    padding: 8px 8px;
+    padding: 8px;
+}
+
+hr {
+    border: none;
+    border-top: 1.5px solid rgb(118, 118, 118);
+    height: 1px;
+    margin: 0;
+}
+
+.login .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    transition: 0.3s ease-in-out;
+}
+
+.login .btn-primary:hover {
+    background-color: #16203b;
+    transition: background-color 0.3s ease;
+}
+
+.login form {
+    animation: fadeSlideIn 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeSlideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
