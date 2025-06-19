@@ -1,16 +1,21 @@
 package com.duantn.controlles.controllechung;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping("/")
-    public String kinhTePage(HttpServletRequest request, Model model) {
-        model.addAttribute("currentUri", request.getRequestURI());
+    @ModelAttribute("currentUri")
+    public String getCurrentUri(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return (uri == null || uri.isEmpty() || "/".equals(uri)) ? "/" : uri;
+    }
+
+    @RequestMapping("/")
+    public String requestMethodName() {
         return "views/gdienChung/home";
     }
 
