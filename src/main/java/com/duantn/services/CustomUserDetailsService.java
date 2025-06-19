@@ -9,17 +9,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.duantn.entitys.Account;
-import com.duantn.repository.AccountRepository;
+import com.duantn.entitys.TaiKhoan;
+import com.duantn.repository.TaiKhoanRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
         @Autowired
-        private AccountRepository accountRepo;
+        private TaiKhoanRepository accountRepo;
 
         @Override
         public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                Account account = accountRepo.findByEmail(email)
+                TaiKhoan account = accountRepo.findByEmail(email)
                                 .orElseThrow(() -> new UsernameNotFoundException("Tài khoản không tồn tại"));
 
                 String role = account.getRole().getName();

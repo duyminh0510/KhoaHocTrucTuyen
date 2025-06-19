@@ -35,7 +35,7 @@ public class BinhLuan implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account account;
+    private TaiKhoan account;
 
     @ManyToOne
     @JoinColumn(name = "baiGiangId", nullable = false)

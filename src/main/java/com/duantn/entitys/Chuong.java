@@ -53,6 +53,6 @@ public class Chuong implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "courseId", nullable = false)
-    private Course courses;
+    private KhoaHoc courses;
 
 }

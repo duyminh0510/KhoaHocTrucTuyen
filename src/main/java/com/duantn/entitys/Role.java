@@ -31,6 +31,6 @@ public class Role implements Serializable {
     // các mối quan hệ giữa các bảng
 
     @OneToMany(mappedBy = "role")
-    private List<Account> accounts;
+    private List<TaiKhoan> accounts;
 
 }

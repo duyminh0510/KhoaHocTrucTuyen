@@ -46,6 +46,6 @@ public class GiangVien implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account accounts;
+    private TaiKhoan accounts;
 
 }

@@ -35,7 +35,7 @@ public class KetQua implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account accounts;
+    private TaiKhoan accounts;
 
     @ManyToOne
     @JoinColumn(name = "tracnghiemId", nullable = false)

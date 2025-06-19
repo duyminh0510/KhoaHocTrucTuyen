@@ -51,7 +51,7 @@ public class DoanhThuGiangVien implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account accountGV;
+    private TaiKhoan accountGV;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "danghocId", nullable = false)

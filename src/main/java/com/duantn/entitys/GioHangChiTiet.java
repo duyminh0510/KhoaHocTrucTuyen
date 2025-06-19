@@ -1,6 +1,7 @@
 package com.duantn.entitys;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,25 +14,22 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "DanhGia")
-public class DanhGia implements Serializable {
+@Table(name = "CartItem")
+public class GioHangChiTiet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer danhgiaId;
+    private Integer id;
 
-    @Column(name = "NoiDung", nullable = false)
-    private String noiDung;
+    @Column(name = "dongia", precision = 12, scale = 2, nullable = false)
+    private BigDecimal dongia;
 
     @CreationTimestamp
-    @Column(name = "ngayDanhGia", nullable = false, updatable = false)
-    private LocalDateTime ngayDanhGia;
-
-    @Column(name = "DiemDanhGia", nullable = false)
-    private Integer diemDanhGia;
+    @Column(name = "NgayThem", nullable = false)
+    private LocalDateTime ngayThem;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan account;
+    @JoinColumn(name = "cartId", nullable = false)
+    private GioHang carts;
 
     @ManyToOne
     @JoinColumn(name = "courseId", nullable = false)

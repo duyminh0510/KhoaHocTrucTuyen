@@ -7,16 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.duantn.entitys.Account;
+import com.duantn.entitys.TaiKhoan;
 import com.duantn.entitys.Role;
-import com.duantn.repository.AccountRepository;
+import com.duantn.repository.TaiKhoanRepository;
 import com.duantn.repository.RoleRepository;
 
 @Component
 @RequiredArgsConstructor
 public class DataInitializer {
 
-    private final AccountRepository accountRepository;
+    private final TaiKhoanRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -30,13 +30,13 @@ public class DataInitializer {
     @PostConstruct
     @Transactional
     public void init() {
-        String superAdminEmail = "ngoctthpd10040@gmail.com";
+        String superAdminEmail = "globaledu237@gmail.com";
 
         // Tạo các vai trò cần thiết
         ensureRoleExists("ROLE_ADMIN");
-        ensureRoleExists("ROLE_INSTRUCTOR");
-        ensureRoleExists("ROLE_STUDENT");
-        ensureRoleExists("ROLE_EMPLOYEE");
+        ensureRoleExists("ROLE_NHANVIEN");
+        ensureRoleExists("ROLE_GIANGVIEN");
+        ensureRoleExists("ROLE_HOCVIEN");
 
         if (accountRepository.existsByEmail(superAdminEmail)) {
             return; // Đã tồn tại Super Admin
@@ -44,7 +44,7 @@ public class DataInitializer {
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
 
-        Account superAdminUser = Account.builder()
+        TaiKhoan superAdminUser = TaiKhoan.builder()
                 .name("Super Admin")
                 .email(superAdminEmail)
                 .password(passwordEncoder.encode("superpassword"))

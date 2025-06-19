@@ -56,6 +56,7 @@ public class SecurityConfig {
                 return new BCryptPasswordEncoder();
         }
 
+        @SuppressWarnings("removal")
         @Bean
         public AuthenticationManager authManager(HttpSecurity http) throws Exception {
                 return http.getSharedObject(AuthenticationManagerBuilder.class)

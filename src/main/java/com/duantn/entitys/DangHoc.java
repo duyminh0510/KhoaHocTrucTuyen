@@ -44,11 +44,11 @@ public class DangHoc implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account accounts;
+    private TaiKhoan accounts;
 
     @ManyToOne
     @JoinColumn(name = "courseId", nullable = false)
-    private Course courses;
+    private KhoaHoc courses;
 
     @OneToMany(mappedBy = "dangHoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DoanhThuGiangVien> danhSachDoanhThu;

@@ -42,5 +42,5 @@ public class GiaoDichKhoaHoc {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    private Account accounts;
+    private TaiKhoan accounts;
 }
