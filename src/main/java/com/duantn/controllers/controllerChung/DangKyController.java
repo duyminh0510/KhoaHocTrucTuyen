@@ -1,12 +1,12 @@
 package com.duantn.controllers.controllerChung;
 
 import com.duantn.dtos.DangKyHocVienDto;
-import com.duantn.entitys.TaiKhoan;
-import com.duantn.entitys.Role;
-import com.duantn.entitys.VerificationToken;
-import com.duantn.repository.TaiKhoanRepository;
-import com.duantn.repository.RoleRepository;
-import com.duantn.repository.VerificationTokenRepository;
+import com.duantn.entities.Role;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.entities.VerificationToken;
+import com.duantn.repositories.RoleRepository;
+import com.duantn.repositories.TaiKhoanRepository;
+import com.duantn.repositories.VerificationTokenRepository;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;

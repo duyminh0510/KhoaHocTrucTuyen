@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.duantn.entitys.TaiKhoan;
-import com.duantn.repository.TaiKhoanRepository;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.repositories.TaiKhoanRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

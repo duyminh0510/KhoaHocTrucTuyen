@@ -1,12 +1,12 @@
 package com.duantn.controllers.controllerChung;
 
 import com.duantn.dtos.DangKyGiangVienDto;
-import com.duantn.entitys.TaiKhoan;
-import com.duantn.entitys.GiangVien;
-import com.duantn.entitys.Role;
-import com.duantn.repository.TaiKhoanRepository;
-import com.duantn.repository.GiangVienRepository;
-import com.duantn.repository.RoleRepository;
+import com.duantn.entities.GiangVien;
+import com.duantn.entities.Role;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.repositories.GiangVienRepository;
+import com.duantn.repositories.RoleRepository;
+import com.duantn.repositories.TaiKhoanRepository;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

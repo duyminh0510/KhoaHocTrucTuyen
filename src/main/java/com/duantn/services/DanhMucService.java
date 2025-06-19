@@ -1,7 +1,8 @@
 package com.duantn.services;
 
 import java.util.List;
-import com.duantn.entitys.DanhMuc;
+
+import com.duantn.entities.DanhMuc;
 
 public interface DanhMucService {
     List<DanhMuc> findAll();

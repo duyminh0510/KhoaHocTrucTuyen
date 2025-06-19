@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.duantn.entitys.TaiKhoan;
-import com.duantn.entitys.Role;
-import com.duantn.repository.TaiKhoanRepository;
-import com.duantn.repository.RoleRepository;
+import com.duantn.entities.Role;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.repositories.RoleRepository;
+import com.duantn.repositories.TaiKhoanRepository;
 
 @Component
 @RequiredArgsConstructor
