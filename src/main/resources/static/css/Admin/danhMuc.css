@@ -1,0 +1,172 @@
+/* category-management.css */
+
+/* --- Form Thêm/Sửa Danh Mục --- */
+.category-form-section {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  border-left: 5px solid #007bff; /* Điểm nhấn màu xanh */
+}
+
+.category-form-section h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.4em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.category-form-section .form-group {
+  margin-bottom: 20px;
+}
+
+.category-form-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95em;
+}
+
+.category-form-section input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccd0d7;
+  border-radius: 6px;
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-form-section input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.category-form-section .form-actions {
+  display: flex;
+  gap: 10px; /* Khoảng cách giữa các nút */
+  justify-content: flex-start;
+  margin-top: 25px;
+}
+
+.category-form-section .btn-submit,
+.category-form-section .btn-cancel {
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none; /* Đối với thẻ <a> */
+  display: inline-block; /* Đối với thẻ <a> */
+  text-align: center;
+}
+
+.category-form-section .btn-submit {
+  background-color: #28a745; /* Màu xanh lá cho nút thêm/cập nhật */
+  color: white;
+  border: none;
+}
+
+.category-form-section .btn-submit:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.category-form-section .btn-cancel {
+  background-color: #6c757d; /* Màu xám cho nút hủy */
+  color: white;
+  border: none;
+}
+
+.category-form-section .btn-cancel:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+/* --- Bảng Hiển Thị Danh Mục --- */
+.category-list-section {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.category-list-section h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.4em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.category-table th,
+.category-table td {
+  padding: 12px 18px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.category-table th {
+  background-color: #1c2437;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.category-table tr:nth-child(even) {
+  background-color: #f8f9fa; /* Màu nền nhẹ hơn cho hàng chẵn */
+}
+
+.category-table tr:hover {
+  background-color: #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.category-table .actions {
+  white-space: nowrap; /* Ngăn các nút xuống dòng */
+}
+
+.category-table .btn-action {
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 8px;
+  display: inline-block;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.category-table .btn-action.edit {
+  background-color: #ffc107; /* Màu vàng cam */
+  color: #333;
+  border: 1px solid #ffc107;
+}
+
+.category-table .btn-action.edit:hover {
+  background-color: #e0a800;
+  transform: translateY(-1px);
+}
+
+.category-table .btn-action.delete {
+  background-color: #dc3545; /* Màu đỏ */
+  color: white;
+  border: 1px solid #dc3545;
+}
+
+.category-table .btn-action.delete:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}

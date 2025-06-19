@@ -1,0 +1,191 @@
+/* Thiết lập lại cơ bản & Kiểu toàn cầu */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex-grow: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #1c2437;
+  padding: 20px 0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #ffffff;
+}
+
+.sidebar ul li i {
+  margin-right: 10px;
+  font-size: 1.1em;
+}
+
+.sidebar ul li:hover {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+.sidebar ul li.active {
+  background-color: #e0f2f7;
+  color: #000000;
+  border-left: 4px solid #ffffff;
+  font-weight: 500;
+}
+
+/* Dashboard body */
+.dashboard-body {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.info-cards .card {
+  background-color: #1c2437;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.info-cards .card h3 {
+  font-size: 0.9em;
+  color: #bbb;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.info-cards .card p {
+  font-size: 2em;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.section-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #444;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+/* Charts and Tables Grid */
+.charts-and-tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* Grid items (chart, table...) */
+.grid-item {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Chart card */
+.chart-card h4 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: #1c2437;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.chart-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Table card */
+.table-card h4 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: #1c2437;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.table-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-card th,
+.table-card td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table-card th {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.table-card tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .info-cards {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .charts-and-tables-grid {
+    grid-template-columns: 1fr;
+  }
+}
