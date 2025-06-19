@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý danh mục - Globaledu</title>
+    <link rel="stylesheet" th:href="@{/css/Admin/danhMuc.css}" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <ul>
+            <li><i class="fas fa-chart-line"></i> Dashboard</li>
+            <li><i class="fas fa-users"></i> Quản lý người dùng</li>
+            <li class="active"><i class="fas fa-book"></i> Quản lý danh mục</li>
+            <li><i class="fas fa-wallet"></i> Quản lý tài chính</li>
+            <li><i class="fas fa-check-circle"></i> Kiểm duyệt nội dung</li>
+            <li><i class="fas fa-comments"></i> Đánh giá & phản hồi</li>
+            <li><i class="fas fa-info-circle"></i> Về chúng tôi</li>
+          </ul>
+        </aside>
+
+        <!-- Main content -->
+        <main class="dashboard-body">
+          <div class="form-container">
+            <h2>Thêm danh mục mới</h2>
+            <form
+              th:action="@{/admin/categories/save}"
+              th:object="${danhMuc}"
+              method="post"
+            >
+              <input type="hidden" th:field="*{danhmucId}" />
+
+              <label for="tenDanhMuc">Tên danh mục:</label>
+              <input type="text" th:field="*{tenDanhMuc}" required />
+
+              <button type="submit" class="btn">💾 Lưu</button>
+            </form>
+          </div>
+
+          <!-- Danh sách danh mục -->
+          <div class="form-container">
+            <h2>Danh sách danh mục</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tên danh mục</th>
+                  <th>Ngày tạo</th>
+                  <th>Ngày cập nhật</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="dm : ${danhSachDanhMuc}">
+                  <td th:text="${dm.danhmucId}">1</td>
+                  <td th:text="${dm.tenDanhMuc}">Lập trình</td>
+                  <td
+                    th:text="${#temporals.format(dm.ngayTao, 'dd/MM/yyyy HH:mm')}"
+                  ></td>
+                  <td
+                    th:text="${#temporals.format(dm.ngayCapNhat, 'dd/MM/yyyy HH:mm')}"
+                  ></td>
+                  <td>
+                    <a
+                      th:href="@{'/admin/categories/edit/' + ${dm.danhmucId}}"
+                      class="btn"
+                      >✏️</a
+                    >
+                    <a
+                      th:href="@{'/admin/categories/delete/' + ${dm.danhmucId}}"
+                      class="btn btn-danger"
+                      onclick="return confirm('Bạn có chắc muốn xóa?')"
+                      >🗑️</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

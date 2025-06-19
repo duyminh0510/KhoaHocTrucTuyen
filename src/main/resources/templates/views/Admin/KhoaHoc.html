@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý khóa học - Globaledu</title>
+    <link rel="stylesheet" th:href="@{/css/Admin/danhMuc.css}" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <ul>
+            <li><i class="fas fa-chart-line"></i> Dashboard</li>
+            <li><i class="fas fa-users"></i> Quản lý người dùng</li>
+            <li class="active"><i class="fas fa-book"></i> Quản lý khóa học</li>
+            <li><i class="fas fa-wallet"></i> Quản lý tài chính</li>
+            <li><i class="fas fa-check-circle"></i> Kiểm duyệt nội dung</li>
+            <li><i class="fas fa-comments"></i> Đánh giá & phản hồi</li>
+            <li><i class="fas fa-info-circle"></i> Về chúng tôi</li>
+          </ul>
+        </aside>
+
+        <!-- Main content -->
+        <main class="dashboard-body">
+          <div class="form-container">
+            <h1>Thêm / Sửa Khóa Học</h1>
+            <form
+              th:action="@{/admin/khoaHoc/save}"
+              th:object="${khoaHoc}"
+              method="post"
+            >
+              <input type="hidden" th:field="*{courseId}" />
+
+              <label>Tên khóa học:</label>
+              <input type="text" th:field="*{tenKhoaHoc}" required /><br />
+
+              <label>Giá gốc:</label>
+              <input
+                type="number"
+                step="0.01"
+                th:field="*{giagoc}"
+                required
+              /><br />
+
+              <label>Giá khuyến mãi:</label>
+              <input
+                type="number"
+                step="0.01"
+                th:field="*{giaKhuyenMai}"
+              /><br />
+
+              <label>Phần trăm giảm:</label>
+              <input type="number" th:field="*{phanTramGiam}" /><br />
+
+              <label>Ngày bắt đầu:</label>
+              <input type="datetime-local" th:field="*{ngaybatdau}" /><br />
+
+              <label>Ngày kết thúc:</label>
+              <input type="datetime-local" th:field="*{ngayketthuc}" /><br />
+
+              <label>URL giới thiệu:</label>
+              <input type="text" th:field="*{urlGioiThieu}" /><br />
+
+              <label>Ảnh bìa:</label>
+              <input type="text" th:field="*{anhBia}" /><br />
+
+              <label>Mô tả:</label>
+              <textarea th:field="*{moTa}"></textarea><br />
+
+              <label>Trạng thái:</label>
+              <select th:field="*{trangThai}">
+                <option th:value="true">Hoạt động</option>
+                <option th:value="false">Ngừng</option></select
+              ><br />
+
+              <label>Danh mục:</label>
+              <select th:field="*{danhMuc.danhmucId}" required>
+                <option
+                  th:each="dm : ${dsDanhMuc}"
+                  th:value="${dm.danhmucId}"
+                  th:text="${dm.tenDanhMuc}"
+                ></option></select
+              ><br />
+
+              <label>Giảng viên:</label>
+              <select th:field="*{giangVien.giangvienId}" required>
+                <option
+                  th:each="gv : ${dsGiangVien}"
+                  th:value="${gv.giangvienId}"
+                  th:text="'Giảng viên ' + ${gv.giangvienId}"
+                ></option></select
+              ><br />
+
+              <button type="submit" class="btn">💾 Lưu</button>
+            </form>
+          </div>
+
+          <div class="form-container">
+            <h2>Danh sách khóa học</h2>
+            <table border="1">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tên khóa học</th>
+                  <th>Giá gốc</th>
+                  <th>Giá KM</th>
+                  <th>Trạng thái</th>
+                  <th>Danh mục</th>
+                  <th>Giảng viên</th>
+                  <th>Ngày tạo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="kh : ${danhSachKhoaHoc}">
+                  <td th:text="${kh.courseId}">1</td>
+                  <td th:text="${kh.tenKhoaHoc}">Tên</td>
+                  <td th:text="${kh.giagoc}">1000000</td>
+                  <td th:text="${kh.giaKhuyenMai}">750000</td>
+                  <td th:text="${kh.trangThai ? 'Hoạt động' : 'Ngừng'}"></td>
+                  <td th:text="${kh.danhMuc.tenDanhMuc}">Danh mục</td>
+                  <td th:text="'GV ' + ${kh.giangVien.giangvienId}"></td>
+                  <td
+                    th:text="${#temporals.format(kh.ngayTao, 'dd/MM/yyyy HH:mm')}"
+                  ></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
