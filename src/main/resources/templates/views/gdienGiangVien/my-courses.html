@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Khoá học của tôi</title>
+    <link rel="stylesheet" href="/css/giangVien/my-courses.css">
+</head>
+<body>
+<div class="container">
+    <aside class="sidebar">
+        <div class="sidebar-title">Bảng điều khiển</div>
+        <ul class="sidebar-menu">
+            <li><a href="/gv" class="sidebar-link">Khoá học của tôi</a></li>
+            <li><a href="/thong-bao" class="sidebar-link">Thông báo</a></li>
+            <li><a href="#" class="sidebar-link">Hồ sơ cá nhân</a></li>
+            <li><a href="/qlbg" class="sidebar-link">Quản lý bài giảng</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <!-- Danh sách khoá học -->
+        <div id="course-list">
+            <h2 class="main-title">KHÓA HỌC CỦA TÔI</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+            </div>
+            <div class="courses-table">
+                <div class="courses-header">
+                    <div class="col-title">Khoá học</div>
+                    <div class="col-action">Mô tả</div>
+                </div>
+                <th:block th:each="khoaHoc : ${khoaHocList}">
+                    <div class="course-row">
+                        <div class="col-title">
+                            <b th:text="${khoaHoc.tenKhoaHoc}"></b><br>
+                            <span th:text="${khoaHoc.moTa}"></span>
+                        </div>
+                        <div class="col-action">
+                            <button class="btn-detail" onclick="showDetail()">Xem chi tiết</button>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <a href="/tkh" class="btn-add-course">+ Thêm khoá học</a>
+        </div>
+        <!-- Chi tiết khoá học -->
+        <div id="course-detail" style="display:none;">
+            <div class="course-detail-header">
+                <h2 class="course-detail-title">LẬP TRÌNH JAVA CHO NGƯỜI MỚI BẮT ĐẦU</h2>
+                <p class="course-detail-desc">Cung cấp kiến thức lập trình Java nền tảng từ cơ bản đến nâng cao</p>
+                <div class="course-detail-actions">
+                    <button class="btn-edit">Chỉnh sửa</button>
+                    <button class="btn-delete">Xoá khoá học</button>
+                </div>
+            </div>
+            <div class="course-detail-body">
+                <div class="course-detail-left">
+                    <div class="video-wrapper">
+                        <iframe width="100%" height="220" src="https://www.youtube.com/embed/BGTx91t8q50" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="comment-section">
+                        <div class="comment-header">
+                            <span>BÌNH LUẬN</span>
+                            <button class="btn-detail">Xem chi tiết</button>
+                        </div>
+                        <div class="comment-box">
+                            <div class="comment-avatar"></div>
+                            <div class="comment-content">
+                                <b>Phạm Văn C</b>
+                                <div>Nội dung này thầy có thể giải thích rõ hơn được không ạ!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-detail-right">
+                    <div class="rating-summary">
+                        <span class="rating-point">5</span>
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">1k Đánh Giá</span>
+                    </div>
+                    <div class="review-list">
+                        <div class="review-item">
+                            <div class="review-avatar"></div>
+                            <div class="review-content">
+                                <b>Nguyễn Văn A</b>
+                                <div class="review-stars">★★★★★ <span>(5/5 sao)</span></div>
+                                <div>Khoá học rất hữu ích, nhưng phần cấu trúc điều kiện nên có thêm ví dụ thực tế...</div>
+                                <div class="review-date">📅 Ngày đăng: 17/05/2025</div>
+                            </div>
+                            <button class="btn-delete-review">❌ Xoá</button>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-avatar"></div>
+                            <div class="review-content">
+                                <b>Lê Thị B</b>
+                                <div class="review-stars">★★★★★ <span>(5/5 sao)</span></div>
+                                <div>Thầy dạy rất dễ hiểu ạ, 10 điểm</div>
+                                <div class="review-date">📅 Ngày đăng: 17/05/2025</div>
+                            </div>
+                            <button class="btn-delete-review">❌ Xoá</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-back" onclick="showList()">Quay lại</button>
+        </div>
+    </main>
+</div>
+<script>
+function showDetail() {
+    document.getElementById('course-list').style.display = 'none';
+    document.getElementById('course-detail').style.display = 'block';
+}
+function showList() {
+    document.getElementById('course-detail').style.display = 'none';
+    document.getElementById('course-list').style.display = 'block';
+}
+</script>
+</body>
+</html> 
