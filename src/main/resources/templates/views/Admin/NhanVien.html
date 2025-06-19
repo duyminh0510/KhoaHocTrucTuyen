@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý nhân viên - Globaledu</title>
+    <link rel="stylesheet" th:href="@{/css/Admin/nhanvien.css}" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <ul>
+            <li><i class="fas fa-chart-line"></i> Dashboard</li>
+            <li class="active">
+              <i class="fas fa-users"></i> Quản lý nhân viên
+            </li>
+            <li><i class="fas fa-book"></i> Quản lý danh mục</li>
+            <li><i class="fas fa-wallet"></i> Quản lý tài chính</li>
+            <li><i class="fas fa-check-circle"></i> Kiểm duyệt nội dung</li>
+            <li><i class="fas fa-comments"></i> Đánh giá & phản hồi</li>
+            <li><i class="fas fa-info-circle"></i> Về chúng tôi</li>
+          </ul>
+        </aside>
+
+        <!-- Main content -->
+        <main class="dashboard-body">
+          <div class="form-container">
+            <h2>Danh sách nhân viên</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Ảnh</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <th>Trạng thái</th>
+                  <th>Chức vụ</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="nv : ${dsNhanVien}">
+                  <td>
+                    <img
+                      th:src="${nv.avatar}"
+                      alt="avatar"
+                      width="40"
+                      height="40"
+                      style="border-radius: 50%"
+                    />
+                  </td>
+                  <td th:text="${nv.name}">Tên</td>
+                  <td th:text="${nv.email}">Email</td>
+                  <td th:text="${nv.phone}">SĐT</td>
+                  <td th:text="${nv.status ? 'Hoạt động' : 'Đã khóa'}">
+                    Trạng thái
+                  </td>
+                  <td th:text="${nv.role.name}">Chức vụ</td>
+                  <td>
+                    <a
+                      th:href="@{'/admin/nhanvien/edit/' + ${nv.accountId}}"
+                      class="btn"
+                      >✏️</a
+                    >
+                    <a
+                      th:href="@{'/admin/nhanvien/delete/' + ${nv.accountId}}"
+                      class="btn btn-danger"
+                      onclick="return confirm('Bạn có chắc muốn xóa nhân viên này?')"
+                      >🗑️</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

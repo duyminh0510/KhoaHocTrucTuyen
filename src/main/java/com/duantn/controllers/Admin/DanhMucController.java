@@ -11,7 +11,7 @@ import com.duantn.entities.DanhMuc;
 @Controller
 public class DanhMucController {
 
-    @GetMapping("/admin/categories")
+    @GetMapping("/admin/x")
     public String hienThiDanhMuc(Model model) {
         // Mock dữ liệu để hiển thị giao diện
         List<DanhMuc> danhSachDanhMuc = Arrays.asList(
