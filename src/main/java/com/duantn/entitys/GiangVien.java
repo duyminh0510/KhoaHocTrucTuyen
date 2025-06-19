@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,11 +31,18 @@ public class GiangVien implements Serializable {
     private String kyNang;
 
     @Column(name = "kinhNghiem")
-    private Integer kinhNghiem;
+    private String kinhNghiem;
 
-    @Column(name = "ngaythamgia", updatable = false)
+    @Column(name = "CCCD")
+    private String CCCD;
+
     @CreationTimestamp
+    @Column(name = "ngaythamgia", updatable = false)
     private LocalDateTime ngayThamGia;
+
+    @UpdateTimestamp
+    @Column(name = "ngay_cap_nhat")
+    private LocalDateTime ngayCapNhat;
 
     @OneToOne
     @JoinColumn(name = "accountId", nullable = false)

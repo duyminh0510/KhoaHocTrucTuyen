@@ -1,0 +1,29 @@
+/* CSS cho các trang thanh toán nhân viên */
+
+.table-payment th, .table-payment td {
+    vertical-align: middle;
+    text-align: center;
+}
+.badge-success { background: #43a047 !important; }
+.badge-warning { background: #ffb300 !important; color: #0b1c36 !important; }
+.badge-danger { background: #e53935 !important; }
+
+/* Nền nội dung xanh nhạt, chữ đậm */
+.container, .card.bg-dark, .list-group-item.bg-dark {
+    background: #e3f2fd !important;
+    color: #0b1c36 !important;
+    border: none;
+}
+.card.bg-dark .list-group-item.bg-dark {
+    background: #e3f2fd !important;
+    color: #0b1c36 !important;
+}
+
+.btn-outline-light {
+    border-color: #0b1c36;
+    color: #0b1c36;
+}
+.btn-outline-light:hover {
+    background: #0b1c36;
+    color: #fff;
+} 

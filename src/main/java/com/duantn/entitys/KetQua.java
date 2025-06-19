@@ -1,6 +1,8 @@
 package com.duantn.entitys;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,23 +15,32 @@ import lombok.*;
 @Table(name = "KetQua")
 public class KetQua implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ketquald;
+    private Integer ketquaId;
 
-    @Column(name = "ThoiGianLam", nullable = false)
-    private Integer thoiGianLam;
+    @Column(name = "ThoiGianBatDau", nullable = false)
+    private LocalDateTime thoiGianBatDau;
+
+    @Column(name = "ThoiGianKetThuc", nullable = false)
+    private LocalDateTime thoiGianKetThuc;
 
     @Column(name = "TongDiem", nullable = false)
     private Double tongDiem;
 
     @Column(name = "Socaudung", nullable = false)
     private Integer soCauDung;
+
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
     private Account accounts;
 
     @ManyToOne
-    @JoinColumn(name = "baiTapId", nullable = false)
-    private BaiTap baiTaps;
+    @JoinColumn(name = "tracnghiemId", nullable = false)
+    private BaiTracNghiem baitracnghiem;
+
+    @OneToMany(mappedBy = "ketQua", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<KetQuaChiTiet> ketQuaChiTiet;
 }

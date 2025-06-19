@@ -2,20 +2,22 @@ package com.duantn.entitys;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
+import com.duantn.enums.LoaiBaiGiang;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -27,24 +29,17 @@ import lombok.*;
 @Table(name = "BaiGiang")
 public class BaiGiang implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baiGiangId;
 
-    @Column(name = "trangThai")
-    private Boolean trangThai;
-
     @Column(name = "tenBaiGiang")
     private String tenBaiGiang;
 
-    @Column(length = 2000)
-    private String noiDung;
-
-    @Column(name = "urlVideo")
-    private String urlVideo;
-
-    @Column(name = "taiLieu")
-    private String taiLieu;
+    @Column(length = 10000)
+    private String mota;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
@@ -54,11 +49,17 @@ public class BaiGiang implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
+    @Column(name = "trangthai")
+    private Boolean trangthai;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "loai_bai_giang", nullable = false, length = 30)
+    private LoaiBaiGiang loaiBaiGiang;
+
     @ManyToOne
-    @JoinColumn(name = "courseId")
-    private Course courses;
+    @JoinColumn(name = "chuongId")
+    private Chuong chuongs;
 
-    @OneToMany(mappedBy = "baiTapId", cascade = CascadeType.ALL)
-    private List<BaiTap> baiTaps;
-
+    @OneToOne(mappedBy = "baiGiang")
+    private BaiViet baiViet;
 }

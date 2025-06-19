@@ -1,0 +1,23 @@
+/* CSS cho các trang quản lý học viên nhân viên */
+
+.table-student th, .table-student td {
+    vertical-align: middle;
+    text-align: center;
+}
+.badge-active { background: #43a047 !important; }
+.badge-locked { background: #e53935 !important; }
+.avatar-student {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0b1c36;
+}
+.avatar-student-detail {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0b1c36;
+    margin-bottom: 16px;
+} 

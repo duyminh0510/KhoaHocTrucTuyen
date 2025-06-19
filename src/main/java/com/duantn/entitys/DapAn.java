@@ -14,24 +14,29 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "LuaChon")
-public class LuaChon implements Serializable {
+@Table(name = "DapAn")
+public class DapAn implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer luaChonId;
-
-    @Column(name = "NoiDung_DapAn", nullable = false)
-    private String noiDungDapAn;
+    private Integer dapanId;
 
     @Column(name = "ThuTu_DapAn")
     private Integer thuTuDapAn;
+
+    @Column(name = "NoiDung_DapAn", nullable = false)
+    private String noiDungDapAn;
 
     @Column(name = "DapAnDung")
     private Boolean dapAnDung;
 
     @Column(name = "GiaThich_Dapan")
     private String giaThichDapan;
+
+    @Column(name = "trangthai")
+    private Boolean trangthai;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
@@ -42,7 +47,7 @@ public class LuaChon implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @ManyToOne
-    @JoinColumn(name = "CauHoild", nullable = false)
+    @JoinColumn(name = "CauHoiId", nullable = false)
     private CauHoi cauHoi;
 
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Xác minh email</title>
+</head>
+
+<body>
+    <h2>Nhập mã xác minh đã gửi đến email của bạn</h2>
+
+    <form th:action="@{/auth/verify}" method="post">
+        <label for="code">Mã xác minh:</label>
+        <input type="text" name="code" required />
+        <button type="submit">Xác minh</button>
+    </form>
+
+    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+</body>
+
+</html>

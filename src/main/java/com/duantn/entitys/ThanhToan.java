@@ -1,8 +1,9 @@
 package com.duantn.entitys;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.duantn.enums.LoaiThanhToan;
+import com.duantn.enums.HinhThucThanhToan;
 import com.duantn.enums.TrangThaiThanhToan;
 
 import jakarta.persistence.*;
@@ -19,22 +20,22 @@ public class ThanhToan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer thanhtoanId;
 
-    @Column(name = "PhuongThuc", nullable = false)
-    private String phuongThuc;
+    @Column(name = "tongtien", precision = 12, scale = 2, nullable = false)
+    private BigDecimal tongtien;
 
-    @Column(name = "DonGia", nullable = false)
-    private Double donGia;
+    @Column(name = "tenhocvien", nullable = false)
+    private String tenhocvien;
 
     @Column(name = "NgayThanhToan", nullable = false)
     private LocalDateTime ngayThanhToan;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "loaiThanhToan", nullable = false)
-    private LoaiThanhToan loaiThanhToan;
+    @Column(name = "hinhThucThanhToan", nullable = false)
+    private HinhThucThanhToan hinhThucThanhToan;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "trangThaiThanhToan", nullable = false)
-    private TrangThaiThanhToan trangThaiThanhToan;
+    @Column(name = "trangThai", nullable = false)
+    private TrangThaiThanhToan trangThai;
 
     @ManyToOne
     @JoinColumn(name = "giaodichId", nullable = false)

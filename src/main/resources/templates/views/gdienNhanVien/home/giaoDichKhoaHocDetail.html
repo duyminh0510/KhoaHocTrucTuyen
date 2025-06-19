@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" th:replace="~{/views/gdienNhanVien/layout/templateNhanVien.html::view(~{::main},~{::title})}">
+<head>
+    <title>Chi tiết giao dịch khoá học</title>
+    <link rel="stylesheet" th:href="@{/static/css/nhanVien/thanhToanNhanVien.css}" />
+</head>
+<body>
+<main>
+    <div class="container py-4">
+        <h2 class="mb-4 fw-bold text-primary-custom">Chi tiết giao dịch khoá học</h2>
+        <div class="card bg-dark text-white shadow">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-dark text-white"><b>ID:</b> <span th:text="${gd.id}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Học viên:</b> <span th:text="${gd.tenHocVien}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Email:</b> <span th:text="${gd.email}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Ngày giao dịch:</b> <span th:text="${gd.ngayGiaoDich}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Hình thức:</b> <span th:text="${gd.hinhThuc}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Tổng tiền:</b> <span th:text="${#numbers.formatDecimal(gd.tongTien, 0, 'COMMA', 2, 'POINT')} + ' đ'"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Trạng thái:</b> <span th:text="${gd.trangThai}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Khóa học:</b> <span th:text="${gd.tenKhoaHoc}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Mã giao dịch:</b> <span th:text="${gd.maGiaoDich}"></span></li>
+                    <li class="list-group-item bg-dark text-white"><b>Ghi chú:</b> <span th:text="${gd.ghiChu}"></span></li>
+                </ul>
+                <div class="mt-4">
+                    <a href="/nhanvien/giao-dich" class="btn btn-outline-light">Quay lại danh sách</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html> 
