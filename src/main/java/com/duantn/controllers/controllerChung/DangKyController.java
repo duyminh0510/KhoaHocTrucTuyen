@@ -46,9 +46,13 @@ public class DangKyController {
             BindingResult result,
             HttpSession session,
             Model model) {
+
+        if (result.hasErrors()) {
+            return "views/gdienChung/register";
+        }
         if (accountRepository.existsByEmail(dto.getEmail())) {
             result.rejectValue("email", "email.exists", "Email đã được sử dụng");
-            return "register";
+            return "views/gdienChung/register";
         }
 
         session.setAttribute("pendingUser", dto);
@@ -107,7 +111,7 @@ public class DangKyController {
 
     @GetMapping("/verify")
     public String showVerifyForm() {
-        return "verify";
+        return "views/gdienChung/verify";
     }
 
     @PostMapping("/verify")
@@ -115,19 +119,19 @@ public class DangKyController {
         Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(code);
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng.");
-            return "verify";
+            return "views/gdienChung/verify";
         }
 
         VerificationToken token = tokenOpt.get();
         if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "Mã xác minh đã hết hạn.");
-            return "verify";
+            return "views/gdienChung/verify";
         }
 
         DangKyHocVienDto dto = (DangKyHocVienDto) session.getAttribute("pendingUser");
         if (dto == null || !dto.getEmail().equals(token.getEmail())) {
             model.addAttribute("error", "Phiên làm việc không hợp lệ.");
-            return "verify";
+            return "views/gdienChung/verify";
         }
 
         Role studentRole = roleRepository.findByName("ROLE_HOCVIEN")

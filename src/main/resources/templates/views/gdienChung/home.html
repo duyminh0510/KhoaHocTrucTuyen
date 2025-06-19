@@ -1,20 +1,131 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Trang chủ - GlobalEdu</title>
   </head>
 
   <body>
-    <main>
-      <h1>Xin chào các bạn</h1>
-      <h1>Mình là dminh!!</h1>
+    <main class="homechung">
+      <!-- Banner -->
+      <div class="banner">
+        BỎ ẢNH
+      </div>
 
+      <!-- Tiêu đề -->
+      <div class="container mt-4">
+        <h4><strong>Tất cả các kĩ năng cần có mọi nơi</strong></h4>
+        <p>Từ các kĩ năng quan trọng, chuyên môn, GlobalEdu hỗ trợ phát triển
+          cho bạn.
+        </p>
+
+        <!-- Tabs -->
+        <div class="course-tabs">
+          <ul class="nav nav-tabs" id="tabCourses" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" data-bs-toggle="tab">Khoa học dữ
+                liệu</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab">Phát triển phần
+                mềm</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab">Ứng dụng phần
+                mềm</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab">Phát triển
+                Web</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab">Giao tiếp</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab">Khả năng lãnh
+                đạo</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Danh sách khóa học -->
+        <div class="row row-cols-1 row-cols-md-4 g-4 mt-3">
+          <!-- Card 1 -->
+          <div class="col">
+            <div class="card course-card">
+              <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
+              <div class="card-body">
+                <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
+                <p class="card-text text-muted">Khám phá thế giới lập trình Java
+                  từ những bước cơ bản nhất!<br><strong>Trần Ngọc
+                    Thái</strong></p>
+                <div class="rating">⭐ 5.0 <span
+                    class="text-muted">(48)</span></div>
+                <p class="text-danger fw-bold mt-1">999.000 đ</p>
+                <p class="text-muted"><del>3.338.000 đ</del></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Các card khác (copy giống trên) -->
+          <div class="col">
+            <div class="card course-card">
+              <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
+              <div class="card-body">
+                <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
+                <p class="card-text text-muted">Khám phá thế giới lập trình Java
+                  từ những bước cơ bản nhất!<br><strong>Trần Ngọc
+                    Thái</strong></p>
+                <div class="rating">⭐ 5.0 <span
+                    class="text-muted">(48)</span></div>
+                <p class="text-danger fw-bold mt-1">999.000 đ</p>
+                <p class="text-muted"><del>3.338.000 đ</del></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card course-card">
+              <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
+              <div class="card-body">
+                <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
+                <p class="card-text text-muted">Khám phá thế giới lập trình Java
+                  từ những bước cơ bản nhất!<br><strong>Trần Ngọc
+                    Thái</strong></p>
+                <div class="rating">⭐ 5.0 <span
+                    class="text-muted">(48)</span></div>
+                <p class="text-danger fw-bold mt-1">999.000 đ</p>
+                <p class="text-muted"><del>3.338.000 đ</del></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card course-card">
+              <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
+              <div class="card-body">
+                <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
+                <p class="card-text text-muted">Khám phá thế giới lập trình Java
+                  từ những bước cơ bản nhất!<br><strong>Trần Ngọc
+                    Thái</strong></p>
+                <div class="rating">⭐ 5.0 <span
+                    class="text-muted">(48)</span></div>
+                <p class="text-danger fw-bold mt-1">999.000 đ</p>
+                <p class="text-muted"><del>3.338.000 đ</del></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút xem thêm -->
+        <div class="text-center course-btn">
+          <button class="btn btn-outline-primary">Xem thêm các khóa học Khoa học
+            dữ liệu</button>
+        </div>
+      </div>
     </main>
-
   </body>
 
 </html>

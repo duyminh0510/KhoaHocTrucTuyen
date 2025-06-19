@@ -1,0 +1,16 @@
+.homehocvien .card-title {
+    font-weight: bold;
+}
+
+.homehocvien .rating {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+.homehocvien .card {
+    transition: transform 0.2s ease;
+}
+
+.homehocvien .card:hover {
+    transform: scale(1.02);
+}
