@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DuantnApplication<duantn>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.duantn.DuantnApplication",
+            "projectName": "duantn",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
