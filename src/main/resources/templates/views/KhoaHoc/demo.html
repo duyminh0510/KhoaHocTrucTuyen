@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Khoá học của tôi</title>
+</head>
+<body>
+<main class="my-courses">
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">Bảng điều khiển</div>
+            <ul class="sidebar-menu">
+                <li><a href="/gv" class="sidebar-link active">Khoá học của tôi</a></li>
+                <li><a href="/thong-bao" class="sidebar-link">Thông báo</a></li>
+                <li><a href="#" class="sidebar-link">Hồ sơ cá nhân</a></li>
+                <li><a href="/qlbg" class="sidebar-link">Quản lý bài giảng</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Danh sách khoá học -->
+            <div id="course-list" class="table-container">
+                <h2 class="page-title">KHÓA HỌC CỦA TÔI</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm khoá học..." onkeyup="filterCourses()">
+                    <button onclick="filterCourses()" class="btn btn-secondary">Tìm kiếm</button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Khoá học</th>
+                        <th class="col-action">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="khoaHoc : ${khoaHocList}">
+                        <tr th:attr="data-title=${khoaHoc.tenKhoaHoc}">
+                            <td>
+                                <b th:text="${khoaHoc.tenKhoaHoc}">Tên khoá học</b><br>
+                                <span th:text="${khoaHoc.moTa != null ? #strings.abbreviate(khoaHoc.moTa, 100) : ''}">Mô tả</span>
+                            </td>
+                            <td class="col-action">
+                                <button class="btn btn-primary btn-detail"
+                                        th:data-course-id="${khoaHoc.courseId}"
+                                        th:data-ten-khoa-hoc="${khoaHoc.tenKhoaHoc}"
+                                        th:data-mo-ta="${khoaHoc.moTa}"
+                                        th:data-url-gioi-thieu="${khoaHoc.urlGioiThieu}"
+                                        th:data-anh-bia="${khoaHoc.anhBia}"
+                                        th:data-giagoc="${khoaHoc.giagoc}"
+                                        th:data-gia-khuyen-mai="${khoaHoc.giaKhuyenMai}"
+                                        th:data-luot-thich="${khoaHoc.luotThich}"
+                                        th:data-trang-thai="${khoaHoc.trangThai}"
+th:data-ngay-tao="${khoaHoc.ngayTao != null ? #temporals.format(khoaHoc.ngayTao, 'dd/MM/yyyy') : ''}"
+                                        th:data-ngay-bat-dau="${khoaHoc.ngaybatdau != null ? #temporals.format(khoaHoc.ngaybatdau, 'dd/MM/yyyy') : ''}"
+                                        th:data-ngay-ket-thuc="${khoaHoc.ngayketthuc != null ? #temporals.format(khoaHoc.ngayketthuc, 'dd/MM/yyyy') : ''}"
+                                        onclick="showDetailFromButton(this)">Xem chi tiết</button>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <a href="/tkh" class="btn btn-secondary btn-add-course">+ Thêm khoá học</a>
+            </div>
+
+            <!-- Chi tiết khoá học (Thiết kế lại) -->
+            <div id="course-detail" style="display:none;">
+                <div class="course-detail-header">
+                    <h2 id="detail-title" class="course-detail-title"></h2>
+                    <div class="course-detail-actions">
+                        <button id="detail-edit-btn" class="btn btn-edit">Chỉnh sửa</button>
+                        <button id="detail-delete-btn" class="btn btn-delete">Xoá khoá học</button>
+                    </div>
+                </div>
+
+                <div class="course-detail-body">
+                    <div class="course-detail-left">
+                        <div class="media-wrapper">
+                            <img id="detail-anh-bia" src="" alt="Ảnh bìa khóa học" style="width:100%; border-radius: 8px; margin-bottom: 15px; display:none;"/>
+                            <div id="detail-video-wrapper" class="video-wrapper" style="display:none;">
+                                <iframe id="detail-video-iframe" width="100%" height="315" src="" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <h4>Mô tả chi tiết</h4>
+                        <p id="detail-desc"></p>
+                    </div>
+                    <div class="course-detail-right">
+                        <div class="course-info-card">
+                            <h4>Thông tin khoá học</h4>
+                            <p><strong>Trạng thái:</strong> <span id="detail-trangthai" class="badge"></span></p>
+                            <p><strong>Giá gốc:</strong> <span id="detail-giagoc"></span></p>
+                            <p id="p-gia-khuyen-mai"><strong>Giá khuyến mãi:</strong> <span id="detail-giakhuyenmai"></span></p>
+                            <p><strong>Lượt thích:</strong> <span id="detail-luotthich"></span></p>
+                            <p><strong>Ngày tạo:</strong> <span id="detail-ngaytao"></span></p>
+                            <p><strong>Ngày bắt đầu:</strong> <span id="detail-ngaybatdau"></span></p>
+<p><strong>Ngày kết thúc:</strong> <span id="detail-ngayketthuc"></span></p>
+                        </div>
+                        <!-- Phần bình luận và đánh giá giữ nguyên làm placeholder -->
+                        <div class="comment-section" style="margin-top: 20px;">
+                             <div class="comment-header"><span>BÌNH LUẬN & ĐÁNH GIÁ</span></div>
+                             <div class="review-list">
+                                <div class="review-item">
+                                    <b>Nguyễn Văn A</b> ★★★★★<br/>
+                                    <span>Khoá học rất hữu ích...</span>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-back" onclick="showList()">Quay lại</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showDetailFromButton(btn) {
+            try {
+                console.log("Button clicked. Reading data attributes...");
+                const details = {
+                    courseId: btn.dataset.courseId,
+                    tenKhoaHoc: btn.dataset.tenKhoaHoc,
+                    moTa: btn.dataset.moTa,
+                    urlGioiThieu: btn.dataset.urlGioiThieu,
+                    anhBia: btn.dataset.anhBia,
+                    giagoc: btn.dataset.giagoc,
+                    giaKhuyenMai: btn.dataset.giaKhuyenMai,
+                    luotThich: btn.dataset.luotThich,
+                    trangThai: btn.dataset.trangThai,
+                    ngayTao: btn.dataset.ngayTao,
+                    ngayBatDau: btn.dataset.ngayBatDau,
+                    ngayKetThuc: btn.dataset.ngayKetThuc,
+                };
+                console.log("Data successfully read:", details);
+                showDetail(details);
+            } catch (e) {
+                console.error("LỖI TRONG HÀM showDetailFromButton:", e);
+                alert("Có lỗi xảy ra khi đọc dữ liệu. Vui lòng kiểm tra Console (F12) để biết chi tiết.");
+            }
+        }
+
+        function showDetail(details) {
+            try {
+                console.log("Attempting to show details for course:", details.tenKhoaHoc);
+                document.getElementById('course-list').style.display = 'none';
+                document.getElementById('course-detail').style.display = 'block';
+
+                // Populate data safely
+                document.getElementById('detail-title').textContent = details.tenKhoaHoc || 'Không có tiêu đề';
+                document.getElementById('detail-desc').textContent = details.moTa || 'Chưa có mô tả.';
+
+                // Media
+                const imgElement = document.getElementById('detail-anh-bia');
+                const videoWrapper = document.getElementById('detail-video-wrapper');
+                const videoIframe = document.getElementById('detail-video-iframe');
+if (details.anhBia && details.anhBia !== 'null') {
+                    imgElement.src = details.anhBia;
+                    imgElement.style.display = 'block';
+                } else {
+                    imgElement.style.display = 'none';
+                }
+
+                if (details.urlGioiThieu && details.urlGioiThieu !== 'null') {
+                    let embedUrl = details.urlGioiThieu;
+                    if (embedUrl.includes("youtube.com/watch?v=")) {
+                        embedUrl = embedUrl.replace("watch?v=", "embed/");
+                    }
+                    videoIframe.src = embedUrl;
+                    videoWrapper.style.display = 'block';
+                } else {
+                    videoWrapper.style.display = 'none';
+                }
+
+                // Info card
+                const trangThaiSpan = document.getElementById('detail-trangthai');
+                if (details.trangThai === 'true') {
+                    trangThaiSpan.textContent = 'Đã xuất bản';
+                    trangThaiSpan.className = 'badge published';
+                } else {
+                    trangThaiSpan.textContent = 'Bản nháp';
+                    trangThaiSpan.className = 'badge draft';
+                }
+
+                const giagocValue = parseFloat(details.giagoc);
+                if (!isNaN(giagocValue)) {
+                    document.getElementById('detail-giagoc').textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(giagocValue);
+                }
+
+                const pGiaKM = document.getElementById('p-gia-khuyen-mai');
+                const giaKMValue = parseFloat(details.giaKhuyenMai);
+                if (!isNaN(giaKMValue) && giaKMValue > 0) {
+                    document.getElementById('detail-giakhuyenmai').textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(giaKMValue);
+                    pGiaKM.style.display = 'block';
+                } else {
+                    pGiaKM.style.display = 'none';
+                }
+
+                document.getElementById('detail-luotthich').textContent = details.luotThich || 0;
+                document.getElementById('detail-ngaytao').textContent = details.ngayTao || 'N/A';
+                document.getElementById('detail-ngaybatdau').textContent = details.ngayBatDau || 'N/A';
+                document.getElementById('detail-ngayketthuc').textContent = details.ngayKetThuc || 'N/A';
+
+                // Buttons
+                const editBtn = document.getElementById('detail-edit-btn');
+                editBtn.onclick = () => {
+                    if (details.courseId) {
+                        window.location.href = '/tkh/' + details.courseId;
+                    }
+                };
+                console.log("Details displayed successfully.");
+            } catch (e) {
+                console.error("LỖI TRONG HÀM showDetail:", e);
+alert("Có lỗi xảy ra khi hiển thị dữ liệu. Vui lòng kiểm tra Console (F12) để biết chi tiết.");
+            }
+        }
+
+        function showList() {
+            document.getElementById('course-detail').style.display = 'none';
+            document.getElementById('course-list').style.display = 'block';
+        }
+
+        function filterCourses() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-table tbody tr');
+            let found = false;
+            rows.forEach(row => {
+                if (row.id === 'not-found-msg') return;
+                const title = row.getAttribute('data-title').toLowerCase();
+                if (title.includes(input)) {
+                    row.style.display = '';
+                    found = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            let notFoundMsg = document.getElementById('not-found-msg');
+            if (!found) {
+                if (!notFoundMsg) {
+                    notFoundMsg = document.createElement('tr');
+                    notFoundMsg.id = 'not-found-msg';
+                    notFoundMsg.innerHTML = '<td colspan="2" style="text-align:center;">Không tìm thấy khoá học</td>';
+                    document.querySelector('.data-table tbody').appendChild(notFoundMsg);
+                }
+            } else if (notFoundMsg) {
+                notFoundMsg.remove();
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS bổ sung cho giao diện chi tiết */
+        .course-info-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .course-info-card h4 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .course-info-card p {
+            margin: 8px 0;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: white;
+            font-weight: bold;
+        }
+        .badge.published {
+            background-color: #28a745; /* Green */
+        }
+        .badge.draft {
+            background-color: #ffc107; /* Yellow */
+        }
+        .media-wrapper {
+            margin-bottom: 20px;
+        }
+    </style>
+</main>
+</body>
+</html>
