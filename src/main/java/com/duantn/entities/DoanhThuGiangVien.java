@@ -50,8 +50,8 @@ public class DoanhThuGiangVien implements Serializable {
     private TrangThaiDoanhThu trangthai = TrangThaiDoanhThu.DA_NHAN;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan accountGV;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoanGV;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "danghocId", nullable = false)

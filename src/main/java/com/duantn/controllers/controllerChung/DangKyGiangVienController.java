@@ -44,7 +44,7 @@ public class DangKyGiangVienController {
             return "redirect:/auth/login";
         }
 
-        if (giangVienRepo.findByAccounts(account).isPresent()) {
+        if (giangVienRepo.findBytaikhoan(account).isPresent()) {
             model.addAttribute("error", "Bạn đã đăng ký làm giảng viên rồi.");
             return "register-instructor";
         }
@@ -60,7 +60,7 @@ public class DangKyGiangVienController {
                 .kyNang(dto.getKyNang())
                 .kinhNghiem(dto.getKinhNghiem())
                 .CCCD(dto.getCCCD())
-                .accounts(account)
+                .taikhoan(account)
                 .build();
 
         giangVienRepo.save(giangVien);

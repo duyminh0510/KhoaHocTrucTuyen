@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+  th:replace="~{/views/gdienChung/templateChung.html :: view(~{::main}, ~{::title})}">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh mục khóa học</title>
+  </head>
+
+  <body>
+    <main class="danhmuc">
+      <div class="container">
+        <h2 class="mb-4">Quản lý danh mục khóa học</h2>
+
+        <!-- Form thêm danh mục (mẫu tĩnh) -->
+        <form class="form-danh-muc" method="post">
+          <div class="mb-3">
+            <label class="form-label">Tên danh mục</label>
+            <input type="text" class="form-control"
+              placeholder="Nhập tên danh mục" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+
+        <!-- Nếu không có danh mục -->
+        <div class="alert alert-info mt-4">
+          Không có danh mục nào
+        </div>
+
+        <!-- Bảng danh mục mẫu -->
+        <div class="mt-4">
+          <table class="table table-bordered table-hover bang-danh-muc">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Tên danh mục</th>
+                <th>Ngày tạo</th>
+                <th>Sửa</th>
+                <th>Xoá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Lập trình Java</td>
+                <td>2025-06-20</td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="#">Cập nhật</a>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteModal-1">Xoá</button>
+
+                  <!-- Modal xác nhận xoá -->
+                  <div class="modal fade" id="confirmDeleteModal-1"
+                    tabindex="-1" aria-labelledby="confirmDeleteLabel-1"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="confirmDeleteLabel-1">Xác
+                            nhận xoá</h5>
+                          <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                          Bạn có chắc muốn xoá danh mục <strong>Lập trình
+                            Java</strong> không?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Huỷ</button>
+                          <form method="post" style="display:inline;">
+                            <button type="submit"
+                              class="btn btn-danger">Xoá</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+
+</html>

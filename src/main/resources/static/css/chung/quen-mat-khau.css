@@ -1,0 +1,25 @@
+.quenmatkhau .forgot-container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.quenmatkhau .forgot-title {
+    color: #16203b;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.quenmatkhau .btn-continue {
+    background-color: #16203b;
+    color: white;
+    font-weight: 600;
+}
+
+.quenmatkhau .btn-continue:hover {
+    background-color: #0f172a;
+}

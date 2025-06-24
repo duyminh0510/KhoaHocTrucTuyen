@@ -1,0 +1,40 @@
+<!-- reset-password.html -->
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Đặt lại mật khẩu</title>
+    </head>
+
+    <body>
+        <main class="xacthuc">
+            <div class="reset-container">
+                <h3 class="reset-title">Đặt lại mật khẩu</h3>
+                <p>Nhập mật khẩu mới cho tài khoản của bạn.</p>
+
+                <form th:action="@{/dat-lai-mat-khau}" method="post">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mật khẩu
+                            mới:</label>
+                        <input type="password" class="form-control"
+                            id="password" name="password" required
+                            placeholder="******">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm" class="form-label">Xác nhận mật
+                            khẩu:</label>
+                        <input type="password" class="form-control" id="confirm"
+                            name="confirm" required placeholder="******">
+                    </div>
+                    <button type="submit" class="btn btn-reset w-100">Cập nhật
+                        mật
+                        khẩu</button>
+                </form>
+            </div>
+        </main>
+    </body>
+
+</html>

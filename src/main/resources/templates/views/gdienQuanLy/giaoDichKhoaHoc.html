@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý giao dịch khoá học</title>
+    </head>
+
+    <body>
+        <main class="giaodich">
+            <div class="container py-4">
+                <h2 class="mb-4 fw-bold text-primary-custom">💳 Quản lý giao
+                    dịch khoá học</h2>
+                <div class="table-responsive">
+                    <table
+                        class="table table-hover align-middle table-transaction">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Học viên</th>
+                                <th>Email</th>
+                                <th>Ngày giao dịch</th>
+                                <th>Hình thức</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Khóa học</th>
+                                <th>Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="gd : ${listGiaoDich}">
+                                <td th:text="${gd.id}"></td>
+                                <td th:text="${gd.tenHocVien}"></td>
+                                <td th:text="${gd.email}"></td>
+                                <td th:text="${gd.ngayGiaoDich}"></td>
+                                <td th:text="${gd.hinhThuc}"></td>
+                                <td
+                                    th:text="${#numbers.formatDecimal(gd.tongTien, 0, 'COMMA', 2, 'POINT')} + ' đ'"></td>
+                                <td>
+                                    <span th:classappend="
+                                ${gd.trangThai} == 'HOAN_THANH' ? 'badge badge-success' :
+                                (${gd.trangThai} == 'CHO_XU_LY' ? 'badge badge-warning' : 'badge badge-danger')"
+                                        th:text="${gd.trangThai}">
+                                    </span>
+                                </td>
+                                <td th:text="${gd.tenKhoaHoc}"></td>
+                                <td>
+                                    <a
+                                        th:href="@{'/admin/quanly-giao-dich/' + ${gd.id}}"
+                                        class="btn btn-sm btn-outline-info">Xem</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trang Nhân Viên</title>
+    </head>
+
+    <body>
+        <main class="homequanly">
+            <div class="container py-4">
+                <h2 class="mb-4 fw-bold text-primary-custom">📊 Bảng điều khiển
+                    nhân viên</h2>
+
+                <!-- Thống kê -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="highlight-box">
+                            <h5>📘 Khóa học đang mở</h5>
+                            <p>152</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="highlight-box">
+                            <h5>👨‍🏫 Giảng viên</h5>
+                            <p>38</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="highlight-box">
+                            <h5>🎓 Học viên</h5>
+                            <p>1.024</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top khoá học -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header card-header-custom">🔥 Top 5 khóa
+                        học bán chạy</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">#1 - Java Cơ bản - 250 lượt
+                        </li>
+                        <li class="list-group-item">#2 - Spring Boot Mastery -
+                            230 lượt</li>
+                        <li class="list-group-item">#3 - ReactJS từ A-Z - 180
+                            lượt
+                        </li>
+                        <li class="list-group-item">#4 - SQL & Dữ liệu - 160
+                            lượt
+                        </li>
+                        <li class="list-group-item">#5 - Thiết kế UI với Figma -
+                            150 lượt</li>
+                    </ul>
+                </div>
+
+                <!-- Nhiệm vụ và Thông báo -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header card-header-custom">📋 Nhiệm
+                                vụ hôm nay</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">📝 Duyệt 2 khóa học
+                                    mới
+                                </li>
+                                <li class="list-group-item">💰 Kiểm tra 3 yêu
+                                    cầu rút tiền</li>
+                                <li class="list-group-item">🧑‍💻 Cập nhật hồ sơ
+                                    giảng viên</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header card-header-custom">📢 Thông
+                                báo hệ thống</div>
+                            <div class="card-body">
+                                <div class="alert alert-info">🔔 Khóa học
+                                    "Spring Boot nâng cao" đã được cập nhật.
+                                </div>
+                                <div class="alert alert-warning">⚠️ Hết hạn
+                                    khuyến mãi khóa học "Java cơ bản".</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </body>
+
+</html>

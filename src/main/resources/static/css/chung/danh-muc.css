@@ -1,0 +1,97 @@
+/* Tiêu đề chính */
+
+.danhmuc h2 {
+    color: #13264b;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+
+/* Form danh mục */
+
+.danhmuc .form-danh-muc {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(27, 38, 59, 0.1);
+    border-left: 5px solid #1B263B;
+}
+
+
+/* Input */
+
+.danhmuc .form-danh-muc input.form-control {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.danhmuc .form-danh-muc input.form-control:focus {
+    border-color: #1B263B;
+    box-shadow: 0 0 0 0.2rem rgba(27, 38, 59, 0.25);
+}
+
+
+/* Button chính */
+
+.danhmuc .form-danh-muc button.btn-primary {
+    background-color: #1B263B;
+    border-color: #1B263B;
+}
+
+.danhmuc .form-danh-muc button.btn-primary:hover {
+    background-color: #324766;
+    border-color: #324766;
+}
+
+
+/* Bảng danh mục */
+
+.danhmuc .bang-danh-muc th {
+    background-color: #1B263B;
+    color: #ffffff;
+}
+
+.danhmuc .bang-danh-muc td {
+    background-color: #ffffff;
+    color: #1B263B;
+    vertical-align: middle;
+}
+
+
+/* Nút sửa */
+
+.danhmuc .btn-warning {
+    background-color: #FFB400;
+    border-color: #FFB400;
+    color: #192946;
+    font-weight: bold;
+}
+
+.danhmuc .btn-warning:hover {
+    background-color: #f4e6a6;
+    border-color: #d2aa0a;
+    color: #0b3b9c;
+}
+
+
+/* Nút xóa */
+
+.danhmuc .btn-danger {
+    background-color: #d9534f;
+    border-color: #d9534f;
+    font-weight: bold;
+}
+
+.danhmuc .btn-danger:hover {
+    background-color: #c5130c;
+    border-color: #890904;
+}
+
+
+/* Alert khi không có danh mục */
+
+.danhmuc .alert-info {
+    background-color: #dce5f3;
+    color: #1B263B;
+    border-left: 5px solid #1B263B;
+}

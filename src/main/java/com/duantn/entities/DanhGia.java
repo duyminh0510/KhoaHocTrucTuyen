@@ -30,10 +30,10 @@ public class DanhGia implements Serializable {
     private Integer diemDanhGia;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan account;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoan;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private KhoaHoc courses;
+    @JoinColumn(name = "khoahocId", nullable = false)
+    private KhoaHoc khoahoc;
 }

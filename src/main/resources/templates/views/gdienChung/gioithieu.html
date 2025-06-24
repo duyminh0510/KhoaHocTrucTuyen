@@ -1,20 +1,81 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Giới thiệu hệ thống GlobalEdu</title>
     </head>
 
     <body>
         <main>
-            <h1>Xin chào các bạn</h1>
-            <h1>About Us!!</h1>
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold">Giới thiệu hệ thống quản lý khóa học
+                            trực tuyến GlobalEdu</h2>
+                        <p class="lead text-muted">Nền tảng học tập hiện đại –
+                            thuận tiện – thông minh</p>
+                    </div>
 
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-6">
+                            <img th:src="@{/photos/gioithieu1.png}"
+                                class="img-fluid rounded shadow"
+                                alt="Học tập trực tuyến">
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="fw-bold">🎓 Học tập mọi lúc, mọi nơi</h3>
+                            <p>
+                                GlobalEdu cho phép học viên truy cập các khóa
+                                học mọi lúc, mọi nơi với trải nghiệm mượt mà và
+                                dễ sử dụng. Các khóa học được thiết kế bởi đội
+                                ngũ giảng viên chuyên môn cao, nội dung bám sát
+                                thực tế.
+                            </p>
+                            <ul>
+                                <li>Video bài giảng chất lượng</li>
+                                <li>Bài tập tương tác và kiểm tra</li>
+                                <li>Cấp chứng chỉ sau hoàn thành</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6 order-md-2">
+                            <img th:src="@{/photos/gioithieu2.png}"
+                                class="img-fluid rounded shadow"
+                                alt="Quản lý giảng viên"
+                                style="width: 100%; height: 300px;">
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="fw-bold">🧑‍🏫 Hệ thống quản lý thông
+                                minh
+                            </h3>
+                            <p>
+                                Với hệ thống quản trị mạnh mẽ, giảng viên và
+                                quản trị viên dễ dàng quản lý khóa học, học
+                                viên, bài giảng và đánh giá. Phân quyền rõ ràng,
+                                giao diện thân thiện, giúp vận hành hiệu quả.
+                            </p>
+                            <ul>
+                                <li>Quản lý khóa học, giảng viên, học viên</li>
+                                <li>Phân quyền rõ ràng: admin, nhân viên, học
+                                    viên, giảng viên</li>
+                                <li>Báo cáo thống kê chi tiết</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a th:href="@{/auth/register}"
+                            class="btn btn-primary btn-lg"
+                            style="text-decoration: none;">Bắt đầu học ngay</a>
+                    </div>
+                </div>
+            </section>
         </main>
-
     </body>
 
 </html>

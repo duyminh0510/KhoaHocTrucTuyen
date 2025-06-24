@@ -27,41 +27,39 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             Authentication authentication)
             throws IOException, ServletException {
 
-        SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
-
-        if (savedRequest != null) {
-            // Redirect to the originally requested URL (e.g. /gio-hang)
-            String targetUrl = savedRequest.getRedirectUrl();
-            redirectStrategy.sendRedirect(request, response, targetUrl);
-            return;
-        }
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-        for (GrantedAuthority authority : authorities) {
-            System.out.println("Granted Authority: " + authority.getAuthority());
-        }
-
-        String redirectUrl = "/";
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
 
+            // Nếu là ADMIN
             if (role.equals("ROLE_ADMIN")) {
-                redirectUrl = "/admin";
-                break;
-            } else if (role.equals("ROLE_GIANGVIEN")) {
-                redirectUrl = "/giangvien";
-                break;
-            } else if (role.equals("ROLE_HOCVIEN")) {
-                redirectUrl = "/hocvien";
-                break;
-            } else if (role.equals("ROLE_NHANVIEN")) {
-                redirectUrl = "/nhanvien";
-                break;
+                redirectStrategy.sendRedirect(request, response, "/admin");
+                return;
+            }
+
+            // Nếu là NHÂN VIÊN
+            if (role.equals("ROLE_NHANVIEN")) {
+                redirectStrategy.sendRedirect(request, response, "/nhanvien");
+                return;
+            }
+
+            // Nếu là HỌC VIÊN hoặc GIẢNG VIÊN
+            if (role.equals("ROLE_HOCVIEN") || role.equals("ROLE_GIANGVIEN")) {
+                // Ưu tiên quay lại trang đã cố truy cập trước đó
+                SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+                if (savedRequest != null) {
+                    String targetUrl = savedRequest.getRedirectUrl();
+                    redirectStrategy.sendRedirect(request, response, targetUrl);
+                } else {
+                    // Nếu không có trang trước, chuyển về /
+                    redirectStrategy.sendRedirect(request, response, "/");
+                }
+                return;
             }
         }
 
-        response.sendRedirect(redirectUrl);
+        // Mặc định
+        redirectStrategy.sendRedirect(request, response, "/");
     }
 }

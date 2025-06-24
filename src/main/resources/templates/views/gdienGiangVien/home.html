@@ -1,18 +1,154 @@
 <!DOCTYPE html>
-<html lang="en"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
+<head>
+    <title th:fragment="title">Trang chủ - Giảng Viên</title>
 
-    <body>
-        <main>
-            <h1>xin chào các bạn!</h1>
-            <h2>Mình là giảng viên!!</h2>
-        </main>
-    </body>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+        
+        .sidebar a {
+            padding: 12px 24px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        /* Nút mở sidebar */
+        
+        .open-btn {
+            font-size: 26px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+        }
+        /* Nội dung chính */
+        
+        .main-content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            padding: 20px;
+        }
+        /* Khi sidebar mở */
+        
+        .sidebar.open {
+            width: 250px;
+        }
+        
+        .main-content.shift {
+            margin-left: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <main th:fragment="main" class="container-fluid">
+
+        <button class="open-btn" onclick="toggleSidebar()">☰ Menu</button>
+
+        <div id="sidebar" class="sidebar">
+            <a class="nav-link" th:href="@{/khoa-hoc-da-tao}">📘 Khóa
+                    học đã tạo</a>
+            <a class="nav-link" th:href="@{/them-moi-khoa-hoc}">➕ Tạo
+                    khóa học</a>
+            <a class="nav-link" th:href="@{/vi-giang-vien}">👤 Ví giảng
+                    viên</a>
+            <a class="nav-link" th:href="@{/quan-ly-hoc-vien}">👥 Quản
+                    lý học viên</a>
+            <a class="nav-link" th:href="@{/danh-gia-tu-khoa-hoc}">⭐
+                    Đánh giá</a>
+            <a class="nav-link" th:href="@{/binh-luan-tu-bai-giang}">💬
+                    Bình luận</a>
+            <a class="nav-link" th:href="@{/danh-sach-thong-ke}">📊
+                    Thống kê</a>
+            <a class="nav-link" th:href="@{/thong-bao}">🔔 Thông báo</a>
+        </div>
+
+        <!-- Nội dung chính -->
+        <div id="mainContent" class="py-5 px-3"></div>
+        <h1 class="text-center mb-5">Trang quản lý giảng viên</h1>
+
+        <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
+        <div class="mb-5">
+            <h2 class="mb-4">📚 Khóa học bạn đã tạo</h2>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Tìm kiếm khoá học...">
+            </div>
+
+            <div class="list-group shadow-sm">
+                <th:block th:each="khoaHoc : ${khoaHocList}">
+                    <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <div>
+                            <h5 th:text="${khoaHoc.tenKhoaHoc}" class="mb-1"></h5>
+                            <small th:text="${khoaHoc.moTa}"></small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="showDetail()">Xem chi tiết</button>
+                    </div>
+                </th:block>
+            </div>
+
+            <div class="mt-3">
+                <a href="/tkh" class="btn btn-success">+ Thêm khóa học
+                            mới</a>
+            </div>
+        </div>
+
+        <!-- KHÓA HỌC ĐƯỢC MUA NHIỀU NHẤT -->
+        <div>
+            <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
+            <div class="row g-4">
+                <div class="col-md-4" th:each="khoaHoc : ${topKhoaHocList}">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}"></h5>
+                            <p class="card-text" th:text="${khoaHoc.moTa}"></p>
+                            <span class="badge bg-primary" th:text="${khoaHoc.luotMua + ' lượt mua'}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const sidebar = document.getElementById("sidebar");
+                const main = document.getElementById("mainContent");
+
+                if (sidebar && main) {
+                    sidebar.classList.toggle("open");
+                    main.classList.toggle("shift");
+                } else {
+                    console.error("Không tìm thấy phần tử sidebar hoặc mainContent");
+                }
+            });
+        </script>
+
+
+    </main>
+</body>
 
 </html>

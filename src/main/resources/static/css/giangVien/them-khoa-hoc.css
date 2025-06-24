@@ -1,0 +1,186 @@
+.themkhoahoc .container {
+    display: flex;
+    align-items: flex-start;
+    background: #fff;
+    min-height: 100vh;
+}
+
+
+/* === Sidebar === */
+
+.themkhoahoc .sidebar {
+    width: 240px;
+    background: #f7f7f7;
+    border-right: 1px solid #e0e0e0;
+    padding: 48px 0 0 0;
+    min-height: 100vh;
+}
+
+.themkhoahoc .sidebar-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-left: 40px;
+    margin-bottom: 32px;
+}
+
+.themkhoahoc .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.themkhoahoc .sidebar-menu li {
+    padding: 18px 40px;
+    font-size: 17px;
+    color: #22314f;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 4px;
+}
+
+.themkhoahoc .sidebar-menu li.active,
+.themkhoahoc .sidebar-menu li:hover {
+    background: #22314f;
+    color: #fff;
+    border-left: 4px solid #22314f;
+}
+
+.themkhoahoc .sidebar-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* === Main Content === */
+
+.themkhoahoc .main-content {
+    flex: 1;
+    padding: 48px 56px 0 56px;
+    min-width: 0;
+    background: #fff;
+}
+
+.themkhoahoc .main-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 32px;
+}
+
+.themkhoahoc .add-course-form {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: #fff;
+    padding: 32px 32px 24px 32px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+}
+
+.themkhoahoc .add-course-form label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #22314f;
+    font-size: 15px;
+}
+
+.themkhoahoc .add-course-form input[type="text"],
+.themkhoahoc .add-course-form input[type="number"],
+.themkhoahoc .add-course-form select,
+.themkhoahoc .add-course-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #fff;
+    margin-bottom: 2px;
+    font-family: inherit;
+}
+
+.themkhoahoc .add-course-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.themkhoahoc .form-row {
+    display: flex;
+    gap: 24px;
+}
+
+.themkhoahoc .form-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.themkhoahoc .add-course-form input[type="file"] {
+    padding: 4px 0;
+    font-size: 15px;
+}
+
+.themkhoahoc .form-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 14px;
+    justify-content: flex-start;
+}
+
+.themkhoahoc .btn-detail,
+.themkhoahoc .btn-outline {
+    background: #22314f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 32px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.themkhoahoc .btn-detail:hover,
+.themkhoahoc .btn-outline:hover {
+    background: #1a2540;
+    color: #fff;
+}
+
+.themkhoahoc .btn-outline {
+    background: #fff;
+    color: #22314f;
+    border: 1px solid #22314f;
+}
+
+.themkhoahoc .btn-outline:hover {
+    background: #22314f;
+    color: #fff;
+}
+
+@media (max-width: 900px) {
+    .themkhoahoc .main-content {
+        padding: 24px 8px 0 8px;
+    }
+    .themkhoahoc .add-course-form {
+        padding: 18px 4px 12px 4px;
+    }
+    .themkhoahoc .sidebar {
+        width: 100%;
+        min-width: 0;
+        padding: 24px 0 0 0;
+    }
+    .themkhoahoc .sidebar-title {
+        margin-left: 18px;
+        font-size: 18px;
+    }
+    .themkhoahoc .sidebar-menu li {
+        padding: 12px 18px;
+        font-size: 15px;
+    }
+}

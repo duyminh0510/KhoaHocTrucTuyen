@@ -25,8 +25,8 @@ public class RutTienGiangVien implements Serializable {
     private Integer rutTienId;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan accountGV;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoanGV;
 
     @Column(name = "soTienRut", precision = 12, scale = 2, nullable = false)
     private BigDecimal soTienRut;

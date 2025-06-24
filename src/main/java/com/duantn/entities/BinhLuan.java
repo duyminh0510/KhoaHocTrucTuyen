@@ -34,8 +34,8 @@ public class BinhLuan implements Serializable {
     private BinhLuan parent;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan account;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoan;
 
     @ManyToOne
     @JoinColumn(name = "baiGiangId", nullable = false)

@@ -11,16 +11,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "Cart")
+@Table(name = "GioHang")
 public class GioHang implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cartId;
+    private Integer giohangId;
 
     @Column(name = "NgayTao", nullable = false)
     private LocalDateTime ngayTao;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan account;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoan;
 }

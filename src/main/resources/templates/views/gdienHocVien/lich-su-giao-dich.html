@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử giao dịch</title>
+    <link rel="stylesheet" href="/css/hocVien/home-hoc-vien.css">
+    <style>
+        .history-container {
+            max-width: 900px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px rgba(34,49,79,0.09);
+            padding: 40px 36px 32px 36px;
+        }
+        .history-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #22314f;
+            margin-bottom: 32px;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .history-table th, .history-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .history-table th {
+            background: #f1f5f9;
+            color: #22314f;
+            font-size: 17px;
+        }
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+        .status-success { color: #388e3c; font-weight: 600; }
+        .status-fail { color: #d32f2f; font-weight: 600; }
+        body{
+    font-family: 'Times New Roman', Times, serif;
+}
+    </style>
+</head>
+<body>
+<div class="history-container">
+    <div class="history-title">Lịch sử giao dịch</div>
+    
+    <!-- Debug message -->
+    <div th:if="${debugMessage}" style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #1976d2;">
+        <strong>Debug:</strong> <span th:text="${debugMessage}"></span>
+    </div>
+    
+    <!-- Error message -->
+    <div th:if="${error}" style="background: #ffebee; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #d32f2f;">
+        <strong>Lỗi:</strong> <span th:text="${error}"></span>
+    </div>
+    
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Mã GD</th>
+                <th>Hình thức</th>
+                <th>Ngày giao dịch</th>
+                <th>Tên học viên</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="gd : ${giaoDichList}">
+                <td th:text="${gd.giaodichId}"></td>
+                <td th:text="${gd.hinhThucThanhToan}"></td>
+                <td th:text="${#temporals.format(gd.ngayGiaoDich, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${gd.tenhocvien}"></td>
+                <td th:text="${#numbers.formatDecimal(gd.tongtien, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                <td>
+                    <span th:if="${gd.trangthai.name() == 'HOAN_THANH'}" class="status-success">Thành công</span>
+                    <span th:if="${gd.trangthai.name() == 'CHO_XU_LY'}" style="color: #f57c00; font-weight: 600;">Chờ xử lý</span>
+                    <span th:if="${gd.trangthai.name() == 'THAT_BAI'}" class="status-fail">Thất bại</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(giaoDichList)}">
+                <td colspan="6" style="text-align:center; color:#888;">Chưa có giao dịch nào.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html> 

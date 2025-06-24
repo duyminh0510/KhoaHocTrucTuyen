@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý học viên</title>
+
+    </head>
+
+    <body>
+        <main>
+            <div class="container py-4">
+                <h2 class="mb-4 fw-bold text-primary-custom">👨‍🎓 Quản lý học
+                    viên
+                </h2>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle table-student">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>ID</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Điện thoại</th>
+                                <th>Ngày tạo</th>
+                                <th>Trạng thái</th>
+                                <th>Chi tiết</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="hv : ${listHocVien}">
+                                <td><img th:src="${hv.avatar}"
+                                        class="avatar-student"
+                                        alt="avatar" /></td>
+                                <td th:text="${hv.id}"></td>
+                                <td th:text="${hv.name}"></td>
+                                <td th:text="${hv.email}"></td>
+                                <td th:text="${hv.phone}"></td>
+                                <td th:text="${hv.ngayTao}"></td>
+                                <td>
+                                    <span th:classappend="
+                                ${hv.trangThai} == 'Hoạt động' ? 'badge badge-active' : 'badge badge-locked'"
+                                        th:text="${hv.trangThai}"></span>
+                                </td>
+                                <td>
+                                    <a
+                                        th:href="@{'/admin/quanly-hocvien-detail/' + ${hv.id}}"
+                                        class="btn btn-sm btn-outline-info">Xem</a>
+                                </td>
+                                <td>
+                                    <a
+                                        th:href="@{'/admin/quanly-hocvien-form/' + ${hv.id}}"
+                                        class="btn btn-sm btn-warning me-1">Sửa</a>
+                                    <button type="button"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Bạn có chắc muốn xóa học viên này?')">Xóa</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Khoá học đã mua</title>
+    <link rel="stylesheet" href="/css/hocVien/home-hoc-vien-courses.css">
+    <style>
+        .purchased-container {
+            max-width: 900px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px rgba(34,49,79,0.09);
+            padding: 40px 36px 32px 36px;
+        }
+        .purchased-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .purchased-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #22314f;
+        }
+        .btn-back-home {
+            padding: 10px 16px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-back-home:hover {
+            background: #5a6268;
+            color: white;
+        }
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+        .course-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(34,49,79,0.07);
+            padding: 0 0 24px 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .course-card:hover {
+            box-shadow: 0 6px 24px rgba(34,49,79,0.13);
+        }
+        .course-thumb {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 16px 16px 0 0;
+        }
+        .course-info {
+            padding: 20px 24px 0 24px;
+            flex: 1;
+        }
+        .course-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #22314f;
+            margin-bottom: 8px;
+        }
+        .course-desc {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 12px;
+            min-height: 40px;
+        }
+        .course-meta {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .course-price {
+            font-size: 17px;
+            color: #d32f2f;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            border: 1px solid #c3e6cb;
+        }
+        body{
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+<div class="purchased-container">
+    <div class="purchased-header">
+        <div class="purchased-title">Khoá học đã mua</div>
+        <a href="/hoc-vien/home" class="btn-back-home">
+            <i class="fas fa-home"></i> Về trang chủ
+        </a>
+    </div>
+    
+    <!-- Thông báo thành công -->
+    <div class="success-message" th:if="${param.success}" style="display: block;">
+        <i class="fas fa-check-circle"></i> Đánh giá của bạn đã được gửi thành công!
+    </div>
+    
+    <div class="courses-grid">
+        <div class="course-card" th:each="kh,iter : ${khoaHocDaMuaList}">
+            <img th:src="@{'/photos/' + ${kh.anhBia}}" alt="Ảnh khoá học" class="course-thumb" />
+            <div class="course-info">
+                <div class="course-title" th:text="${kh.tenKhoaHoc}"></div>
+                <div class="course-desc" th:text="${kh.moTa}"></div>
+                <div class="course-meta">Giảng viên: <span th:text="${kh.giangVien}"></span></div>
+                <div class="course-price" th:text="${#numbers.formatDecimal(kh.gia, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+                <div style="margin-top:18px; display:flex; gap:12px;">
+                    <a th:href="@{'/hoc-tap/khoa-hoc/' + ${kh.id}}" class="btn-detail">Học ngay</a>
+                    <a th:if="${kh.danhGia == false}" 
+                       th:href="@{'/danh-gia/khoa-hoc/' + ${kh.id}}" 
+                       class="btn-detail btn-outline">Đánh giá</a>
+                    <button type="button" class="btn-detail btn-outline"
+                        th:if="${kh.danhGia == true}"
+                        disabled>Đã đánh giá</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

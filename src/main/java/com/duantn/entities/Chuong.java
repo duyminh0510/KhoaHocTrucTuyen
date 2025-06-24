@@ -52,7 +52,7 @@ public class Chuong implements Serializable {
     private Boolean trangthai;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private KhoaHoc courses;
+    @JoinColumn(name = "khoahocId", nullable = false)
+    private KhoaHoc khoahoc;
 
 }

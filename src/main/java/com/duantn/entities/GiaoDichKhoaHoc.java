@@ -41,6 +41,6 @@ public class GiaoDichKhoaHoc {
     private TrangThaiGiaoDich trangthai;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan accounts;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoan;
 }

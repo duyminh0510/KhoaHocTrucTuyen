@@ -43,12 +43,12 @@ public class DangHoc implements Serializable {
     private LocalDateTime ngayHoanThanh;
 
     @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    private TaiKhoan accounts;
+    @JoinColumn(name = "taikhoanId", nullable = false)
+    private TaiKhoan taikhoan;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private KhoaHoc courses;
+    @JoinColumn(name = "khoahocId", nullable = false)
+    private KhoaHoc khoahoc;
 
     @OneToMany(mappedBy = "dangHoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DoanhThuGiangVien> danhSachDoanhThu;
