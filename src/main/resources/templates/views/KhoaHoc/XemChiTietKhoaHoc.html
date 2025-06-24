@@ -91,10 +91,10 @@
 
             <span
               class="badge bg-success ms-2"
-              th:if="${course.phanTramGiam != null}"
-              th:text="'Giảm ' + course.phanTramGiam + '%'"
+              th:if="${course.phanTramGiam != null and course.phanTramGiam > 0}"
+              th:inline="text"
             >
-              -50%
+              Giảm [[${course.phanTramGiam}]]%
             </span>
           </div>
 
@@ -140,23 +140,7 @@
         <h4>Mô tả khóa học</h4>
         <p th:utext="${course.moTa}">Nội dung mô tả chi tiết...</p>
       </div>
-
-      <!-- Danh sách chương -->
-      <div
-        class="mt-4"
-        th:if="${course.chuongs != null and #lists.size(course.chuongs) > 0}"
-      >
-        <h5>Nội dung khóa học</h5>
-        <ul class="list-group">
-          <li
-            class="list-group-item"
-            th:each="chuong : ${course.chuongs}"
-            th:text="${chuong.tenChuong}"
-          >
-            Chương 1: Giới thiệu
-          </li>
-        </ul>
-      </div>
     </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </html>
