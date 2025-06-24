@@ -64,29 +64,44 @@
             <!-- Sidebar -->
             <div id="sidebar">
                 <div class="p-3 border-bottom">
-                    <h4 style="color: white; text-align: center;">QUẢN LÝ</h4>
+                    <h4 style="color: white; text-align: center;">QUẢN LÝ
+                    </h4>
                 </div>
                 <nav class="nav flex-column p-3">
-                    <a class="nav-link" th:href="@{/khoa-hoc-da-tao}">📘 Khóa
+                    <a class="nav-link"
+                        th:href="@{/giangvien/trang-giang-vien}">👨‍🏫
+                        Trang giảng viên</a>
+                    <a class="nav-link"
+                        th:href="@{/giangvien/khoa-hoc-da-tao}">📘
+                        Khóa
                         học đã
                         tạo</a>
-                    <a class="nav-link" th:href="@{/them-moi-khoa-hoc}">➕ Tạo
+                    <a class="nav-link"
+                        th:href="@{/giangvien/them-moi-khoa-hoc}">➕
+                        Tạo
                         khóa học</a>
-                    <a class="nav-link" th:href="@{/vi-giang-vien}">👤 Ví giảng
+                    <a class="nav-link" th:href="@{/giangvien/vi-giang-vien}">👤
+                        Ví
+                        giảng
                         viên</a>
-                    <a class="nav-link" th:href="@{/quan-ly-hoc-vien}">👥 Quản
+                    <a class="nav-link"
+                        th:href="@{/giangvien/quan-ly-hoc-vien}">👥
+                        Quản
                         lý
                         học viên</a>
-                    <a class="nav-link" th:href="@{/danh-gia-tu-khoa-hoc}">⭐
+                    <a class="nav-link"
+                        th:href="@{/giangvien/danh-gia-tu-khoa-hoc}">⭐
                         Đánh
                         giá</a>
-                    <a class="nav-link" th:href="@{/binh-luan-tu-bai-giang}">💬
+                    <a class="nav-link"
+                        th:href="@{/giangvien/binh-luan-tu-bai-giang}">💬
                         Bình
                         luận</a>
-                    <a class="nav-link" th:href="@{/danh-sach-thong-ke}">📊
+                    <a class="nav-link"
+                        th:href="@{/giangvien/danh-sach-thong-ke}">📊
                         Thống
                         kê</a>
-                    <a class="nav-link" th:href="@{/thong-bao}">🔔
+                    <a class="nav-link" th:href="@{/giangvien/thong-bao}">🔔
                         Thông báo</a>
                 </nav>
 
@@ -101,6 +116,7 @@
             sidebar.classList.toggle("active");
         });
     </script>
+
     </body>
 
 </html>

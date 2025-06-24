@@ -1,0 +1,47 @@
+        .thongbao {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 40px 20px;
+            color: #16203b;
+        }
+        
+        .thongbao .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .thongbao h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #16203b;
+            padding-bottom: 10px;
+        }
+        
+        .thongbao .notice {
+            padding: 20px;
+            border-left: 5px solid #16203b;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .thongbao .notice h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+        
+        .thongbao .notice p {
+            margin: 0;
+            color: #555;
+        }
+        
+        .thongbao .notice time {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }

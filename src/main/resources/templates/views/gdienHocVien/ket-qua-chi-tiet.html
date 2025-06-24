@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Kết quả chi tiết</title>
+    </head>
+
+    <body>
+        <main class="ketquachitiet">
+            <div class="container">
+                <h1 class="text-center mb-4">📋 Kết quả chi tiết bài trắc nghiệm
+                </h1>
+
+                <!-- Thông tin tổng quan -->
+                <div class="summary-box">
+                    <p><strong>Bài trắc nghiệm:</strong> Bài trắc nghiệm cuối
+                        khóa
+                    </p>
+                    <p><strong>Khóa học:</strong> Lập trình Java cơ bản</p>
+                    <p><strong>Ngày làm bài:</strong> 21/06/2025 - 14:15</p>
+                    <p><strong>Điểm số:</strong> <span class="score">9.5 /
+                            10</span></p>
+                </div>
+
+                <!-- Danh sách câu hỏi -->
+                <div class="question-list">
+                    <div class="question-item">
+                        <p><strong>Câu 1:</strong> Java là ngôn ngữ lập trình
+                            gì?
+                        </p>
+                        <ul class="answers">
+                            <li class="correct">A. Hướng đối tượng ✅</li>
+                            <li>B. Hướng sự kiện</li>
+                            <li>C. Hàm</li>
+                            <li>D. Thủ tục</li>
+                        </ul>
+                        <p class="status correct">Bạn đã chọn: A - Chính xác 🎉
+                        </p>
+                    </div>
+
+                    <div class="question-item">
+                        <p><strong>Câu 2:</strong> Từ khóa để khai báo lớp trong
+                            Java là gì?</p>
+                        <ul class="answers">
+                            <li>B. method</li>
+                            <li class="correct">C. class ✅</li>
+                            <li>D. define</li>
+                            <li>A. object</li>
+                        </ul>
+                        <p class="status wrong">Bạn đã chọn: A - Sai ❌</p>
+                    </div>
+
+                    <!-- Thêm các câu tiếp theo nếu cần -->
+                </div>
+
+                <!-- Nút trở lại -->
+                <div class="text-center mt-4">
+                    <a href="/ket-qua-lam-bai" class="btn-detail">⬅️ Quay lại
+                        danh sách kết quả</a>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

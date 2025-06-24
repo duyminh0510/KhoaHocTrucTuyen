@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Quản lý học viên</title>
+    </head>
+
+    <body>
+        <main class="hocvien">
+            <div class="quanlyhocvien">
+                <h1><i class="fas fa-user-graduate"></i> Quản lý học viên</h1>
+
+                <!-- Bộ lọc khóa học -->
+                <div class="filter-course">
+                    <label for="courseSelect"><strong>Chọn khóa
+                            học:</strong></label>
+                    <select id="courseSelect" onchange="filterByCourse()">
+                        <option value="all">Tất cả</option>
+                        <option value="java">Java Spring Boot Cơ Bản</option>
+                        <option value="react">React JS Nâng Cao</option>
+                    </select>
+                </div>
+
+                <!-- Tìm kiếm -->
+                <div class="search-bar">
+                    <input type="text"
+                        placeholder="Tìm kiếm học viên theo tên, email...">
+                </div>
+
+                <!-- Bảng -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Khóa học</th>
+                            <th>Tiến độ</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-course="java">
+                            <td>1</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>a.nguyen@example.com</td>
+                            <td>Java Spring Boot Cơ Bản</td>
+                            <td>75%</td>
+                            <td class="actions">
+                                <a href="javascript:void(0)" class="btn"
+                                    onclick="openModal('Nguyễn Văn A', 'a.nguyen@example.com', 'Java Spring Boot Cơ Bản', '75%')">Xem</a>
+                            </td>
+                        </tr>
+                        <tr data-course="react">
+                            <td>2</td>
+                            <td>Trần Thị B</td>
+                            <td>b.tran@example.com</td>
+                            <td>React JS Nâng Cao</td>
+                            <td>90%</td>
+                            <td class="actions">
+                                <a href="javascript:void(0)" class="btn"
+                                    onclick="openModal('Trần Thị B', 'b.tran@example.com', 'React JS Nâng Cao', '90%')">Xem</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="studentModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div class="modal-header">Chi tiết học viên</div>
+                    <div class="modal-body">
+                        <p><strong>Họ và tên:</strong> <span
+                                id="modalTen"></span></p>
+                        <p><strong>Email:</strong> <span
+                                id="modalEmail"></span></p>
+                        <p><strong>Khóa học:</strong> <span
+                                id="modalKhoaHoc"></span></p>
+                        <p><strong>Tiến độ:</strong> <span
+                                id="modalTienDo"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Script -->
+            <script>
+            function openModal(ten, email, khoaHoc, tienDo) {
+                document.getElementById('modalTen').textContent = ten;
+                document.getElementById('modalEmail').textContent = email;
+                document.getElementById('modalKhoaHoc').textContent = khoaHoc;
+                document.getElementById('modalTienDo').textContent = tienDo;
+                document.getElementById('studentModal').style.display = "block";
+            }
+
+            function closeModal() {
+                document.getElementById('studentModal').style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target === document.getElementById('studentModal')) {
+                    closeModal();
+                }
+            }
+
+            function filterByCourse() {
+                const selected = document.getElementById("courseSelect").value;
+                const rows = document.querySelectorAll("tbody tr");
+
+                rows.forEach(row => {
+                    const course = row.getAttribute("data-course");
+                    if (selected === "all" || course === selected) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            }
+        </script>
+        </main>
+    </body>
+
+</html>

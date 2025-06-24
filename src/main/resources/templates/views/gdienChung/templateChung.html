@@ -10,18 +10,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
             rel="stylesheet">
 
-        <link rel="stylesheet" href="/css/chung/login.css">
-        <link rel="stylesheet" href="/css/chung/register.css">
-        <link rel="stylesheet" href="/css/chung/home-chung.css">
-        <link rel="stylesheet" href="/css/chung/home-hocvien.css">
-        <link rel="stylesheet" href="/css/quanLy/home-quanly.css">
-        <link rel="stylesheet" href="/css/quanLy/quanly-thanh-toan.css">
-        <link rel="stylesheet" href="/css/quanLy/quanly-giao-dich.css">
-        <link rel="stylesheet" href="/css/chung/danh-muc.css">
-        <link rel="stylesheet" href="/css/chung/gio-hang.css">
-        <link rel="stylesheet" href="/css/chung/quen-mat-khau.css">
-        <link rel="stylesheet" href="/css/chung/buoc2-quen-mat-khau.css">
-        <link rel="stylesheet" href="/css/giangVien/my-courses.css">
+        <link rel="stylesheet" href="/css/all.css">
 
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -37,11 +26,16 @@
         <nav th:replace="~{views/layouts/navquanly}"
             sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_NHANVIEN')">Nav</nav>
 
+        <!-- Chỉ hiển thị nav này nếu người dùng có role là Giảng viên -->
+        <nav th:replace="~{views/layouts/navgiangvien}"
+            sec:authorize="hasRole('ROLE_GIANGVIEN')">Nav</nav>
+
         <main th:replace="${content}">
             <h1>Content</h1>
         </main>
 
         <footer th:replace="~{views/layouts/footer}">Footer</footer>
+
         <!-- Bootstrap JS -->
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
