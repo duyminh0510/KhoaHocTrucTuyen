@@ -25,7 +25,7 @@ public class KhoaHocController {
         GiangVien gv2 = GiangVien.builder().giangvienId(2).build();
 
         // Giả lập khóa học
-        KhoaHoc kh1 = KhoaHoc.builder().courseId(1).tenKhoaHoc("Java Spring Boot")
+        KhoaHoc kh1 = KhoaHoc.builder().khoahocId(1).tenKhoaHoc("Java Spring Boot")
                 .giagoc(new BigDecimal("1000000")).giaKhuyenMai(new BigDecimal("750000"))
                 .phanTramGiam(25).ngaybatdau(LocalDateTime.now())
                 .ngayketthuc(LocalDateTime.now().plusMonths(1))
@@ -33,7 +33,7 @@ public class KhoaHocController {
                 .urlGioiThieu("https://youtube.com/demo").anhBia("springboot.jpg").trangThai(true)
                 .ngayTao(LocalDateTime.now()).danhMuc(dm1).giangVien(gv1).build();
 
-        KhoaHoc kh2 = KhoaHoc.builder().courseId(2).tenKhoaHoc("UI/UX Design")
+        KhoaHoc kh2 = KhoaHoc.builder().khoahocId(2).tenKhoaHoc("UI/UX Design")
                 .giagoc(new BigDecimal("800000")).giaKhuyenMai(new BigDecimal("600000"))
                 .phanTramGiam(25).ngaybatdau(LocalDateTime.now())
                 .ngayketthuc(LocalDateTime.now().plusMonths(1))

@@ -11,19 +11,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "Course")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "KhoaHoc")
 public class KhoaHoc implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id")
-    private Integer courseId;
+    @Column(name = "khoahocId")
+    private Integer khoahocId;
 
     @Column(name = "url_gioi_thieu", length = 500)
     private String urlGioiThieu;
@@ -75,6 +75,6 @@ public class KhoaHoc implements Serializable {
     @JoinColumn(name = "danhmuc_id", nullable = false)
     private DanhMuc danhMuc;
 
-    @OneToMany(mappedBy = "courses", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chuong> chuongs;
 }

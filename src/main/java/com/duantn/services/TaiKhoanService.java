@@ -2,8 +2,8 @@ package com.duantn.services;
 
 import com.duantn.entities.TaiKhoan;
 
-public interface TaiKhoanService {
+public interface TaiKhoanService<T extends TaiKhoan> {
     TaiKhoan login(String email, String password);
 
-    TaiKhoan register(TaiKhoan account);
+    TaiKhoan register(TaiKhoan taiKhoan);
 }

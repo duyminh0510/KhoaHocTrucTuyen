@@ -26,15 +26,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "Account")
+@Table(name = "TaiKhoan")
 public class TaiKhoan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accountId")
-    private Integer accountId;
+    @Column(name = "taikhoanId")
+    private Integer taikhoanId;
 
     @Column(name = "name")
     private String name;
@@ -69,18 +69,18 @@ public class TaiKhoan implements Serializable {
     @JoinColumn(name = "roleId", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "accounts", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     private GiangVien giangVien;
 
-    @OneToMany(mappedBy = "accountGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DoanhThuGiangVien> danhSachDoanhThu;
 
-    @OneToMany(mappedBy = "accountGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RutTienGiangVien> rutTienGV;
 
-    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GiaoDichKhoaHoc> giaodich;
 
-    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<KetQua> ketqua;
 }

@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "GiaoDichKhoaHocDetail")
+@Table(name = "GiaoDichKhoaHocChiTiet")
 public class GiaoDichKhoaHocChiTiet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,6 @@ public class GiaoDichKhoaHocChiTiet implements Serializable {
     private GiaoDichKhoaHoc giaoDichKhoaHoc;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private KhoaHoc courses;
+    @JoinColumn(name = "khoahocId", nullable = false)
+    private KhoaHoc khoahoc;
 }

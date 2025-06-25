@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "CartItem")
+@Table(name = "GioHangChiTiet")
 public class GioHangChiTiet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +28,10 @@ public class GioHangChiTiet implements Serializable {
     private LocalDateTime ngayThem;
 
     @ManyToOne
-    @JoinColumn(name = "cartId", nullable = false)
-    private GioHang carts;
+    @JoinColumn(name = "giohangId", nullable = false)
+    private GioHang giohang;
 
     @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
-    private KhoaHoc courses;
+    @JoinColumn(name = "khoahocId", nullable = false)
+    private KhoaHoc khoahoc;
 }
