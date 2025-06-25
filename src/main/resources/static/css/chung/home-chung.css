@@ -1,0 +1,53 @@
+.homechung .banner {
+    background-color: #999;
+    color: white;
+    text-align: center;
+    font-size: 36px;
+    padding: 80px 0px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.homechung .course-tabs {
+    margin-top: 30px;
+}
+
+.homechung .course-tabs ul {
+    border-bottom: 2px solid #ccc;
+}
+
+.homechung .course-tabs li {
+    margin-right: 20px;
+}
+
+.homechung .course-tabs .nav-link {
+    font-weight: 500;
+    color: #000;
+}
+
+.homechung .course-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.homechung .course-card .card-title {
+    font-weight: bold;
+}
+
+.homechung .rating {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+.homechung .course-btn {
+    margin-top: 20px;
+}
+
+.homechung .card {
+    transition: transform 0.2s ease;
+}
+
+.homechung .card:hover {
+    transform: scale(1.02);
+}

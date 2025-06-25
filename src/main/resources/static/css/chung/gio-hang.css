@@ -1,0 +1,131 @@
+.giohang {
+    font-size: 18px;
+    font-weight: bold;
+    color: #16203b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.giohang i {
+    font-size: 30px;
+    color: #16203b;
+}
+
+.giohang .cart-wrapper {
+    padding: 40px 20px;
+}
+
+.giohang .cart-title {
+    font-weight: bold;
+    font-size: 32px;
+    color: #16203b;
+    margin-bottom: 30px;
+}
+
+.giohang .cart-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 0;
+}
+
+.giohang .cart-item img {
+    width: 120px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.giohang .item-title {
+    font-weight: 600;
+    font-size: 17px;
+    color: #16203b;
+    margin-bottom: 6px;
+}
+
+.giohang .item-meta {
+    font-size: 14px;
+    color: #555;
+}
+
+.giohang .label-tag {
+    font-size: 13px;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-right: 6px;
+}
+
+.giohang .item-price {
+    font-weight: bold;
+    font-size: 18px;
+    color: #16203b;
+}
+
+.giohang .item-old-price {
+    text-decoration: line-through;
+    font-size: 13px;
+    color: #888;
+}
+
+.giohang .item-action {
+    color: #6f42c1;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.giohang .cart-summary {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.giohang .summary-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #16203b;
+}
+
+.giohang .summary-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #16203b;
+}
+
+.giohang .summary-note {
+    font-size: 13px;
+    color: #666;
+}
+
+.giohang .checkout-btn {
+    background-color: #16203b;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 10px;
+}
+
+.giohang .checkout-btn:hover {
+    background-color: #0f172a;
+}
+
+.giohang .coupon-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #16203b;
+    color: #16203b;
+    font-weight: 600;
+    border-radius: 8px;
+    background: transparent;
+}
+
+.giohang .coupon-btn:hover {
+    background-color: #16203b;
+    color: white;
+}

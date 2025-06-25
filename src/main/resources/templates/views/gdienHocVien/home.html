@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Trang chủ</title>
+    </head>
+
+    <body>
+        <main class="trangchu">
+            <!-- BANNER -->
+            <div class="banner-container">
+                <div class="banner-main">BỎ BANNER</div>
+                <div class="banner-side">
+                    <div class="side-image">BỎ ẢNH</div>
+                    <div class="side-image">BỎ ẢNH</div>
+                </div>
+            </div>
+
+            <!-- KHÁM PHÁ -->
+            <section class="section">
+                <h3>Cùng nhau khám phá</h3>
+
+                <!-- NGƯỜI HỌC ĐANG XEM -->
+                <div class="sub-section">
+                    <h4>Người học đang xem</h4>
+                    <div class="course-grid">
+                        <th:block th:each="course : ${dangXemList}">
+                            <div class="course-card">
+                                <img th:src="@{${course.hinhAnh}}" alt="course">
+                                <h4 th:text="${course.tenKhoaHoc}"></h4>
+                                <p th:text="${course.moTa}"></p>
+                                <span class="rating">⭐⭐⭐⭐☆</span>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="text-end"><a href="#" class="btn-view">Xem
+                            thêm</a></div>
+                </div>
+
+                <!-- ĐỀ XUẤT CHO BẠN -->
+                <div class="sub-section">
+                    <h4>Khóa học được đề xuất cho bạn dựa trên xếp hạng</h4>
+                    <div class="course-grid">
+                        <th:block th:each="course : ${deXuatList}">
+                            <div class="course-card">
+                                <img th:src="@{${course.hinhAnh}}" alt="course">
+                                <h4 th:text="${course.tenKhoaHoc}"></h4>
+                                <p th:text="${course.moTa}"></p>
+                                <span class="rating">⭐⭐⭐⭐☆</span>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="text-end"><a href="#" class="btn-view">Xem
+                            thêm</a></div>
+                </div>
+            </section>
+
+            <!-- ẢNH -->
+            <div class="big-image">Ảnh</div>
+
+            <!-- KHÓA HỌC NỔI BẬT -->
+            <section class="section">
+                <h4>Các khóa học nổi bật về <span class="text-primary">Phát
+                        triển phần mềm</span></h4>
+                <div class="course-grid">
+                    <th:block th:each="course : ${noiBatList}">
+                        <div class="course-card">
+                            <img th:src="@{${course.hinhAnh}}" alt="course">
+                            <h4 th:text="${course.tenKhoaHoc}"></h4>
+                            <p th:text="${course.moTa}"></p>
+                            <span class="rating">⭐⭐⭐⭐☆</span>
+                        </div>
+                    </th:block>
+                </div>
+            </section>
+        </main>
+    </body>
+
+</html>

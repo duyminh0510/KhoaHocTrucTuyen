@@ -1,0 +1,33 @@
+.khoahoccuatoi .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.khoahoccuatoi .course-card {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.khoahoccuatoi .course-card:hover {
+    transform: translateY(-4px);
+}
+
+.khoahoccuatoi .course-card img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.khoahoccuatoi .certificate-card {
+    background: #eefaf0;
+    border-left: 5px solid #28a745;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}

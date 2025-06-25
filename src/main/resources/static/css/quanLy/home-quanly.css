@@ -1,0 +1,52 @@
+.homequanly .text-primary-custom {
+    color: #0b1c36 !important;
+}
+
+.homequanly .card-custom {
+    background-color: #0b1c36;
+    color: #fff;
+    border: none;
+    border-radius: 0.75rem;
+    transition: transform 0.2s;
+}
+
+.homequanly .card-custom:hover {
+    transform: translateY(-4px);
+}
+
+.homequanly .card-header-custom {
+    background-color: #0b1c36;
+    color: white;
+    font-weight: bold;
+}
+
+.homequanly .list-group-item {
+    font-size: 15px;
+}
+
+.homequanly .alert-info {
+    background-color: #dbe9ff;
+    color: #0b1c36;
+}
+
+.homequanly .alert-warning {
+    background-color: #fff4d6;
+    color: #856404;
+}
+
+.homequanly .highlight-box {
+    background: #0b1c36;
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.homequanly .highlight-box h5 {
+    font-size: 1rem;
+}
+
+.homequanly .highlight-box p {
+    font-size: 1.5rem;
+    font-weight: 600;
+}

@@ -1,0 +1,31 @@
+.khoahocyeuthich .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.khoahocyeuthich .course-card {
+    background: #fff9f9;
+    border: 1px solid #ffc0cb;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(255, 192, 203, 0.3);
+    transition: transform 0.2s;
+}
+
+.khoahocyeuthich .course-card:hover {
+    transform: translateY(-4px);
+}
+
+.khoahocyeuthich .course-card img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.khoahocyeuthich .btn {
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+}

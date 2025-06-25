@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Giỏ hàng</title>
+
+    </head>
+
+    <body>
+        <main class="giohang">
+            <div class="container cart-wrapper">
+                <div class="row">
+                    <!-- DANH SÁCH KHÓA HỌC -->
+                    <div class="col-md-8">
+                        <div class="cart-title">
+                            <h3 class="mb-4 fw-bold"><i
+                                    class="bi bi-cart3 me-2"></i> Giỏ hàng của
+                                bạn
+                            </h3>
+                        </div>
+                        <div class="cart-item d-flex gap-3">
+                            <img th:src="@{/photos/gioithieu1.png}"
+                                alt="khóa học">
+                            <div class="flex-grow-1">
+                                <div class="item-title">Lập trình Java Spring
+                                    Boot cơ bản</div>
+                                <div class="item-meta mb-2">Bởi Nguyễn Văn A
+                                </div>
+                                <div
+                                    class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="label-tag">Mới</span>
+                                    <span class="text-warning fw-bold">5.0
+                                        ★</span>
+                                    <small>(123 đánh giá)</small>
+                                </div>
+                                <div class="item-action">• Xóa khỏi giỏ hàng
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="item-price">499.000 ₫</div>
+                                <div class="item-old-price">899.000 ₫</div>
+                            </div>
+                        </div>
+
+                        <div class="cart-item d-flex gap-3">
+                            <img th:src="@{/photos/gioithieu2.png}"
+                                alt="khóa học">
+                            <div class="flex-grow-1">
+                                <div class="item-title">Thiết kế web với HTML,
+                                    CSS & Bootstrap
+                                </div>
+                                <div class="item-meta mb-2">Bởi Trần Thị B</div>
+                                <div
+                                    class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="label-tag">Cập nhật gần
+                                        đây</span>
+                                    <span class="text-warning fw-bold">4.6
+                                        ★</span>
+                                    <small>(2.000 lượt đánh giá)</small>
+                                </div>
+                                <div class="item-action">• Xóa khỏi giỏ hàng
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="item-price">299.000 ₫</div>
+                                <div class="item-old-price">750.000 ₫</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TỔNG KẾT -->
+                    <div class="col-md-4">
+                        <div class="cart-summary">
+                            <div class="summary-title mb-2">Tổng cộng:</div>
+                            <div class="summary-price mb-1">798.000 ₫</div>
+                            <div class="item-old-price mb-2">1.649.000 ₫ • Giảm
+                                giá 52%
+                            </div>
+                            <button class="checkout-btn">Tiến hành thanh toán
+                                →</button>
+                            <div class="summary-note mt-2">Bạn sẽ không bị tính
+                                phí ngay bây giờ</div>
+                            <button class="coupon-btn">Áp dụng phiếu giảm
+                                giá</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

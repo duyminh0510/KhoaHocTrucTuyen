@@ -1,0 +1,89 @@
+.vigiangvien .vigv-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.vigiangvien .vigv-container h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #16203b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vigiangvien .wallet-balance {
+    font-size: 22px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 30px;
+}
+
+.vigiangvien .withdraw-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.vigiangvien .withdraw-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.vigiangvien .withdraw-form button {
+    padding: 10px 18px;
+    background-color: #16203b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.vigiangvien .withdraw-form button:hover {
+    background-color: #1d2a4c;
+}
+
+.vigiangvien .transaction-history h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #16203b;
+}
+
+.vigiangvien .transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vigiangvien .transaction-table th,
+.vigiangvien .transaction-table td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 14px;
+}
+
+.vigiangvien .transaction-table th {
+    background-color: #f1f3f5;
+}
+
+.vigiangvien .transaction-table td.income {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.vigiangvien .transaction-table td.expense {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.vigiangvien .transaction-table td.status {
+    font-style: italic;
+}

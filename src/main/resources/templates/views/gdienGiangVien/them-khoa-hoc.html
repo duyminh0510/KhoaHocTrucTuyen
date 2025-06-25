@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Thêm khoá học</title>
+    </head>
+
+    <body>
+        <main class="themkhoahoc">
+            <div class="container">
+                <h2 class="main-title">THÊM KHOÁ HỌC</h2>
+                <form class="add-course-form" method="post"
+                    enctype="multipart/form-data">
+                    <label for="tenKhoaHoc">Tên khoá học</label>
+                    <input type="text" id="tenKhoaHoc" name="tenKhoaHoc"
+                        required>
+
+                    <label for="moTa">Mô tả</label>
+                    <textarea id="moTa" name="moTa" rows="4"
+                        required></textarea>
+
+                    <label for="giagoc">Giá gốc</label>
+                    <input type="number" id="giagoc" name="giagoc" step="0.01"
+                        required>
+
+                    <label for="giaKhuyenMai">Giá khuyến mãi</label>
+                    <input type="number" id="giaKhuyenMai" name="giaKhuyenMai"
+                        step="0.01">
+
+                    <label for="phanTramGiam">Phần trăm giảm (%)</label>
+                    <input type="number" id="phanTramGiam" name="phanTramGiam"
+                        min="0" max="100">
+
+                    <label for="ngaybatdau">Ngày bắt đầu</label>
+                    <input type="date" id="ngaybatdau" name="ngaybatdau">
+
+                    <label for="ngayketthuc">Ngày kết thúc</label>
+                    <input type="date" id="ngayketthuc" name="ngayketthuc">
+
+                    <label for="danhMuc">Danh mục</label>
+                    <select id="danhMuc" name="danhMuc">
+                        <option value>Chọn danh mục</option>
+                    </select>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="anhBia">Ảnh bìa</label>
+                            <input type="file" id="anhBia" name="anhBia">
+                        </div>
+                        <div class="form-col">
+                            <label for="urlGioiThieu">Video giới thiệu
+                                (URL)</label>
+                            <input type="text" id="urlGioiThieu"
+                                name="urlGioiThieu">
+                        </div>
+                    </div>
+
+                    <label for="trangThai">Trạng thái</label>
+                    <select id="trangThai" name="trangThai">
+                        <option value="true">Hiển thị</option>
+                        <option value="false">Ẩn</option>
+                    </select>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-detail">THÊM</button>
+                        <button type="reset" class="btn-detail btn-outline">LÀM
+                            MỚI</button>
+                        <button type="button"
+                            class="btn-detail btn-outline">HUỶ</button>
+                    </div>
+                </form>
+
+            </div>
+        </main>
+    </body>
+
+</html>

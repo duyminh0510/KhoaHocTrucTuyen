@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Xác minh email</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        <main class="verify">
+            <section class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-5">
+                        <div class="card shadow rounded">
+                            <div class="card-body p-4">
+                                <h4
+                                    class="card-title text-center text-primary mb-4">
+                                    ✉️ Nhập mã xác minh email
+                                </h4>
+                                <p class="text-muted text-center">
+                                    Mã đã được gửi đến địa chỉ email bạn đã đăng
+                                    ký
+                                </p>
+
+                                <!-- Form xác minh -->
+                                <form th:action="@{/auth/verify}" method="post">
+                                    <div class="mb-3">
+                                        <label for="code" class="form-label">Mã
+                                            xác minh:</label>
+                                        <input type="text" name="code"
+                                            class="form-control" required
+                                            placeholder="Nhập mã 6 chữ số" />
+                                    </div>
+
+                                    <div th:if="${error}"
+                                        class="alert alert-danger text-center"
+                                        th:text="${error}"></div>
+
+                                    <button type="submit"
+                                        class="btn btn-primary w-100">Xác
+                                        minh</button>
+                                </form>
+
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">Chưa nhận được mã?
+                                        Vui lòng kiểm tra lại email hoặc gửi lại
+                                        sau ít phút.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+
+</html>

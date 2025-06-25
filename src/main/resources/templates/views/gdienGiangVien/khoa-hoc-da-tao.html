@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <title th:fragment="title">Khóa học đã tạo</title>
+    </head>
+
+    <body>
+        <main th:fragment="main" class="khoahocdatao">
+            <div class="container">
+                <div class="search-bar">
+                    <input type="text" placeholder="🔍 Tìm kiếm khóa học..." />
+                </div>
+
+                <div class="course-list">
+                    <th:block th:each="khoaHoc : ${khoaHocList}">
+                        <div class="course-card">
+                            <div class="course-info">
+                                <h3 th:text="${khoaHoc.tenKhoaHoc}">Tên khóa
+                                    học</h3>
+                                <p th:text="${khoaHoc.moTa}">Mô tả ngắn về khóa
+                                    học...</p>
+                            </div>
+                            <div class="course-actions">
+                                <a class="btn-view" href="#">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div class="add-new">
+                    <a href="/giangvien/them-moi-khoa-hoc" class="btn-add">
+                        ➕ Thêm khóa học mới
+                    </a>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

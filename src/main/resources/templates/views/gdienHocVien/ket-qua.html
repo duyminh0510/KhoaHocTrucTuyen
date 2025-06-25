@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Kết quả trắc nghiệm</title>
+    </head>
+
+    <body>
+        <main class="ketqua">
+            <div class="list-container">
+                <div class="list-header">
+                    <h1>Kết quả bài trắc nghiệm</h1>
+                </div>
+
+                <div class="result-summary" style="text-align: center;">
+                    <h2 style="color: #1e3a8a; margin-bottom: 20px;">🎉 Bạn đã
+                        hoàn thành bài trắc nghiệm!</h2>
+
+                    <p><strong>Bài trắc nghiệm:</strong> Bài trắc nghiệm cuối
+                        khóa
+                    </p>
+                    <p><strong>Khóa học:</strong> Lập trình Java cơ bản</p>
+                    <p><strong>Điểm số:</strong> <span class="score"
+                            style="font-size: 24px; color: #1e3a8a;">9.5</span></p>
+                    <p><strong>Thời gian hoàn thành:</strong> 14:15 - 21/06/2025
+                    </p>
+
+                    <div style="margin-top: 24px;">
+                        <a href="/ket-qua-lam-bai/1" class="btn-detail">Xem chi
+                            tiết</a>
+                        <a href="/hoc-vien/khoa-hoc-da-mua" class="btn-detail"
+                            style="background-color: #6c757d; margin-left: 12px;">Quay
+                            lại khóa học</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

@@ -1,0 +1,25 @@
+.xacthuc .reset-container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.xacthuc .reset-title {
+    color: #16203b;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.xacthuc .btn-reset {
+    background-color: #16203b;
+    color: white;
+    font-weight: 600;
+}
+
+.xacthuc .btn-reset:hover {
+    background-color: #0f172a;
+}

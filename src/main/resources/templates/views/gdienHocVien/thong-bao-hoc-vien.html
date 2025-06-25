@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8" />
+        <title th:fragment="title">Thông báo của bạn</title>
+    </head>
+
+    <body>
+        <main class="thongbao">
+            <div class="tb-container">
+                <h1><i class="fas fa-bell"></i> Thông báo của bạn</h1>
+
+                <div class="notification-list">
+                    <!-- Thông báo 1 -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon"><i
+                                class="fas fa-graduation-cap"></i></div>
+                        <div class="notification-content">
+                            <h4>Chúc mừng! Bạn đã hoàn thành khóa học “Java
+                                Spring Boot Cơ Bản”</h4>
+                            <p>Hãy truy cập vào mục “Chứng chỉ” để xem và tải về
+                                chứng nhận của bạn.</p>
+                            <span class="notification-time">2 giờ trước</span>
+                        </div>
+                    </div>
+
+                    <!-- Thông báo 2 -->
+                    <div class="notification-item">
+                        <div class="notification-icon"><i
+                                class="fas fa-star"></i></div>
+                        <div class="notification-content">
+                            <h4>Giảng viên đã phản hồi đánh giá của bạn</h4>
+                            <p>Bạn có thể xem phản hồi trong phần “Đánh giá của
+                                tôi”.</p>
+                            <span class="notification-time">1 ngày trước</span>
+                        </div>
+                    </div>
+
+                    <!-- Thông báo 3 -->
+                    <div class="notification-item">
+                        <div class="notification-icon"><i
+                                class="fas fa-fire"></i></div>
+                        <div class="notification-content">
+                            <h4>Khóa học “ReactJS Nâng Cao” đang giảm giá
+                                40%</h4>
+                            <p>Đăng ký ngay để nhận ưu đãi đặc biệt, thời hạn
+                                đến hết ngày 30/06!</p>
+                            <span class="notification-time">3 ngày trước</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>
