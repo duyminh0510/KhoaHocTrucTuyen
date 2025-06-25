@@ -23,41 +23,7 @@ public class CourseController {
         KhoaHoc course = courseRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
 
-        if (course.getUrlGioiThieu() != null && !course.getUrlGioiThieu().isEmpty()) {
-            course.setUrlGioiThieu(convertYoutubeUrl(course.getUrlGioiThieu()));
-        }
-
-        model.addAttribute("khoaHoc", course);
-        return "views/KhoaHoc/XemChiTietKhoaHoc";
-    }
-
-    @GetMapping("/{id}/bai-giang")
-    public String getDanhSachBaiGiang(@PathVariable("id") Integer id, Model model) {
-        KhoaHoc khoaHoc = courseRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
-        model.addAttribute("khoaHoc", khoaHoc);
-        return "views/KhoaHoc/danhSachBaiGiang";
-    }
-
-    private String convertYoutubeUrl(String url) {
-        if (url == null || url.trim().isEmpty()) {
-            return null;
-        }
-        String videoId = null;
-        if (url.contains("youtube.com/watch?v=")) {
-            videoId = url.substring(url.indexOf("v=") + 2);
-            int ampersandPosition = videoId.indexOf('&');
-            if (ampersandPosition != -1) {
-                videoId = videoId.substring(0, ampersandPosition);
-            }
-        } else if (url.contains("youtu.be/")) {
-            videoId = url.substring(url.indexOf("youtu.be/") + 9);
-        }
-
-        if (videoId != null) {
-            return "https://www.youtube.com/embed/" + videoId;
-        }
-        // Return original URL if it's not a standard YouTube link
-        return url;
+        model.addAttribute("course", course);
+        return "views/KhoaHoc"; // Tên file HTML trong templates
     }
 }
