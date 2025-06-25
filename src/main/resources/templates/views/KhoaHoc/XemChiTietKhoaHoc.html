@@ -2,42 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title th:text="${khoaHoc.tenKhoaHoc}">Chi tiết khóa học</title>
+    <title th:text="${khoaHoc.tenKhoaHoc}"></title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
       body {
         background-color: #f8f9fa;
       }
+
       .course-header {
         padding: 2rem 0;
         background-color: #2c3e50;
         color: white;
       }
+
       .instructor-link {
         color: #ffc107;
         text-decoration: none;
       }
+
       .instructor-link:hover {
         color: #fff;
       }
+
       .sticky-top-card {
         top: 20px;
       }
+
       .price {
         font-size: 2rem;
         font-weight: bold;
       }
+
       .original-price {
         text-decoration: line-through;
         color: #6c757d;
       }
+
       .discount-badge {
         font-size: 0.9rem;
         font-weight: bold;
@@ -62,7 +69,7 @@
         <div class="container">
           <p
             class="lead"
-            th:if="${khoaHoc.danhMuc != null}"
+            th:if="${khoaHoc.danhMuc}"
             th:text="${khoaHoc.danhMuc.tenDanhMuc}"
           >
             Danh mục
@@ -77,28 +84,22 @@
             <a
               href="#"
               class="instructor-link"
-              th:text="${khoaHoc.giangVien != null and khoaHoc.giangVien.taikhoan != null
-                    ? khoaHoc.giangVien.taikhoan.name : 'Đang cập nhật'}"
+              th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}"
+              >Tên Giảng Viên</a
             >
-              Tên Giảng Viên
-            </a>
           </p>
         </div>
       </header>
 
       <div class="container my-4">
         <div class="row">
-          <!-- Left -->
+          <!-- Left side: Course details -->
           <div class="col-lg-8">
-            <!-- Mô tả -->
+            <!-- Course Description -->
             <div class="card mb-4">
               <div class="card-body">
                 <h4 class="card-title">Mô tả khóa học</h4>
-                <p
-                  th:text="${khoaHoc.moTa != null ? khoaHoc.moTa : 'Đang cập nhật'}"
-                >
-                  Mô tả chi tiết khóa học.
-                </p>
+                <p th:text="${khoaHoc.moTa}">Mô tả chi tiết khóa học.</p>
               </div>
             </div>
 
@@ -106,7 +107,6 @@
             <div class="card mb-4 curriculum">
               <div class="card-body">
                 <h4 class="card-title">Nội dung khóa học</h4>
-
                 <div
                   class="accordion"
                   id="courseCurriculum"
@@ -118,32 +118,31 @@
                   >
                     <h2
                       class="accordion-header"
-                      th:attr="id='heading' + ${iter.index}"
+                      th:id="'heading' + ${iter.index}"
                     >
                       <button
                         class="accordion-button"
                         type="button"
                         data-bs-toggle="collapse"
-                        th:attr="data-bs-target='#collapse' + ${iter.index}"
+                        th:data-bs-target="'#collapse' + ${iter.index}"
                         aria-expanded="true"
-                        th:text="'Chương ' + (${iter.index} + 1) + ': ' + (chuong.tenchuong != null ? chuong.tenchuong : 'Không có tên')"
+                        th:text="${'Chương ' + (iter.index + 1) + ': ' + chuong.tenchuong}"
                       >
                         Tên chương
                       </button>
                     </h2>
                     <div
+                      th:id="'collapse' + ${iter.index}"
                       class="accordion-collapse collapse show"
-                      th:attr="id='collapse' + ${iter.index}, aria-labelledby='heading' + ${iter.index}"
+                      th:aria-labelledby="'heading' + ${iter.index}"
                     >
                       <div class="accordion-body">
-                        <p
-                          th:text="${chuong.mota != null ? chuong.mota : 'Chưa có mô tả'}"
-                        ></p>
+                        <p th:text="${chuong.mota}"></p>
+                        <!-- Can list lectures (BaiGiang) here if available -->
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div
                   th:if="${khoaHoc.chuongs == null or khoaHoc.chuongs.isEmpty()}"
                 >
@@ -153,65 +152,42 @@
             </div>
           </div>
 
-          <!-- Right -->
+          <!-- Right side: Purchase card -->
           <div class="col-lg-4">
             <div class="card sticky-top-card">
-              <!-- Video Preview -->
-              <div
-                class="ratio ratio-16x9"
-                th:if="${khoaHoc.urlGioiThieu != null and !#strings.isEmpty(khoaHoc.urlGioiThieu)}"
-              >
-                <iframe
-                  th:src="${khoaHoc.urlGioiThieu}"
-                  title="Giới thiệu khoá học"
-                  allowfullscreen
-                ></iframe>
-              </div>
-
-              <!-- Hình ảnh -->
               <img
-                class="card-img-top"
-                th:if="${khoaHoc.urlGioiThieu == null or #strings.isEmpty(khoaHoc.urlGioiThieu)}"
                 th:src="${khoaHoc.anhBia != null ? '/images/' + khoaHoc.anhBia : '/images/default.png'}"
+                class="card-img-top"
                 alt="Ảnh bìa"
               />
-
               <div class="card-body">
-                <!-- Giá -->
-                <div
-                  class="d-flex align-items-center mb-3"
-                  th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai > 0}"
-                >
+                <div class="d-flex align-items-center mb-3">
                   <span
                     class="price text-danger me-2"
-                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                    th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
                   ></span>
                   <span
                     class="original-price"
-                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                    th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
                   ></span>
                 </div>
                 <div
                   class="d-flex align-items-center mb-3"
-                  th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai == 0}"
+                  th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
                 >
                   <span
                     class="price"
-                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
                   ></span>
                 </div>
 
-                <!-- Buttons -->
                 <div class="d-grid gap-2">
                   <a href="#" class="btn btn-danger btn-lg"
                     >Thêm vào giỏ hàng</a
                   >
                   <a href="#" class="btn btn-outline-dark btn-lg">Mua ngay</a>
-                  <a
-                    th:href="@{'/khoa-hoc/' + ${khoaHoc.khoahocId} + '/bai-giang'}"
-                    class="btn btn-info btn-lg"
-                    >Xem bài giảng</a
-                  >
                 </div>
                 <hr />
                 <a href="/khoaHoc" class="btn btn-secondary w-100">Quay lại</a>
@@ -221,7 +197,6 @@
         </div>
       </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
