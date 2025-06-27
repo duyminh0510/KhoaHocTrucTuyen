@@ -22,7 +22,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -70,17 +71,27 @@ public class TaiKhoan implements Serializable {
     private Role role;
 
     @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private GiangVien giangVien;
 
     @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<DoanhThuGiangVien> danhSachDoanhThu;
 
     @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<RutTienGiangVien> rutTienGV;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<GiaoDichKhoaHoc> giaodich;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<KetQua> ketqua;
 }

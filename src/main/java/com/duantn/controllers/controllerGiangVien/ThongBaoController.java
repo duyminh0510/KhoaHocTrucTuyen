@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ThongBaoController {
-    @GetMapping("/thong-bao")
+    @GetMapping("giangvien/thong-bao")
     public String showThongBao() {
         return "views/gdienGiangVien/thong-bao";
     }
-} 
+}

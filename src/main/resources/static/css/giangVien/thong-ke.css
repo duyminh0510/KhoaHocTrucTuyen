@@ -1,0 +1,76 @@
+  body {
+      background-color: #f5f6f8;
+      margin: 0;
+      padding: 0;
+      color: #16203b;
+  }
+  
+  .thongke .thongke-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      margin-bottom: 40px;
+      margin-top: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .thongke .thongke-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+  }
+  
+  .thongke .thongke-header i {
+      font-size: 28px;
+      color: #16203b;
+  }
+  
+  .thongke .thongke-header h1 {
+      font-size: 26px;
+      margin: 0;
+  }
+  
+  .thongke .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+  }
+  
+  .thongke .stat-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .thongke .stat-card i {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #28a745;
+  }
+  
+  .thongke .stat-card h2 {
+      font-size: 22px;
+      margin: 10px 0 5px;
+  }
+  
+  .thongke .stat-card p {
+      font-size: 15px;
+      color: #666;
+  }
+  
+  .thongke .chart-placeholder {
+      margin-top: 40px;
+      background-color: #e9ecef;
+      height: 300px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 16px;
+  }

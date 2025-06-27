@@ -1,0 +1,89 @@
+body {
+    background-color: #f4f6fa;
+    color: #16203b;
+    margin: 0;
+    padding: 0;
+}
+
+.khoahocdatao .container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.khoahocdatao .search-bar {
+    margin-bottom: 30px;
+}
+
+.khoahocdatao .search-bar input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.khoahocdatao .course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.khoahocdatao .course-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-left: 6px solid #16203b;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s;
+}
+
+.khoahocdatao .course-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.khoahocdatao .course-info h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #16203b;
+}
+
+.khoahocdatao .course-info p {
+    margin-top: 6px;
+    color: #555;
+}
+
+.khoahocdatao .course-actions .btn-view {
+    background-color: #16203b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.khoahocdatao .course-actions .btn-view:hover {
+    background-color: #1c2a4a;
+}
+
+.khoahocdatao .add-new {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.khoahocdatao .btn-add {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.khoahocdatao .btn-add:hover {
+    background-color: #218838;
+}

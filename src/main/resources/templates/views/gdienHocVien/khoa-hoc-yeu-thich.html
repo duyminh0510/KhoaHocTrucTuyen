@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi"
+      th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Khóa học yêu thích</title>
+</head>
+
+<body>
+<main>
+    <h3>Khóa học bạn đã yêu thích</h3>
+    <div class="course-grid">
+        <th:block th:if="${#lists.isEmpty(favoriteCourses)}">
+            <p>Bạn chưa thích khóa học nào.</p>
+        </th:block>
+        <th:block th:each="course : ${favoriteCourses}">
+            <div class="course-card">
+                <a th:href="@{'/chi-tiet-khoa-hoc/' + ${course.khoahocId}}">
+                    <img th:src="@{${course.anhBia != null ? '/photos/' + course.anhBia : '/photos/default.png'}}"
+                         alt="Ảnh khóa học">
+                </a>
+                <div class="course-info">
+                    <h4 th:text="${course.tenKhoaHoc}">Tên khóa học</h4>
+                    <p th:text="${course.giangVien.taikhoan.name}">Tên giảng viên</p>
+                    <div class="price"
+                         th:text="${#numbers.formatDecimal(course.giaKhuyenMai != null ? course.giaKhuyenMai : course.giagoc, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <style>
+        .course-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .course-card {
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 10px;
+            background: #fff;
+        }
+    </style>
+</main>
+</body>
+</html>

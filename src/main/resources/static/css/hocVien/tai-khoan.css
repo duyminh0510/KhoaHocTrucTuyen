@@ -1,0 +1,73 @@
+.taikhoan .taikhoan-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.taikhoan h1 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    color: #16203b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.taikhoan h2 {
+    font-size: 20px;
+    margin: 30px 0 20px;
+    color: #1c1c1c;
+}
+
+.taikhoan .form-group {
+    margin-bottom: 20px;
+}
+
+.taikhoan label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.taikhoan input[type="text"],
+.taikhoan input[type="email"],
+.taikhoan input[type="password"],
+.taikhoan input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.taikhoan .btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.taikhoan .btn-update {
+    background-color: #16203b;
+    color: #fff;
+}
+
+.taikhoan .btn-update:hover {
+    background-color: #1e2a4f;
+}
+
+.taikhoan .btn-change {
+    background-color: #28a745;
+    color: white;
+}
+
+.taikhoan .btn-change:hover {
+    background-color: #218838;
+}

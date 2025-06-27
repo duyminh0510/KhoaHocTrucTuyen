@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Nhân viên</title>
+</head>
+<body>
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">👥 Quản lý Nhân viên</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
+            <li class="breadcrumb-item active">Quản lý Nhân viên</li>
+        </ol>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-table me-1"></i>
+                    Danh sách Nhân viên
+                </div>
+                <button class="btn btn-primary"><i class="fas fa-plus"></i> Thêm nhân viên mới</button>
+            </div>
+            <div class="card-body">
+                <!-- Search and Filter -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên hoặc email...">
+                            <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option selected>Lọc theo trạng thái...</option>
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Tạm khóa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Họ và Tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày cập nhật</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Mock data row 1 -->
+                    <tr>
+                        <td><img th:src="@{/photos/avartar.jpg}" alt="Avatar" width="40" class="rounded-circle"></td>
+                        <td>Lê Thị Cẩm Vân</td>
+                        <td>vanltc@email.com</td>
+                        <td>0987654321</td>
+                        <td><span class="badge bg-success">Hoạt động</span></td>
+                        <td>2023-01-15</td>
+                        <td>2024-05-20</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" title="Sửa"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" title="Khóa"><i class="fas fa-lock"></i></button>
+                        </td>
+                    </tr>
+                    <!-- Mock data row 2 -->
+                    <tr>
+                        <td><img th:src="@{/photos/avartar.jpg}" alt="Avatar" width="40" class="rounded-circle"></td>
+                        <td>Trần Minh Hoàng</td>
+                        <td>hoangtm@email.com</td>
+                        <td>0123456789</td>
+                        <td><span class="badge bg-danger">Tạm khóa</span></td>
+                        <td>2023-02-20</td>
+                        <td>2024-04-10</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" title="Sửa"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-success" title="Mở khóa"><i class="fas fa-unlock"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html> 

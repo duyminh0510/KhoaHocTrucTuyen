@@ -11,7 +11,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -67,14 +68,17 @@ public class KhoaHoc implements Serializable {
 
     // ===== Quan hệ =====
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "giangvien_id", nullable = false)
     private GiangVien giangVien;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "danhmuc_id", nullable = false)
     private DanhMuc danhMuc;
 
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chuong> chuongs;
+
+    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GiaoDichKhoaHocChiTiet> giaoDichChiTiet;
 }

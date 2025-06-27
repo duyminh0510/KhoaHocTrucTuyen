@@ -1,87 +1,133 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 <head>
     <meta charset="UTF-8">
     <title>Trang chủ học viên</title>
-    <link rel="stylesheet" href="/css/hocVien/home-hoc-vien.css">
-    <link rel="stylesheet" href="/css/hocVien/home-hoc-vien-courses.css">
 </head>
 <body>
-<div class="container">
-    <main class="main-content" style="position:relative;">
-        <h2 class="main-title">Chào mừng bạn đến với hệ thống học trực tuyến!</h2>
-        <p style="font-size:18px; color:#22314f; margin-bottom:32px;">Khám phá các khoá học nổi bật và bắt đầu hành trình học tập của mình.</p>
-        <div style="display:flex; justify-content:center; gap:32px; margin-top:40px;">
-            <a href="/hoc-vien/khoa-hoc-da-mua" class="btn-big">
-                <span style="font-size:28px; vertical-align:middle; margin-right:12px;">📚</span>
-                <span style="font-size:22px; vertical-align:middle; font-weight:600;">Khoá học đã mua</span>
-                <div style="font-size:15px; color:#555; margin-top:6px;">Xem danh sách và truy cập các khoá học bạn đã đăng ký</div>
-            </a>
-            <a href="/hoc-vien/lich-su-giao-dich" class="btn-big">
-                <span style="font-size:28px; vertical-align:middle; margin-right:12px;">💳</span>
-                <span style="font-size:22px; vertical-align:middle; font-weight:600;">Lịch sử giao dịch</span>
-                <div style="font-size:15px; color:#555; margin-top:6px;">Xem các giao dịch đã thực hiện</div>
-            </a>
-        </div>
-        <h3 style="margin-top:56px; font-size:22px; color:#22314f; font-weight:600;">Khoá học nổi bật</h3>
-        <div class="courses-grid">
-            <th:block th:each="khoaHoc : ${khoaHocList}">
-                <div class="course-card">
-                    <img th:src="${khoaHoc.anhBia != null ? '/photos/' + khoaHoc.anhBia : '/photos/logochinh.png'}" alt="Ảnh khoá học" class="course-thumb" />
-                    <div class="course-info">
-                        <div class="course-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
-                        <div class="course-desc" th:text="${#strings.abbreviate(khoaHoc.moTa, 80)}"></div>
-                        <div class="course-price">
-                            <span th:if="${khoaHoc.giaKhuyenMai != null}" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
-                            <span th:if="${khoaHoc.giaKhuyenMai == null}" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
-                        </div>
-                    </div>
-                    <div class="course-actions">
-                        <a th:href="@{/hoc-vien/khoa-hoc/{id}(id=${khoaHoc.courseId})}" class="btn-detail">Xem chi tiết</a>
-                        <button type="button" class="btn-detail btn-outline" th:attr="onclick='showShareForm(' + ${khoaHoc.courseId} + ')'">Share</button>
-                        <div class="share-form" th:attr="id='share-form-' + ${khoaHoc.courseId}" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:16px; z-index:100; margin-top:8px;">
-                            <div style="font-size:15px; margin-bottom:8px; color:#22314f; font-weight:600;">Chia sẻ khoá học</div>
-                            <input type="text" style="width:260px; padding:6px 10px; border-radius:6px; border:1px solid #bbb; font-size:15px;" readonly th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.courseId}" th:attr="id='share-link-' + ${khoaHoc.courseId}">
-                            <button type="button" class="btn-detail btn-outline" style="margin-left:8px;" th:attr="onclick='copyShareLink(' + ${khoaHoc.courseId} + ')'" th:attrappend="id='btn-copy-' + ${khoaHoc.courseId}">Copy</button>
-                            <span class="copy-tick" th:attr="id='tick-' + ${khoaHoc.courseId}" style="display:none; color:green; font-size:20px; margin-left:6px; vertical-align:middle;">✔</span>
-                            <button type="button" class="btn-detail btn-outline" style="margin-left:8px;" th:attr="onclick='hideShareForm(' + ${khoaHoc.courseId} + ')'">Đóng</button>
-                        </div>
-                    </div>
+    <main class="home-hoc-vien">
+        <div class="container">
+            <main class="main-content" style="position:relative;">
+                <h2 class="main-title">Chào mừng bạn đến với hệ thống học trực tuyến!</h2>
+                <p style="font-size:18px; color:#22314f; margin-bottom:32px;">Khám phá các khoá học nổi bật và bắt đầu hành trình học tập của mình.</p>
+
+                <div style="display:flex; justify-content:center; gap:32px; margin-top:40px;">
+                    <a href="/hoc-vien/khoa-hoc-da-mua" class="btn-big">📚 Khoá học đã mua</a>
+                    <a href="/hoc-vien/khoa-hoc-yeu-thich" class="btn-big">❤️ Khoá học yêu thích</a>
+                    <a href="/hoc-vien/lich-su-giao-dich" class="btn-big">💳 Lịch sử giao dịch</a>
                 </div>
-            </th:block>
+
+                <h3 style="margin-top:56px; font-size:22px; color:#22314f; font-weight:600;">Khoá học nổi bật</h3>
+                <div class="courses-grid">
+                    <th:block th:each="khoaHoc : ${khoaHocList}">
+                        <div class="course-card">
+                            <img th:src="@{${khoaHoc.anhBia != null ? '/photos/' + khoaHoc.anhBia : '/photos/logochinh.png'}}" alt="Ảnh khoá học" class="course-thumb" />
+                            <div class="course-info">
+                                <div class="course-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
+                                <div class="course-desc" th:text="${#strings.abbreviate(khoaHoc.moTa, 80)}"></div>
+                                <div class="course-price">
+                                    <span th:if="${khoaHoc.giaKhuyenMai != null}" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                    <span th:if="${khoaHoc.giaKhuyenMai == null}" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                </div>
+                            </div>
+                            <div class="course-actions">
+                                <a th:href="@{/hoc-vien/khoa-hoc/{id}(id=${khoaHoc.khoahocId})}" class="btn-detail">Xem chi tiết</a>
+
+                                <button type="button" 
+                                        class="btn-detail btn-outline btn-like"
+                                        th:id="'like-btn-' + ${khoaHoc.khoahocId}"
+                                        th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? ' liked' : ''"
+                                        th:attr="onclick='likeCourse(' + ${khoaHoc.khoahocId} + ')'"
+                                >
+                                    <span th:text="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'Bỏ thích' : 'Thích'"></span>
+                                    <span th:id="'like-count-' + ${khoaHoc.khoahocId}" 
+                                          th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
+                                          style="margin-left: 4px;"></span>
+                                </button>
+
+                                <button type="button" class="btn-detail btn-outline" th:attr="onclick='showShareForm(' + ${khoaHoc.khoahocId} + ')'">Share</button>
+
+                                <div class="share-form" th:attr="id='share-form-' + ${khoaHoc.khoahocId}" style="display:none;">
+                                    <div>Chia sẻ khoá học</div>
+                                    <input type="text" readonly 
+                                           th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.khoahocId}" 
+                                           th:attr="id='share-link-' + ${khoaHoc.khoahocId}">
+                                    <button type="button" 
+                                            th:attr="onclick='copyShareLink(' + ${khoaHoc.khoahocId} + ')'" 
+                                            th:attrappend="id='btn-copy-' + ${khoaHoc.khoahocId}">
+                                        Copy
+                                    </button>
+                                    <span class="copy-tick" th:attr="id='tick-' + ${khoaHoc.khoahocId}" style="display:none;">✔</span>
+                                    <button type="button" th:attr="onclick='hideShareForm(' + ${khoaHoc.khoahocId} + ')'">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </main>
         </div>
+
+        <style>
+            .btn-like.liked {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+            .course-card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 24px; }
+            .course-thumb { width: 100%; height: auto; }
+            .courses-grid { display: flex; flex-wrap: wrap; gap: 24px; }
+        </style>
+
+        <script>
+        function likeCourse(id) {
+            fetch('/hoc-vien/khoa-hoc/' + id + '/like', { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error('Lỗi khi gửi yêu cầu');
+                return response.json();
+            })
+            .then(data => {
+                const btn = document.getElementById('like-btn-' + id);
+                const btnText = btn.querySelector('span:first-child');
+                const countSpan = document.getElementById('like-count-' + id);
+                countSpan.innerText = data.newLikeCount;
+                if (data.isLiked) {
+                    btn.classList.add('liked');
+                    btnText.innerText = 'Bỏ thích';
+                } else {
+                    btn.classList.remove('liked');
+                    btnText.innerText = 'Thích';
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function showShareForm(id) {
+            document.querySelectorAll('.share-form').forEach(f => f.style.display = 'none');
+            const form = document.getElementById('share-form-' + id);
+            if (form) form.style.display = 'block';
+        }
+
+        function hideShareForm(id) {
+            const form = document.getElementById('share-form-' + id);
+            if (form) form.style.display = 'none';
+        }
+
+        function copyShareLink(id) {
+            const input = document.getElementById('share-link-' + id);
+            let link = input.value;
+            if (link.startsWith('/')) {
+                link = window.location.origin + link;
+            }
+            navigator.clipboard.writeText(link).then(() => {
+                const tick = document.getElementById('tick-' + id);
+                if (tick) {
+                    tick.style.display = 'inline';
+                    setTimeout(() => tick.style.display = 'none', 1500);
+                }
+            });
+        }
+        </script>
     </main>
-</div>
-<script>
-function showShareForm(id) {
-    document.querySelectorAll('.share-form').forEach(f => f.style.display = 'none');
-    var form = document.getElementById('share-form-' + id);
-    if(form) form.style.display = 'block';
-}
-function hideShareForm(id) {
-    var form = document.getElementById('share-form-' + id);
-    if(form) form.style.display = 'none';
-}
-function copyShareLink(id) {
-    var input = document.getElementById('share-link-' + id);
-    var link = input.value;
-    if(link.startsWith('/')) {
-        link = window.location.origin + link;
-    }
-    var temp = document.createElement('input');
-    document.body.appendChild(temp);
-    temp.value = link;
-    temp.select();
-    temp.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    document.body.removeChild(temp);
-    // Hiện dấu tick
-    var tick = document.getElementById('tick-' + id);
-    if(tick) {
-        tick.style.display = 'inline';
-        setTimeout(function() { tick.style.display = 'none'; }, 1500);
-    }
-}
-</script>
 </body>
-</html> 
+</html>

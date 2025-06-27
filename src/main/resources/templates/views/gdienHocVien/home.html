@@ -1,18 +1,133 @@
 <!DOCTYPE html>
-<html lang="en"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ học viên</title>
+</head>
+<body>
+    <main class="home-hoc-vien">
+        <div class="container">
+            <main class="main-content" style="position:relative;">
+                <h2 class="main-title">Chào mừng bạn đến với hệ thống học trực tuyến!</h2>
+                <p style="font-size:18px; color:#22314f; margin-bottom:32px;">Khám phá các khoá học nổi bật và bắt đầu hành trình học tập của mình.</p>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
+                <div style="display:flex; justify-content:center; gap:32px; margin-top:40px;">
+                    <a href="/hoc-vien/khoa-hoc-da-mua" class="btn-big">📚 Khoá học đã mua</a>
+                    <a href="/hoc-vien/khoa-hoc-yeu-thich" class="btn-big">❤️ Khoá học yêu thích</a>
+                    <a href="/hoc-vien/lich-su-giao-dich" class="btn-big">💳 Lịch sử giao dịch</a>
+                </div>
 
-    <body>
-        <main>
-            <h1>Xin chào các bạn!!</h1>
-            <h2>Mình là học viên!!</h2>
-        </main>
-    </body>
+                <h3 style="margin-top:56px; font-size:22px; color:#22314f; font-weight:600;">Khoá học nổi bật</h3>
+                <div class="courses-grid">
+                    <th:block th:each="khoaHoc : ${khoaHocList}">
+                        <div class="course-card">
+                            <img th:src="@{${khoaHoc.anhBia != null ? '/photos/' + khoaHoc.anhBia : '/photos/logochinh.png'}}" alt="Ảnh khoá học" class="course-thumb" />
+                            <div class="course-info">
+                                <div class="course-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
+                                <div class="course-desc" th:text="${#strings.abbreviate(khoaHoc.moTa, 80)}"></div>
+                                <div class="course-price">
+                                    <span th:if="${khoaHoc.giaKhuyenMai != null}" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                    <span th:if="${khoaHoc.giaKhuyenMai == null}" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                </div>
+                            </div>
+                            <div class="course-actions">
+                                <a th:href="@{/hoc-vien/khoa-hoc/{id}(id=${khoaHoc.khoahocId})}" class="btn-detail">Xem chi tiết</a>
 
+                                <button type="button" 
+                                        class="btn-detail btn-outline btn-like"
+                                        th:id="'like-btn-' + ${khoaHoc.khoahocId}"
+                                        th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? ' liked' : ''"
+                                        th:attr="onclick='likeCourse(' + ${khoaHoc.khoahocId} + ')'"
+                                >
+                                    <span th:text="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'Bỏ thích' : 'Thích'"></span>
+                                    <span th:id="'like-count-' + ${khoaHoc.khoahocId}" 
+                                          th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
+                                          style="margin-left: 4px;"></span>
+                                </button>
+
+                                <button type="button" class="btn-detail btn-outline" th:attr="onclick='showShareForm(' + ${khoaHoc.khoahocId} + ')'">Share</button>
+
+                                <div class="share-form" th:attr="id='share-form-' + ${khoaHoc.khoahocId}" style="display:none;">
+                                    <div>Chia sẻ khoá học</div>
+                                    <input type="text" readonly 
+                                           th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.khoahocId}" 
+                                           th:attr="id='share-link-' + ${khoaHoc.khoahocId}">
+                                    <button type="button" 
+                                            th:attr="onclick='copyShareLink(' + ${khoaHoc.khoahocId} + ')'" 
+                                            th:attrappend="id='btn-copy-' + ${khoaHoc.khoahocId}">
+                                        Copy
+                                    </button>
+                                    <span class="copy-tick" th:attr="id='tick-' + ${khoaHoc.khoahocId}" style="display:none;">✔</span>
+                                    <button type="button" th:attr="onclick='hideShareForm(' + ${khoaHoc.khoahocId} + ')'">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </main>
+        </div>
+
+        <style>
+            .btn-like.liked {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+            .course-card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 24px; }
+            .course-thumb { width: 100%; height: auto; }
+            .courses-grid { display: flex; flex-wrap: wrap; gap: 24px; }
+        </style>
+
+        <script>
+        function likeCourse(id) {
+            fetch('/hoc-vien/khoa-hoc/' + id + '/like', { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error('Lỗi khi gửi yêu cầu');
+                return response.json();
+            })
+            .then(data => {
+                const btn = document.getElementById('like-btn-' + id);
+                const btnText = btn.querySelector('span:first-child');
+                const countSpan = document.getElementById('like-count-' + id);
+                countSpan.innerText = data.newLikeCount;
+                if (data.isLiked) {
+                    btn.classList.add('liked');
+                    btnText.innerText = 'Bỏ thích';
+                } else {
+                    btn.classList.remove('liked');
+                    btnText.innerText = 'Thích';
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function showShareForm(id) {
+            document.querySelectorAll('.share-form').forEach(f => f.style.display = 'none');
+            const form = document.getElementById('share-form-' + id);
+            if (form) form.style.display = 'block';
+        }
+
+        function hideShareForm(id) {
+            const form = document.getElementById('share-form-' + id);
+            if (form) form.style.display = 'none';
+        }
+
+        function copyShareLink(id) {
+            const input = document.getElementById('share-link-' + id);
+            let link = input.value;
+            if (link.startsWith('/')) {
+                link = window.location.origin + link;
+            }
+            navigator.clipboard.writeText(link).then(() => {
+                const tick = document.getElementById('tick-' + id);
+                if (tick) {
+                    tick.style.display = 'inline';
+                    setTimeout(() => tick.style.display = 'none', 1500);
+                }
+            });
+        }
+        </script>
+    </main>
+</body>
 </html>

@@ -2,97 +2,19 @@
 <html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
 <head>
-    <title th:fragment="title">Trang chủ - Giảng Viên</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ - Giảng Viên</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        /* Sidebar */
-        
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px;
-        }
-        
-        .sidebar a {
-            padding: 12px 24px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #fff;
-            display: block;
-            transition: 0.3s;
-        }
-        
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        /* Nút mở sidebar */
-        
-        .open-btn {
-            font-size: 26px;
-            cursor: pointer;
-            background-color: #111;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-        }
-        /* Nội dung chính */
-        
-        .main-content {
-            margin-left: 0;
-            transition: margin-left 0.3s;
-            padding: 20px;
-        }
-        /* Khi sidebar mở */
-        
-        .sidebar.open {
-            width: 250px;
-        }
-        
-        .main-content.shift {
-            margin-left: 250px;
-        }
     </style>
 </head>
 
 <body>
-    <main th:fragment="main" class="container-fluid">
-
-        <button class="open-btn" onclick="toggleSidebar()">☰ Menu</button>
-
-        <div id="sidebar" class="sidebar">
-            <a class="nav-link" th:href="@{/khoa-hoc-da-tao}">📘 Khóa
-                    học đã tạo</a>
-            <a class="nav-link" th:href="@{/them-moi-khoa-hoc}">➕ Tạo
-                    khóa học</a>
-            <a class="nav-link" th:href="@{/vi-giang-vien}">👤 Ví giảng
-                    viên</a>
-            <a class="nav-link" th:href="@{/quan-ly-hoc-vien}">👥 Quản
-                    lý học viên</a>
-            <a class="nav-link" th:href="@{/danh-gia-tu-khoa-hoc}">⭐
-                    Đánh giá</a>
-            <a class="nav-link" th:href="@{/binh-luan-tu-bai-giang}">💬
-                    Bình luận</a>
-            <a class="nav-link" th:href="@{/danh-sach-thong-ke}">📊
-                    Thống kê</a>
-            <a class="nav-link" th:href="@{/thong-bao}">🔔 Thông báo</a>
-        </div>
-
-        <!-- Nội dung chính -->
-        <div id="mainContent" class="py-5 px-3"></div>
+    <main class="container py-5 home">
         <h1 class="text-center mb-5">Trang quản lý giảng viên</h1>
 
         <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
-        <div class="mb-5">
+        <section class="mb-5">
             <h2 class="mb-4">📚 Khóa học bạn đã tạo</h2>
             <div class="mb-3">
                 <input type="text" class="form-control" placeholder="Tìm kiếm khoá học...">
@@ -105,19 +27,21 @@
                             <h5 th:text="${khoaHoc.tenKhoaHoc}" class="mb-1"></h5>
                             <small th:text="${khoaHoc.moTa}"></small>
                         </div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="showDetail()">Xem chi tiết</button>
+                        <button class="btn btn-sm btn-outline-primary">Xem
+                                chi tiết</button>
                     </div>
                 </th:block>
             </div>
 
-            <div class="mt-3">
-                <a href="/tkh" class="btn btn-success">+ Thêm khóa học
-                            mới</a>
+            <div class="add-new">
+                <a href="/giangvien/them-moi-khoa-hoc" class="btn-add">
+                        ➕ Thêm khóa học mới
+                    </a>
             </div>
-        </div>
+        </section>
 
         <!-- KHÓA HỌC ĐƯỢC MUA NHIỀU NHẤT -->
-        <div>
+        <section class="mb-5">
             <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
             <div class="row g-4">
                 <div class="col-md-4" th:each="khoaHoc : ${topKhoaHocList}">
@@ -130,24 +54,32 @@
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
+        </section>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const sidebar = document.getElementById("sidebar");
-                const main = document.getElementById("mainContent");
+        <!-- THÔNG BÁO MỚI -->
+        <section class="mb-5">
+            <h2 class="mb-4">🔔 Thông báo mới</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Hệ thống sẽ bảo trì vào lúc 23:00 ngày 28/06/2025.</li>
+                <li class="list-group-item">Bạn có 3 đánh giá mới từ học viên.
+                </li>
+                <li class="list-group-item">1 khóa học của bạn đã đạt 100 lượt mua.</li>
+            </ul>
+        </section>
 
-                if (sidebar && main) {
-                    sidebar.classList.toggle("open");
-                    main.classList.toggle("shift");
-                } else {
-                    console.error("Không tìm thấy phần tử sidebar hoặc mainContent");
-                }
-            });
-        </script>
-
-
+        <!-- HƯỚNG DẪN NHANH -->
+        <section>
+            <h2 class="mb-4">📖 Hướng dẫn nhanh cho giảng viên</h2>
+            <ol>
+                <li>Vào mục <strong>"Tạo khóa học"</strong> để thêm bài giảng mới.</li>
+                <li>Quản lý học viên đã đăng ký từ mục
+                    <strong>"Quản lý học viên"</strong>.</li>
+                <li>Xem và phản hồi đánh giá trong phần
+                    <strong>"Đánh giá"</strong>.</li>
+                <li>Theo dõi thống kê lượt học trong phần
+                    <strong>"Thống kê"</strong>.</li>
+            </ol>
+        </section>
     </main>
 </body>
 

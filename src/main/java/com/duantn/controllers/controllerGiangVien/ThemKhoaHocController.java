@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ThemKhoaHocController {
-    @GetMapping("/tkh")
+    @GetMapping("/giangvien/them-moi-khoa-hoc")
     public String showThemKhoaHoc() {
         return "views/gdienGiangVien/them-khoa-hoc";
     }
-} 
+}

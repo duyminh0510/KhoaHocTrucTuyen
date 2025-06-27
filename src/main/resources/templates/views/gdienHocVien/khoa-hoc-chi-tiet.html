@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết khoá học</title>
-    <link rel="stylesheet" href="/css/hocVien/home-hoc-vien-courses.css">
     <style>
         .course-detail-container {
             max-width: 900px;
@@ -60,7 +60,8 @@
     </style>
 </head>
 <body>
-<div class="course-detail-container">
+    <main class="khoahocchitiet">
+        <div class="course-detail-container">
     <img th:src="${khoaHoc.anhBia != null ? '/photos/' + khoaHoc.anhBia : '/photos/logochinh.png'}" alt="Ảnh khoá học" class="course-detail-thumb" />
     <div class="course-detail-info">
         <div class="course-detail-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
@@ -91,8 +92,6 @@
                     <option value="">-- Chọn --</option>
                     <option value="VNPAY">VNPAY</option>
                     <option value="MOMO">MOMO</option>
-                    <option value="BANK">Chuyển khoản ngân hàng</option>
-                    <option value="CASH">Tiền mặt</option>
                 </select>
             </div>
             <div style="margin-bottom:16px;">
@@ -110,6 +109,7 @@
         </form>
     </div>
 </div>
+
 <script>
 function showPaymentForm() {
     document.getElementById('payment-popup').style.display = 'flex';
@@ -118,5 +118,8 @@ function hidePaymentForm() {
     document.getElementById('payment-popup').style.display = 'none';
 }
 </script>
+    </main>
+
+
 </body>
 </html> 

@@ -399,22 +399,6 @@
                             </a>
                         </li>
 
-                        <li>
-                            <a class="dropdown-item" href="/doi-mat-khau">
-                                <i
-                                    class="fa-solid fa-arrow-right me-2 text-primary"></i>
-                                Đổi mật khẩu
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="/chinh-sua-ho-so">
-                                <i
-                                    class="fa-solid fa-arrow-right me-2 text-primary"></i>
-                                Chỉnh sửa hồ sơ
-                            </a>
-                        </li>
-
                         <li sec:authorize="!hasAnyRole('HOCVIEN','GIANGVIEN')">
                             <a class="dropdown-item" href="/thong-ke-he-thong">
                                 <i
@@ -486,7 +470,7 @@
 
         <!-- Bottom menu: chỉ hiện khi đã đăng nhập -->
         <nav class="bottom-nav"
-            sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN') and !hasRole('ROLE_NHANVIEN')">
+            sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN') and !hasRole('ROLE_NHANVIEN') and !hasRole('ROLE_GIANGVIEN')">
             <div class="menu-icon">
                 <i class="fas fa-bars"></i>
             </div>

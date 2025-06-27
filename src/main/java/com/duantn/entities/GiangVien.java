@@ -17,7 +17,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -46,6 +47,8 @@ public class GiangVien implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "taikhoanId", nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private TaiKhoan taikhoan;
 
 }
