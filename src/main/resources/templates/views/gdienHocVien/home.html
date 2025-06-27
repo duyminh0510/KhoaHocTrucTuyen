@@ -20,64 +20,63 @@
 
                 <h3 style="margin-top:56px; font-size:22px; color:#22314f; font-weight:600;">Khoá học nổi bật</h3>
                 <div class="courses-grid">
-                    <th:block th:each="khoaHoc : ${khoaHocList}">
+                    <th:block th:each="khoaHoc, iterStat : ${khoaHocList}" th:if="${iterStat.index < 6}">
                         <div class="course-card">
-                            <img th:src="@{${khoaHoc.anhBia != null ? '/photos/' + khoaHoc.anhBia : '/photos/logochinh.png'}}" alt="Ảnh khoá học" class="course-thumb" />
+                            <img class="course-thumb"
+                                th:src="'https://aptechvietnam.com.vn/wp-content/uploads/tai-sao-nen-hoc-lap-trinh-full-stack.jpg'"
+                                alt="Ảnh khoá học" />
+
                             <div class="course-info">
                                 <div class="course-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
                                 <div class="course-desc" th:text="${#strings.abbreviate(khoaHoc.moTa, 80)}"></div>
                                 <div class="course-price">
-                                    <span th:if="${khoaHoc.giaKhuyenMai != null}" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
-                                    <span th:if="${khoaHoc.giaKhuyenMai == null}" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                    <span th:if="${khoaHoc.giaKhuyenMai != null}"
+                                        th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                    <span th:if="${khoaHoc.giaKhuyenMai == null}"
+                                        th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
                                 </div>
                             </div>
+
                             <div class="course-actions">
                                 <a th:href="@{/hoc-vien/khoa-hoc/{id}(id=${khoaHoc.khoahocId})}" class="btn-detail">Xem chi tiết</a>
 
-                                <button type="button" 
+                                <button type="button"
                                         class="btn-detail btn-outline btn-like"
                                         th:id="'like-btn-' + ${khoaHoc.khoahocId}"
                                         th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? ' liked' : ''"
-                                        th:attr="onclick='likeCourse(' + ${khoaHoc.khoahocId} + ')'"
-                                >
+                                        th:attr="onclick='likeCourse(' + ${khoaHoc.khoahocId} + ')'">
                                     <span th:text="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'Bỏ thích' : 'Thích'"></span>
-                                    <span th:id="'like-count-' + ${khoaHoc.khoahocId}" 
-                                          th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
-                                          style="margin-left: 4px;"></span>
+                                    <span th:id="'like-count-' + ${khoaHoc.khoahocId}"
+                                        th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
+                                        style="margin-left: 4px;"></span>
                                 </button>
 
-                                <button type="button" class="btn-detail btn-outline" th:attr="onclick='showShareForm(' + ${khoaHoc.khoahocId} + ')'">Share</button>
+                                <button type="button"
+                                        class="btn-detail btn-outline"
+                                        th:attr="onclick='showShareForm(' + ${khoaHoc.khoahocId} + ')'">Share</button>
 
                                 <div class="share-form" th:attr="id='share-form-' + ${khoaHoc.khoahocId}" style="display:none;">
                                     <div>Chia sẻ khoá học</div>
-                                    <input type="text" readonly 
-                                           th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.khoahocId}" 
-                                           th:attr="id='share-link-' + ${khoaHoc.khoahocId}">
-                                    <button type="button" 
-                                            th:attr="onclick='copyShareLink(' + ${khoaHoc.khoahocId} + ')'" 
-                                            th:attrappend="id='btn-copy-' + ${khoaHoc.khoahocId}">
-                                        Copy
-                                    </button>
-                                    <span class="copy-tick" th:attr="id='tick-' + ${khoaHoc.khoahocId}" style="display:none;">✔</span>
-                                    <button type="button" th:attr="onclick='hideShareForm(' + ${khoaHoc.khoahocId} + ')'">Đóng</button>
+                                    <input type="text" readonly
+                                        th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.khoahocId}"
+                                        th:attr="id='share-link-' + ${khoaHoc.khoahocId}">
+                                    <button type="button"
+                                            th:attr="onclick='copyShareLink(' + ${khoaHoc.khoahocId} + ')'"
+                                            th:attrappend="id='btn-copy-' + ${khoaHoc.khoahocId}">Copy</button>
+                                    <span class="copy-tick"
+                                        th:attr="id='tick-' + ${khoaHoc.khoahocId}"
+                                        style="display:none;">✔</span>
+                                    <button type="button"
+                                            th:attr="onclick='hideShareForm(' + ${khoaHoc.khoahocId} + ')'">Đóng</button>
                                 </div>
                             </div>
                         </div>
                     </th:block>
                 </div>
+
             </main>
         </div>
 
-        <style>
-            .btn-like.liked {
-                background-color: #007bff;
-                color: white;
-                border-color: #007bff;
-            }
-            .course-card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 24px; }
-            .course-thumb { width: 100%; height: auto; }
-            .courses-grid { display: flex; flex-wrap: wrap; gap: 24px; }
-        </style>
 
         <script>
         function likeCourse(id) {
