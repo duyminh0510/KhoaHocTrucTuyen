@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.duantn.services.KhoaHocService;
+import com.duantn.entities.KhoaHoc;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,10 @@ public class TrangChuController {
         boolean isGiangVien = request.isUserInRole("ROLE_GIANGVIEN");
 
         if (isHocVien) {
-            model.addAttribute("newCourses", khoaHocService.getNewestCourses(8));
-            model.addAttribute("topCourses", khoaHocService.getTopPurchasedCourses(8));
+            List<KhoaHoc> khoaHocList = khoaHocService.getTatCaKhoaHoc();
+        model.addAttribute("khoaHocList", khoaHocList);
 
-            // Lấy danh sách ID các khóa học đã thích
+        if (authentication != null && authentication.isAuthenticated()) {
             taiKhoanRepository.findByEmail(authentication.getName()).ifPresent(taiKhoan -> {
                 Set<Integer> likedCourseIds = nguoiDungThichKhoaHocRepository.findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId())
                         .stream()
@@ -52,12 +54,12 @@ public class TrangChuController {
                         .collect(Collectors.toSet());
                 model.addAttribute("likedCourseIds", likedCourseIds);
             });
-            
-            if (!model.containsAttribute("likedCourseIds")) {
-                model.addAttribute("likedCourseIds", Collections.emptySet());
-            }
-
-            return "views/gdienHocVien/home";
+        }
+        if (!model.containsAttribute("likedCourseIds")) {
+            model.addAttribute("likedCourseIds", Collections.emptySet());
+        }
+        
+        return "views/gdienHocVien/home-hoc-vien";
         }
 
         if (isGiangVien) {
