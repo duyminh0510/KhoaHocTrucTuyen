@@ -48,7 +48,7 @@ public class HomeHocVienController {
             model.addAttribute("likedCourseIds", Collections.emptySet());
         }
         
-        return "views/gdienHocVien/home-hoc-vien";
+        return "views/gdienHocVien/home";
     }
 
     @GetMapping("/khoa-hoc-yeu-thich")

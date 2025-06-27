@@ -59,7 +59,7 @@ public class TrangChuController {
             model.addAttribute("likedCourseIds", Collections.emptySet());
         }
         
-        return "views/gdienHocVien/home-hoc-vien";
+        return "views/gdienHocVien/home";
         }
 
         if (isGiangVien) {
