@@ -51,27 +51,48 @@
                                         style="margin-left: 4px;"></span>
                                 </button>
 
-                                <button type="button"
-                                        class="btn-detail btn-outline"
-                                        th:attr="onclick='showShareForm(' + ${khoaHoc.khoahocId} + ')'">Share</button>
+                                <button type="button" class="btn-detail btn-outline" data-bs-toggle="modal" th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
+                                    Share
+                                </button>
+                            </div>
+                        </div>
 
-                                <div class="share-form" th:attr="id='share-form-' + ${khoaHoc.khoahocId}" style="display:none;">
-                                    <div>Chia sẻ khoá học</div>
-                                    <input type="text" readonly
-                                        th:value="'/hoc-vien/khoa-hoc/' + ${khoaHoc.khoahocId}"
-                                        th:attr="id='share-link-' + ${khoaHoc.khoahocId}">
-                                    <button type="button"
-                                            th:attr="onclick='copyShareLink(' + ${khoaHoc.khoahocId} + ')'"
-                                            th:attrappend="id='btn-copy-' + ${khoaHoc.khoahocId}">Copy</button>
-                                    <span class="copy-tick"
-                                        th:attr="id='tick-' + ${khoaHoc.khoahocId}"
-                                        style="display:none;">✔</span>
-                                    <button type="button"
-                                            th:attr="onclick='hideShareForm(' + ${khoaHoc.khoahocId} + ')'">Đóng</button>
+                        <!-- Share Modal -->
+                        <div class="modal fade" th:id="'shareModal-' + ${khoaHoc.khoahocId}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Chia sẻ khóa học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form th:action="@{/hoc-vien/share-course}" method="post">
+                                        <div class="modal-body">
+                                                <input type="hidden" name="courseId" th:value="${khoaHoc.khoahocId}" />
+                                                <div class="mb-3">
+                                                    <label for="recipientEmail" class="form-label">Email người nhận:</label>
+                                                    <input type="email" name="recipientEmail" class="form-control" required placeholder="nhapemail@example.com">
+                                                </div>
+                                                <p>Một email chứa thông tin và liên kết đến khóa học này sẽ được gửi đến địa chỉ trên.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Gửi Email</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </th:block>
+                </div>
+
+                 <!-- Global Alert for Share -->
+                <div th:if="${share_success}" class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+                    <strong th:text="${share_success}"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${share_error}" class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+                    <strong th:text="${share_error}"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
             </main>
