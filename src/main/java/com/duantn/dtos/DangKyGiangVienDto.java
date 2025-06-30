@@ -1,6 +1,7 @@
 package com.duantn.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -12,5 +13,6 @@ public class DangKyGiangVienDto {
     private String kinhNghiem;
 
     @NotBlank(message = "Vui lòng nhập CCCD")
+    @Pattern(regexp = "^[0-9]{12}$", message = "CCCD phải là 12 chữ số")
     private String CCCD;
 }

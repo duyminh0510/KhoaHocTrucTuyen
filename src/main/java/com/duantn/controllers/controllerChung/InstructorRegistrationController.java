@@ -16,6 +16,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -321,11 +328,18 @@ public class InstructorRegistrationController {
             instructor.setCCCD(instructorDetails.getCCCD());
             giangVienRepository.save(instructor);
 
+            // Tự động đăng nhập cho người dùng với vai trò mới
+            UserDetails userDetails = new User(account.getEmail(), account.getPassword(), List.of(new SimpleGrantedAuthority(instructorRole.getName())));
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+            // Xóa các thuộc tính session không cần thiết
             session.removeAttribute("registrationEmail");
             session.removeAttribute("instructorDetails");
+            session.removeAttribute("emailForOtp");
 
-            redirectAttributes.addFlashAttribute("success", "Nâng cấp tài khoản thành công! Vui lòng đăng nhập lại.");
-            return "redirect:/login";
+            redirectAttributes.addFlashAttribute("success", "Nâng cấp tài khoản thành công! Chào mừng bạn đến với trang giảng viên.");
+            return "views/gdienGiangVien/home";
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình nâng cấp: " + e.getMessage());

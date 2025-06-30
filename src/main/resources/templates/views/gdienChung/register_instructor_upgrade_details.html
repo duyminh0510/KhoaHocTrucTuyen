@@ -16,21 +16,37 @@
                             <!-- CCCD -->
                             <div class="mb-3">
                                 <label for="CCCD" class="form-label">Số CCCD</label>
-                                <input type="text" class="form-control" th:field="*{CCCD}" required>
+                                <input type="text" class="form-control" th:field="*{CCCD}" id="cccdInput" required pattern="[0-9]{12}" title="CCCD phải là 12 chữ số." inputmode="numeric" maxlength="12">
+                                <small id="cccdError" class="text-danger mt-1" style="display: none;">CCCD chỉ được chứa số.</small>
                                 <div class="text-danger mt-1" th:if="${#fields.hasErrors('CCCD')}" th:errors="*{CCCD}"></div>
                             </div>
 
                             <!-- Kinh Nghiem -->
                             <div class="mb-3">
-                                <label for="kinhNghiem" class="form-label">Kinh Nghiệm</label>
-                                <textarea class="form-control" th:field="*{kinhNghiem}" rows="3" required></textarea>
+                                <label class="form-label">Kinh Nghiệm</label>
                                 <div class="text-danger mt-1" th:if="${#fields.hasErrors('kinhNghiem')}" th:errors="*{kinhNghiem}"></div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="Dưới 1 năm" required>
+                                    <label class="form-check-label">Dưới 1 năm</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="1 - 2 năm">
+                                    <label class="form-check-label">1 - 2 năm</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="2 - 5 năm">
+                                    <label class="form-check-label">2 - 5 năm</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="Trên 5 năm">
+                                    <label class="form-check-label">Trên 5 năm</label>
+                                </div>
                             </div>
 
                             <!-- Ky Nang -->
                             <div class="mb-3">
-                                <label for="kyNang" class="form-label">Kỹ Năng</label>
-                                <textarea class="form-control" th:field="*{kyNang}" rows="3" required></textarea>
+                                <label for="kyNang" class="form-label">Mô tả kỹ năng</label>
+                                <textarea class="form-control" id="kyNang" th:field="*{kyNang}" rows="4" required placeholder="Liệt kê các kỹ năng chính của bạn, ví dụ: Java, Spring Boot, ReactJS..."></textarea>
                                 <div class="text-danger mt-1" th:if="${#fields.hasErrors('kyNang')}" th:errors="*{kyNang}"></div>
                             </div>
 
@@ -43,5 +59,22 @@
             </div>
         </div>
     </div>
+    <script>
+        const cccdInput = document.getElementById('cccdInput');
+        const cccdError = document.getElementById('cccdError');
+
+        cccdInput.addEventListener('input', function() {
+            const originalValue = this.value;
+            const sanitizedValue = originalValue.replace(/[^0-9]/g, '');
+
+            if (originalValue !== sanitizedValue) {
+                cccdError.style.display = 'block';
+            } else {
+                cccdError.style.display = 'none';
+            }
+
+            this.value = sanitizedValue;
+        });
+    </script>
 </main>
 </html> 
