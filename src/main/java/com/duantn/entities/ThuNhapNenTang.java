@@ -39,9 +39,9 @@ public class ThuNhapNenTang implements Serializable {
     @Column(name = "ngaynhan", updatable = false)
     private LocalDateTime ngaynhan;
 
-    @Column(name = "tenKhoaHoc")
+    @Column(name = "tenKhoaHoc", columnDefinition = "NVARCHAR(MAX)")
     private String tenKhoaHoc;
 
-    @Column(name = "thuocGiangVien")
+    @Column(name = "thuocGiangVien", columnDefinition = "NVARCHAR(MAX)")
     private String thuocGiangVien;
 }

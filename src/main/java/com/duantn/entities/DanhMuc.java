@@ -14,7 +14,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,7 +26,7 @@ public class DanhMuc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer danhmucId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tenDanhMuc;
 
     @CreationTimestamp
@@ -38,6 +39,15 @@ public class DanhMuc {
 
     @Builder.Default
     @Column(nullable = false)
-    private Boolean isDeleted = true; // Mặc định là true (được hiển thị)
+    private Boolean isDeleted = true;
 
+    @Override
+    public String toString() {
+        return "DanhMuc{" +
+                "danhmucId=" + danhmucId +
+                ", tenDanhMuc='" + tenDanhMuc + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngayCapNhat=" + ngayCapNhat +
+                '}';
+    }
 }

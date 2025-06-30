@@ -19,7 +19,7 @@ public class DanhGia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer danhgiaId;
 
-    @Column(name = "NoiDung", nullable = false)
+    @Column(name = "NoiDung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;
 
     @CreationTimestamp

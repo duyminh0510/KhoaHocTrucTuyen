@@ -22,7 +22,7 @@ public class BinhLuan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer binhluanId;
 
-    @Column(name = "NoiDung", nullable = false)
+    @Column(name = "NoiDung", columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;
 
     @CreationTimestamp

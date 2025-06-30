@@ -26,13 +26,13 @@ public class DapAn implements Serializable {
     @Column(name = "ThuTu_DapAn")
     private Integer thuTuDapAn;
 
-    @Column(name = "NoiDung_DapAn", nullable = false)
+    @Column(name = "NoiDung_DapAn", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDungDapAn;
 
     @Column(name = "DapAnDung")
     private Boolean dapAnDung;
 
-    @Column(name = "GiaThich_Dapan")
+    @Column(name = "GiaThich_Dapan", columnDefinition = "NVARCHAR(MAX)")
     private String giaThichDapan;
 
     @Column(name = "trangthai")

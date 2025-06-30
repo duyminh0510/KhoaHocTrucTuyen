@@ -2,10 +2,13 @@ package com.duantn.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,11 +16,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
+import lombok.Builder.Default;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,10 +37,10 @@ public class Chuong implements Serializable {
     @Column(name = "chuongId")
     private Integer chuongId;
 
-    @Column(name = "tenchuong")
+    @Column(name = "tenchuong", columnDefinition = "NVARCHAR(MAX)")
     private String tenchuong;
 
-    @Column(name = "mota")
+    @Column(name = "mota", columnDefinition = "NVARCHAR(MAX)")
     private String mota;
 
     @Column(name = "thutuchuong")
@@ -54,5 +60,22 @@ public class Chuong implements Serializable {
     @ManyToOne
     @JoinColumn(name = "khoahocId", nullable = false)
     private KhoaHoc khoahoc;
+
+    @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BaiGiang> baiGiangs = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Chuong{" +
+                "chuongId=" + chuongId +
+                ", tenchuong='" + tenchuong + '\'' +
+                ", mota='" + mota + '\'' +
+                ", thutuchuong=" + thutuchuong +
+                ", ngayTao=" + ngayTao +
+                ", ngayCapNhat=" + ngayCapNhat +
+                ", trangthai=" + trangthai +
+                ", khoahocId=" + (khoahoc != null ? khoahoc.getKhoahocId() : "null") +
+                '}';
+    }
 
 }

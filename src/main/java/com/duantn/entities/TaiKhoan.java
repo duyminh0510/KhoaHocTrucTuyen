@@ -22,7 +22,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,13 +37,13 @@ public class TaiKhoan implements Serializable {
     @Column(name = "taikhoanId")
     private Integer taikhoanId;
 
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", columnDefinition = "NVARCHAR(MAX)")
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "phone", columnDefinition = "NVARCHAR(MAX)")
     private String phone;
 
     @CreationTimestamp
@@ -53,10 +54,10 @@ public class TaiKhoan implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
-    @Column(name = "avatar")
+    @Column(name = "avatar", columnDefinition = "NVARCHAR(MAX)")
     private String avatar;
 
-    @Column(name = "password")
+    @Column(name = "password", columnDefinition = "NVARCHAR(MAX)")
     private String password;
 
     // tài khoản mới thêm mặc định trạng thái là true
@@ -83,4 +84,19 @@ public class TaiKhoan implements Serializable {
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<KetQua> ketqua;
+
+    @Override
+    public String toString() {
+        return "TaiKhoan{" +
+                "taikhoanId=" + taikhoanId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngayCapNhat=" + ngayCapNhat +
+                ", avatar='" + avatar + '\'' +
+                ", status=" + status +
+                ", role=" + (role != null ? role.getName() : "null") +
+                '}';
+    }
 }

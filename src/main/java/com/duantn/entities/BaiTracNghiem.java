@@ -17,10 +17,12 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "baiGiang")
 @Table(name = "BaiTracNghiem")
 public class BaiTracNghiem implements Serializable {
 
@@ -30,7 +32,7 @@ public class BaiTracNghiem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tracnghiemId;
 
-    @Column(name = "tenbai")
+    @Column(name = "tenbai", columnDefinition = "NVARCHAR(MAX)")
     private String tenbai;
 
     @CreationTimestamp
