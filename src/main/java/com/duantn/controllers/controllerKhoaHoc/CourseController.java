@@ -20,10 +20,10 @@ public class CourseController {
     // Hiển thị chi tiết 1 khóa học
     @GetMapping("/{id}")
     public String getChiTietKhoaHoc(@PathVariable("id") Integer id, Model model) {
-        KhoaHoc course = courseRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
-
-        model.addAttribute("course", course);
-        return "views/KhoaHoc"; // Tên file HTML trong templates
+        KhoaHoc course = courseRepository.findByIdWithChaptersAndLectures(id)
+            .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
+        model.addAttribute("khoaHoc", course);
+        model.addAttribute("chuongs", course.getChuongs());
+        return "views/KhoaHoc/XemChiTietKhoaHoc";
     }
 }
