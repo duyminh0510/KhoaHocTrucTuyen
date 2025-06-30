@@ -35,8 +35,9 @@ public class RutTienGiangVien implements Serializable {
     @Column(name = "ngayrut", updatable = false)
     private LocalDateTime ngayrut;
 
-    @Column(name = "tenGiangVien")
+    @Column(name = "tenGiangVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenGiangVien;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trangthai", nullable = false)

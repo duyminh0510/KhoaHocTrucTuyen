@@ -17,10 +17,12 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "baiGiang")
 @Table(name = "VideoBaiGiang")
 public class VideoBaiGiang implements Serializable {
 
@@ -28,10 +30,10 @@ public class VideoBaiGiang implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    @Column(name = "url_video")
+    @Column(name = "url_video", columnDefinition = "NVARCHAR(MAX)")
     private String url_video;
 
-    @Column(name = "mota")
+    @Column(name = "mota", columnDefinition = "NVARCHAR(MAX)")
     private String mota;
 
     @CreationTimestamp
@@ -43,7 +45,8 @@ public class VideoBaiGiang implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @Column(name = "trangThai")
-    private Boolean trangThai;
+    @Builder.Default
+    private Boolean trangThai = true;
 
     @OneToOne
     @JoinColumn(name = "baiGiangId", unique = true)

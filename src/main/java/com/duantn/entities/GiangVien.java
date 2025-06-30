@@ -1,6 +1,7 @@
 package com.duantn.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,20 +23,33 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Table(name = "GiangVien")
 public class GiangVien implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer giangvienId;
 
-    @Column(name = "kyNang")
+    @Column(name = "kyNang", columnDefinition = "NVARCHAR(MAX)")
     private String kyNang;
 
-    @Column(name = "kinhNghiem")
+    @Column(name = "kinhNghiem", columnDefinition = "NVARCHAR(MAX)")
     private String kinhNghiem;
 
-    @Column(name = "CCCD")
+    @Column(name = "CCCD", columnDefinition = "NVARCHAR(MAX)")
     private String CCCD;
+
+    @Column(name = "congViec", columnDefinition = "NVARCHAR(255)")
+    private String congViec;
+
+    @Column(name = "ngaySinh")
+    private LocalDate ngaySinh;
+
+    @Column(name = "gioiTinh", columnDefinition = "NVARCHAR(50)")
+    private String gioiTinh;
+
+    @Column(name = "chuyenNganh", columnDefinition = "NVARCHAR(255)")
+    private String chuyenNganh;
 
     @CreationTimestamp
     @Column(name = "ngaythamgia", updatable = false)
@@ -46,9 +60,8 @@ public class GiangVien implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @OneToOne
-    @JoinColumn(name = "taikhoanId", nullable = false)
+    @JoinColumn(name = "taikhoanId", nullable = false, unique = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private TaiKhoan taikhoan;
-
 }

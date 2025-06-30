@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.duantn.enums.LoaiBaiGiang;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,10 +23,13 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
+@Getter
+@Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = { "videoBaiGiang", "baiViet", "tracNghiem" })
 @Table(name = "BaiGiang")
 public class BaiGiang implements Serializable {
 
@@ -35,10 +39,10 @@ public class BaiGiang implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baiGiangId;
 
-    @Column(name = "tenBaiGiang")
+    @Column(name = "tenBaiGiang", columnDefinition = "NVARCHAR(MAX)")
     private String tenBaiGiang;
 
-    @Column(length = 10000)
+    @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
     private String mota;
 
     @CreationTimestamp
@@ -58,8 +62,15 @@ public class BaiGiang implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "chuongId")
-    private Chuong chuongs;
+    private Chuong chuong;
 
-    @OneToOne(mappedBy = "baiGiang")
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
+    private VideoBaiGiang videoBaiGiang;
+
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
     private BaiViet baiViet;
+
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
+    private BaiTracNghiem tracNghiem;
+
 }
