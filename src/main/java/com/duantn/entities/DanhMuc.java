@@ -35,4 +35,9 @@ public class DanhMuc {
     @UpdateTimestamp
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean isDeleted = true; // Mặc định là true (được hiển thị)
+
 }

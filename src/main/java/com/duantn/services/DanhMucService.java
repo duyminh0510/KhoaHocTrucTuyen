@@ -5,11 +5,13 @@ import java.util.List;
 import com.duantn.entities.DanhMuc;
 
 public interface DanhMucService {
-    List<DanhMuc> findAll();
+    List<DanhMuc> layTatCa();
+    DanhMuc layTheoId(Integer id);
+    DanhMuc taoDanhMuc(DanhMuc danhMuc);
+    DanhMuc capNhat(Integer id, DanhMuc danhMuc);
+    void voHieuHoa(Integer id);
+    boolean daTonTaiTen(String tenDanhMuc);
+    boolean daTonTaiTenKhacId(String tenDanhMuc, Integer idHienTai);
 
-    DanhMuc save(DanhMuc danhMuc);
-
-    void deleteById(Integer id);
-
-    DanhMuc findById(Integer id);
+    void kichHoat(Integer id);
 }
