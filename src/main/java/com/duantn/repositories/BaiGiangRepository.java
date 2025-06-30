@@ -9,6 +9,6 @@ import com.duantn.entities.BaiGiang;
 public interface BaiGiangRepository extends JpaRepository<BaiGiang, Integer> {
 
     // Lấy danh sách bài giảng theo ID chương
-    List<BaiGiang> findByChuongs_ChuongId(Integer chuongId);
+    List<BaiGiang> findByChuong_ChuongId(Integer chuongId);
 
 }

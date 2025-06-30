@@ -7,25 +7,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.duantn.entities.KhoaHoc;
-import com.duantn.repositories.KhoaHocRepository;
+import com.duantn.services.KhoaHocService;
 
 @Controller
 public class ListKhoaHocController {
 
     @Autowired
-    private KhoaHocRepository khoaHocRepository;
+    private KhoaHocService khoaHocService;
 
     @GetMapping("/khoaHoc")
     public String hienThiDanhSachKhoaHoc(Model model) {
-        List<KhoaHoc> danhSach = khoaHocRepository.findAll();
+        List<KhoaHoc> danhSach = khoaHocService.getTatCaKhoaHoc();
         model.addAttribute("khoaHocs", danhSach);
         return "views/KhoaHoc/danhSachKhoaHoc";
     }
 
     @GetMapping("/khoaHoc/{id}")
     public String chiTietKhoaHoc(@PathVariable("id") Integer id, Model model) {
-        KhoaHoc khoaHoc = khoaHocRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid course Id: " + id));
+        KhoaHoc khoaHoc = khoaHocService.getKhoaHocById(id);
+        if (khoaHoc == null) {
+            return "redirect:/khoaHoc?error=notfound";
+        }
         model.addAttribute("khoaHoc", khoaHoc);
         return "views/KhoaHoc/xemChiTietKhoaHoc";
     }

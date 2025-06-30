@@ -35,11 +35,6 @@
                   th:each="baiGiang : ${chuong.baiGiangs}"
                 >
                   <span th:text="${baiGiang.tenBaiGiang}"></span>
-                  <a
-                    th:href="@{'/baiGiang/' + ${baiGiang.baiGiangId}}"
-                    class="btn btn-sm btn-info ms-2"
-                    >Xem chi tiết bài giảng</a
-                  >
                 </li>
               </ul>
             </div>

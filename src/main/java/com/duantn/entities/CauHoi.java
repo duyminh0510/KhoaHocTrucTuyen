@@ -33,7 +33,7 @@ public class CauHoi implements Serializable {
     @Column(name = "cauHoiSo")
     private Integer cauHoiSo;
 
-    @Column(name = "tenCauHoi")
+    @Column(name = "tenCauHoi", columnDefinition = "NVARCHAR(MAX)")
     private String tenCauHoi;
 
     @CreationTimestamp

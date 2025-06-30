@@ -17,22 +17,22 @@ public class ChungChi implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer chungchiId;
 
-    @Column(name = "MaChungChi", nullable = false, unique = true)
+    @Column(name = "MaChungChi", unique = true, columnDefinition = "NVARCHAR(MAX)")
     private String maChungChi;
 
     @Column(name = "NgayCap", nullable = false)
     private LocalDateTime ngayCap;
 
-    @Column(name = "DuongDanFile", nullable = false)
+    @Column(name = "DuongDanFile", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String duongDanFile;
 
-    @Column(name = "tenKhoaHoc")
+    @Column(name = "tenKhoaHoc", columnDefinition = "NVARCHAR(MAX)")
     private String tenKhoaHoc;
 
     @Column(name = "maHocVien")
     private Integer maHocVien;
 
-    @Column(name = "tenHocVien")
+    @Column(name = "tenHocVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenHocVien;
 
     @ManyToOne

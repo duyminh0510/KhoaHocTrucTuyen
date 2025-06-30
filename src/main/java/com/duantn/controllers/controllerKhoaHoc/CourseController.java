@@ -17,13 +17,12 @@ public class CourseController {
 
     private final KhoaHocRepository courseRepository;
 
-    // Hiển thị chi tiết 1 khóa học
     @GetMapping("/{id}")
     public String getChiTietKhoaHoc(@PathVariable("id") Integer id, Model model) {
-        KhoaHoc course = courseRepository.findByIdWithChaptersAndLectures(id)
-            .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
+        KhoaHoc course = courseRepository.findByIdWithChaptersAndLectures(id).orElseThrow(
+                () -> new EntityNotFoundException("Không tìm thấy khóa học với id = " + id));
         model.addAttribute("khoaHoc", course);
         model.addAttribute("chuongs", course.getChuongs());
-        return "views/KhoaHoc/XemChiTietKhoaHoc";
+        return "views/KhoaHoc/xemChiTietKhoaHoc"; // viết đúng tên file html
     }
 }

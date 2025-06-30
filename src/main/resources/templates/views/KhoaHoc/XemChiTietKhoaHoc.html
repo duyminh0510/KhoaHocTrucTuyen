@@ -104,19 +104,45 @@
               Xem danh sách các chương
             </a>
 
+            <!-- Phần Curriculum - Nội dung khóa học -->
             <div class="card mb-4 curriculum">
               <div class="card-body" id="chuong-list">
                 <h4 class="card-title">Nội dung khóa học</h4>
+
                 <div th:if="${#lists.isEmpty(chuongs)}">
                   <p>Chưa có chương nào cho khóa học này.</p>
                 </div>
+
                 <div th:if="${!#lists.isEmpty(chuongs)}">
-                  <ul class="list-group">
+                  <ul class="list-group mb-4">
                     <li class="list-group-item" th:each="chuong : ${chuongs}">
-                      <span th:text="${chuong.tenchuong}"></span>
-                      <span class="text-muted" th:if="${chuong.mota != null}">
-                        - <span th:text="${chuong.mota}"></span>
-                      </span>
+                      <div>
+                        <strong th:text="${chuong.tenchuong}"></strong>
+                        <span class="text-muted" th:if="${chuong.mota != null}">
+                          - <span th:text="${chuong.mota}"></span>
+                        </span>
+                      </div>
+
+                      <div
+                        th:if="${chuong.baiGiangs != null && !#lists.isEmpty(chuong.baiGiangs)}"
+                        class="ms-3 mt-2"
+                      >
+                        <ul class="list-group">
+                          <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                            th:each="baiGiang : ${chuong.baiGiangs}"
+                          >
+                            <span th:text="${baiGiang.tenBaiGiang}"></span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div
+                        th:if="${chuong.baiGiangs == null || #lists.isEmpty(chuong.baiGiangs)}"
+                        class="ms-3 mt-2 text-muted"
+                      >
+                        Chưa có bài giảng nào trong chương này.
+                      </div>
                     </li>
                   </ul>
                 </div>
