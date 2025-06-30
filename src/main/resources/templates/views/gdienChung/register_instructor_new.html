@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Đăng ký thông tin giảng viên')}">
+
+<main>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Thông tin Giảng viên</h3>
+                        <p>Hoàn tất các thông tin dưới đây để trở thành giảng viên.</p>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/dang-ky-giang-vien/register-new}" th:object="${giangVienDto}" method="post">
+                            <!-- Email (read-only) -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" th:field="*{email}" readonly>
+                            </div>
+
+                            <!-- Ho Ten -->
+                            <div class="mb-3">
+                                <label for="hoTen" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" th:field="*{hoTen}" required>
+                            </div>
+
+                            <!-- SDT -->
+                            <div class="mb-3">
+                                <label for="sdt" class="form-label">Số Điện Thoại</label>
+                                <input type="text" class="form-control" th:field="*{sdt}" required>
+                            </div>
+                            
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" th:field="*{password}" required>
+                            </div>
+
+                            <!-- CCCD -->
+                            <div class="mb-3">
+                                <label for="CCCD" class="form-label">Số CCCD</label>
+                                <input type="text" class="form-control" th:field="*{CCCD}" required>
+                            </div>
+
+                            <!-- Kinh Nghiem -->
+                            <div class="mb-3">
+                                <label for="kinhNghiem" class="form-label">Kinh Nghiệm</label>
+                                <textarea class="form-control" th:field="*{kinhNghiem}" rows="3" required></textarea>
+                            </div>
+
+                            <!-- Ky Nang -->
+                            <div class="mb-3">
+                                <label for="kyNang" class="form-label">Kỹ Năng</label>
+                                <textarea class="form-control" th:field="*{kyNang}" rows="3" required></textarea>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Hoàn tất đăng ký</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html> 

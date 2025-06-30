@@ -8,5 +8,5 @@ import com.duantn.entities.GiangVien;
 import com.duantn.entities.TaiKhoan;
 
 public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
-    Optional<GiangVien> findBytaikhoan(TaiKhoan taikhoan);
+    Optional<GiangVien> findByTaikhoan(TaiKhoan taiKhoan);
 }

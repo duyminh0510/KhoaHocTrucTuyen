@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Bổ sung thông tin Giảng viên')}">
+
+<main>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Bổ sung thông tin Giảng viên</h3>
+                        <p>Vui lòng cung cấp thêm các thông tin sau.</p>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/dang-ky-giang-vien/upgrade-details}" th:object="${giangVienDto}" method="post">
+                            <!-- CCCD -->
+                            <div class="mb-3">
+                                <label for="CCCD" class="form-label">Số CCCD</label>
+                                <input type="text" class="form-control" th:field="*{CCCD}" required>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('CCCD')}" th:errors="*{CCCD}"></div>
+                            </div>
+
+                            <!-- Kinh Nghiem -->
+                            <div class="mb-3">
+                                <label for="kinhNghiem" class="form-label">Kinh Nghiệm</label>
+                                <textarea class="form-control" th:field="*{kinhNghiem}" rows="3" required></textarea>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('kinhNghiem')}" th:errors="*{kinhNghiem}"></div>
+                            </div>
+
+                            <!-- Ky Nang -->
+                            <div class="mb-3">
+                                <label for="kyNang" class="form-label">Kỹ Năng</label>
+                                <textarea class="form-control" th:field="*{kyNang}" rows="3" required></textarea>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('kyNang')}" th:errors="*{kyNang}"></div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Tiếp tục</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html> 
