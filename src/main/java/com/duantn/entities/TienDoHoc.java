@@ -23,10 +23,10 @@ public class TienDoHoc implements Serializable {
     @Column(name = "ngayhoanthanh")
     private LocalDateTime ngayhoanthanh;
 
-    @Column(name = "tenHocVien")
+    @Column(name = "tenHocVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenHocVien;
 
-    @Column(name = "tenKhoaHoc")
+    @Column(name = "tenKhoaHoc", columnDefinition = "NVARCHAR(MAX)")
     private String tenKhoaHoc;
 
     @Builder.Default

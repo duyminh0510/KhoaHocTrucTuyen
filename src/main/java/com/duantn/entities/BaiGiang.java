@@ -8,24 +8,16 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.duantn.enums.LoaiBaiGiang;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = { "videoBaiGiang", "baiViet", "tracNghiem" })
 @Table(name = "BaiGiang")
 public class BaiGiang implements Serializable {
 
@@ -35,10 +27,10 @@ public class BaiGiang implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baiGiangId;
 
-    @Column(name = "tenBaiGiang")
+    @Column(name = "tenBaiGiang", columnDefinition = "NVARCHAR(MAX)")
     private String tenBaiGiang;
 
-    @Column(length = 10000)
+    @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
     private String mota;
 
     @CreationTimestamp
@@ -53,13 +45,19 @@ public class BaiGiang implements Serializable {
     private Boolean trangthai;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "loai_bai_giang", nullable = false, length = 30)
+    @Column(name = "loai_bai_giang", length = 30)
     private LoaiBaiGiang loaiBaiGiang;
 
     @ManyToOne
     @JoinColumn(name = "chuongId")
-    private Chuong chuongs;
+    private Chuong chuong;
 
-    @OneToOne(mappedBy = "baiGiang")
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
+    private VideoBaiGiang videoBaiGiang;
+
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
     private BaiViet baiViet;
+
+    @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
+    private BaiTracNghiem tracNghiem;
 }

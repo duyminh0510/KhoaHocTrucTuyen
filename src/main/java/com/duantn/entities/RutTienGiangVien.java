@@ -19,6 +19,8 @@ import lombok.*;
 @Table(name = "RutTienGiangVien")
 public class RutTienGiangVien implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rutTienId")
@@ -35,7 +37,7 @@ public class RutTienGiangVien implements Serializable {
     @Column(name = "ngayrut", updatable = false)
     private LocalDateTime ngayrut;
 
-    @Column(name = "tenGiangVien")
+    @Column(name = "tenGiangVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenGiangVien;
 
     @Enumerated(EnumType.STRING)

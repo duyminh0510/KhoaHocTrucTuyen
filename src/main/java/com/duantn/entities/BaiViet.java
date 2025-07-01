@@ -6,21 +6,16 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "baiGiang")
 @Table(name = "BaiViet")
 public class BaiViet implements Serializable {
 
@@ -33,7 +28,7 @@ public class BaiViet implements Serializable {
     @Column(name = "tenBaiViet")
     private String tenBaiViet;
 
-    @Column(length = 10000)
+    @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
     private String noidung;
 
     @CreationTimestamp
@@ -50,5 +45,4 @@ public class BaiViet implements Serializable {
     @OneToOne
     @JoinColumn(name = "baiGiangId", unique = true)
     private BaiGiang baiGiang;
-
 }

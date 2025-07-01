@@ -10,3 +10,4 @@ public class KhoaHocDaTaoController {
         return "views/gdienGiangVien/khoa-hoc-da-tao";
     }
 }
+

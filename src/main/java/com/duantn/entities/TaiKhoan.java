@@ -7,22 +7,12 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,13 +26,13 @@ public class TaiKhoan implements Serializable {
     @Column(name = "taikhoanId")
     private Integer taikhoanId;
 
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", columnDefinition = "NVARCHAR(MAX)")
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "phone", columnDefinition = "NVARCHAR(MAX)")
     private String phone;
 
     @CreationTimestamp
@@ -53,34 +43,59 @@ public class TaiKhoan implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
-    @Column(name = "avatar")
+    @Column(name = "avatar", columnDefinition = "NVARCHAR(MAX)")
     private String avatar;
 
-    @Column(name = "password")
+    @Column(name = "password", columnDefinition = "NVARCHAR(MAX)")
     private String password;
 
-    // tài khoản mới thêm mặc định trạng thái là true
     @Column(name = "status", nullable = false, columnDefinition = "BIT DEFAULT 1")
     @Builder.Default
     private boolean status = true;
 
-    // các mối quan hệ giữa các bảng
+    // ===== Quan hệ =====
+
     @ManyToOne
     @JoinColumn(name = "roleId", nullable = false)
     private Role role;
 
     @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private GiangVien giangVien;
 
     @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<DoanhThuGiangVien> danhSachDoanhThu;
 
     @OneToMany(mappedBy = "taikhoanGV", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<RutTienGiangVien> rutTienGV;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<GiaoDichKhoaHoc> giaodich;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<KetQua> ketqua;
+
+    @Override
+    public String toString() {
+        return "TaiKhoan{" +
+                "taikhoanId=" + taikhoanId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngayCapNhat=" + ngayCapNhat +
+                ", avatar='" + avatar + '\'' +
+                ", status=" + status +
+                ", role=" + (role != null ? role.getName() : "null") +
+                '}';
+    }
 }

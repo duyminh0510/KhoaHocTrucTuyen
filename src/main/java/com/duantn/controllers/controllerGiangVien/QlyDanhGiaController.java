@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class QlyDanhGiaController {
+
     @RequestMapping("/giangvien/danh-gia-tu-khoa-hoc")
     public String requestMethodName() {
         return "views/gdienGiangVien/quan-ly-danh-gia";

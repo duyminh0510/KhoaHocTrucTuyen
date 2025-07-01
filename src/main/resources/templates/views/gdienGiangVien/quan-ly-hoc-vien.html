@@ -14,8 +14,7 @@
 
                 <!-- Bộ lọc khóa học -->
                 <div class="filter-course">
-                    <label for="courseSelect"><strong>Chọn khóa
-                            học:</strong></label>
+                    <label for="courseSelect"><strong>Chọn khóa học:</strong></label>
                     <select id="courseSelect" onchange="filterByCourse()">
                         <option value="all">Tất cả</option>
                         <option value="java">Java Spring Boot Cơ Bản</option>
@@ -25,8 +24,7 @@
 
                 <!-- Tìm kiếm -->
                 <div class="search-bar">
-                    <input type="text"
-                        placeholder="Tìm kiếm học viên theo tên, email...">
+                    <input type="text" placeholder="Tìm kiếm học viên theo tên, email...">
                 </div>
 
                 <!-- Bảng -->
@@ -74,14 +72,10 @@
                     <span class="close" onclick="closeModal()">&times;</span>
                     <div class="modal-header">Chi tiết học viên</div>
                     <div class="modal-body">
-                        <p><strong>Họ và tên:</strong> <span
-                                id="modalTen"></span></p>
-                        <p><strong>Email:</strong> <span
-                                id="modalEmail"></span></p>
-                        <p><strong>Khóa học:</strong> <span
-                                id="modalKhoaHoc"></span></p>
-                        <p><strong>Tiến độ:</strong> <span
-                                id="modalTienDo"></span></p>
+                        <p><strong>Họ và tên:</strong> <span id="modalTen"></span></p>
+                        <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                        <p><strong>Khóa học:</strong> <span id="modalKhoaHoc"></span></p>
+                        <p><strong>Tiến độ:</strong> <span id="modalTienDo"></span></p>
                     </div>
                 </div>
             </div>
@@ -112,15 +106,10 @@
 
                 rows.forEach(row => {
                     const course = row.getAttribute("data-course");
-                    if (selected === "all" || course === selected) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
+                    row.style.display = (selected === "all" || course === selected) ? "" : "none";
                 });
             }
-        </script>
+            </script>
         </main>
     </body>
-
 </html>

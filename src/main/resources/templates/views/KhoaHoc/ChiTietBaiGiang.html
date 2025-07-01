@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="${baiGiang.tenBaiGiang}">Chi tiết bài giảng</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2 class="mb-4" th:text="${baiGiang.tenBaiGiang}">Tên bài giảng</h2>
+
+      <div class="mb-3">
+        <strong>Mô tả:</strong>
+        <span th:text="${baiGiang.mota}">Mô tả bài giảng</span>
+      </div>
+
+      <div class="mb-3">
+        <strong>Loại bài giảng:</strong>
+        <span th:text="${baiGiang.loaiBaiGiang}">Loại bài giảng</span>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="mb-3" th:if="${baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
+        <div th:if="${baiGiang.videoBaiGiang != null}">
+          <strong>Video bài giảng:</strong>
+          <div class="ratio ratio-16x9 mt-2">
+            <iframe
+              th:src="'https://www.youtube.com/embed/' + ${#strings.substring(baiGiang.videoBaiGiang.url_video, baiGiang.videoBaiGiang.url_video.indexOf('v=') + 2)}"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- TÀI LIỆU -->
+      <div class="mb-3" th:if="${baiGiang.loaiBaiGiang.name() == 'TAILIEU'}">
+        <div th:if="${baiGiang.baiViet != null}">
+          <strong>Tài liệu bài giảng:</strong>
+          <a
+            th:href="${baiGiang.baiViet.noidung}"
+            target="_blank"
+            class="d-block mt-2"
+            >Xem tài liệu</a
+          >
+        </div>
+      </div>
+
+      <!-- Quay lại -->
+      <a
+        th:if="${baiGiang.chuongs != null}"
+        th:href="@{'/chuong/danhsach/' + ${baiGiang.chuongs.chuongId}}"
+        class="btn btn-secondary mt-4"
+      >
+        Quay lại danh sách chương
+      </a>
+      <span
+        th:if="${baiGiang.chuongs == null}"
+        class="text-danger mt-4 d-block"
+      >
+        Bài giảng này chưa thuộc chương nào!
+      </span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

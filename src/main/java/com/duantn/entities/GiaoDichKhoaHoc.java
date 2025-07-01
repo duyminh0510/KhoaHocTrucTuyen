@@ -18,6 +18,7 @@ import lombok.*;
 @Builder
 @Table(name = "GiaoDichKhoaHoc")
 public class GiaoDichKhoaHoc {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer giaodichId;
@@ -25,7 +26,7 @@ public class GiaoDichKhoaHoc {
     @Column(name = "tongtien", precision = 12, scale = 2, nullable = false)
     private BigDecimal tongtien;
 
-    @Column(name = "tenhocvien", nullable = false)
+    @Column(name = "tenhocvien", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tenhocvien;
 
     @CreationTimestamp

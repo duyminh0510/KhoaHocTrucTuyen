@@ -5,16 +5,12 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,7 +21,7 @@ public class DanhMuc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer danhmucId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tenDanhMuc;
 
     @CreationTimestamp
@@ -35,4 +31,18 @@ public class DanhMuc {
     @UpdateTimestamp
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean isDeleted = true;
+
+    @Override
+    public String toString() {
+        return "DanhMuc{" +
+                "danhmucId=" + danhmucId +
+                ", tenDanhMuc='" + tenDanhMuc + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngayCapNhat=" + ngayCapNhat +
+                '}';
+    }
 }
