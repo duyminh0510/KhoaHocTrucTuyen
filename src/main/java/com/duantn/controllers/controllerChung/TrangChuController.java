@@ -1,22 +1,19 @@
 package com.duantn.controllers.controllerChung;
 
-import com.duantn.entities.KhoaHoc;
-import com.duantn.repositories.KhoaHocRepository;
-import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
-import com.duantn.repositories.TaiKhoanRepository;
-import com.duantn.services.KhoaHocService;
-
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
+import com.duantn.repositories.TaiKhoanRepository;
+import com.duantn.services.KhoaHocService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class TrangChuController {
@@ -49,10 +46,8 @@ public class TrangChuController {
 
             taiKhoanRepository.findByEmail(authentication.getName()).ifPresent(taiKhoan -> {
                 Set<Integer> likedCourseIds = nguoiDungThichKhoaHocRepository
-                        .findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId())
-                        .stream()
-                        .map(like -> like.getKhoaHoc().getKhoahocId())
-                        .collect(Collectors.toSet());
+                        .findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId()).stream()
+                        .map(like -> like.getKhoaHoc().getKhoahocId()).collect(Collectors.toSet());
                 model.addAttribute("likedCourseIds", likedCourseIds);
             });
 
