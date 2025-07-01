@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
+<<<<<<< HEAD
 import com.duantn.services.KhoaHocService;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.repositories.KhoaHocRepository;
@@ -16,6 +15,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+=======
+import jakarta.servlet.http.HttpServletRequest;
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 
 @Controller
 public class TrangChuController {

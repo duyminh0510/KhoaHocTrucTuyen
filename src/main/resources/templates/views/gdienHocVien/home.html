@@ -1,80 +1,96 @@
 <!DOCTYPE html>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <html lang="vi"
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+=======
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ học viên</title>
+</head>
+<body>
+    <main class="home-hoc-vien">
+        <div class="container">
+            <main class="main-content" style="position:relative;">
+                <h2 class="main-title">Chào mừng bạn đến với hệ thống học trực tuyến!</h2>
+                <p style="font-size:18px; color:#22314f; margin-bottom:32px;">Khám phá các khoá học nổi bật và bắt đầu hành trình học tập của mình.</p>
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Trang chủ</title>
-    </head>
-
-    <body>
-        <main class="trangchu">
-            <!-- BANNER -->
-            <div class="banner-container">
-                <div class="banner-main">BỎ BANNER</div>
-                <div class="banner-side">
-                    <div class="side-image">BỎ ẢNH</div>
-                    <div class="side-image">BỎ ẢNH</div>
-                </div>
-            </div>
-
-            <!-- KHÁM PHÁ -->
-            <section class="section">
-                <h3>Cùng nhau khám phá</h3>
-
-                <!-- NGƯỜI HỌC ĐANG XEM -->
-                <div class="sub-section">
-                    <h4>Người học đang xem</h4>
-                    <div class="course-grid">
-                        <th:block th:each="course : ${dangXemList}">
-                            <div class="course-card">
-                                <img th:src="@{${course.hinhAnh}}" alt="course">
-                                <h4 th:text="${course.tenKhoaHoc}"></h4>
-                                <p th:text="${course.moTa}"></p>
-                                <span class="rating">⭐⭐⭐⭐☆</span>
-                            </div>
-                        </th:block>
-                    </div>
-                    <div class="text-end"><a href="#" class="btn-view">Xem
-                            thêm</a></div>
+                <div style="display:flex; justify-content:center; gap:32px; margin-top:40px;">
+                    <a href="/hoc-vien/khoa-hoc-da-mua" class="btn-big">📚 Khoá học đã mua</a>
+                    <a href="/hoc-vien/khoa-hoc-yeu-thich" class="btn-big">❤️ Khoá học yêu thích</a>
+                    <a href="/hoc-vien/lich-su-giao-dich" class="btn-big">💳 Lịch sử giao dịch</a>
                 </div>
 
-                <!-- ĐỀ XUẤT CHO BẠN -->
-                <div class="sub-section">
-                    <h4>Khóa học được đề xuất cho bạn dựa trên xếp hạng</h4>
-                    <div class="course-grid">
-                        <th:block th:each="course : ${deXuatList}">
-                            <div class="course-card">
-                                <img th:src="@{${course.hinhAnh}}" alt="course">
-                                <h4 th:text="${course.tenKhoaHoc}"></h4>
-                                <p th:text="${course.moTa}"></p>
-                                <span class="rating">⭐⭐⭐⭐☆</span>
-                            </div>
-                        </th:block>
-                    </div>
-                    <div class="text-end"><a href="#" class="btn-view">Xem
-                            thêm</a></div>
-                </div>
-            </section>
-
-            <!-- ẢNH -->
-            <div class="big-image">Ảnh</div>
-
-            <!-- KHÓA HỌC NỔI BẬT -->
-            <section class="section">
-                <h4>Các khóa học nổi bật về <span class="text-primary">Phát
-                        triển phần mềm</span></h4>
-                <div class="course-grid">
-                    <th:block th:each="course : ${noiBatList}">
+                <h3 style="margin-top:56px; font-size:22px; color:#22314f; font-weight:600;">Khoá học nổi bật</h3>
+                <div class="courses-grid">
+                    <th:block th:each="khoaHoc, iterStat : ${khoaHocList}" th:if="${iterStat.index < 6}">
                         <div class="course-card">
-                            <img th:src="@{${course.hinhAnh}}" alt="course">
-                            <h4 th:text="${course.tenKhoaHoc}"></h4>
-                            <p th:text="${course.moTa}"></p>
-                            <span class="rating">⭐⭐⭐⭐☆</span>
+                            <img class="course-thumb"
+                                th:src="'https://aptechvietnam.com.vn/wp-content/uploads/tai-sao-nen-hoc-lap-trinh-full-stack.jpg'"
+                                alt="Ảnh khoá học" />
+
+                            <div class="course-info">
+                                <div class="course-title" th:text="${khoaHoc.tenKhoaHoc}"></div>
+                                <div class="course-desc" th:text="${#strings.abbreviate(khoaHoc.moTa, 80)}"></div>
+                                <div class="course-price">
+                                    <span th:if="${khoaHoc.giaKhuyenMai != null}"
+                                        th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                    <span th:if="${khoaHoc.giaKhuyenMai == null}"
+                                        th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                </div>
+                            </div>
+
+                            <div class="course-actions">
+                                <a th:href="@{/hoc-vien/khoa-hoc/{id}(id=${khoaHoc.khoahocId})}" class="btn-detail">Xem chi tiết</a>
+
+                                <button type="button"
+                                        class="btn-detail btn-outline btn-like"
+                                        th:id="'like-btn-' + ${khoaHoc.khoahocId}"
+                                        th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? ' liked' : ''"
+                                        th:attr="onclick='likeCourse(' + ${khoaHoc.khoahocId} + ')'">
+                                    <span th:text="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'Bỏ thích' : 'Thích'"></span>
+                                    <span th:id="'like-count-' + ${khoaHoc.khoahocId}"
+                                        th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
+                                        style="margin-left: 4px;"></span>
+                                </button>
+
+                                <button type="button" class="btn-detail btn-outline" data-bs-toggle="modal" th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Share Modal -->
+                        <div class="modal fade" th:id="'shareModal-' + ${khoaHoc.khoahocId}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Chia sẻ khóa học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form th:action="@{/hoc-vien/share-course}" method="post">
+                                        <div class="modal-body">
+                                                <input type="hidden" name="courseId" th:value="${khoaHoc.khoahocId}" />
+                                                <div class="mb-3">
+                                                    <label for="recipientEmail" class="form-label">Email người nhận:</label>
+                                                    <input type="email" name="recipientEmail" class="form-control" required placeholder="nhapemail@example.com">
+                                                </div>
+                                                <p>Một email chứa thông tin và liên kết đến khóa học này sẽ được gửi đến địa chỉ trên.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Gửi Email</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </th:block>
                 </div>
+<<<<<<< HEAD
             </section>
         </main>
     </body>
@@ -166,6 +182,9 @@
                     </th:block>
                 </div>
 
+=======
+
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
                  <!-- Global Alert for Share -->
                 <div th:if="${share_success}" class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
                     <strong th:text="${share_success}"></strong>

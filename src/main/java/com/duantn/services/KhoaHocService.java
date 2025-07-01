@@ -1,5 +1,6 @@
 package com.duantn.services;
 
+<<<<<<< HEAD
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.NguoiDungThichKhoaHoc;
 import com.duantn.entities.TaiKhoan;
@@ -16,13 +17,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+=======
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.repositories.KhoaHocRepository;
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 
 @Service
 public class KhoaHocService {
 
+<<<<<<< HEAD
     @Autowired private KhoaHocRepository khoaHocRepository;
     @Autowired private TaiKhoanRepository taiKhoanRepository;
     @Autowired private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
+=======
+    @Autowired
+    private KhoaHocRepository khoaHocRepository;
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 
     public List<KhoaHoc> getTatCaKhoaHoc() {
         return khoaHocRepository.findAll();
@@ -31,6 +44,7 @@ public class KhoaHocService {
     public KhoaHoc getKhoaHocById(Integer id) {
         return khoaHocRepository.findById(id).orElse(null);
     }
+<<<<<<< HEAD
 
     public List<KhoaHoc> layTatCaKhoaHocCanDuyet() {
         return khoaHocRepository.findAllByTrangThai(TrangThaiKhoaHoc.PENDING_APPROVAL); 
@@ -91,4 +105,6 @@ public class KhoaHocService {
     public KhoaHoc getKhoaHocByIdWithDetails(Integer id) {
         return khoaHocRepository.findByIdWithDetails(id).orElse(null);
     }
+=======
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 }

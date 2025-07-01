@@ -1,15 +1,20 @@
 package com.duantn.repositories;
 
+<<<<<<< HEAD
 import com.duantn.entities.KhoaHoc;
 import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.enums.TrangThaiGiaoDich;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+=======
+import java.util.Optional;
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.duantn.entities.KhoaHoc;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +22,7 @@ import java.util.Optional;
 @Repository
 public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
+<<<<<<< HEAD
     // Dành cho quản trị duyệt khóa học
     List<KhoaHoc> findAllByTrangThai(TrangThaiKhoaHoc trangThai);
 
@@ -52,4 +58,9 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
            AND gdct.giaoDichKhoaHoc.trangthai = :status
            """)
     List<KhoaHoc> findEnrolledCoursesByEmail(@Param("email") String email, @Param("status") TrangThaiGiaoDich status);
+=======
+    @Query("SELECT k FROM KhoaHoc k " + "LEFT JOIN FETCH k.chuongs c "
+            + "LEFT JOIN FETCH c.baiGiangs " + "WHERE k.khoahocId = :id")
+    Optional<KhoaHoc> findByIdWithChaptersAndLectures(@Param("id") Integer id);
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 }

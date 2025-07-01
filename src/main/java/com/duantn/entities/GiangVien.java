@@ -16,7 +16,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "taikhoan")
 @EqualsAndHashCode(exclude = "taikhoan")
 @Table(name = "GiangVien")
 public class GiangVien implements Serializable {
@@ -57,4 +56,21 @@ public class GiangVien implements Serializable {
     @OneToOne
     @JoinColumn(name = "taikhoanId", nullable = false, unique = true)
     private TaiKhoan taikhoan;
+
+    @Override
+    public String toString() {
+        return "GiangVien{" +
+                "giangvienId=" + giangvienId +
+                ", kyNang='" + kyNang + '\'' +
+                ", kinhNghiem='" + kinhNghiem + '\'' +
+                ", CCCD='" + CCCD + '\'' +
+                ", congViec='" + congViec + '\'' +
+                ", ngaySinh=" + ngaySinh +
+                ", gioiTinh='" + gioiTinh + '\'' +
+                ", chuyenNganh='" + chuyenNganh + '\'' +
+                ", ngayThamGia=" + ngayThamGia +
+                ", ngayCapNhat=" + ngayCapNhat +
+                ", taikhoanId=" + (taikhoan != null ? taikhoan.getTaikhoanId() : "null") +
+                '}';
+    }
 }

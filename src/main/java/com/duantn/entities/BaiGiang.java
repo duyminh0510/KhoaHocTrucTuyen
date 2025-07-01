@@ -8,13 +8,31 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.duantn.enums.LoaiBaiGiang;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
+=======
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 import lombok.*;
 
 @Entity
 @Getter
 @Setter
+<<<<<<< HEAD
 @Data
+=======
+>>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -46,7 +64,7 @@ public class BaiGiang implements Serializable {
     private Boolean trangthai;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "loai_bai_giang", nullable = false, length = 30)
+    @Column(name = "loai_bai_giang", length = 30)
     private LoaiBaiGiang loaiBaiGiang;
 
     @ManyToOne
