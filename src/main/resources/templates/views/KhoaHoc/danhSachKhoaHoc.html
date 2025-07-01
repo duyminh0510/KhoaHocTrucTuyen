@@ -38,12 +38,14 @@
         th:if="${khoaHocs != null and !#lists.isEmpty(khoaHocs)}"
       >
         <div class="col-md-4 mb-4" th:each="khoaHoc : ${khoaHocs}">
-          <div class="card h-100 shadow-sm course-card">
+          <div
+            class="card h-100 shadow-sm course-card"
+            th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|"
+            style="cursor: pointer"
+          >
             <img
               class="card-img-top"
-              th:src="${khoaHoc.anhBia != null and !#strings.isEmpty(khoaHoc.anhBia) 
-                        ? '/images/' + khoaHoc.anhBia 
-                        : '/images/default.png'}"
+              th:src="${khoaHoc.anhBia != null and !#strings.isEmpty(khoaHoc.anhBia) ? '/images/' + khoaHoc.anhBia : '/images/default.png'}"
               alt="Ảnh bìa"
             />
 
@@ -97,12 +99,112 @@
                   ></span>
                 </p>
               </div>
-              <a
-                th:href="@{'/khoaHoc/' + ${khoaHoc.khoahocId}}"
-                class="btn btn-primary w-100"
+
+              <div
+                class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1"
               >
-                Xem chi tiết
-              </a>
+                <!-- Like -->
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  id="like-btn-[[${khoaHoc.khoahocId}]]"
+                  onclick="likeCourse([[${khoaHoc.khoahocId}]])"
+                >
+                  <i class="fas fa-heart me-1"></i> Thích (<span
+                    id="like-count-[[${khoaHoc.khoahocId}]]"
+                    th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}"
+                    >0</span
+                  >)
+                </button>
+
+                <!-- Share -->
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#shareModal-[[${khoaHoc.khoahocId}]]"
+                >
+                  <i class="fas fa-share me-1"></i> Chia sẻ
+                </button>
+
+                <!-- Add to Cart -->
+                <form
+                  th:action="@{/gio-hang/them}"
+                  method="post"
+                  class="d-inline"
+                >
+                  <input
+                    type="hidden"
+                    name="khoaHocId"
+                    th:value="${khoaHoc.khoahocId}"
+                  />
+                  <button type="submit" class="btn btn-outline-success btn-sm">
+                    <i class="fas fa-cart-plus me-1"></i> Giỏ hàng
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal chia sẻ -->
+          <div
+            class="modal fade"
+            th:id="'shareModal-' + ${khoaHoc.khoahocId}"
+            tabindex="-1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    Chia sẻ khóa học:
+                    <span th:text="${khoaHoc.tenKhoaHoc}"></span>
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Đóng"
+                  ></button>
+                </div>
+                <form th:action="@{/hoc-vien/share-course}" method="post">
+                  <div class="modal-body">
+                    <input
+                      type="hidden"
+                      name="courseId"
+                      th:value="${khoaHoc.khoahocId}"
+                    />
+                    <div class="mb-3">
+                      <label for="recipientEmail" class="form-label"
+                        >Email người nhận:</label
+                      >
+                      <input
+                        type="email"
+                        name="recipientEmail"
+                        class="form-control"
+                        required
+                        placeholder="nhapemail@example.com"
+                      />
+                    </div>
+                    <p>
+                      Một email chứa thông tin và liên kết đến khóa học sẽ được
+                      gửi đi.
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Đóng
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      Gửi Email
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -112,5 +214,28 @@
         <p>Không có khóa học nào.</p>
       </div>
     </div>
+
+    <script>
+      function likeCourse(id) {
+        fetch("/hoc-vien/khoa-hoc/" + id + "/like", { method: "POST" })
+          .then((response) => {
+            if (!response.ok) throw new Error("Lỗi khi gửi yêu cầu");
+            return response.json();
+          })
+          .then((data) => {
+            const btn = document.getElementById("like-btn-" + id);
+            const countSpan = document.getElementById("like-count-" + id);
+            countSpan.innerText = data.newLikeCount;
+            btn.classList.toggle("btn-danger", data.isLiked);
+            btn.classList.toggle("btn-outline-danger", !data.isLiked);
+            btn.innerHTML = `<i class="fas fa-heart me-1"></i> ${
+              data.isLiked ? "Bỏ thích" : "Thích"
+            } (${data.newLikeCount})`;
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
