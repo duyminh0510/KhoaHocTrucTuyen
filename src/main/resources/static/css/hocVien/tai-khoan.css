@@ -1,73 +1,75 @@
-.taikhoan .taikhoan-container {
-    max-width: 800px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', sans-serif;
-}
-
-.taikhoan h1 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    color: #16203b;
+.taikhoan {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    padding: 40px 20px;
 }
 
-.taikhoan h2 {
-    font-size: 20px;
-    margin: 30px 0 20px;
-    color: #1c1c1c;
+.taikhoan-container {
+    max-width: 500px;
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
 }
 
-.taikhoan .form-group {
+.avatar-wrapper {
     margin-bottom: 20px;
 }
 
-.taikhoan label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 6px;
-    color: #333;
+.avatar-wrapper img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #ddd;
 }
 
-.taikhoan input[type="text"],
-.taikhoan input[type="email"],
-.taikhoan input[type="password"],
-.taikhoan input[type="file"] {
+.profile-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="file"] {
     width: 100%;
     padding: 10px;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
 }
 
-.taikhoan .btn {
-    padding: 10px 18px;
+.btn-update {
+    width: 100%;
+    padding: 12px;
     border: none;
-    border-radius: 6px;
-    font-size: 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
 }
 
-.taikhoan .btn-update {
-    background-color: #16203b;
-    color: #fff;
+.btn-update:hover {
+    background-color: #45a049;
 }
 
-.taikhoan .btn-update:hover {
-    background-color: #1e2a4f;
-}
-
-.taikhoan .btn-change {
-    background-color: #28a745;
-    color: white;
-}
-
-.taikhoan .btn-change:hover {
-    background-color: #218838;
+.alert {
+    margin-bottom: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #e7f3fe;
+    color: #31708f;
 }

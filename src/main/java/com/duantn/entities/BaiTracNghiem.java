@@ -21,7 +21,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 @Table(name = "BaiTracNghiem")
+@EqualsAndHashCode(exclude = "baiGiang")
 public class BaiTracNghiem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +33,7 @@ public class BaiTracNghiem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tracnghiemId;
 
-    @Column(name = "tenbai")
+    @Column(name = "tenbai", columnDefinition = "NVARCHAR(MAX)")
     private String tenbai;
 
     @CreationTimestamp

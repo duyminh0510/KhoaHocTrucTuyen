@@ -1,5 +1,6 @@
 package com.duantn.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
     Optional<VerificationToken> findByToken(String token);
 
     Optional<VerificationToken> findByEmail(String email);
+
+    Optional<VerificationToken> findByEmailAndToken(String email, String token);
 }

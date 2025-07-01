@@ -85,14 +85,10 @@ public class TaiKhoan implements Serializable {
     @ToString.Exclude
     private List<RutTienGiangVien> rutTienGV;
 
-    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // @EqualsAndHashCode.Exclude
-    // @ToString.Exclude
-    // private List<GiaoDichKhoaHoc> giaodich;
-
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<GiaoDichKhoaHoc> giaodich;
-
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude

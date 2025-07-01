@@ -1,40 +1,61 @@
-<!-- reset-password.html -->
+<!-- buoc2quenmatkhau.html -->
 <!DOCTYPE html>
-<html lang="vi"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Đặt lại mật khẩu</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đặt lại mật khẩu</title>
 
-    <body>
-        <main class="xacthuc">
-            <div class="reset-container">
-                <h3 class="reset-title">Đặt lại mật khẩu</h3>
-                <p>Nhập mật khẩu mới cho tài khoản của bạn.</p>
+</head>
 
-                <form th:action="@{/dat-lai-mat-khau}" method="post">
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Mật khẩu
-                            mới:</label>
-                        <input type="password" class="form-control"
-                            id="password" name="password" required
-                            placeholder="******">
-                    </div>
-                    <div class="mb-3">
-                        <label for="confirm" class="form-label">Xác nhận mật
-                            khẩu:</label>
-                        <input type="password" class="form-control" id="confirm"
-                            name="confirm" required placeholder="******">
-                    </div>
-                    <button type="submit" class="btn btn-reset w-100">Cập nhật
-                        mật
-                        khẩu</button>
-                </form>
+<body>
+    <main class="xacthuc" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="reset-container">
+            <h3 class="reset-title text-center">Đặt lại mật khẩu</h3>
+            <p class="text-center">Nhập mật khẩu mới cho tài khoản của bạn.</p>
+
+            <!-- Hiển thị lỗi -->
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form th:action="@{/lay-lai-mat-khau/reset}" method="post">
+                <label for="password" class="form-label">Mật khẩu mới:</label>
+                <input type="password" class="form-control" id="password" name="password" required placeholder="******">
+
+                <label for="confirm" class="form-label">Xác nhận mật khẩu:</label>
+                <input type="password" class="form-control" id="confirm" name="confirm" required placeholder="******">
+
+                <button type="submit" class="btn-reset">Cập nhật mật khẩu</button>
+            </form>
+        </div>
+
+        <!-- Modal thông báo thành công -->
+        <div id="successModal" class="modal-overlay"
+            th:style="${message == 'Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.'} ? '' : 'display:none;'">
+            <div class="modal-box">
+                <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35" cy="35" r="35" fill="#8fd19e" />
+                    <path d="M20 36L31 47L50 28" stroke="white" stroke-width="5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <div class="modal-message">Đặt lại mật khẩu thành công!</div>
+                <a th:href="@{/login}" class="modal-close-btn">Đăng nhập</a>
             </div>
-        </main>
-    </body>
+        </div>
+        <script>
+            // Tự động đóng modal sau 4s
+            window.addEventListener("load", function () {
+                const modal = document.getElementById("successModal");
+                if (modal && modal.style.display !== "none") {
+                    setTimeout(() => {
+                        modal.style.display = "none";
+                    }, 4000);
+                }
+            });
+        </script>
+    </main>
+
+
+</body>
 
 </html>

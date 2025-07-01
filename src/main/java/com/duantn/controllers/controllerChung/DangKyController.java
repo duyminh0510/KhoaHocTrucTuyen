@@ -110,27 +110,34 @@ public class DangKyController {
     }
 
     @GetMapping("/verify")
-    public String showVerifyForm() {
+    public String showVerifyForm(Model model) {
+        model.addAttribute("type", "register"); // <-- Truyền biến type để xác định luồng
         return "views/gdienChung/verify";
     }
 
     @PostMapping("/verify")
-    public String verify(@RequestParam("code") String code, HttpSession session, Model model) {
+    public String verify(@RequestParam("code") String code,
+            @RequestParam(value = "type", required = false) String type,
+            HttpSession session,
+            Model model) {
         Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(code);
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng.");
+            model.addAttribute("type", "register");
             return "views/gdienChung/verify";
         }
 
         VerificationToken token = tokenOpt.get();
         if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "Mã xác minh đã hết hạn.");
+            model.addAttribute("type", "register");
             return "views/gdienChung/verify";
         }
 
         DangKyHocVienDto dto = (DangKyHocVienDto) session.getAttribute("pendingUser");
         if (dto == null || !dto.getEmail().equals(token.getEmail())) {
             model.addAttribute("error", "Phiên làm việc không hợp lệ.");
+            model.addAttribute("type", "register");
             return "views/gdienChung/verify";
         }
 
@@ -152,4 +159,5 @@ public class DangKyController {
 
         return "redirect:/login";
     }
+
 }
