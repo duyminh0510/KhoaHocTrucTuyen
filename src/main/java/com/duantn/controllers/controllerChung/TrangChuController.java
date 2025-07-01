@@ -1,23 +1,22 @@
 package com.duantn.controllers.controllerChung;
 
+import com.duantn.entities.KhoaHoc;
+import com.duantn.repositories.KhoaHocRepository;
+import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
+import com.duantn.repositories.TaiKhoanRepository;
+import com.duantn.services.KhoaHocService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-<<<<<<< HEAD
-import com.duantn.services.KhoaHocService;
-import com.duantn.entities.KhoaHoc;
-import com.duantn.repositories.KhoaHocRepository;
-import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
-import com.duantn.repositories.TaiKhoanRepository;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-=======
-import jakarta.servlet.http.HttpServletRequest;
->>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
 
 @Controller
 public class TrangChuController {
@@ -46,29 +45,29 @@ public class TrangChuController {
 
         if (isHocVien) {
             List<KhoaHoc> khoaHocList = khoaHocService.getTatCaKhoaHoc();
-        model.addAttribute("khoaHocList", khoaHocList);
+            model.addAttribute("khoaHocList", khoaHocList);
 
-        if (authentication != null && authentication.isAuthenticated()) {
             taiKhoanRepository.findByEmail(authentication.getName()).ifPresent(taiKhoan -> {
-                Set<Integer> likedCourseIds = nguoiDungThichKhoaHocRepository.findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId())
+                Set<Integer> likedCourseIds = nguoiDungThichKhoaHocRepository
+                        .findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId())
                         .stream()
                         .map(like -> like.getKhoaHoc().getKhoahocId())
                         .collect(Collectors.toSet());
                 model.addAttribute("likedCourseIds", likedCourseIds);
             });
-        }
-        if (!model.containsAttribute("likedCourseIds")) {
-            model.addAttribute("likedCourseIds", Collections.emptySet());
-        }
-        
-        return "views/gdienHocVien/home";
+
+            if (!model.containsAttribute("likedCourseIds")) {
+                model.addAttribute("likedCourseIds", Collections.emptySet());
+            }
+
+            return "views/gdienHocVien/home";
         }
 
         if (isGiangVien) {
-            return "views/gdienGiangVien/home"; // Chuyển giảng viên về trang chủ của giảng viên
+            return "views/gdienGiangVien/home";
         }
 
-        // Nếu không phải học viên hay giảng viên (phòng trường hợp khác)
+        // Nếu không phải học viên hay giảng viên
         return "redirect:/login?error=unauthorized";
     }
 }

@@ -1,5 +1,6 @@
 package com.duantn.services;
 
+
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.NguoiDungThichKhoaHoc;
 import com.duantn.entities.TaiKhoan;
@@ -17,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+
 @Service
 public class KhoaHocService {
+
 
     @Autowired private KhoaHocRepository khoaHocRepository;
     @Autowired private TaiKhoanRepository taiKhoanRepository;
     @Autowired private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
+
 
     public List<KhoaHoc> getTatCaKhoaHoc() {
         return khoaHocRepository.findAll();
@@ -31,6 +35,7 @@ public class KhoaHocService {
     public KhoaHoc getKhoaHocById(Integer id) {
         return khoaHocRepository.findById(id).orElse(null);
     }
+
 
     public List<KhoaHoc> layTatCaKhoaHocCanDuyet() {
         return khoaHocRepository.findAllByTrangThai(TrangThaiKhoaHoc.PENDING_APPROVAL); 
@@ -91,6 +96,5 @@ public class KhoaHocService {
     public KhoaHoc getKhoaHocByIdWithDetails(Integer id) {
         return khoaHocRepository.findByIdWithDetails(id).orElse(null);
     }
-=======
->>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
+
 }

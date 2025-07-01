@@ -98,8 +98,4 @@ public class TaiKhoan implements Serializable {
                 ", role=" + (role != null ? role.getName() : "null") +
                 '}';
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 82b8d85276debf6d30035129ac4415f6a301d0a0
