@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Thống kê hệ thống</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">📊 Thống kê hệ thống</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Bảng điều khiển</a></li>
+            <li class="breadcrumb-item active">Thống kê</li>
+        </ol>
+
+        <!-- Info Cards -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <i class="fas fa-user-graduate fa-3x"></i>
+                            <div>
+                                <div class="fs-4">1,250</div>
+                                <div>Tổng số học viên</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <i class="fas fa-chalkboard-teacher fa-3x"></i>
+                            <div>
+                                <div class="fs-4">85</div>
+                                <div>Tổng số giảng viên</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <i class="fas fa-book-open fa-3x"></i>
+                            <div>
+                                <div class="fs-4">215</div>
+                                <div>Tổng số khóa học</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <i class="fas fa-dollar-sign fa-3x"></i>
+                            <div>
+                                <div class="fs-4">50M</div>
+                                <div>Doanh thu tháng này</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header"><i class="fas fa-chart-bar me-1"></i>Doanh thu 6 tháng gần nhất</div>
+                    <div class="card-body"><canvas id="revenueChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card mb-4">
+                    <div class="card-header"><i class="fas fa-chart-pie me-1"></i>Tỉ lệ danh mục khóa học</div>
+                    <div class="card-body"><canvas id="categoryChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table me-1"></i>Thống kê chi tiết khóa học</div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên khóa học</th>
+                            <th>Lượt mua</th>
+                            <th>Doanh thu</th>
+                            <th>Số lượt thích</th>
+                            <th>Giảng viên</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Java Web Full-stack</td>
+                            <td>120</td>
+                            <td>12,000,000đ</td>
+                            <td>80</td>
+                            <td>Nguyễn Văn A</td>
+                        </tr>
+                        <tr>
+                            <td>ReactJS cho người mới bắt đầu</td>
+                            <td>250</td>
+                            <td>20,000,000đ</td>
+                            <td>150</td>
+                            <td>Trần Thị B</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Bar Chart - Revenue
+        var ctxBar = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+                datasets: [{
+                    label: 'Doanh thu (VND)',
+                    data: [12000000, 19000000, 30000000, 50000000, 20000000, 30000000],
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pie Chart - Categories
+        var ctxPie = document.getElementById('categoryChart').getContext('2d');
+        var categoryChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Frontend', 'Backend', 'UI/UX', 'Database'],
+                datasets: [{
+                    label: 'Tỉ lệ',
+                    data: [40, 35, 15, 10],
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+                }]
+            }
+        });
+    </script>
+</main>
+</body>
+</html> 

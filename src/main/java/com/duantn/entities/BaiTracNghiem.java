@@ -6,17 +6,11 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -49,5 +43,4 @@ public class BaiTracNghiem implements Serializable {
     @OneToOne
     @JoinColumn(name = "baiGiangId", unique = true)
     private BaiGiang baiGiang;
-
 }

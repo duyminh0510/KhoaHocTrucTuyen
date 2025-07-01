@@ -18,6 +18,7 @@ import lombok.*;
 @Builder
 @Table(name = "GiaoDichKhoaHoc")
 public class GiaoDichKhoaHoc {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer giaodichId;

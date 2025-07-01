@@ -85,6 +85,9 @@ public class KhoaHoc implements Serializable {
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chuong> chuongs;
 
+    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GiaoDichKhoaHocChiTiet> giaoDichChiTiet;
+
     @Override
     public String toString() {
         return "KhoaHoc{" +
@@ -101,3 +104,4 @@ public class KhoaHoc implements Serializable {
                 '}';
     }
 }
+

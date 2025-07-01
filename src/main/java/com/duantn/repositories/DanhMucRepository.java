@@ -11,3 +11,4 @@ public interface DanhMucRepository extends JpaRepository<DanhMuc, Integer> {
 
     DanhMuc findByTenDanhMucIgnoreCase(String tenDanhMuc);
 }
+

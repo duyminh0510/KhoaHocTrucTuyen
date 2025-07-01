@@ -9,5 +9,4 @@ public class ThongTinCaNhanController {
     public String requestMethodName() {
         return "views/gdienHocVien/tai-khoan";
     }
-
 }

@@ -3,13 +3,7 @@ package com.duantn.entities;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -21,6 +15,8 @@ import lombok.*;
 @Table(name = "Role")
 public class Role implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roleId")
@@ -29,9 +25,8 @@ public class Role implements Serializable {
     @Column(name = "name", columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
-    // các mối quan hệ giữa các bảng
-
-    @OneToMany(mappedBy = "role")
+    // Quan hệ 1-n với bảng TaiKhoan
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private List<TaiKhoan> taikhoans;
 
     @Override
@@ -41,5 +36,4 @@ public class Role implements Serializable {
                 ", name='" + name + '\'' +
                 '}';
     }
-
 }

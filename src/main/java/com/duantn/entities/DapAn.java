@@ -49,5 +49,4 @@ public class DapAn implements Serializable {
     @ManyToOne
     @JoinColumn(name = "CauHoiId", nullable = false)
     private CauHoi cauHoi;
-
 }

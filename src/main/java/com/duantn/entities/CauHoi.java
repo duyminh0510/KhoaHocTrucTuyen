@@ -50,5 +50,4 @@ public class CauHoi implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tracnghiemId", nullable = false)
     private BaiTracNghiem baiTracNghiem;
-
 }

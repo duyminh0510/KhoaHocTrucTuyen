@@ -1,0 +1,82 @@
+/* Custom styles for the student home page */
+
+/* General container improvements */
+.container-fluid.px-4 {
+    background-color: #f8f9fa; /* Light grey background for the page */
+}
+
+/* Course card enhancements */
+.course-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden; /* Ensures the image corners are rounded */
+    border: 1px solid #e9ecef;
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.course-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.course-card .card-body {
+    padding: 1.25rem;
+}
+
+.course-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 0.5rem;
+}
+
+.course-card .card-subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Price and rating styling */
+.course-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #007bff; /* A nice blue for the price */
+}
+
+.course-rating .fa-star {
+    color: #ffc107; /* Gold color for stars */
+}
+
+/* Action button styling */
+.course-actions .btn {
+    margin: 0 4px;
+    transition: background-color 0.2s ease;
+}
+
+.course-actions .btn-share {
+    background-color: #17a2b8;
+    color: white;
+}
+.course-actions .btn-share:hover {
+    background-color: #138496;
+}
+
+.course-actions .btn-like .fa-heart {
+    color: #dc3545; /* Red heart for like button */
+}
+
+/* Page header */
+.welcome-header {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.welcome-header h1 {
+    font-weight: 300;
+} 
