@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -36,9 +37,9 @@ public class DangKyController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") @Valid DangKyHocVienDto dto,
-            BindingResult result,
-            HttpSession session,
-            Model model) {
+                                BindingResult result,
+                                HttpSession session,
+                                Model model) {
 
         if (result.hasErrors())
             return "views/gdienChung/register";
@@ -51,8 +52,7 @@ public class DangKyController {
         session.setAttribute("pendingUser", dto);
         tokenService.generateAndSendToken(dto.getEmail(), dto.getName(), "Xác minh tài khoản",
                 "Mã xác minh của bạn là:");
-
-        return "redirect:/auth/verify";
+        return "redirect:/auth/verify?type=register";
     }
 
     @GetMapping("/forgot-password")
@@ -70,24 +70,38 @@ public class DangKyController {
         session.setAttribute("resetEmail", email);
         tokenService.generateAndSendToken(email, tk.get().getName(), "Khôi phục mật khẩu",
                 "Mã xác minh khôi phục mật khẩu:");
-        return "redirect:/auth/verify";
+        return "redirect:/auth/verify?type=reset";
     }
 
     @GetMapping("/verify")
-    public String showVerifyForm() {
+    public String showVerifyForm(Model model, @RequestParam(value = "type", defaultValue = "register") String type) {
+        model.addAttribute("type", type);
         return "views/gdienChung/verify";
     }
 
     @PostMapping("/verify")
-public String verify(@RequestParam("code") String code, HttpSession session, Model model) {
+    public String verify(@RequestParam("code") String code,
+                         @RequestParam(value = "type", required = false) String type,
+                         HttpSession session,
+                         Model model) {
+
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng hoặc đã hết hạn.");
+            model.addAttribute("type", type != null ? type : "register");
             return "views/gdienChung/verify";
         }
 
         VerificationToken token = tokenOpt.get();
 
+        // Kiểm tra hạn sử dụng mã
+        if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
+            model.addAttribute("error", "Mã xác minh đã hết hạn.");
+            model.addAttribute("type", type != null ? type : "register");
+            return "views/gdienChung/verify";
+        }
+
+        // Xử lý xác minh đăng ký
         DangKyHocVienDto pending = (DangKyHocVienDto) session.getAttribute("pendingUser");
         if (pending != null && pending.getEmail().equals(token.getEmail())) {
             Role studentRole = roleRepository.findByName("ROLE_HOCVIEN")
@@ -101,12 +115,14 @@ public String verify(@RequestParam("code") String code, HttpSession session, Mod
                     .status(true)
                     .role(studentRole)
                     .build();
+
             accountRepository.save(account);
             tokenService.delete(token);
             session.removeAttribute("pendingUser");
             return "redirect:/auth/login";
         }
 
+        // Xử lý xác minh khôi phục mật khẩu
         String resetEmail = (String) session.getAttribute("resetEmail");
         if (resetEmail != null && resetEmail.equals(token.getEmail())) {
             session.setAttribute("verifiedEmail", resetEmail);
@@ -116,11 +132,12 @@ public String verify(@RequestParam("code") String code, HttpSession session, Mod
         }
 
         model.addAttribute("error", "Phiên xác minh không hợp lệ.");
+        model.addAttribute("type", type != null ? type : "register");
         return "views/gdienChung/verify";
     }
 
     @GetMapping("/reset-password")
-    public String showResetForm(HttpSession session, Model model) {
+    public String showResetForm(HttpSession session) {
         if (session.getAttribute("verifiedEmail") == null) {
             return "redirect:/auth/forgot-password";
         }
@@ -130,14 +147,15 @@ public String verify(@RequestParam("code") String code, HttpSession session, Mod
     @PostMapping("/reset-password")
     public String handleReset(@RequestParam("password") String password, HttpSession session) {
         String email = (String) session.getAttribute("verifiedEmail");
-        if (email == null)
+        if (email == null) {
             return "redirect:/auth/forgot-password";
+        }
 
         TaiKhoan tk = accountRepository.findByEmail(email).orElseThrow();
         tk.setPassword(passwordEncoder.encode(password));
         accountRepository.save(tk);
-
         session.removeAttribute("verifiedEmail");
+
         return "redirect:/auth/login?resetSuccess";
     }
 }

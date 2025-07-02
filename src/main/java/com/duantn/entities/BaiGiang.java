@@ -45,7 +45,7 @@ public class BaiGiang implements Serializable {
     private Boolean trangthai;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "loai_bai_giang", length = 30)
+    @Column(name = "loai_bai_giang", nullable = false, length = 30)
     private LoaiBaiGiang loaiBaiGiang;
 
     @ManyToOne
