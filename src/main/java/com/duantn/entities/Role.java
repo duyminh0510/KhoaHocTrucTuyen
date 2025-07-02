@@ -13,7 +13,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,12 +26,20 @@ public class Role implements Serializable {
     @Column(name = "roleId")
     private Integer roleId;
 
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
     // các mối quan hệ giữa các bảng
 
     @OneToMany(mappedBy = "role")
     private List<TaiKhoan> taikhoans;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 
 }

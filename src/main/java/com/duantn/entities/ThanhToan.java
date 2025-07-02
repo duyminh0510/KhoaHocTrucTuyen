@@ -23,7 +23,7 @@ public class ThanhToan {
     @Column(name = "tongtien", precision = 12, scale = 2, nullable = false)
     private BigDecimal tongtien;
 
-    @Column(name = "tenhocvien", nullable = false)
+    @Column(name = "tenhocvien", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tenhocvien;
 
     @Column(name = "NgayThanhToan", nullable = false)

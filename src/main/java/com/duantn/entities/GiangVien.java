@@ -17,7 +17,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,13 +28,13 @@ public class GiangVien implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer giangvienId;
 
-    @Column(name = "kyNang")
+    @Column(name = "kyNang", columnDefinition = "NVARCHAR(MAX)")
     private String kyNang;
 
-    @Column(name = "kinhNghiem")
+    @Column(name = "kinhNghiem", columnDefinition = "NVARCHAR(MAX)")
     private String kinhNghiem;
 
-    @Column(name = "CCCD")
+    @Column(name = "CCCD", columnDefinition = "NVARCHAR(MAX)")
     private String CCCD;
 
     @CreationTimestamp
@@ -48,4 +49,16 @@ public class GiangVien implements Serializable {
     @JoinColumn(name = "taikhoanId", nullable = false)
     private TaiKhoan taikhoan;
 
+    @Override
+    public String toString() {
+        return "GiangVien{" +
+                "giangvienId=" + giangvienId +
+                ", kyNang='" + kyNang + '\'' +
+                ", kinhNghiem='" + kinhNghiem + '\'' +
+                ", CCCD='" + CCCD + '\'' +
+                ", ngayThamGia=" + ngayThamGia +
+                ", ngayCapNhat=" + ngayCapNhat +
+                ", taikhoanId=" + (taikhoan != null ? taikhoan.getTaikhoanId() : "null") +
+                '}';
+    }
 }

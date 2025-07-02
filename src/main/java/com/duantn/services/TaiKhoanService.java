@@ -7,4 +7,6 @@ public interface TaiKhoanService {
 
     TaiKhoan register(TaiKhoan account);
 
+    TaiKhoan findByUsername(String username); // username ở đây là email
+
 }

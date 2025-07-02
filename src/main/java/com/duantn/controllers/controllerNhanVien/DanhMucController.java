@@ -1,36 +1,76 @@
 package com.duantn.controllers.controllerNhanVien;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.duantn.entities.DanhMuc;
+import com.duantn.services.DanhMucService;
 
 @Controller
-@RequestMapping({ "/admin", "/nhanvien" })
-@PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
+@RequestMapping("/quanly-danh-muc")
 public class DanhMucController {
 
-    @GetMapping("/quanly-danh-muc")
-    public String hienThiDanhMuc(Model model) {
-        // Mock dữ liệu để hiển thị giao diện
-        List<com.duantn.entities.DanhMuc> danhSachDanhMuc = Arrays.asList(
-                DanhMuc.builder().danhmucId(1).tenDanhMuc("Lập trình Java")
-                        .ngayTao(LocalDateTime.now().minusDays(10)).ngayCapNhat(LocalDateTime.now())
-                        .build(),
-                DanhMuc.builder().danhmucId(2).tenDanhMuc("Thiết kế Web")
-                        .ngayTao(LocalDateTime.now().minusDays(5)).ngayCapNhat(LocalDateTime.now())
-                        .build());
+    @Autowired
+    private DanhMucService service;
 
-        model.addAttribute("danhMuc", new DanhMuc());
-        model.addAttribute("danhSachDanhMuc", danhSachDanhMuc);
-
+    @GetMapping
+    public String trangDanhSach(Model model) {
+        List<DanhMuc> danhmucs = service.findAll();
+        model.addAttribute("danhmucs", danhmucs);
+        model.addAttribute("danhmuc", new DanhMuc());
         return "views/gdienQuanLy/danhmuc";
+    }
+
+    @PostMapping("/them-moi")
+    public String them(@ModelAttribute("danhmuc") DanhMuc danhMuc, Model model) {
+        if (service.daTonTaiTen(danhMuc.getTenDanhMuc())) {
+            model.addAttribute("error", "Tên danh mục đã tồn tại!");
+            model.addAttribute("danhmucs", service.findAll());
+            return "views/gdienQuanLy/danhmuc";
+        }
+
+        service.save(danhMuc);
+        return "redirect:/quanly-danh-muc";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String suaForm(@PathVariable Integer id, Model model) {
+        DanhMuc dm = service.findById(id);
+        model.addAttribute("danhmucs", service.findAll());
+        model.addAttribute("danhmuc", dm);
+        return "views/gdienQuanLy/danhmuc";
+    }
+
+    @PostMapping("/edit")
+    public String capNhat(@ModelAttribute("danhmuc") DanhMuc danhMuc, Model model) {
+        if (service.daTonTaiTenKhacId(danhMuc.getTenDanhMuc(), danhMuc.getDanhmucId())) {
+            model.addAttribute("error", "Tên danh mục đã tồn tại!");
+            model.addAttribute("danhmucs", service.findAll());
+            model.addAttribute("danhmuc", danhMuc);
+            return "views/gdienQuanLy/danhmuc";
+        }
+
+        service.save(danhMuc);
+        return "redirect:/quanly-danh-muc";
+    }
+
+    @GetMapping("/vo-hieu-hoa/{id}")
+    public String xoa(@PathVariable Integer id) {
+        service.voHieuHoaDanhMuc(id);
+        return "redirect:/quanly-danh-muc";
+    }
+
+    @GetMapping("/kich-hoat/{id}")
+    public String kichHoat(@PathVariable Integer id) {
+        service.kichHoatDanhMuc(id);
+        return "redirect:/quanly-danh-muc";
     }
 }

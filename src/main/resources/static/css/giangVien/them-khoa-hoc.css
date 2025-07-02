@@ -1,186 +1,84 @@
-.themkhoahoc .container {
-    display: flex;
-    align-items: flex-start;
+.themkhoahoc body {
+    font-family: Arial;
+    background-color: #f7f7f7;
+    padding: 40px;
+    color: #16203b;
+}
+
+.themkhoahoc form {
     background: #fff;
-    min-height: 100vh;
-}
-
-
-/* === Sidebar === */
-
-.themkhoahoc .sidebar {
-    width: 240px;
-    background: #f7f7f7;
-    border-right: 1px solid #e0e0e0;
-    padding: 48px 0 0 0;
-    min-height: 100vh;
-}
-
-.themkhoahoc .sidebar-title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-left: 40px;
-    margin-bottom: 32px;
-}
-
-.themkhoahoc .sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.themkhoahoc .sidebar-menu li {
-    padding: 18px 40px;
-    font-size: 17px;
-    color: #22314f;
-    cursor: pointer;
-    border-left: 4px solid transparent;
-    transition: background 0.2s, border-color 0.2s;
-    border-radius: 0 12px 12px 0;
-    margin-bottom: 4px;
-}
-
-.themkhoahoc .sidebar-menu li.active,
-.themkhoahoc .sidebar-menu li:hover {
-    background: #22314f;
-    color: #fff;
-    border-left: 4px solid #22314f;
-}
-
-.themkhoahoc .sidebar-link {
-    color: inherit;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-
-/* === Main Content === */
-
-.themkhoahoc .main-content {
-    flex: 1;
-    padding: 48px 56px 0 56px;
-    min-width: 0;
-    background: #fff;
-}
-
-.themkhoahoc .main-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 32px;
-}
-
-.themkhoahoc .add-course-form {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    background: #fff;
-    padding: 32px 32px 24px 32px;
-    border: 1px solid #e0e0e0;
+    padding: 30px;
     border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    margin: auto;
 }
 
-.themkhoahoc .add-course-form label {
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #22314f;
-    font-size: 15px;
+.themkhoahoc h2 {
+    color: #16203b;
+    margin-bottom: 24px;
 }
 
-.themkhoahoc .add-course-form input[type="text"],
-.themkhoahoc .add-course-form input[type="number"],
-.themkhoahoc .add-course-form select,
-.themkhoahoc .add-course-form textarea {
+.themkhoahoc label {
+    display: block;
+    margin-top: 16px;
+    font-weight: bold;
+}
+
+.themkhoahoc input[type="text"],
+.themkhoahoc textarea,
+.themkhoahoc select {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #cfd8dc;
+    padding: 10px;
     border-radius: 6px;
-    font-size: 15px;
-    background: #fff;
-    margin-bottom: 2px;
-    font-family: inherit;
+    border: 1px solid #ccc;
+    margin-top: 6px;
 }
 
-.themkhoahoc .add-course-form textarea {
-    resize: vertical;
-    min-height: 80px;
+.themkhoahoc input[type="file"] {
+    margin-top: 6px;
 }
 
-.themkhoahoc .form-row {
-    display: flex;
-    gap: 24px;
-}
-
-.themkhoahoc .form-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.themkhoahoc .add-course-form input[type="file"] {
-    padding: 4px 0;
-    font-size: 15px;
-}
-
-.themkhoahoc .form-actions {
-    margin-top: 18px;
-    display: flex;
-    gap: 14px;
-    justify-content: flex-start;
-}
-
-.themkhoahoc .btn-detail,
-.themkhoahoc .btn-outline {
-    background: #22314f;
-    color: #fff;
+.themkhoahoc button {
+    margin-top: 24px;
+    background-color: #16203b;
+    color: white;
+    padding: 12px 24px;
     border: none;
     border-radius: 6px;
-    padding: 12px 32px;
-    font-size: 16px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s, color 0.2s;
 }
 
-.themkhoahoc .btn-detail:hover,
-.themkhoahoc .btn-outline:hover {
-    background: #1a2540;
-    color: #fff;
+.themkhoahoc button:hover {
+    background-color: #0f1a2e;
 }
 
-.themkhoahoc .btn-outline {
-    background: #fff;
-    color: #22314f;
-    border: 1px solid #22314f;
+.themkhoahoc .box-khuyen-mai {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
 }
 
-.themkhoahoc .btn-outline:hover {
-    background: #22314f;
-    color: #fff;
+.themkhoahoc .box-khuyen-mai label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
-@media (max-width: 900px) {
-    .themkhoahoc .main-content {
-        padding: 24px 8px 0 8px;
-    }
-    .themkhoahoc .add-course-form {
-        padding: 18px 4px 12px 4px;
-    }
-    .themkhoahoc .sidebar {
-        width: 100%;
-        min-width: 0;
-        padding: 24px 0 0 0;
-    }
-    .themkhoahoc .sidebar-title {
-        margin-left: 18px;
-        font-size: 18px;
-    }
-    .themkhoahoc .sidebar-menu li {
-        padding: 12px 18px;
-        font-size: 15px;
-    }
+.themkhoahoc .box-khuyen-mai input {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.themkhoahoc .box-khuyen-mai input:focus {
+    border-color: #007bff;
 }

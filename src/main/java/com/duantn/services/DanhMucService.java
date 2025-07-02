@@ -12,4 +12,12 @@ public interface DanhMucService {
     void deleteById(Integer id);
 
     DanhMuc findById(Integer id);
+
+    void voHieuHoaDanhMuc(Integer id);
+
+    boolean daTonTaiTen(String tenDanhMuc);
+
+    boolean daTonTaiTenKhacId(String tenDanhMuc, Integer idHienTai);
+
+    void kichHoatDanhMuc(Integer id);
 }

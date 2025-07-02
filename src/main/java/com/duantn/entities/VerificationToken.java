@@ -17,8 +17,10 @@ public class VerificationToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String token;
 
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String email;
 
     private LocalDateTime expiryTime;
