@@ -1,7 +1,6 @@
 package com.duantn.controllers.controllerChung;
 
 import com.duantn.entities.KhoaHoc;
-import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.KhoaHocService;
