@@ -52,6 +52,7 @@ public class Chuong implements Serializable {
     private KhoaHoc khoahoc;
 
     @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<BaiGiang> baiGiangs = new ArrayList<>();
 
     @Override

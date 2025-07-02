@@ -5,13 +5,15 @@ import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.TaiKhoanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TaiKhoanServiceImpl implements TaiKhoanService {
-    
+
     @Autowired
     private TaiKhoanRepository repository;
 
@@ -49,29 +51,34 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
     }
 
-
+    @Override
+    public TaiKhoan register(TaiKhoan taiKhoan) {
+        // Kiểm tra email đã tồn tại chưa
+        if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
+        return repository.save(taiKhoan);
+    }
 
     @Override
-public TaiKhoan register(TaiKhoan taiKhoan) {
-    // Kiểm tra email đã tồn tại chưa
-    if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
-        throw new RuntimeException("Email đã tồn tại");
-    }
-    // TODO: mã hóa mật khẩu nếu cần
-    return repository.save(taiKhoan);
-}
+    public TaiKhoan login(String email, String password) {
+        // Tìm tài khoản theo email
+        TaiKhoan tk = repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
-@Override
-public TaiKhoan login(String email, String password) {
-    // Tìm tài khoản theo email
-    TaiKhoan tk = repository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
+        // So sánh mật khẩu (ở đây là plain text, bạn nên dùng BCrypt để an toàn hơn)
+        if (!tk.getPassword().equals(password)) {
+            throw new RuntimeException("Sai mật khẩu");
+        }
 
-    // So sánh mật khẩu (ở đây là plain text, bạn nên dùng BCrypt để an toàn hơn)
-    if (!tk.getPassword().equals(password)) {
-        throw new RuntimeException("Sai mật khẩu");
+        return tk;
     }
 
-    return tk;
-}
+    @Override
+    public TaiKhoan getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName(); // hoặc username
+        return repository.findByEmail(email).orElseThrow();
+    }
+
 }

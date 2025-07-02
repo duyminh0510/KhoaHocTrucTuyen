@@ -10,9 +10,15 @@ public interface TaiKhoanService {
     TaiKhoan register(TaiKhoan account);
 
     List<TaiKhoan> layTatCaNhanVien();
+
     TaiKhoan themNhanVien(TaiKhoan taiKhoan);
+
     TaiKhoan capNhatNhanVien(Integer id, TaiKhoan taiKhoan);
+
     void xoaNhanVien(Integer id);
+
     TaiKhoan layTheoId(Integer id);
+
+    TaiKhoan getCurrentUser();
 
 }
