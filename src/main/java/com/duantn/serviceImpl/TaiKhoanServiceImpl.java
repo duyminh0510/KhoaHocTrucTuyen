@@ -81,4 +81,8 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         return repository.findByEmail(email).orElseThrow();
     }
 
+    @Override
+    public TaiKhoan findByEmail(String email) {
+        return repository.findByEmail(email).orElse(null);
+    }
 }

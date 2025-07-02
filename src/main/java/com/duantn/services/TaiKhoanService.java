@@ -21,4 +21,6 @@ public interface TaiKhoanService {
 
     TaiKhoan getCurrentUser();
 
+    TaiKhoan findByEmail(String email);
+
 }

@@ -54,13 +54,16 @@
             <div class="mt-4">
                 <h5>Tổng cộng: <span id="sum">0 ₫</span></h5>
                 <p id="old" class="text-muted"></p>
-                <a href="/thanh-toan" class="btn btn-primary">Tiến hành thanh toán</a>
+                <a id="checkout-btn" href="/hoc-vien/thanh-toan" class="btn btn-primary disabled">Tiến hành thanh
+                    toán</a>
             </div>
         </div>
+
         <script th:inline="javascript">
             const cartBox = document.getElementById('cart-box');
             const sumNode = document.getElementById('sum');
             const oldNode = document.getElementById('old');
+            const checkoutBtn = document.getElementById('checkout-btn');
 
             const isLoggedIn = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
 
@@ -103,6 +106,26 @@
                 }
             }
 
+            function handleCheckboxChange() {
+                const checkboxes = document.querySelectorAll('.select-one');
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', function () {
+                        checkboxes.forEach(other => {
+                            if (other !== cb) other.checked = false;
+                        });
+
+                        if (cb.checked) {
+                            const khoaHocId = cb.value;
+                            checkoutBtn.href = `/hoc-vien/thanh-toan?khoahocId=${khoaHocId}`;
+                            checkoutBtn.classList.remove('disabled');
+                        } else {
+                            checkoutBtn.href = '#';
+                            checkoutBtn.classList.add('disabled');
+                        }
+                    });
+                });
+            }
+
             function renderItems(items) {
                 cartBox.innerHTML = '';
 
@@ -110,6 +133,8 @@
                     cartBox.innerHTML = '<p>Giỏ hàng trống.</p>';
                     sumNode.innerText = '0 ₫';
                     oldNode.innerText = '';
+                    checkoutBtn.classList.add('disabled');
+                    checkoutBtn.href = '#';
                     return;
                 }
 
@@ -124,20 +149,21 @@
                     oldTotal += giagoc;
 
                     const item = document.createElement('div');
-                    item.className = 'cart-item d-flex';
+                    item.className = 'cart-item d-flex align-items-start';
 
                     item.innerHTML = `
-                <img src="/images/${i.anhBia || 'default.png'}" class="cart-image me-3" alt="Ảnh bìa">
-                <div class="flex-grow-1">
-                    <div class="cart-title">${i.tenKhoaHoc}</div>
-                    <div class="cart-teacher">Bởi ${i.giangVien}</div>
-                    <div class="mt-2">
-                        <span class="item-price">${fmt(gia)}</span>
-                        ${giagoc > gia ? `<span class="item-old-price ms-2">${fmt(giagoc)}</span>` : ''}
-                    </div>
-                    <button class="btn btn-sm btn-outline-danger mt-2" onclick="removeCart(${i.khoaHocId})">Xóa</button>
-                </div>
-            `;
+                        <input type="checkbox" class="form-check-input me-3 mt-2 select-one" value="${i.khoaHocId}">
+                        <img src="/images/${i.anhBia || 'default.png'}" class="cart-image me-3" alt="Ảnh bìa">
+                        <div class="flex-grow-1">
+                            <div class="cart-title">${i.tenKhoaHoc}</div>
+                            <div class="cart-teacher">Bởi ${i.giangVien}</div>
+                            <div class="mt-2">
+                                <span class="item-price">${fmt(gia)}</span>
+                                ${giagoc > gia ? `<span class="item-old-price ms-2">${fmt(giagoc)}</span>` : ''}
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger mt-2" onclick="removeCart(${i.khoaHocId})">Xóa</button>
+                        </div>
+                    `;
 
                     cartBox.appendChild(item);
                 });
@@ -148,6 +174,8 @@
                 } else {
                     oldNode.innerText = '';
                 }
+
+                handleCheckboxChange(); // Gắn sự kiện cho checkbox
             }
 
             function render() {
@@ -165,15 +193,11 @@
                 }
             }
 
-            // Gọi khi DOM đã sẵn sàng
             document.addEventListener('DOMContentLoaded', function () {
                 render();
             });
         </script>
-
-
     </main>
-
 </body>
 
 </html>
