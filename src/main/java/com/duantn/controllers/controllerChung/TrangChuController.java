@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.duantn.entities.KhoaHoc;
+import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.KhoaHocService;
@@ -31,7 +32,10 @@ public class TrangChuController {
     public String home(HttpServletRequest request, Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             // Trường hợp chưa đăng nhập: Hiển thị trang chủ chung với danh sách khóa học
-            List<KhoaHoc> allCourses = khoaHocService.getTatCaKhoaHoc(); // Lấy tất cả khóa học
+            List<KhoaHoc> allCourses = khoaHocService.getTatCaKhoaHoc().stream()
+                    .filter(kh -> kh.getTrangThai() == TrangThaiKhoaHoc.PUBLISHED)
+                    .collect(Collectors.toList());
+            // Lấy tất cả khóa học
             model.addAttribute("khoaHocList", allCourses); // Đặt vào model với tên "khoaHocList"
             model.addAttribute("likedCourseIds", Collections.emptySet()); // Không có user, nên
                                                                           // không có khóa học yêu

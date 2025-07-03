@@ -37,15 +37,12 @@
         border-radius: 4px;
         cursor: pointer;
         font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
       }
 
-      .btn-approve {
-        background-color: #28a745;
-        color: white;
-      }
-
-      .btn-reject {
-        background-color: #dc3545;
+      .btn-view {
+        background-color: #007bff;
         color: white;
       }
 
@@ -61,7 +58,7 @@
     </style>
   </head>
   <body>
-    <h2>Danh sách Khóa học chờ phê duyệt</h2>
+    <h2>Danh sách Khóa học</h2>
     <table>
       <thead>
         <tr>
@@ -76,50 +73,24 @@
         <tr th:each="khoaHoc : ${danhSach}">
           <td th:text="${khoaHoc.tenKhoaHoc}">Tên KH</td>
           <td
-            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 1, 'COMMA', 2, 'POINT')} + ' ₫'"
+            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
           >
             0 ₫
           </td>
           <td
-            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 1, 'COMMA', 2, 'POINT')} + ' ₫'"
+            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
           >
             0 ₫
           </td>
           <td th:text="${khoaHoc.trangThai}">Trạng thái</td>
           <td>
-            <!-- Nếu đang chờ duyệt -->
-            <div th:if="${khoaHoc.trangThai.name() == 'PENDING_APPROVAL'}">
-              <form
-                th:action="@{/duyetKhoaHoc/phe-duyet/{id}(id=${khoaHoc.khoahocId})}"
-                method="post"
-                style="display: inline-block"
-              >
-                <button type="submit" class="btn btn-approve">Phê duyệt</button>
-              </form>
-              <form
-                th:action="@{/duyetKhoaHoc/tu-choi/{id}(id=${khoaHoc.khoahocId})}"
-                method="post"
-                style="display: inline-block"
-              >
-                <button type="submit" class="btn btn-reject">Từ chối</button>
-              </form>
-            </div>
-
-            <!-- Nếu đã xử lý -->
-            <div th:if="${khoaHoc.trangThai.name() != 'PENDING_APPROVAL'}">
-              <span
-                th:if="${khoaHoc.trangThai.name() == 'PUBLISHED'}"
-                class="status-approved"
-              >
-                Đã phê duyệt
-              </span>
-              <span
-                th:if="${khoaHoc.trangThai.name() == 'REJECTED'}"
-                class="status-rejected"
-              >
-                Đã từ chối
-              </span>
-            </div>
+            <button
+              class="btn btn-primary"
+              th:onclick="|window.location.href='/duyetChiTiet/${khoaHoc.khoahocId}'|"
+              type="button"
+            >
+              Xem chi tiết
+            </button>
           </td>
         </tr>
       </tbody>
