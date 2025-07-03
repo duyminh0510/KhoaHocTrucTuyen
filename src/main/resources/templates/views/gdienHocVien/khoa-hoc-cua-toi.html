@@ -1,48 +1,65 @@
 <!DOCTYPE html>
-<html lang="vi"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8" />
-        <title th:fragment="title">Khóa học của tôi</title>
-        <link rel="stylesheet" href="/css/hocVien/khoa-hoc-cua-toi.css" />
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <title th:fragment="title">Khóa học của tôi</title>
+    <link rel="stylesheet" href="/css/hocVien/khoa-hoc-cua-toi.css" />
+</head>
 
-    <body>
-        <main class="khoahoccuatoi">
-            <div class="trangchu my-courses-container" style="padding: 30px;">
-                <!-- Khóa học đã đăng ký -->
-                <h2 class="mb-4">🎓 Khóa học đã đăng ký</h2>
-                <div class="course-grid mb-5">
-                    <div class="course-card">
-                        <img src="/img/java.jpg" alt="Ảnh khóa học">
-                        <h4>Nhập Môn Java Cơ Bản</h4>
-                        <p>Làm quen với cú pháp và lập trình hướng đối tượng trong Java.</p>
-                        <div class="rating">⭐⭐⭐⭐☆ (4.5)</div>
-                        <a href="#" class="btn btn-outline-primary">Vào học</a>
+<body>
+    <main class="khoahoccuatoi">
+        <div class="trangchu my-courses-container" style="padding: 30px;">
+
+            <p>Số khóa học đã đăng ký: <span th:text="${#lists.size(tatCaDangKy)}">0</span></p>
+            <p>Số chứng chỉ đã nhận: <span th:text="${#lists.size(chungChi)}">0</span></p>
+
+            <!-- Khóa học đã đăng ký -->
+            <h2 class="mb-4">🎓 Khóa học đã đăng ký</h2>
+            <div class="course-grid mb-5">
+                <div class="course-card" th:each="dangHoc : ${tatCaDangKy}">
+                    <!-- Ảnh khóa học -->
+                    <img th:src="@{${dangHoc.khoahoc.anhBia} ?: '/photos/default.png'}" alt="Ảnh khóa học"
+                        style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+
+                    <!-- Tên & mô tả -->
+                    <h4 th:text="${dangHoc.khoahoc.tenKhoaHoc ?: 'Không có tên'}">Tên KH</h4>
+                    <p th:text="${dangHoc.khoahoc.moTa ?: 'Không có mô tả'}">Mô tả KH</p>
+
+                    <!-- Trạng thái -->
+                    <div>
+                        <span th:if="${dangHoc.daCap_ChungChi}" class="text-success">Đã hoàn thành</span>
+                        <span th:if="${!dangHoc.daCap_ChungChi}" class="text-warning">Đang học</span>
                     </div>
-                    <div class="course-card">
-                        <img src="/img/react.jpg" alt="Ảnh khóa học">
-                        <h4>Lập Trình ReactJS</h4>
-                        <p>Học cách xây dựng ứng dụng web hiện đại với React và JSX.</p>
-                        <div class="rating">⭐⭐⭐⭐⭐ (5.0)</div>
-                        <a href="#" class="btn btn-outline-primary">Vào học</a>
-                    </div>
-                </div>
 
-                <!-- Chứng chỉ đã nhận -->
-                <h2 class="mb-4">📜 Chứng chỉ đã nhận</h2>
-                <div class="certificate-card">
-                    <h4>Nhập Môn Java Cơ Bản</h4>
-                    <p>Nhận lúc: <span>12/06/2025</span></p>
-                    <a href="#" class="btn btn-sm btn-success">Xem chứng chỉ</a>
-                </div>
-                <div class="certificate-card">
-                    <h4>Lập Trình ReactJS</h4>
-                    <p>Nhận lúc: <span>18/06/2025</span></p>
-                    <a href="#" class="btn btn-sm btn-success">Xem chứng chỉ</a>
+                    <!-- Nút hành động (luôn hiển thị cả 2) -->
+                    <div style="margin-top: 10px;">
+                        <a th:href="@{'/vao-hoc/' + ${dangHoc.khoahoc.khoahocId}}" class="btn btn-outline-primary me-2">
+                            Vào học
+                        </a>
+
+                        <a th:href="@{'/danh-gia/' + ${dangHoc.khoahoc.khoahocId}}" class="btn btn-outline-success">
+                            Đánh giá
+                        </a>
+                    </div>
                 </div>
             </div>
-        </main>
-    </body>
+
+
+            <!-- Chứng chỉ đã nhận -->
+            <h2 class="mb-4">📜 Chứng chỉ đã nhận</h2>
+            <div class="certificate-card" th:each="cc : ${chungChi}">
+                <h4 th:text="${cc.khoahoc.tenKhoaHoc ?: 'Không có tên KH'}">Tên KH</h4>
+                <p>
+                    Nhận lúc:
+                    <span th:text="${#temporals.format(cc.ngayHoanThanh, 'dd/MM/yyyy')}">dd/MM/yyyy</span>
+                </p>
+                <a th:href="@{'/chung-chi/' + ${cc.danghocId}}" class="btn btn-sm btn-success">
+                    Xem chứng chỉ
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+
 </html>

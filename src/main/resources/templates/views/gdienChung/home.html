@@ -11,117 +11,89 @@
 <body>
   <main class="homechung">
     <!-- Banner -->
-    <div class="banner">
-      BỎ ẢNH
-    </div>
+    <div class="banner">BỎ ẢNH</div>
 
     <!-- Tiêu đề -->
     <div class="container mt-4">
       <h4><strong>Tất cả các kĩ năng cần có mọi nơi</strong></h4>
-      <p>Từ các kĩ năng quan trọng, chuyên môn, GlobalEdu hỗ trợ phát triển
-        cho bạn.
+      <p>
+        Từ các kĩ năng quan trọng, chuyên môn, GlobalEdu hỗ trợ phát triển cho
+        bạn.
       </p>
 
       <!-- Tabs -->
       <div class="course-tabs">
         <ul class="nav nav-tabs" id="tabCourses" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" data-bs-toggle="tab">Khoa học dữ
-              liệu</button>
+            <button class="nav-link active" data-bs-toggle="tab">
+              Khoa học dữ liệu
+            </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab">Phát triển phần
-              mềm</button>
+            <button class="nav-link" data-bs-toggle="tab">
+              Phát triển phần mềm
+            </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab">Ứng dụng phần
-              mềm</button>
+            <button class="nav-link" data-bs-toggle="tab">
+              Ứng dụng phần mềm
+            </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab">Phát triển
-              Web</button>
+            <button class="nav-link" data-bs-toggle="tab">
+              Phát triển Web
+            </button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" data-bs-toggle="tab">Giao tiếp</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab">Khả năng lãnh
-              đạo</button>
+            <button class="nav-link" data-bs-toggle="tab">
+              Khả năng lãnh đạo
+            </button>
           </li>
         </ul>
       </div>
 
       <!-- Danh sách khóa học -->
-      <div class="row row-cols-1 row-cols-md-4 g-4 mt-3">
-        <!-- Card 1 -->
-        <div class="col">
-          <div class="card course-card">
-            <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
-            <div class="card-body">
-              <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
-              <p class="card-text text-muted">Khám phá thế giới lập trình Java
-                từ những bước cơ bản nhất!<br><strong>Trần Ngọc
-                  Thái</strong></p>
-              <div class="rating">⭐ 5.0 <span class="text-muted">(48)</span></div>
-              <p class="text-danger fw-bold mt-1">999.000 đ</p>
-              <p class="text-muted"><del>3.338.000 đ</del></p>
+      <div class="row mt-4" th:if="${khoaHocList != null and !#lists.isEmpty(khoaHocList)}">
+        <div class="col-md-4 mb-4" th:each="khoaHoc : ${khoaHocList}">
+          <div class="card h-100 shadow-sm" style="cursor: pointer"
+            th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
+            <img class="card-img-top"
+              th:src="${khoaHoc.anhBia != null and !#strings.isEmpty(khoaHoc.anhBia) ? '/images/' + khoaHoc.anhBia : '/images/default.png'}"
+              alt="Ảnh bìa" style="height: 180px; object-fit: cover" />
+            <div class="card-body d-flex flex-column pb-0">
+              <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">
+                Tên khóa học
+              </h5>
+              <p class="card-text" th:text="${#strings.abbreviate(khoaHoc.moTa, 100)}">
+                Mô tả...
+              </p>
+              <p class="card-text small text-muted mt-auto">
+                <i class="fas fa-chalkboard-teacher me-1"></i>
+                <span th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên giảng viên</span>
+              </p>
             </div>
-          </div>
-        </div>
-
-        <!-- Các card khác (copy giống trên) -->
-        <div class="col">
-          <div class="card course-card">
-            <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
-            <div class="card-body">
-              <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
-              <p class="card-text text-muted">Khám phá thế giới lập trình Java
-                từ những bước cơ bản nhất!<br><strong>Trần Ngọc
-                  Thái</strong></p>
-              <div class="rating">⭐ 5.0 <span class="text-muted">(48)</span></div>
-              <p class="text-danger fw-bold mt-1">999.000 đ</p>
-              <p class="text-muted"><del>3.338.000 đ</del></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card course-card">
-            <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
-            <div class="card-body">
-              <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
-              <p class="card-text text-muted">Khám phá thế giới lập trình Java
-                từ những bước cơ bản nhất!<br><strong>Trần Ngọc
-                  Thái</strong></p>
-              <div class="rating">⭐ 5.0 <span class="text-muted">(48)</span></div>
-              <p class="text-danger fw-bold mt-1">999.000 đ</p>
-              <p class="text-muted"><del>3.338.000 đ</del></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card course-card">
-            <img src="https://i.imgur.com/SdVVbdX.png" alt="JAVA">
-            <div class="card-body">
-              <h6 class="card-title">Nhập Môn Java Core Cơ Bản</h6>
-              <p class="card-text text-muted">Khám phá thế giới lập trình Java
-                từ những bước cơ bản nhất!<br><strong>Trần Ngọc
-                  Thái</strong></p>
-              <div class="rating">⭐ 5.0 <span class="text-muted">(48)</span></div>
-              <p class="text-danger fw-bold mt-1">999.000 đ</p>
-              <p class="text-muted"><del>3.338.000 đ</del></p>
+            <div class="card-footer pt-0">
+              <div class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1">
+                <span class="fw-bold text-danger"
+                  th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai.doubleValue() > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}">0
+                  ₫</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-
+      <div th:if="${khoaHocList == null or #lists.isEmpty(khoaHocList)}">
+        <p>Không có khóa học nào.</p>
+      </div>
 
       <!-- Nút xem thêm -->
       <div class="text-center course-btn">
-        <button class="btn btn-outline-primary">Xem thêm các khóa học Khoa học
-          dữ liệu</button>
+        <button class="btn btn-outline-primary">
+          Xem thêm các khóa học Khoa học dữ liệu
+        </button>
       </div>
     </div>
   </main>

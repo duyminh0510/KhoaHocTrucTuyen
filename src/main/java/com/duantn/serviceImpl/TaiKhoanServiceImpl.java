@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaiKhoanServiceImpl implements TaiKhoanService {
@@ -85,4 +86,10 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
     public TaiKhoan findByEmail(String email) {
         return repository.findByEmail(email).orElse(null);
     }
+
+    @Override
+    public Optional<TaiKhoan> findById(Integer id) {
+        return repository.findById(id);
+    }
+
 }

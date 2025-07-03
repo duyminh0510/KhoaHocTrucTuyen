@@ -79,7 +79,7 @@ public class DangKyController {
     }
 
     @PostMapping("/verify")
-public String verify(@RequestParam("code") String code, HttpSession session, Model model) {
+    public String verify(@RequestParam("code") String code, HttpSession session, Model model) {
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng hoặc đã hết hạn.");
