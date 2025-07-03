@@ -359,7 +359,7 @@
             <div class="icon-group" sec:authorize="isAuthenticated()">
 
                 <!-- Nếu là ADMIN -->
-                <a th:href="@{/admin/quan-ly-nhan-vien}" class="icon-link"
+                <a th:href="@{/admin/qlynhanvien}" class="icon-link"
                     sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fas fa-users"></i> <span>Nhân Viên</span>
                 </a>
@@ -409,11 +409,14 @@
 
                 <!-- Avatar + Dropdown -->
                 <div class="dropdown avatar-link">
-                    <a href="/tai-khoan"
-                        class="d-flex align-items-center text-decoration-none">
-                        <img th:src="@{/photos/avartar.jpg}"
-                            alt="Avatar người dùng" class="user-avatar" />
-                    </a>
+                    <!-- Nếu có avatar -->
+                    <img th:if="${taiKhoan != null and taiKhoan.avatar != null}" th:src="@{${taiKhoan.avatar}}"
+                        alt="Avatar người dùng" class="user-avatar" />
+
+                    <!-- Nếu không có -->
+                    <img th:unless="${taiKhoan != null and taiKhoan.avatar != null}" th:src="@{/photos/avartar.jpg}"
+                        alt="Avatar mặc định" class="user-avatar" />
+
                     <ul class="dropdown-menu text-small">
                         <li>
                             <a class="dropdown-item" href="/tai-khoan">
@@ -502,10 +505,8 @@
         <!-- Bottom menu: chỉ hiện khi đã đăng nhập -->
         <nav class="bottom-nav"
             sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN') and !hasRole('ROLE_NHANVIEN') and !hasRole('ROLE_GIANGVIEN')">
-            <div class="menu-icon">
-                <i class="fas fa-bars"></i>
-            </div>
-            <div class="menu-container">
+            
+            <div class="menu-container container d-flex justify-content-center">
                 <a th:href="@{/}"
                     th:classappend="${currentUri == '/'} ? 'active' : ''">Trang
                     chủ</a>

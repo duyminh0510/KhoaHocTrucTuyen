@@ -52,14 +52,14 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 
 
     @Override
-public TaiKhoan register(TaiKhoan taiKhoan) {
-    // Kiểm tra email đã tồn tại chưa
-    if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
-        throw new RuntimeException("Email đã tồn tại");
+    public TaiKhoan register(TaiKhoan taiKhoan) {
+        // Kiểm tra email đã tồn tại chưa
+        if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
+        // TODO: mã hóa mật khẩu nếu cần
+        return repository.save(taiKhoan);
     }
-    // TODO: mã hóa mật khẩu nếu cần
-    return repository.save(taiKhoan);
-}
 
 @Override
 public TaiKhoan login(String email, String password) {

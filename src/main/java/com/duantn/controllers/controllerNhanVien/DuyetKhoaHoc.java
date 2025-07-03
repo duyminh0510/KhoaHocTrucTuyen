@@ -14,13 +14,13 @@ import com.duantn.services.KhoaHocService;
 
 
 @Controller
-@RequestMapping("/nhanvien/khoahoccanduyet")
-@PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")     
+@RequestMapping({ "/admin", "/nhanvien" })
+@PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
 public class DuyetKhoaHoc {
     @Autowired
     private KhoaHocService khoaHocService;
 
-    @GetMapping
+    @GetMapping("/khoahoccanduyet")
     public String hienThiDanhSachKhoaHoc(Model model) {
         List<KhoaHoc> danhSach = khoaHocService.layTatCaKhoaHocCanDuyet();
         model.addAttribute("dsKhoaHoc", danhSach);

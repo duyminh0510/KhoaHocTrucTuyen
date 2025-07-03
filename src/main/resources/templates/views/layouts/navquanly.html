@@ -82,7 +82,7 @@
                     <div
                         th:if="${#authorization.expression('hasRole(''NHANVIEN'')')}">
                         <a class="nav-link"
-                            th:href="@{/nhanvien/quanly-danh-muc}">📦 Quản lý
+                            th:href="@{/nhanvien/danhmuc}">📦 Quản lý
                             danh mục</a>
                         <a class="nav-link"
                             th:href="@{/nhanvien/quanly-thanh-toan}">💳 Quản lý
@@ -108,7 +108,7 @@
                     <div
                         th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                         <a class="nav-link"
-                            th:href="@{/admin/quanly-danh-muc}">📦
+                            th:href="@{/admin/danhmuc}">📦
                             Quản lý danh
                             mục</a>
                         <a class="nav-link"
@@ -118,7 +118,7 @@
                             th:href="@{/admin/quanly-giao-dich}">💰 Giao dịch
                             khóa học</a>
                         <a class="nav-link"
-                            th:href="@{/admin/quanly-hocvien}">👨‍🎓 Quản lý học
+                            th:href="@{/admin/qlynhanvien}">👨‍🎓 Quản lý học
                             viên</a>
                         <a class="nav-link"
                             th:href="@{/admin/quanly-thong-bao-he-thong}">📢
