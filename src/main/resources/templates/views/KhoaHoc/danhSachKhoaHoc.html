@@ -98,6 +98,20 @@
                     th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
                   ></span>
                 </p>
+                <!-- Countdown timer giảm giá -->
+                <div
+                  th:if="${khoaHoc.ngayketthuc != null && khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                >
+                  <span>Thời gian giảm giá còn lại: </span>
+                  <span th:attr="id='countdown-' + ${khoaHoc.khoahocId}"
+                    >Đang tải...</span
+                  >
+                  <input
+                    type="hidden"
+                    th:attr="id='endTime-' + ${khoaHoc.khoahocId}"
+                    th:value="${#temporals.format(khoaHoc.ngayketthuc, 'yyyy-MM-dd\'T\'HH:mm:ss')}"
+                  />
+                </div>
               </div>
 
               <div
@@ -261,5 +275,36 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("[id^='countdown-']").forEach((span) => {
+          const id = span.id.split("countdown-")[1];
+          const hiddenInput = document.getElementById("endTime-" + id);
+          if (!hiddenInput || !hiddenInput.value) return;
+          const endDate = new Date(hiddenInput.value).getTime();
+          function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            if (distance <= 0) {
+              span.innerText = "Hết thời gian khuyến mãi";
+              return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(
+              (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutes = Math.floor(
+              (distance % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            span.innerText = `${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+          }
+          updateCountdown();
+          setInterval(updateCountdown, 1000);
+        });
+      });
+      /*]]>*/
+    </script>
   </body>
 </html>

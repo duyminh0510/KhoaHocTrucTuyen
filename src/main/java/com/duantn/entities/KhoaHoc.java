@@ -56,6 +56,7 @@ public class KhoaHoc implements Serializable {
     @Column(name = "ngaybatdau")
     private LocalDateTime ngaybatdau;
 
+
     @Column(name = "ngayketthuc")
     private LocalDateTime ngayketthuc;
 

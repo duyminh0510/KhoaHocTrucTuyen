@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách Khóa học cần phê duyệt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        margin: 2px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .btn-approve {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .btn-reject {
+        background-color: #dc3545;
+        color: white;
+      }
+
+      .status-approved {
+        color: #28a745;
+        font-weight: bold;
+      }
+
+      .status-rejected {
+        color: #dc3545;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Danh sách Khóa học chờ phê duyệt</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tên Khóa học</th>
+          <th>Giá Gốc</th>
+          <th>Giá Khuyến Mãi</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="khoaHoc : ${danhSach}">
+          <td th:text="${khoaHoc.tenKhoaHoc}">Tên KH</td>
+          <td
+            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 1, 'COMMA', 2, 'POINT')} + ' ₫'"
+          >
+            0 ₫
+          </td>
+          <td
+            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 1, 'COMMA', 2, 'POINT')} + ' ₫'"
+          >
+            0 ₫
+          </td>
+          <td th:text="${khoaHoc.trangThai}">Trạng thái</td>
+          <td>
+            <!-- Nếu đang chờ duyệt -->
+            <div th:if="${khoaHoc.trangThai.name() == 'PENDING_APPROVAL'}">
+              <form
+                th:action="@{/duyetKhoaHoc/phe-duyet/{id}(id=${khoaHoc.khoahocId})}"
+                method="post"
+                style="display: inline-block"
+              >
+                <button type="submit" class="btn btn-approve">Phê duyệt</button>
+              </form>
+              <form
+                th:action="@{/duyetKhoaHoc/tu-choi/{id}(id=${khoaHoc.khoahocId})}"
+                method="post"
+                style="display: inline-block"
+              >
+                <button type="submit" class="btn btn-reject">Từ chối</button>
+              </form>
+            </div>
+
+            <!-- Nếu đã xử lý -->
+            <div th:if="${khoaHoc.trangThai.name() != 'PENDING_APPROVAL'}">
+              <span
+                th:if="${khoaHoc.trangThai.name() == 'PUBLISHED'}"
+                class="status-approved"
+              >
+                Đã phê duyệt
+              </span>
+              <span
+                th:if="${khoaHoc.trangThai.name() == 'REJECTED'}"
+                class="status-rejected"
+              >
+                Đã từ chối
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

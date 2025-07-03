@@ -81,19 +81,40 @@
 
                   <div class="card-footer pt-0">
                       <div class="mb-2">
-                          <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                             class="card-text mb-0">
-                              <span class="fw-bold text-danger me-2"
-                                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                              <del class="text-muted"
-                                   th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
-                          </p>
-                          <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                             class="card-text fw-bold mb-0">
-                              <span th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                          </p>
-                      </div>
-
+                <p
+                  th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                  class="card-text mb-0"
+                >
+                  <span
+                    class="fw-bold text-danger me-2"
+                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                  ></span>
+                  <del
+                    class="text-muted"
+                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                  ></del>
+                </p>
+                <p
+                  th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
+                  class="card-text fw-bold mb-0"
+                >
+                  <span
+                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                  ></span>
+                </p>
+                <!-- Countdown timer giảm giá -->
+                <div
+                  th:if="${khoaHoc.ngayketthuc != null && khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                >
+                  <span>Thời gian giảm giá còn lại: </span>
+                  <span th:attr="id='countdown-' + ${khoaHoc.khoahocId}">Đang tải...</span>
+                  <input
+                    type="hidden"
+                    th:attr="id='endTime-' + ${khoaHoc.khoahocId}"
+                    th:value="${#temporals.format(khoaHoc.ngayketthuc, 'yyyy-MM-dd''T''HH:mm:ss')}"
+                  />
+                </div>
+              </div>
                       <div class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1">
                           <button type="button"
                                   class="btn btn-sm like-btn"
@@ -220,6 +241,31 @@
               });
           });
       </script>
+      <script th:inline="javascript">
+      /*<![CDATA[*/
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("[id^='countdown-']").forEach((span) => {
+          const id = span.id.split("countdown-")[1];
+          const hiddenInput = document.getElementById("endTime-" + id);
+          if (!hiddenInput || !hiddenInput.value) return;
+          const endDate = new Date(hiddenInput.value).getTime();
+          function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            if (distance <= 0) {
+              span.innerText = "Hết thời gian khuyến mãi";
+              return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            span.innerText = `${days} ngày ${hours} giờ`;
+          }
+          updateCountdown();
+          setInterval(updateCountdown, 1000);
+        });
+      });
+      /*]]>*/
+    </script>
     </main>
   </body>
 </html>
@@ -302,4 +348,10 @@
 .btn-outline.liked:hover {
   background-color: #c82333;
   border-color: #bd2130;
-}</style>
+}
+.discount-timer {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 15px;
+}
+</style>
