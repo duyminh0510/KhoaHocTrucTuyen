@@ -149,7 +149,7 @@ public class QuenMatKhauController {
         session.removeAttribute("resetEmail");
 
         redirectAttributes.addFlashAttribute("success", "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.");
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
     private void sendVerificationEmail(String to, String code) {
