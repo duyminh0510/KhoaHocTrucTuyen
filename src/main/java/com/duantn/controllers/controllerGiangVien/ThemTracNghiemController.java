@@ -158,6 +158,16 @@ public class ThemTracNghiemController {
         trac = baiTracNghiemService.save(trac);
 
         if ("themCauHoi".equals(action)) {
+            for (CauHoiDTO ch : tracNghiemDTO.getCauHoiList()) {
+                Integer dung = ch.getDapAnDungIndex();
+                if (dung != null && ch.getDapAnList() != null
+                        && dung >= 0 && dung < ch.getDapAnList().size()) {
+                    for (int i = 0; i < ch.getDapAnList().size(); i++) {
+                        ch.getDapAnList().get(i).setDapAnDung(i == dung);
+                    }
+                }
+            }
+
             // Thêm 1 câu hỏi trống
             CauHoiDTO cauHoiMoi = new CauHoiDTO();
             List<DapAnDto> ds = new ArrayList<>();
