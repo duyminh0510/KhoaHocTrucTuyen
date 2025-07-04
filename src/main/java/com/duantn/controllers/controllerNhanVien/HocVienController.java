@@ -1,82 +1,108 @@
 package com.duantn.controllers.controllerNhanVien;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.duantn.entities.Role;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.repositories.RoleRepository;
+import com.duantn.repositories.TaiKhoanRepository;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping({ "/admin", "/nhanvien" })
-@PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
+@RequestMapping("/auth/hoc-vien")
+@RequiredArgsConstructor
 public class HocVienController {
 
-    public static class HocVienVM {
-        public Integer id;
-        public String name;
-        public String email;
-        public String phone;
-        public String ngayTao;
-        public String trangThai;
-        public String avatar;
+    private final TaiKhoanRepository taiKhoanRepository;
+    private final RoleRepository roleRepository;
 
-        public HocVienVM(Integer id, String name, String email, String phone, String ngayTao, String trangThai,
-                String avatar) {
-            this.id = id;
-            this.name = name;
-            this.email = email;
-            this.phone = phone;
-            this.ngayTao = ngayTao;
-            this.trangThai = trangThai;
-            this.avatar = avatar;
+    // 🧾 Danh sách tất cả học viên (kể cả bị khóa)
+    @GetMapping
+    public String danhSachHocVien(Model model) {
+        Role hocVienRole = roleRepository.findByName("ROLE_HOCVIEN")
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy role học viên"));
+
+        List<TaiKhoan> hocVienList = taiKhoanRepository.findByRole(hocVienRole);
+        model.addAttribute("hocVienList", hocVienList);
+        return "views/gdienQuanLy/danhsachhocvien";
+    }
+
+    // ✏️ Form chỉnh sửa học viên
+    @GetMapping("/edit/{id}")
+    public String editHocVien(@PathVariable("id") Integer id, Model model) {
+        TaiKhoan taiKhoan = taiKhoanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy học viên"));
+        model.addAttribute("taiKhoan", taiKhoan);
+        return "views/gdienQuanLy/formhocvien";
+    }
+
+    // 💾 Lưu cập nhật học viên
+    @PostMapping("/save")
+    public String updateHocVien(
+            @ModelAttribute("taiKhoan") @Valid TaiKhoan taiKhoanForm,
+            BindingResult bindingResult,
+            @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+            RedirectAttributes redirectAttributes) {
+
+        if (taiKhoanForm.getTaikhoanId() == null) {
+            redirectAttributes.addFlashAttribute("error", "Không thể thêm học viên mới.");
+            return "redirect:/auth/hoc-vien";
         }
-    }
 
-    private List<HocVienVM> listHocVien() {
-        return Arrays.asList(
-                new HocVienVM(1, "Nguyễn Văn A", "a@gmail.com", "0123456789", "01/06/2024", "Hoạt động",
-                        "https://randomuser.me/api/portraits/men/1.jpg"),
-                new HocVienVM(2, "Trần Thị B", "b@gmail.com", "0987654321", "02/06/2024", "Khoá",
-                        "https://randomuser.me/api/portraits/women/2.jpg"),
-                new HocVienVM(3, "Lê Văn C", "c@gmail.com", "0912345678", "03/06/2024", "Hoạt động",
-                        "https://randomuser.me/api/portraits/men/3.jpg"));
-    }
+        if (bindingResult.hasErrors()) {
+            return "views/gdienQuanLy/formhocvien";
+        }
 
-    @GetMapping("/quanly-hocvien")
-    public String listHocVien(Model model) {
-        model.addAttribute("listHocVien", listHocVien());
-        return "views/gdienQuanLy/hocVien";
-    }
+        TaiKhoan taiKhoanToUpdate = taiKhoanRepository.findById(taiKhoanForm.getTaikhoanId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
-    @GetMapping("/quanly-hocvien-detail/{id}")
-    public String detailHocVien(@PathVariable Integer id, Model model) {
-        HocVienVM detail = null;
-        for (HocVienVM hv : listHocVien()) {
-            if (hv.id.equals(id)) {
-                detail = hv;
-                break;
+        taiKhoanToUpdate.setName(taiKhoanForm.getName());
+        taiKhoanToUpdate.setEmail(taiKhoanForm.getEmail());
+        taiKhoanToUpdate.setPhone(taiKhoanForm.getPhone());
+        taiKhoanToUpdate.setStatus(taiKhoanForm.isStatus());
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            try {
+                taiKhoanToUpdate.setAvatar(saveAvatarFile(avatarFile));
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi lưu avatar!");
+                return "redirect:/auth/hoc-vien";
             }
         }
-        model.addAttribute("hv", detail);
-        return "views/gdienQuanLy/hocVienDetail";
+
+        taiKhoanRepository.save(taiKhoanToUpdate);
+        redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin học viên thành công!");
+        return "redirect:/auth/hoc-vien";
     }
 
-    // Hiển thị form thêm học viên
-    @GetMapping("/quanly-hocvien-form")
-    public String addHocVienForm(Model model) {
-        model.addAttribute("formTitle", "Thêm học viên");
-        return "views/gdienQuanLy/hocVienForm";
+    // 🔒 Khóa/Mở khóa tài khoản học viên
+    @PostMapping("/toggle-status/{id}")
+    public String toggleHocVienStatus(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        TaiKhoan hocVien = taiKhoanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy học viên"));
+
+        hocVien.setStatus(!hocVien.isStatus());
+        taiKhoanRepository.save(hocVien);
+
+        redirectAttributes.addFlashAttribute("success", hocVien.isStatus()
+                ? "Tài khoản đã được mở khóa!"
+                : "Tài khoản đã bị khóa!");
+
+        return "redirect:/auth/hoc-vien";
     }
 
-    // Hiển thị form sửa học viên
-    @GetMapping("/quanly-hocvien-form/{id}")
-    public String editHocVienForm(@PathVariable Integer id, Model model) {
-        model.addAttribute("formTitle", "Sửa học viên");
-        // Có thể truyền thêm dữ liệu học viên vào model nếu cần
-        return "views/gdienQuanLy/hocVienForm";
+    // 👤 Hàm giả lập lưu avatar
+    private String saveAvatarFile(MultipartFile file) throws IOException {
+        // Giả lập tên file (nên thay bằng xử lý upload thực sự)
+        return file.getOriginalFilename();
     }
 }

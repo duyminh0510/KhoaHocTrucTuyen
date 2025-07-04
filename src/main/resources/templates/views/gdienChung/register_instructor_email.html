@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Đăng ký giảng viên')}">
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
 <main>
     <div class="container mt-5 mb-5">
@@ -17,14 +17,14 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Địa chỉ Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                       placeholder="Nhập địa chỉ email của bạn" required>
+                                    placeholder="Nhập địa chỉ email của bạn" required>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Gửi mã xác thực</button>
                             </div>
                         </form>
                     </div>
-                     <div class="card-footer text-center">
+                    <div class="card-footer text-center">
                         <a th:href="@{/auth/login}">Đã có tài khoản? Đăng nhập</a>
                     </div>
                 </div>
@@ -33,4 +33,4 @@
     </div>
 </main>
 
-</html> 
+</html>

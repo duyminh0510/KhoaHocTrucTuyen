@@ -1,6 +1,5 @@
 package com.duantn.services;
 
-
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.NguoiDungThichKhoaHoc;
 import com.duantn.entities.TaiKhoan;
@@ -18,15 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-
 @Service
 public class KhoaHocService {
 
-
-    @Autowired private KhoaHocRepository khoaHocRepository;
-    @Autowired private TaiKhoanRepository taiKhoanRepository;
-    @Autowired private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
-
+    @Autowired
+    private KhoaHocRepository khoaHocRepository;
+    @Autowired
+    private TaiKhoanRepository taiKhoanRepository;
+    @Autowired
+    private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
 
     public List<KhoaHoc> getTatCaKhoaHoc() {
         return khoaHocRepository.findAll();
@@ -36,9 +35,8 @@ public class KhoaHocService {
         return khoaHocRepository.findById(id).orElse(null);
     }
 
-
     public List<KhoaHoc> layTatCaKhoaHocCanDuyet() {
-        return khoaHocRepository.findAllByTrangThai(TrangThaiKhoaHoc.PENDING_APPROVAL); 
+        return khoaHocRepository.findAllByTrangThai(TrangThaiKhoaHoc.PENDING_APPROVAL);
     }
 
     public List<KhoaHoc> getNewestCourses(int count) {
@@ -50,7 +48,8 @@ public class KhoaHocService {
         Pageable pageable = PageRequest.of(0, count);
         List<Integer> topIds = khoaHocRepository.findTopPurchasedCourseIds(pageable);
 
-        if (topIds.isEmpty()) return Collections.emptyList();
+        if (topIds.isEmpty())
+            return Collections.emptyList();
 
         List<KhoaHoc> courses = khoaHocRepository.findByIdInWithDetails(topIds);
 
@@ -68,7 +67,8 @@ public class KhoaHocService {
         KhoaHoc khoaHoc = khoaHocRepository.findById(khoahocId).orElse(null);
         TaiKhoan taiKhoan = taiKhoanRepository.findById(taikhoanId).orElse(null);
 
-        if (khoaHoc == null || taiKhoan == null) return false;
+        if (khoaHoc == null || taiKhoan == null)
+            return false;
 
         Optional<NguoiDungThichKhoaHoc> like = nguoiDungThichKhoaHocRepository
                 .findByTaiKhoan_TaikhoanIdAndKhoaHoc_KhoahocId(taikhoanId, khoahocId);
@@ -88,7 +88,8 @@ public class KhoaHocService {
     }
 
     public List<KhoaHoc> findLikedCoursesByAccountId(Integer currentUserId) {
-        if (currentUserId == null) return Collections.emptyList();
+        if (currentUserId == null)
+            return Collections.emptyList();
         return khoaHocRepository.findLikedCoursesByAccountId(currentUserId);
     }
 
@@ -97,4 +98,7 @@ public class KhoaHocService {
         return khoaHocRepository.findByIdWithDetails(id).orElse(null);
     }
 
+    public Optional<KhoaHoc> findById(Integer id) {
+        return khoaHocRepository.findById(id);
+    }
 }

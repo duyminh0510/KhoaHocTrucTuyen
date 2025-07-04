@@ -2,8 +2,10 @@ package com.duantn.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashSet;
+
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -51,7 +53,8 @@ public class Chuong implements Serializable {
     private KhoaHoc khoahoc;
 
     @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BaiGiang> baiGiangs = new ArrayList<>();
+    @Builder.Default
+    private Set<BaiGiang> baiGiangs = new HashSet<>();
 
     @Override
     public String toString() {

@@ -14,7 +14,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "DanhGia")
+@Table(name = "DanhGia", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "nguoiDungId", "khoaHocId" })
+})
 public class DanhGia implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,9 @@ public class TrangChuController {
                                                                           // không có khóa học yêu
                                                                           // thích
 
+
             // Bạn có thể thêm các khóa học mới nhất, khóa học nổi bật ở đây nếu cần cho trang chung
+
             // model.addAttribute("newCourses", khoaHocService.getNewestCourses(8));
             // model.addAttribute("topCourses", khoaHocService.getTopPurchasedCourses(8));
 
@@ -76,6 +79,6 @@ public class TrangChuController {
         }
 
         // Nếu không phải học viên hay giảng viên
-        return "redirect:/login?error=unauthorized";
+        return "redirect:/auth/login?error=unauthorized";
     }
 }

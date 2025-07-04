@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +38,7 @@ public class GiangVien implements Serializable {
     private String congViec;
 
     @Column(name = "ngaySinh")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngaySinh;
 
     @Column(name = "gioiTinh", columnDefinition = "NVARCHAR(50)")

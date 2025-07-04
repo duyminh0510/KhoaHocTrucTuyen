@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đánh giá khóa học</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .star-rating {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .star-rating .fa-star {
+            font-size: 2.5rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .star-rating .fa-star.hovered,
+        .star-rating .fa-star.checked {
+            color: #ffc107;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h3>Đánh giá khóa học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h3>
+
+        <form th:action="@{'/danh-gia/' + ${khoaHoc.khoahocId}}" th:object="${danhGiaMoi}" method="post">
+            <!-- Rating sao -->
+            <div class="mb-3">
+                <label class="form-label">Chọn số sao:</label>
+                <div class="star-rating" id="starContainer">
+                    <i class="fa fa-star" data-value="1"></i>
+                    <i class="fa fa-star" data-value="2"></i>
+                    <i class="fa fa-star" data-value="3"></i>
+                    <i class="fa fa-star" data-value="4"></i>
+                    <i class="fa fa-star" data-value="5"></i>
+                </div>
+                <input type="hidden" name="diemDanhGia" id="diemDanhGia" th:field="*{diemDanhGia}" required />
+            </div>
+
+            <!-- Nội dung -->
+            <div class="mb-3">
+                <label class="form-label">Nhận xét:</label>
+                <textarea class="form-control" name="noiDung" th:field="*{noiDung}" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+
+            <!-- Nút xóa đánh giá nếu đã có -->
+            <th:block th:if="${danhGiaMoi.danhgiaId != null}">
+                <a th:href="@{'/danh-gia/xoa/' + ${khoaHoc.khoahocId}}" class="btn btn-danger ms-2"
+                    onclick="return confirm('Bạn có chắc muốn xóa đánh giá này không?');">
+                    Xóa đánh giá
+                </a>
+            </th:block>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll('.star-rating .fa-star');
+            const input = document.getElementById('diemDanhGia');
+
+            let selectedValue = parseInt(input.value) || 0;
+
+            function updateStars(value) {
+                stars.forEach((s, i) => {
+                    s.classList.toggle('checked', i < value);
+                });
+            }
+
+            updateStars(selectedValue); // Tô sao vàng khi form load
+
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseover', () => {
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('hovered', i <= index);
+                    });
+                });
+
+                star.addEventListener('mouseout', () => {
+                    stars.forEach((s) => s.classList.remove('hovered'));
+                    updateStars(selectedValue);
+                });
+
+                star.addEventListener('click', () => {
+                    selectedValue = index + 1;
+                    input.value = selectedValue;
+                    updateStars(selectedValue);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

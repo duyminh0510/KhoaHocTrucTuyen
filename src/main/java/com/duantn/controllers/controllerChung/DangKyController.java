@@ -85,6 +85,7 @@ public class DangKyController {
                          HttpSession session,
                          Model model) {
 
+
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng hoặc đã hết hạn.");

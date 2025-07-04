@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Danh sách giảng viên</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h2>Danh sách giảng viên</h2>
+
+    <div th:if="${success}" style="color: green" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red" th:text="${error}"></div>
+
+    <!-- ❌ Đã bỏ nút Thêm mới -->
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>SĐT</th>
+                <th>Kỹ năng</th>
+                <th>Kinh nghiệm</th>
+                <th>CCCD</th>
+                <th>Công việc</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Chuyên ngành</th>
+                <th>Ngày tham gia</th>
+                <th>Ngày cập nhật</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="tk : ${giangVienList}">
+                <td th:text="${tk.name}">Tên</td>
+                <td th:text="${tk.email}">Email</td>
+                <td th:text="${tk.phone}">SĐT</td>
+                <td th:text="${tk.giangVien.kyNang}">Kỹ năng</td>
+                <td th:text="${tk.giangVien.kinhNghiem}">Kinh nghiệm</td>
+                <td th:text="${tk.giangVien.CCCD}">CCCD</td>
+                <td th:text="${tk.giangVien.congViec}">Công việc</td>
+                <td th:text="${#temporals.format(tk.giangVien.ngaySinh, 'dd/MM/yyyy')}">Ngày sinh</td>
+                <td th:text="${tk.giangVien.gioiTinh}">Giới tính</td>
+                <td th:text="${tk.giangVien.chuyenNganh}">Chuyên ngành</td>
+                <td th:text="${#temporals.format(tk.giangVien.ngayThamGia, 'dd/MM/yyyy HH:mm')}">Ngày tham gia</td>
+                <td th:text="${#temporals.format(tk.giangVien.ngayCapNhat, 'dd/MM/yyyy HH:mm')}">Ngày cập nhật</td>
+                <td th:text="${tk.status ? 'Đang hoạt động' : 'Đã khóa'}"></td>
+                <td>
+                    <a th:href="@{/auth/giang-vien/edit/{id}(id=${tk.taikhoanId})}">✏️ Sửa</a> |
+                    <form th:action="@{/auth/giang-vien/toggle-status/{id}(id=${tk.taikhoanId})}" method="post"
+                        style="display:inline;">
+                        <button type="submit" th:text="${tk.status ? 'Khóa' : 'Mở khóa'}"
+                            onclick="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái tài khoản?')">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
