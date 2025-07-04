@@ -52,14 +52,7 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
     }
 
-    @Override
-    public TaiKhoan register(TaiKhoan taiKhoan) {
-        // Kiểm tra email đã tồn tại chưa
-        if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
-            throw new RuntimeException("Email đã tồn tại");
-        }
-        return repository.save(taiKhoan);
-    }
+    
 
     @Override
     public TaiKhoan register(TaiKhoan taiKhoan) {
