@@ -16,7 +16,7 @@ public class BaiGiangController {
 
     @GetMapping("/baigiang/chitiet/{id}")
     public String chiTietBaiGiang(@PathVariable("id") Integer id, Model model) {
-        BaiGiang baiGiang = baiGiangService.findById(id);
+        BaiGiang baiGiang = baiGiangService.findBaiGiangById(id);
         model.addAttribute("baiGiang", baiGiang);
         return "views/KhoaHoc/ChiTietBaiGiang";
     }

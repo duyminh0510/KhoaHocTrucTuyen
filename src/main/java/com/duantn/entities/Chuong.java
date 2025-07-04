@@ -86,8 +86,5 @@ public class Chuong implements Serializable {
                 ", khoahocId=" + (khoahoc != null ? khoahoc.getKhoahocId() : "null") +
                 '}';
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> c1fcf06a01708ed1209e4aa62eb6bd560db7df10
+    
 }
