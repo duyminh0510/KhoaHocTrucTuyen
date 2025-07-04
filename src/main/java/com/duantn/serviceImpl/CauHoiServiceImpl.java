@@ -40,4 +40,9 @@ public class CauHoiServiceImpl implements CauHoiService {
         return cauHoiRepository.saveAndFlush(cauHoi);
     }
 
+    @Override
+    public CauHoi findById(Integer id) {
+        return cauHoiRepository.findById(id).orElse(null);
+    }
+
 }

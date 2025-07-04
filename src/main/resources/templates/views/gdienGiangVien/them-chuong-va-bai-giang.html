@@ -224,33 +224,15 @@
                                                 theo.</i></p>
                                     </div>
 
-                                    <!-- TRẮC NGHIỆM -->
-
                                     <div class="tracnghiem-fields mt-2"
-                                        th:style="${baiGiang.loaiBaiGiang?.name() == 'TRACNGHIEM'} ? 'display: block;' : 'display: none;'">
+                                        th:style="${baiGiang.loaiBaiGiang?.name() == 'TRACNGHIEM'} ? 'display:block;' : 'display:none;'">
 
-                                        <!-- Input tên bài trắc nghiệm -->
-                                        <div class="mb-3">
+                                        <a
+                                            th:href="@{/giangvien/cau-hoi/them(baiGiangId=${baiGiang.baiGiangId})}"
+                                            class="btn btn-outline-primary btn-sm">
+                                            ➕ Thêm hoặc sửa câu hỏi
+                                        </a>
 
-                                            <label class="form-label">📌 Tên bài
-                                                trắc nghiệm:</label>
-                                            <input type="text"
-                                                class="form-control mb-2"
-                                                th:name="'chuongs[' + ${cStat.index} + '].baiGiangs[' + ${bStat.index} + '].tracNghiem.tenbai'"
-                                                th:value="${baiGiang.tracNghiem?.tenbai}"
-                                                placeholder="Nhập tên bài trắc nghiệm"
-                                                th:disabled="${baiGiang.loaiBaiGiang?.name() != 'TRACNGHIEM'}" />
-                                            <p class="m-2"><i>Nội dung của bài
-                                                    kiểm tra trắc
-                                                    nghiệm...</i></p>
-                                        </div>
-
-                                        <div class="cau-hoi-container"></div>
-
-                                        <button type="button"
-                                            class="btn btn-outline-success btn-sm mt-2"
-                                            onclick="themCauHoi(this)">+ Thêm
-                                            câu hỏi</button>
                                     </div>
 
                                 </div>
@@ -441,7 +423,7 @@
 
                     <input type="hidden"
                         name="chuongs[__cIndex__].baiGiangs[__bIndex__].loaiBaiGiang"
-                        class="loai-bai-giang-input" value="VIDEO" />
+                        class="loai-bai-giang-input" value />
 
                     <label class="form-label mb-2">🎬 Nội dung:</label>
                     <textarea
@@ -487,22 +469,15 @@
                     <!-- TRẮC NGHIỆM -->
                     <div class="tracnghiem-fields mt-2" style="display: none;">
 
-                        <div class="mb-3">
+                        <input type="hidden"
+                            name="chuongs[__cIndex__].baiGiangs[__bIndex__].tracNghiem.tracnghiemId"
+                            value />
 
-                            <label class="form-label">📌 Tên bài trắc
-                                nghiệm:</label>
-                            <input type="text"
-                                class="form-control mb-2"
-                                name="chuongs[__cIndex__].baiGiangs[__bIndex__].tracNghiem.tenbai"
-                                placeholder="Nhập tên bài trắc nghiệm" />
-                            <p class="m-2"><i>Nội dung của bài kiểm tra trắc
-                                    nghiệm...</i></p>
-                        </div>
-                        <div class="cau-hoi-container"></div>
-
-                        <button type="button"
-                            class="btn btn-outline-success btn-sm mt-2"
-                            onclick="themCauHoi(this)">+ Thêm câu hỏi</button>
+                        <!-- Nút chuyển trang để thêm/sửa câu hỏi -->
+                        <a href="#" class="btn btn-outline-primary btn-sm mt-2"
+                            onclick="return false;">
+                            ➕ Thêm hoặc sửa câu hỏi
+                        </a>
                     </div>
                 </div>
             </template>

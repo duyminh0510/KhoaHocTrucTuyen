@@ -14,4 +14,9 @@ public interface DapAnService {
 
     void deleteByCauHoiId(Integer cauHoiId);
 
+    List<DapAn> findByCauHoiId(Integer cauHoiId);
+
+    void deleteById(Integer dapanId);
+
+    List<DapAn> findByCauHoiIds(List<Integer> ids);
 }

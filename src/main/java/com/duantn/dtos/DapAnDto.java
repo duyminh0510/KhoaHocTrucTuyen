@@ -1,15 +1,12 @@
 package com.duantn.dtos;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class DapAnDto {
-    private String noiDungDapAn;
-    private boolean dapAnDung;
-    private String giaThichDapan;
-    private Integer cauHoiId;
+    private Integer dapanId;
     private Integer thuTuDapAn;
+    private String noiDungDapAn;
+    private Boolean dapAnDung;
+    private String giaThichDapan;
 }

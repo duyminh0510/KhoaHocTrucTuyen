@@ -46,7 +46,7 @@ public class DapAn implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CauHoiId", nullable = false)
     private CauHoi cauHoi;
 

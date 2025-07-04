@@ -54,7 +54,7 @@ public class CauHoi implements Serializable {
     @Column(name = "trangthai")
     private Boolean trangthai;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tracnghiemId", nullable = false)
     private BaiTracNghiem baiTracNghiem;
 

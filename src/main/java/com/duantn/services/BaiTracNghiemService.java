@@ -11,4 +11,10 @@ public interface BaiTracNghiemService {
 
     void saveBaiTracNghiemVaCauHoi(BaiTracNghiem tracMoi, BaiGiang baiGiang);
 
+    // BaiTracNghiem findFullById(Integer id);
+
+    BaiTracNghiem findFullByBaiGiangId(Integer baiGiangId);
+
+    BaiTracNghiem findById(Integer id);
+
 }

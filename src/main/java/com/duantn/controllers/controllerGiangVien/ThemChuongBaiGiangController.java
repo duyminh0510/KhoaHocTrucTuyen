@@ -144,8 +144,12 @@ public class ThemChuongBaiGiangController {
 
                 BaiGiang entity;
                 if (baiGiang.getBaiGiangId() != null) {
-                    entity = baiGiangService.findById(baiGiang.getBaiGiangId())
-                            .orElse(new BaiGiang());
+                    BaiGiang baiGiangCu = baiGiangService.findById(baiGiang.getBaiGiangId()).orElse(null);
+                    if (daThayDoiLoaiBaiGiang(baiGiang, baiGiangCu)) {
+                        redirectAttributes.addFlashAttribute("loi", "❌ Không được thay đổi loại bài giảng đã lưu.");
+                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    }
+                    entity = baiGiangCu != null ? baiGiangCu : new BaiGiang();
                 } else {
                     entity = new BaiGiang();
                 }
@@ -166,7 +170,6 @@ public class ThemChuongBaiGiangController {
                     if (daCo != null) {
                         daCo.setUrl_video(video.getUrl_video());
                         daCo.setMota(video.getMota());
-                        daCo.setNgayCapNhat(LocalDateTime.now());
                         videoBaiGiangService.save(daCo);
                     } else {
                         video.setBaiGiang(baiGiangLuu);
@@ -186,8 +189,6 @@ public class ThemChuongBaiGiangController {
                         baivietService.save(baiViet);
                     }
                 }
-
-                // Nếu là TRẮC NGHIỆM thì xử lý sau (tùy bạn)
 
                 redirectAttributes.addFlashAttribute("thongbao", "Lưu bài giảng thành công.");
             } catch (Exception e) {
@@ -247,6 +248,11 @@ public class ThemChuongBaiGiangController {
 
                 if (bg.getBaiGiangId() != null) {
                     BaiGiang bgCu = baiGiangService.findBaiGiangById(bg.getBaiGiangId());
+                    if (daThayDoiLoaiBaiGiang(bg, bgCu)) {
+                        redirectAttributes.addFlashAttribute("loi",
+                                "❌ Không được thay đổi loại bài giảng đã lưu: " + bg.getTenBaiGiang());
+                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    }
                     if (bgCu != null) {
                         bgCu.setTenBaiGiang(bg.getTenBaiGiang());
                         bgCu.setLoaiBaiGiang(bg.getLoaiBaiGiang());
@@ -421,4 +427,11 @@ public class ThemChuongBaiGiangController {
 
         return danhSachLoi;
     }
+
+    private boolean daThayDoiLoaiBaiGiang(BaiGiang moi, BaiGiang cu) {
+        return cu != null && cu.getLoaiBaiGiang() != null
+                && moi.getLoaiBaiGiang() != null
+                && !moi.getLoaiBaiGiang().equals(cu.getLoaiBaiGiang());
+    }
+
 }

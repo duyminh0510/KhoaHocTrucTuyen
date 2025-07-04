@@ -7,7 +7,6 @@ function themChuong() {
     const chuongIndex = chuongContainer.querySelectorAll(".chuong-item").length;
     chuongEl.querySelector(".chuong-title").innerText = "Phần " + (chuongIndex + 1);
 
-    // Thay thế tất cả __index__ trong name, id, for...
     chuongEl.querySelectorAll("*").forEach(el => {
         if (el.hasAttribute("name")) {
             el.setAttribute("name", el.getAttribute("name").replace(/__index__/g, chuongIndex));
@@ -20,32 +19,24 @@ function themChuong() {
         }
     });
 
-    // Gắn lại sự kiện toggle mô tả nếu có
     chuongEl.querySelectorAll(".btn-toggle-mota").forEach(btn => {
         btn.onclick = function() {
             toggleMoTa(this);
         };
     });
 
-    // Thêm phần tử chương vào giao diện
     chuongContainer.appendChild(chuongEl);
 
-    // ❗ Chỉ thêm bài giảng mặc định nếu có dữ liệu
     if (coDuLieu) {
         const btnThemBai = chuongEl.querySelector("button[onclick*='themBaiGiang']");
-
-        if (btnThemBai) {
-            themBaiGiang(btnThemBai);
-        }
+        if (btnThemBai) themBaiGiang(btnThemBai);
     }
 
-    // Kích hoạt tooltip
     const tooltipTriggerList = [].slice.call(chuongEl.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
-
 
 function themBaiGiang(btn) {
     const chuongEl = btn.closest(".chuong-item");
@@ -63,39 +54,103 @@ function themBaiGiang(btn) {
     const baigiangEl = wrapper.firstElementChild;
     baigiangEl.querySelector(".baigiang-title").innerText = "Bài giảng " + (baigiangIndex + 1);
 
-    // Gán mặc định "VIDEO"
-    const loaiBanDau = baigiangEl.querySelector(".loai-bai-giang-input").value;
-
-    // Hiển thị và enable đúng loại
-    const videoFields = baigiangEl.querySelector(".video-fields");
-    const baivietFields = baigiangEl.querySelector(".baiviet-fields");
-
-    if (videoFields) {
-        videoFields.style.display = (loaiBanDau === "VIDEO") ? "block" : "none";
-        videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = loaiBanDau !== "VIDEO");
-    }
-
-    if (baivietFields) {
-        baivietFields.style.display = (loaiBanDau === "TAILIEU") ? "block" : "none";
-        baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = loaiBanDau !== "TAILIEU");
-    }
-
-    // Đặt nút active đúng loại
-    const nutLoai = baigiangEl.querySelector(`.btn-chon-loai[data-value="${loaiBanDau}"]`);
-    if (nutLoai) nutLoai.classList.add("active");
-
-    // Thêm vào container
     baiGiangContainer.appendChild(baigiangEl);
 
-    // Cập nhật lại nhãn loại
     capNhatTenLoaiBaiGiang();
 
-    // Kích hoạt tooltip nếu có
+    baigiangEl.querySelectorAll(".btn-chon-loai").forEach(button => {
+        button.addEventListener("click", function() {
+            const selectedValue = this.getAttribute("data-value");
+            const baigiangItem = this.closest(".baigiang-item");
+            const hiddenInput = baigiangItem.querySelector(".loai-bai-giang-input");
+            const allButtons = baigiangItem.querySelectorAll(".btn-chon-loai");
+            const videoFields = baigiangItem.querySelector(".video-fields");
+            const baivietFields = baigiangItem.querySelector(".baiviet-fields");
+            const tracnghiemFields = baigiangItem.querySelector(".tracnghiem-fields");
+
+            const isAlreadyActive = this.classList.contains("active");
+
+            allButtons.forEach(btn => btn.classList.remove("active"));
+
+            if (videoFields) {
+                videoFields.style.display = "none";
+                videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+            }
+            if (baivietFields) {
+                baivietFields.style.display = "none";
+                baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = true);
+            }
+            if (tracnghiemFields) {
+                tracnghiemFields.style.display = "none";
+                tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = true);
+            }
+
+            if (isAlreadyActive) {
+                if (hiddenInput) hiddenInput.value = "";
+            } else {
+                if (hiddenInput) hiddenInput.value = selectedValue;
+                this.classList.add("active");
+
+                if (selectedValue === "VIDEO" && videoFields) {
+                    videoFields.style.display = "block";
+                    videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = false);
+                } else if (selectedValue === "TAILIEU" && baivietFields) {
+                    baivietFields.style.display = "block";
+                    baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = false);
+                } else if (selectedValue === "TRACNGHIEM" && tracnghiemFields) {
+                    tracnghiemFields.style.display = "block";
+                    tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = false);
+                }
+            }
+        });
+    });
+
     const tooltipTriggerList = [].slice.call(baigiangEl.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
+
+function capNhatTenLoaiBaiGiang() {
+    document.querySelectorAll(".baigiang-item").forEach(baigiangEl => {
+        const loaiInput = baigiangEl.querySelector(".loai-bai-giang-input");
+        const loaiDaChon = loaiInput ? loaiInput.value : "";
+
+        const videoFields = baigiangEl.querySelector(".video-fields");
+        const baivietFields = baigiangEl.querySelector(".baiviet-fields");
+        const tracnghiemFields = baigiangEl.querySelector(".tracnghiem-fields");
+
+        if (videoFields) {
+            videoFields.style.display = "none";
+            videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+        }
+        if (baivietFields) {
+            baivietFields.style.display = "none";
+            baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = true);
+        }
+        if (tracnghiemFields) {
+            tracnghiemFields.style.display = "none";
+            tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = true);
+        }
+
+        baigiangEl.querySelectorAll(".btn-chon-loai").forEach(btn => btn.classList.remove("active"));
+
+        if (loaiDaChon === "VIDEO" && videoFields) {
+            videoFields.style.display = "block";
+            videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = false);
+        } else if (loaiDaChon === "TAILIEU" && baivietFields) {
+            baivietFields.style.display = "block";
+            baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = false);
+        } else if (loaiDaChon === "TRACNGHIEM" && tracnghiemFields) {
+            tracnghiemFields.style.display = "block";
+            tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = false);
+        }
+
+        const nutLoai = baigiangEl.querySelector(`.btn-chon-loai[data-value="${loaiDaChon}"]`);
+        if (nutLoai) nutLoai.classList.add("active");
+    });
+}
+
 
 
 function xoaChuong(btn) {
@@ -214,7 +269,7 @@ document.addEventListener("click", function(e) {
         }
         if (tracnghiemFields) {
             tracnghiemFields.style.display = "none";
-            tracnghiemFields.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+            tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = true);
         }
 
         if (isAlreadyActive) {
@@ -234,44 +289,11 @@ document.addEventListener("click", function(e) {
                 baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = false);
             } else if (selectedValue === "TRACNGHIEM" && tracnghiemFields) {
                 tracnghiemFields.style.display = "block";
-                tracnghiemFields.querySelectorAll("input, textarea").forEach(el => el.disabled = false);
+                tracnghiemFields.querySelectorAll("input, textarea, button").forEach(el => el.disabled = false);
             }
         }
     }
 });
-
-
-function capNhatTenLoaiBaiGiang() {
-    document.querySelectorAll(".baigiang-item").forEach(baigiangEl => {
-        // Luôn ẩn cả 3 loại
-        const videoFields = baigiangEl.querySelector(".video-fields");
-        const baivietFields = baigiangEl.querySelector(".baiviet-fields");
-        const tracnghiemFields = baigiangEl.querySelector(".tracnghiem-fields");
-
-        if (videoFields) {
-            videoFields.style.display = "none";
-            videoFields.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
-        }
-
-        if (baivietFields) {
-            baivietFields.style.display = "none";
-            baivietFields.querySelectorAll("textarea").forEach(el => el.disabled = true);
-        }
-
-
-        if (tracnghiemFields) {
-            tracnghiemFields.style.display = "none";
-            tracnghiemFields.querySelectorAll("input").forEach(el => el.disabled = true);
-        }
-
-
-
-        // Bỏ active của tất cả nút chọn loại
-        baigiangEl.querySelectorAll(".btn-chon-loai").forEach(btn => {
-            btn.classList.remove("active");
-        });
-    });
-}
 
 
 function moModalXoaChuong(chuongId) {
@@ -284,124 +306,4 @@ function moModalXoaBaiGiang(baiGiangId) {
     document.getElementById("inputBaiGiangIdXoa").value = baiGiangId;
     const modal = new bootstrap.Modal(document.getElementById("modalXoaBaiGiang"));
     modal.show();
-}
-
-
-
-// function themCauHoi(btn) {
-//     const container = btn.closest(".tracnghiem-fields").querySelector(".cau-hoi-container");
-//     const soCau = container.children.length;
-
-//     const baiGiangItem = btn.closest(".baigiang-item");
-//     const prefixInput = baiGiangItem.querySelector("input[name*='.tenBaiGiang']");
-//     const nameAttr = prefixInput ? prefixInput.getAttribute("name") : null;
-//     const prefix = nameAttr ? nameAttr.substring(0, nameAttr.indexOf(".tenBaiGiang")) : "";
-
-//     const html = `
-//     <div class="cau-hoi-item border rounded p-3 mt-3 bg-light">
-//         <label class="form-label">📝 Câu hỏi ${soCau + 1}:</label>
-//         <input type="text" class="form-control mb-2"
-//             name="${prefix}.tracNghiem.cauHoiList[${soCau}].tenCauHoi"
-//             placeholder="Nhập nội dung câu hỏi">
-
-//         <div class="row g-3">
-//             <div class="col-md-6 d-flex align-items-center">
-//                 <input type="radio" class="form-check-input me-2"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnDung"
-//                     value="A" />
-//                 <input type="text" class="form-control"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnA"
-//                     placeholder="Đáp án A" />
-//             </div>
-//             <div class="col-md-6 d-flex align-items-center">
-//                 <input type="radio" class="form-check-input me-2"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnDung"
-//                     value="B" />
-//                 <input type="text" class="form-control"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnB"
-//                     placeholder="Đáp án B" />
-//             </div>
-//             <div class="col-md-6 d-flex align-items-center">
-//                 <input type="radio" class="form-check-input me-2"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnDung"
-//                     value="C" />
-//                 <input type="text" class="form-control"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnC"
-//                     placeholder="Đáp án C" />
-//             </div>
-//             <div class="col-md-6 d-flex align-items-center">
-//                 <input type="radio" class="form-check-input me-2"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnDung"
-//                     value="D" />
-//                 <input type="text" class="form-control"
-//                     name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnD"
-//                     placeholder="Đáp án D" />
-//             </div>
-//         </div>
-
-//         <label class="form-label mt-3">💡 Giải thích đáp án:</label>
-//         <textarea class="form-control"
-//             name="${prefix}.tracNghiem.cauHoiList[${soCau}].giaiThich"
-//             placeholder="Giải thích câu trả lời (tùy chọn)"></textarea>
-//     </div>
-//     `;
-
-//     container.insertAdjacentHTML("beforeend", html);
-// }
-
-function themCauHoi(btn) {
-    const container = btn.closest(".tracnghiem-fields").querySelector(".cau-hoi-container");
-    const soCau = container.children.length;
-
-    const baiGiangItem = btn.closest(".baigiang-item");
-    const prefixInput = baiGiangItem.querySelector("input[name*='.tenBaiGiang']");
-    const nameAttr = prefixInput ? prefixInput.getAttribute("name") : null;
-    const prefix = nameAttr ? nameAttr.substring(0, nameAttr.indexOf(".tenBaiGiang")) : "";
-
-    const html = `
-    <div class="cau-hoi-item border rounded p-3 mt-3 bg-light">
-
-    <input type="hidden"
-    name="${prefix}.tracNghiem.cauHoiList[${soCau}].cauHoiId"
-    value="" /
-
-            <label class="form-label">📝 Câu hỏi ${soCau + 1}:</label>
-            <input type="text" class="form-control mb-2"
-            name="${prefix}.tracNghiem.cauHoiList[${soCau}].tenCauHoi"
-            placeholder="Nhập nội dung câu hỏi">
-
-        <div class="row g-3 mt-2">
-            ${["A", "B", "C", "D"].map((label, idx) => `
-                <div class="col-md-6 d-flex align-items-center">
-                    <input type="radio" class="form-check-input me-2"
-                        name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnDungIndex"
-                        value="${idx}" />
-
-                    <input type="text" class="form-control"
-                        name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnList[${idx}].noiDungDapAn"
-                        placeholder="Đáp án ${label}" />
-
-                    <input type="hidden"
-                        name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnList[${idx}].thuTuDapAn"
-                        value="${idx + 1}" />
-
-                    <input type="hidden"
-                        name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnList[${idx}].trangthai"
-                        value="true" />
-
-                         <input type="hidden"
-                    name="${prefix}.tracNghiem.cauHoiList[${soCau}].dapAnList[${idx}].dapAnId"
-                    value="" />
-                </div>
-            `).join("")}
-        </div>
-
-        <label class="form-label mt-3">💡 Giải thích đáp án đúng:</label>
-        <textarea class="form-control"
-            name="${prefix}.tracNghiem.cauHoiList[${soCau}].giaiThich"
-            placeholder="Giải thích đáp án đúng (nếu có)"></textarea>
-    </div>
-    `;
-
-    container.insertAdjacentHTML("beforeend", html);
 }

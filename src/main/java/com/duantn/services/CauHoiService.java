@@ -14,4 +14,7 @@ public interface CauHoiService {
     CauHoi getReferenceById(Integer id);
 
     CauHoi saveAndFlush(CauHoi cauHoi);
+
+    CauHoi findById(Integer id);
+
 }

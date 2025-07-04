@@ -35,4 +35,21 @@ public class DapAnServiceImpl implements DapAnService {
         dapAnRepository.deleteByCauHoiId(cauHoiId);
     }
 
+    @Override
+    public List<DapAn> findByCauHoiId(Integer cauHoiId) {
+        return dapAnRepository.findByCauHoi_CauHoiId(cauHoiId);
+    }
+
+    @Override
+    public void deleteById(Integer dapanId) {
+        dapAnRepository.deleteById(dapanId);
+    }
+
+    @Override
+    public List<DapAn> findByCauHoiIds(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of(); // Tránh gọi DB nếu rỗng
+        }
+        return dapAnRepository.findByCauHoiIds(ids);
+    }
 }
