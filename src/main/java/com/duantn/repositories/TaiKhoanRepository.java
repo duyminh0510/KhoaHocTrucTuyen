@@ -10,6 +10,8 @@ import com.duantn.entities.TaiKhoan;
 public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     Optional<TaiKhoan> findByEmail(String email);
 
+    Optional<TaiKhoan> findByUsername(String username);
+
     boolean existsByEmail(String email);
 
     List<TaiKhoan> findByRoleRoleId(Integer role);

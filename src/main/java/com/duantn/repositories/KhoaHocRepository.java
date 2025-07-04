@@ -56,4 +56,16 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
     // Lấy khóa học kèm chương và bài giảng (tuỳ chọn nếu cần)
     @Query("SELECT k FROM KhoaHoc k LEFT JOIN FETCH k.chuongs c LEFT JOIN FETCH c.baiGiangs WHERE k.khoahocId = :id")
     Optional<KhoaHoc> findByIdWithChaptersAndLectures(@Param("id") Integer id);
+
+
+    // Tìm kiếm khóa học theo tên (không phân biệt hoa thường)
+    @Query("SELECT k FROM KhoaHoc k WHERE LOWER(k.tenKhoaHoc) LIKE LOWER(CONCAT('%', :tenKhoaHoc, '%'))")
+    List<KhoaHoc> timTheoTenIgnoreCase(@Param("tenKhoaHoc") String tenKhoaHoc);
+
+    @Query("SELECT k FROM KhoaHoc k WHERE k.tenKhoaHoc LIKE %:tuKhoa% AND k.trangThai = :trangThai")
+    List<KhoaHoc> findByTenKhoaHocContainingSimple(@Param("tuKhoa") String tuKhoa,
+            @Param("trangThai") TrangThaiKhoaHoc trangThai);
+
+    @Query("SELECT k FROM KhoaHoc k WHERE k.trangThai = :trangThai ORDER BY k.ngayTao DESC")
+    List<KhoaHoc> findAllActive(@Param("trangThai") TrangThaiKhoaHoc trangThai);
 }

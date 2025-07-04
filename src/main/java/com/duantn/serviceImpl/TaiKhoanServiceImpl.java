@@ -63,6 +63,7 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         // TODO: mã hóa mật khẩu nếu cần
         return repository.save(taiKhoan);
     }
+    @Override
     public TaiKhoan login(String email, String password) {
         // Tìm tài khoản theo email
         TaiKhoan tk = repository.findByEmail(email)
@@ -93,5 +94,11 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
     public Optional<TaiKhoan> findById(Integer id) {
         return repository.findById(id);
     }
+
+    @Override
+    public TaiKhoan findByUsername(String username) {
+        return repository.findByUsername(username).orElse(null);
+    }
+
 
 }

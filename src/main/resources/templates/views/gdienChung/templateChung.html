@@ -13,16 +13,18 @@
     <link rel="stylesheet" th:href="@{/css/hocVien/home-hoc-vien.css}">
     <link rel="stylesheet" href="/css/hocVien/home.css">
 
-
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <header th:replace="~{views/layouts/header}">Header</header>
-
 
     <!-- Nav cho ADMIN hoặc NHANVIEN -->
     <nav th:replace="~{views/layouts/navquanly}"
@@ -42,4 +44,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

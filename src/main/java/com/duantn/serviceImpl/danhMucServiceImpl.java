@@ -10,7 +10,7 @@ import com.duantn.repositories.DanhMucRepository;
 import com.duantn.services.DanhMucService;
 
 @Service
-public class danhMucServiceImpl implements DanhMucService {
+public class DanhMucServiceImpl implements DanhMucService {
     @Autowired
     private DanhMucRepository repository;
 

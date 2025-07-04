@@ -25,7 +25,8 @@ public class BaiViet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baivietId;
 
-    @Column(name = "tenBaiViet")
+
+    @Column(name = "tenBaiViet", columnDefinition = "NVARCHAR(MAX)")
     private String tenBaiViet;
 
     @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
@@ -40,7 +41,7 @@ public class BaiViet implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @Column(name = "trangthai")
-    private Boolean trangthai;
+    private Boolean trangthai = true;
 
     @OneToOne
     @JoinColumn(name = "baiGiangId", unique = true)

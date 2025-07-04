@@ -8,7 +8,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.duantn.enums.LoaiBaiGiang;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
@@ -45,7 +56,7 @@ public class BaiGiang implements Serializable {
     private Boolean trangthai;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "loai_bai_giang", nullable = false, length = 30)
+    @Column(name = "loai_bai_giang", length = 30)
     private LoaiBaiGiang loaiBaiGiang;
 
     @ManyToOne

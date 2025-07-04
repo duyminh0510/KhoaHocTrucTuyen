@@ -12,6 +12,7 @@
     <!-- Thông báo lỗi -->
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
+
     <!-- Form thêm / cập nhật -->
     <form class="form-danh-muc"
           th:action="@{${danhmuc.danhmucId} != null ? ${prefixPath + '/danhmuc/edit'} : ${prefixPath + '/danhmuc/add'}}"
@@ -26,6 +27,7 @@
         <input type="text" class="form-control" th:field="*{tenDanhMuc}"
                placeholder="Nhập tên danh mục" required />
       </div>
+
 
       <button type="submit" class="btn btn-primary"
               th:text="${danhmuc.danhmucId} != null ? 'Cập nhật' : 'Thêm'">

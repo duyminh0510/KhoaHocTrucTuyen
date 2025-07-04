@@ -349,9 +349,11 @@
             <!-- Search -->
             <div class="search-bar">
                 <div class="search-wrapper">
-                    <input type="text"
-                        placeholder="Tìm kiếm với Globaledu..." />
-                    <i class="fas fa-search"></i>
+                    <form th:action="@{/tim-kiem}" method="get">
+                        <input type="text"
+                            placeholder="Tìm kiếm với Globaledu..." />
+                        <i class="fas fa-search"></i>
+                    </form>
                 </div>
             </div>
 
@@ -363,7 +365,7 @@
                     sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fas fa-users"></i> <span>Nhân Viên</span>
                 </a>
-                <a th:href="@{/admin/thong-ke-he-thong}" class="icon-link"
+                <a th:href="@{/quanly-thong-ke-he-thong}" class="icon-link"
                     sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fas fa-chart-bar"></i> <span>
                         Thống kê hệ thống</span>
@@ -434,7 +436,8 @@
                         </li>
 
                         <li sec:authorize="!hasAnyRole('HOCVIEN','GIANGVIEN')">
-                            <a class="dropdown-item" href="/thong-ke-he-thong">
+                            <a class="dropdown-item"
+                                href="/quanly-thong-ke-he-thong">
                                 <i
                                     class="fa-solid fa-arrow-right me-2 text-primary"></i>
                                 Thống kê hệ thống

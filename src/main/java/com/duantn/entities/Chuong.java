@@ -2,6 +2,8 @@ package com.duantn.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.HashSet;
 
@@ -10,11 +12,26 @@ import java.util.Set;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
+=======
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+>>>>>>> c1fcf06a01708ed1209e4aa62eb6bd560db7df10
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -46,15 +63,15 @@ public class Chuong implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @Column(name = "trangthai")
-    private Boolean trangthai;
+    private Boolean trangthai = true;
 
     @ManyToOne
     @JoinColumn(name = "khoahocId", nullable = false)
     private KhoaHoc khoahoc;
 
     @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<BaiGiang> baiGiangs = new HashSet<>();
+
+    private List<BaiGiang> baiGiangs = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -69,4 +86,8 @@ public class Chuong implements Serializable {
                 ", khoahocId=" + (khoahoc != null ? khoahoc.getKhoahocId() : "null") +
                 '}';
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c1fcf06a01708ed1209e4aa62eb6bd560db7df10
 }

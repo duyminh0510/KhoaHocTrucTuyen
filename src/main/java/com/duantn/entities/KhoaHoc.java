@@ -5,25 +5,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
+
 import com.duantn.enums.TrangThaiKhoaHoc;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -72,7 +58,7 @@ public class KhoaHoc implements Serializable {
     private String anhBia;
 
     @Column(name = "anh_bia_public_id", length = 500, columnDefinition = "NVARCHAR(MAX)")
-    private String anhBiaPublicId;
+    private String anhBiaPublicId; // public_id dùng để xóa ảnh
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trang_thai")
@@ -90,24 +76,23 @@ public class KhoaHoc implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giangvien_id", nullable = false)
     private GiangVien giangVien;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "danhmuc_id", nullable = false)
     private DanhMuc danhMuc;
-
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chuong> chuongs;
 
-    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<GiaoDichKhoaHocChiTiet> giaoDichChiTiet;
-
     @Override
     public String toString() {
-        return "KhoaHoc{" + "khoahocId=" + khoahocId + ", tenKhoaHoc='" + tenKhoaHoc + '\''
-                + ", giagoc=" + giagoc + ", giaKhuyenMai=" + giaKhuyenMai + ", phanTramGiam="
-                + phanTramGiam + ", ngaybatdau=" + ngaybatdau + ", ngayketthuc=" + ngayketthuc
-                + ", trangThai=" + trangThai + ", giangVienId="
-                + (giangVien != null ? giangVien.getGiangvienId() : "null") + ", danhMucId="
-                + (danhMuc != null ? danhMuc.getDanhmucId() : "null") + '}';
+        return "KhoaHoc{" +
+                "khoahocId=" + khoahocId +
+                ", tenKhoaHoc='" + tenKhoaHoc + '\'' +
+                ", giagoc=" + giagoc +
+                ", giaKhuyenMai=" + giaKhuyenMai +
+                ", phanTramGiam=" + phanTramGiam +
+                ", ngaybatdau=" + ngaybatdau +
+                ", ngayketthuc=" + ngayketthuc +
+                ", trangThai=" + trangThai +
+                ", giangVienId=" + (giangVien != null ? giangVien.getGiangvienId() : "null") +
+                ", danhMucId=" + (danhMuc != null ? danhMuc.getDanhmucId() : "null") +
+                '}';
     }
 }

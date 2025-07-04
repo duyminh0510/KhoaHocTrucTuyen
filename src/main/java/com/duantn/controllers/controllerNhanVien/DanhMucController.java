@@ -84,4 +84,3 @@ public class DanhMucController {
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 }
-
