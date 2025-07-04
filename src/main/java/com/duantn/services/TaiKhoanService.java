@@ -25,7 +25,7 @@ public interface TaiKhoanService {
     TaiKhoan findByEmail(String email);
 
     Optional<TaiKhoan> findById(Integer id);
-    TaiKhoan findByUsername(String username); // username ở đây là email
 
+    TaiKhoan findByUsername(String username);
 
 }

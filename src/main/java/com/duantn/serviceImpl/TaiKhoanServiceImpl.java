@@ -97,8 +97,6 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 
     @Override
     public TaiKhoan findByUsername(String username) {
-        return repository.findByUsername(username).orElse(null);
+        return repository.findByEmail(username).orElse(null);
     }
-
-
 }

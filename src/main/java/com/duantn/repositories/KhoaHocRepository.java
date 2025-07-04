@@ -25,8 +25,14 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
     List<KhoaHoc> findByOrderByNgayTaoDesc(Pageable pageable);
 
     // Lấy top khóa học được mua nhiều nhất
-    @Query("SELECT kh.khoahocId FROM KhoaHoc kh JOIN kh.giaoDichChiTiet gdct GROUP BY kh.khoahocId ORDER BY COUNT(gdct.id) DESC")
-    List<Integer> findTopPurchasedCourseIds(Pageable pageable);
+    @Query("""
+    SELECT gdct.khoahoc.khoahocId
+    FROM GiaoDichKhoaHocChiTiet gdct
+    GROUP BY gdct.khoahoc.khoahocId
+    ORDER BY COUNT(gdct.id) DESC
+    """)
+List<Integer> findTopPurchasedCourseIds(Pageable pageable);
+
 
     // Truy vấn danh sách khóa học theo ID (kèm giảng viên, tài khoản)
     @Query("SELECT kh FROM KhoaHoc kh WHERE kh.khoahocId IN :ids")
