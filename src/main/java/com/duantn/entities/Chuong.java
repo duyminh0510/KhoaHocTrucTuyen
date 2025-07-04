@@ -12,9 +12,7 @@ import java.util.Set;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-<<<<<<< HEAD
-import jakarta.persistence.*;
-=======
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +24,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
->>>>>>> c1fcf06a01708ed1209e4aa62eb6bd560db7df10
+
 import lombok.*;
 
 @Entity
@@ -86,5 +84,5 @@ public class Chuong implements Serializable {
                 ", khoahocId=" + (khoahoc != null ? khoahoc.getKhoahocId() : "null") +
                 '}';
     }
-    
+
 }
