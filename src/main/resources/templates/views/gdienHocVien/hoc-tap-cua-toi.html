@@ -110,6 +110,68 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Modal chia sẻ -->
+                                <div class="modal fade"
+                                    th:id="'shareModal-' + ${dangHoc.khoahoc.khoahocId}"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Chia sẻ
+                                                    khóa học:
+                                                    <span
+                                                        th:text="${dangHoc.khoahoc.tenKhoaHoc}"></span>
+                                                </h5>
+                                                <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <form
+                                                th:action="@{/hoc-vien/share-course}"
+                                                method="post" class="ajax-form">
+                                                <div class="modal-body">
+                                                    <input type="hidden"
+                                                        name="courseId"
+                                                        th:value="${dangHoc.khoahoc.khoahocId}" />
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="recipientEmail"
+                                                            class="form-label">Email
+                                                            người nhận:</label>
+                                                        <input type="email"
+                                                            name="recipientEmail"
+                                                            class="form-control"
+                                                            required
+                                                            placeholder="nhapemail@example.com">
+                                                    </div>
+                                                    <p>Một email chứa thông tin
+                                                        và liên kết đến khóa học
+                                                        này sẽ được gửi đến địa
+                                                        chỉ trên.</p>
+                                                </div>
+
+                                                <div
+                                                    class="ajax-message text-center px-3"></div>
+
+                                                <div class="modal-footer">
+                                                    <div
+                                                        class="d-flex justify-content-end gap-2 w-100">
+                                                        <button type="button"
+                                                            class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit"
+                                                            class="btn fw-semibold text-white"
+                                                            style="background-color: #16203b;">Gửi
+                                                            Email</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal -->
                             </div>
                         </th:block>
                     </div>
@@ -207,6 +269,67 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Modal chia sẻ -->
+                                <div class="modal fade"
+                                    th:id="'shareModal-' + ${course.khoahocId}"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Chia sẻ
+                                                    khóa học:
+                                                    <span
+                                                        th:text="${course.tenKhoaHoc}"></span>
+                                                </h5>
+                                                <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <form
+                                                th:action="@{/hoc-vien/share-course}"
+                                                method="post" class="ajax-form">
+                                                <div class="modal-body">
+                                                    <input type="hidden"
+                                                        name="courseId"
+                                                        th:value="${course.khoahocId}" />
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="recipientEmail"
+                                                            class="form-label">Email
+                                                            người nhận:</label>
+                                                        <input type="email"
+                                                            name="recipientEmail"
+                                                            class="form-control"
+                                                            required
+                                                            placeholder="nhapemail@example.com">
+                                                    </div>
+                                                    <p>Một email chứa thông tin
+                                                        và liên kết đến khóa học
+                                                        này sẽ được gửi đến địa
+                                                        chỉ trên.</p>
+                                                </div>
+
+                                                <div
+                                                    class="ajax-message text-center px-3"></div>
+
+                                                <div class="modal-footer">
+                                                    <div
+                                                        class="d-flex justify-content-end gap-2 w-100">
+                                                        <button type="button"
+                                                            class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit"
+                                                            class="btn fw-semibold text-white"
+                                                            style="background-color: #16203b;">Gửi
+                                                            Email</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal -->
                             </div>
                         </th:block>
                     </div>
@@ -231,58 +354,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Modal chia sẻ -->
-            <div class="modal fade"
-                th:id="'shareModal-' + ${dangHoc.khoahoc.khoahocId}"
-                tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Chia sẻ khóa học:
-                                <span
-                                    th:text="${dangHoc.khoahoc.tenKhoaHoc}"></span>
-                            </h5>
-                            <button type="button" class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <form th:action="@{/hoc-vien/share-course}"
-                            method="post" class="ajax-form">
-                            <div class="modal-body">
-                                <input type="hidden" name="courseId"
-                                    th:value="${dangHoc.khoahoc.khoahocId}" />
-                                <div class="mb-3">
-                                    <label for="recipientEmail"
-                                        class="form-label">Email
-                                        người nhận:</label>
-                                    <input type="email" name="recipientEmail"
-                                        class="form-control" required
-                                        placeholder="nhapemail@example.com">
-                                </div>
-                                <p>Một email chứa thông tin và liên kết đến khóa
-                                    học này sẽ được gửi đến địa chỉ trên.</p>
-                            </div>
-
-                            <div class="ajax-message text-center px-3"></div>
-
-                            <div class="modal-footer">
-                                <div
-                                    class="d-flex justify-content-end gap-2 w-100">
-                                    <button type="button"
-                                        class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit"
-                                        class="btn fw-semibold text-white"
-                                        style="background-color: #16203b;">Gửi
-                                        Email</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- End Modal -->
         </main>
     </body>
 
