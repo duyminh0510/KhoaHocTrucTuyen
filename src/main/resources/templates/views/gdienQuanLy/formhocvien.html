@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <title>Chỉnh sửa học viên</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <form th:action="@{/auth/hoc-vien/save}" th:object="${taiKhoan}"
+            method="post" enctype="multipart/form-data">
+            <h2>Chỉnh sửa học viên</h2>
+
+            <input type="hidden" th:field="*{taikhoanId}" />
+
+            <label>Họ tên:</label>
+            <input type="text" th:field="*{name}" required /><br />
+
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" required /><br />
+
+            <label>Số điện thoại:</label>
+            <input type="text" th:field="*{phone}" /><br />
+
+            <label>Avatar (upload mới nếu cần):</label>
+            <input type="file" name="avatarFile" /><br />
+
+            <label>Trạng thái:</label>
+            <select th:field="*{status}">
+                <option th:value="true" th:text="'Hoạt động'"></option>
+                <option th:value="false" th:text="'Bị khóa'"></option>
+            </select><br />
+
+            <button type="submit">💾 Lưu</button>
+            <a th:href="@{/auth/hoc-vien}">🔙 Quay lại</a>
+        </form>
+    </body>
+
+</html>

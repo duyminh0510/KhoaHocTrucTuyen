@@ -71,5 +71,4 @@ public class BaiGiang implements Serializable {
 
     @OneToOne(mappedBy = "baiGiang", cascade = CascadeType.ALL)
     private BaiTracNghiem tracNghiem;
-
 }

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 
@@ -68,7 +69,7 @@
             height: 40px;
             object-fit: cover;
             border-radius: 50%;
-            border: 2px solid #0b1c36;
+            border: 1px solid #414344;
             display: block;
             transition: transform 0.3s ease, box-shadow 0.3s;
         }
@@ -161,21 +162,17 @@
         .bottom-nav a {
             color: white;
             text-decoration: none;
-            font-size: 14px;
-            /* line-height: 30px; */
+            font-size: 15px;
         }
         
         .bottom-nav a:hover {
-            background-color: white;
-            color: black;
-            border-radius: 15px;
+            color: #0ea5e9;
         }
         
         .bottom-nav a.active {
-            background-color: white;
-            color: black;
-            border-radius: 15px;
-            padding: 0px 3px;
+            color: #0ea5e9;
+            border-bottom: 2px solid #0ea5e9;
+            padding-bottom: 2px;
         }
         
         .icon-link {
@@ -337,7 +334,7 @@
             <div class="icon-group" sec:authorize="isAuthenticated()">
 
                 <!-- Nếu là ADMIN -->
-                <a th:href="@{/quanly-nhanvien}" class="icon-link"
+                <a th:href="@{/admin/qlynhanvien}" class="icon-link"
                     sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fas fa-users"></i> <span>Nhân Viên</span>
                 </a>
@@ -371,10 +368,13 @@
                 <!-- Chỉ hiển thị cho học viên và giảng viên -->
                 <div
                     sec:authorize="hasRole('ROLE_HOCVIEN') or hasRole('ROLE_GIANGVIEN')">
-                    <a th:href="@{/khoa-hoc-cua-toi}" class="icon-link">
-                        <span>KHÓA HỌC CỦA TÔI</span>
+                    <a th:href="@{/hoc-vien/hoc-tap(tab='hoc-tap')}"
+                        class="icon-link">
+                        <span>HỌC TẬP CỦA TÔI</span>
                     </a>
-                    <a th:href="@{/yeu-thich}" class="icon-link">
+
+                    <a th:href="@{/hoc-vien/hoc-tap(tab='yeu-thich')}"
+                        class="icon-link">
                         <i class="fas fa-heart text-danger"></i>
                     </a>
                     <a th:href="@{/gio-hang}" class="icon-link">
@@ -387,17 +387,24 @@
 
                 <!-- Avatar + Dropdown -->
                 <div class="dropdown avatar-link">
-                    <a href="/tai-khoan"
-                        class="d-flex align-items-center text-decoration-none">
-                        <img th:src="@{/photos/avartar.jpg}"
-                            alt="Avatar người dùng" class="user-avatar" />
-                    </a>
+                    <img
+                        th:src="@{${taiKhoan != null and taiKhoan.avatar != null} ? ${taiKhoan.avatar} : '/photos/avartar.jpg'}"
+                        alt="Avatar người dùng" class="user-avatar" />
+
                     <ul class="dropdown-menu text-small">
                         <li>
                             <a class="dropdown-item" href="/tai-khoan">
                                 <i
                                     class="fa-solid fa-arrow-right me-2 text-primary"></i>
                                 Tài khoản
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="/doi-mat-khau">
+                                <i
+                                    class="fa-solid fa-key me-2 text-primary"></i>
+                                Đổi mật khẩu
                             </a>
                         </li>
 
@@ -458,7 +465,7 @@
                 <a href="/gio-hang"><i class="fas fa-shopping-cart"></i></a>
                 <a href="/dang-ky-giang-vien" class="btn-light">Dạy trên
                     GLoBalEdu</a>
-                <a href="/login" class="btn-light">
+                <a href="/auth/login" class="btn-light">
                     <i class="fas fa-sign-in-alt"></i> Đăng nhập
                 </a>
                 <a href="/auth/register" class="btn-dark">
@@ -474,39 +481,27 @@
         <!-- Bottom menu: chỉ hiện khi đã đăng nhập -->
         <nav class="bottom-nav"
             sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN') and !hasRole('ROLE_NHANVIEN') and !hasRole('ROLE_GIANGVIEN')">
-            <div class="menu-icon">
-                <i class="fas fa-bars"></i>
-            </div>
-            <div class="menu-container">
+
+            <div
+                class="menu-container container d-flex justify-content-center flex-wrap">
                 <a th:href="@{/}"
-                    th:classappend="${currentUri == '/'} ? 'active' : ''">Trang
-                    chủ</a>
-                <a th:href="@{/gioithieu}"
-                    th:classappend="${currentUri == '/gioithieu'} ? 'active' : ''">Giới
-                    thiệu</a>
-                <a th:href="@{/cntt&phanmem}"
-                    th:classappend="${currentUri == '/cntt&phanmem'} ? 'active' : ''">CNTT
-                    & Phần mềm</a>
-                <a th:href="@{/laptrinhweb}"
-                    th:classappend="${currentUri == '/laptrinhweb'} ? 'active' : ''">Lập
-                    trình Web</a>
-                <a th:href="@{/kinhte}"
-                    th:classappend="${currentUri == '/kinhte'} ? 'active' : ''">Kinh
-                    tế</a>
-                <a th:href="@{/chinhtri-phapluat}"
-                    th:classappend="${currentUri == '/chinhtri&phapluat'} ? 'active' : ''">Chính
-                    trị & pháp luật</a>
-                <a th:href="@{/qtkd-marketing}"
-                    th:classappend="${currentUri == '/qtkd&marketing'} ? 'active' : ''">QTKD
-                    & Marketing</a>
-                <a th:href="@{/phattriencanhan}"
-                    th:classappend="${currentUri == '/phattriencanhan'} ? 'active' : ''">Phát
-                    triển cá nhân</a>
-                <a th:href="@{/thietkedohoa}"
-                    th:classappend="${currentUri == '/thietkedohoa'} ? 'active' : ''">Thiết
-                    kế đồ họa</a>
+                    th:classappend="${currentUri == '/'} ? 'active' : ''">
+                    Trang chủ
+                </a>
+                <a th:href="@{/ve-chung-toi}"
+                    th:classappend="${currentUri == '/ve-chung-toi'} ? 'active' : ''">
+                    Về chúng tôi
+                </a>
+
+                <!-- Tạo các mục từ danh mục có slug -->
+                <th:block th:each="dm : ${danhMucList}">
+                    <a th:href="@{'/' + ${dm.slug}}" th:text="${dm.tenDanhMuc}"
+                        th:classappend="${currentUri == '/' + dm.slug} ? 'active' : ''">
+                    </a>
+                </th:block>
             </div>
         </nav>
+
     </body>
 
 </html>

@@ -41,3 +41,4 @@ public class ThanhToan {
     @JoinColumn(name = "giaodichId", nullable = false)
     private GiaoDichKhoaHoc giaoDichKhoaHoc;
 }
+

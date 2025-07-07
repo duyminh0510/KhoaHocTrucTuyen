@@ -40,7 +40,7 @@ public class TimKiemController {
                     model.addAttribute("goiYKhoaHoc", goiYKhoaHoc);
                 }
             } else {
-                ketQuaTimKiem = khoaHocService.layTatCaKhoaHoc();
+                ketQuaTimKiem = khoaHocService.getTatCaKhoaHoc();
                 model.addAttribute("query", "");
             }
             model.addAttribute("ketQuaTimKiem", ketQuaTimKiem);

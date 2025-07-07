@@ -10,7 +10,7 @@ import com.duantn.entities.TaiKhoan;
 
 public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
 
-        Optional<GiangVien> findBytaikhoan(TaiKhoan taikhoan);
+        Optional<GiangVien> findByTaikhoan(TaiKhoan taikhoan);
 
         // Tìm kiếm giảng viên theo tên (không phân biệt hoa thường)
         @Query("SELECT gv FROM GiangVien gv WHERE LOWER(gv.taikhoan.name) LIKE LOWER(CONCAT('%', :ten, '%'))")

@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 
 import lombok.*;
 
@@ -62,6 +64,7 @@ public class Chuong implements Serializable {
     private KhoaHoc khoahoc;
 
     @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<BaiGiang> baiGiangs = new ArrayList<>();
 
     @Override

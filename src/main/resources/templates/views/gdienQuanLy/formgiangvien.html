@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <title>Chỉnh sửa giảng viên</title>
+        <meta charset="UTF-8" />
+    </head>
+
+    <body>
+        <form th:action="@{/auth/giang-vien/save}" th:object="${taiKhoan}"
+            method="post">
+            <h2>Chỉnh sửa giảng viên</h2>
+
+            <!-- Hiển thị lỗi toàn cục nếu có -->
+            <div th:if="${#fields.hasErrors('all')}" style="color:red">
+                <p th:errors="*{all}"></p>
+            </div>
+
+            <input type="hidden" th:field="*{taikhoanId}" />
+
+            <label>Họ tên:</label>
+            <input type="text" th:field="*{name}" required /><br />
+
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" required /><br />
+
+            <label>Số điện thoại:</label>
+            <input type="text" th:field="*{phone}" /><br />
+
+            <!-- Không còn mật khẩu -->
+
+            <label>Kỹ năng:</label>
+            <input type="text" th:field="*{giangVien.kyNang}" /><br />
+
+            <label>Kinh nghiệm:</label>
+            <input type="text" th:field="*{giangVien.kinhNghiem}" /><br />
+
+            <label>CCCD:</label>
+            <input type="text" th:field="*{giangVien.CCCD}" /><br />
+
+            <label>Công việc:</label>
+            <input type="text" th:field="*{giangVien.congViec}" /><br />
+
+            <label>Ngày sinh:</label>
+            <input type="date" th:field="*{giangVien.ngaySinh}" /><br />
+
+            <label>Giới tính:</label>
+            <select th:field="*{giangVien.gioiTinh}">
+                <option value>-- Chọn giới tính --</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select><br />
+
+            <label>Chuyên ngành:</label>
+            <input type="text" th:field="*{giangVien.chuyenNganh}" /><br />
+
+            <label>Trạng thái tài khoản:</label>
+            <input type="checkbox" th:field="*{status}" /> Đang hoạt động<br />
+
+            <button type="submit">💾 Lưu</button>
+            <a th:href="@{/auth/giang-vien}">🔙 Quay lại</a>
+        </form>
+    </body>
+
+</html>

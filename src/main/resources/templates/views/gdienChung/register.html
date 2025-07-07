@@ -11,7 +11,8 @@
   <body>
     <main class="register">
       <section>
-        <div class="container-fluid" style="margin-top: 65px;">
+        <div class="container-fluid"
+          style="margin-top: 35px; margin-bottom: 55px;">
           <div
             class="row d-flex justify-content-center align-items-center h-100">
             <!-- Hình ảnh bên trái -->
@@ -53,18 +54,6 @@
                       <span th:text="${#fields.errors('email')[0]}"></span>
                     </div>
                   </div>
-
-                  <!-- Avatar -->
-                  <!-- <div class="text-center">
-                    <img src="https://via.placeholder.com/120"
-                      alt="Ảnh đại diện" class="avatar-preview"
-                      id="avatarPreview"
-                      onclick="document.getElementById('avatarInput').click()">
-                    <input type="file" name="avatar" accept="image/*"
-                      id="avatarInput" style="display: none;"
-                      onchange="previewAvatar(event)">
-                    <div class="mt-2 text-small">Chọn ảnh đại diện</div>
-                  </div> -->
 
                   <!-- Số điện thoại -->
                   <div>
@@ -111,7 +100,7 @@
 
                   <div class="text-center mt-3">
                     Đã có tài khoản? <a style="text-decoration: none;"
-                      th:href="@{/login}">Đăng nhập</a>
+                      th:href="@{/auth/login}">Đăng nhập</a>
                   </div>
                 </form>
               </div>

@@ -1,5 +1,6 @@
 package com.duantn.configs;
 
+import com.duantn.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.duantn.services.CustomUserDetailsService;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -24,30 +23,52 @@ public class SecurityConfig {
         @Autowired
         private CustomLoginSuccessHandler loginSuccessHandler;
 
+        @Autowired
+        private CustomFailureHandler customFailureHandler;
+
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
+                                                // Static resources
                                                 .requestMatchers("/css/**", "/js/**", "/photos/**", "/favicon.ico")
                                                 .permitAll()
-                                                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/giangvien/**").hasRole("GIANGVIEN")
+
+                                                // Public pages
+                                                .requestMatchers("/auth/**", "/", "/home", "/register", "/verify")
+                                                .permitAll()
+
+                                                // Role-based access
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .requestMatchers("/nhanvien/**").hasRole("NHANVIEN")
                                                 .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
+                                                .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
+                                                .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
+
+                                                // All other requests
                                                 .anyRequest().permitAll())
                                 .formLogin(form -> form
-                                                .loginPage("/login")
+                                                .loginPage("/auth/login")
                                                 .loginProcessingUrl("/login/form")
                                                 .usernameParameter("email")
                                                 .passwordParameter("password")
                                                 .successHandler(loginSuccessHandler)
-                                                .failureUrl("/login?error=true")
+                                                .failureHandler(customFailureHandler)
                                                 .permitAll())
+                                .rememberMe(remember -> remember
+                                                .rememberMeParameter("remember-me") // phải giống tên trong checkbox
+                                                                                    // form
+                                                .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 ngày
+                                                .key("globaledu-secret-key-123") // khóa bí mật
+                                                .userDetailsService(userDetailsService) // quan trọng
+                                )
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/login?logout=true")
-                                                .permitAll());
-                http.csrf(AbstractHttpConfigurer::disable);
+                                                .logoutSuccessUrl("/auth/login?logout=true")
+                                                .deleteCookies("JSESSIONID", "remember-me")
+                                                .permitAll())
+                                .csrf(AbstractHttpConfigurer::disable);
+
                 return http.build();
         }
 

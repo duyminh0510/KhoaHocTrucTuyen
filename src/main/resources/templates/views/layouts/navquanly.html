@@ -77,32 +77,62 @@
                     <h4 style="color: white; text-align: center;">QUẢN LÝ</h4>
                 </div>
                 <nav class="nav flex-column p-3">
-                    <div>
-                        <a class="nav-link" th:href="@{/quanly-danh-muc}">📦
-                            Quản lý danh
-                            mục</a>
-                        <a class="nav-link" th:href="@{/quanly-thanh-toan}">💳
-                            Quản lý
-                            thanh toán</a>
-                        <a class="nav-link" th:href="@{/quanly-giao-dich}">💰
-                            Giao dịch
-                            khóa học</a>
-                        <a class="nav-link" th:href="@{/quanly-hocvien}">👨‍🎓
-                            Quản lý học
-                            viên</a>
+
+                    <!-- MỤC CHO NHÂN VIÊN -->
+                    <div
+                        th:if="${#authorization.expression('hasRole(''NHANVIEN'')')}">
                         <a class="nav-link"
-                            th:href="@{/quanly-thong-bao-he-thong}">📢
+                            th:href="@{/nhanvien/danhmuc}">📦 Quản lý
+                            danh mục</a>
+                        <a class="nav-link"
+                            th:href="@{/nhanvien/quanly-thanh-toan}">💳 Quản lý
+                            thanh toán</a>
+                        <a class="nav-link"
+                            th:href="@{/nhanvien/quanly-giao-dich}">💰 Giao dịch
+                            khóa học</a>
+                        <a class="nav-link"
+                            th:href="@{/nhanvien/quanly-hocvien}">👨‍🎓 Quản lý
+                            học viên</a>
+                        <a class="nav-link"
+                            th:href="@{/nhanvien/quanly-thong-bao-he-thong}">📢
                             Thông báo hệ thống</a>
                         <a class="nav-link"
-                            th:href="@{/quanly-thong-ke-he-thong}">📊
+                            th:href="@{/nhanvien/quanly-thong-ke-he-thong}">📊
                             Thống kê hệ thống</a>
                         <a class="nav-link"
-                            th:href="@{/quanly-danh-gia-binh-luan}">💬
+                            th:href="@{/nhanvien/quanly-danh-gia-binh-luan}">💬
+                            Bình luận, đánh giá</a>
+                    </div>
+
+                    <!-- MỤC CHO ADMIN -->
+                    <div
+                        th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="nav-link"
+                            th:href="@{/admin/danhmuc}">📦
+                            Quản lý danh
+                            mục</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-thanh-toan}">💳 Quản lý
+                            thanh toán</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-giao-dich}">💰 Giao dịch
+                            khóa học</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/qlynhanvien}">👨‍🎓 Quản lý học
+                            viên</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-thong-bao-he-thong}">📢
+                            Thông báo hệ thống</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-thong-ke-he-thong}">📊
+                            Thống kê hệ thống</a>
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-danh-gia-binh-luan}">💬
                             Bình luận, đánh giá</a>
 
                         <!-- Chỉ ADMIN có -->
-                        <a class="nav-link" th:href="@{/quanly-nhanvien}">👩‍💼
-                            Quản lý
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-nhanvien}">👩‍💼 Quản lý
                             nhân viên</a>
                     </div>
 

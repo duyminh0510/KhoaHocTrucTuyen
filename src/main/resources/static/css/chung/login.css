@@ -79,3 +79,7 @@ hr {
     text-align: center;
     margin-bottom: 10px;
 }
+
+.login .form-control {
+    border-radius: 8px !important;
+}

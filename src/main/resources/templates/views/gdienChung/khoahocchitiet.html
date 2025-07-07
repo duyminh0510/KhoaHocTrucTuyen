@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8" />
+        <title th:text="${khoaHoc.tenKhoaHoc}"></title>
+        <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .course-header {
+            padding: 2rem 0;
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .instructor-link {
+            color: #ffc107;
+            text-decoration: none;
+        }
+        
+        .instructor-link:hover {
+            color: #fff;
+        }
+        
+        .sticky-top-card {
+            top: 20px;
+        }
+        
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .discount-badge {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .curriculum .accordion-button:not(.collapsed) {
+            color: #0c63e4;
+            background-color: #e7f1ff;
+        }
+    </style>
+    </head>
+
+    <body>
+        <main>
+            <div th:if="${khoaHoc == null}" class="container mt-5">
+                <div class="alert alert-danger">
+                    <h2>Không tìm thấy khóa học</h2>
+                    <p>Khóa học bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
+                    </p>
+                    <a href="/khoaHoc" class="btn btn-primary">Quay lại danh
+                        sách</a>
+                </div>
+            </div>
+
+            <div th:if="${khoaHoc != null}">
+                <header class="course-header">
+                    <div class="container">
+                        <p class="lead" th:if="${khoaHoc.danhMuc}"
+                            th:text="${khoaHoc.danhMuc.tenDanhMuc}">
+                            Danh mục
+                        </p>
+                        <h1 th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h1>
+                        <p class="lead"
+                            th:text="${#strings.abbreviate(khoaHoc.moTa, 150)}">
+                            Mô tả ngắn gọn.
+                        </p>
+                        <p>
+                            <i class="fas fa-chalkboard-teacher me-1"></i> Giảng
+                            viên:
+                            <a href="#" class="instructor-link"
+                                th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên
+                                Giảng Viên</a>
+                        </p>
+                    </div>
+                </header>
+
+                <div class="container my-4">
+                    <div class="row">
+                        <!-- Left side: Course details -->
+                        <div class="col-lg-8">
+                            <!-- Course Description -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h4 class="card-title">Mô tả khóa học</h4>
+                                    <p th:text="${khoaHoc.moTa}">Mô tả chi tiết
+                                        khóa học.</p>
+                                </div>
+                            </div>
+
+                            <!-- Curriculum -->
+
+                            <!-- Phần Curriculum - Nội dung khóa học -->
+                            <div class="card mb-4 curriculum">
+                                <div class="card-body" id="chuong-list">
+                                    <h4 class="card-title">Nội dung khóa học
+                                    </h4>
+
+                                    <div th:if="${#lists.isEmpty(chuongs)}">
+                                        <p>Chưa có chương nào cho khóa học này.
+                                        </p>
+                                    </div>
+
+                                    <div th:if="${!#lists.isEmpty(chuongs)}">
+                                        <ul class="list-group mb-4">
+                                            <li class="list-group-item"
+                                                th:each="chuong : ${chuongs}">
+                                                <div>
+                                                    <strong
+                                                        th:text="${chuong.tenchuong}"></strong>
+                                                    <span class="text-muted"
+                                                        th:if="${chuong.mota != null}">
+                                                        - <span
+                                                            th:text="${chuong.mota}"></span>
+                                                    </span>
+                                                </div>
+
+                                                <div
+                                                    th:if="${chuong.baiGiangs != null && !#lists.isEmpty(chuong.baiGiangs)}"
+                                                    class="ms-3 mt-2">
+                                                    <ul class="list-group">
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between align-items-center"
+                                                            th:each="baiGiang : ${chuong.baiGiangs}">
+                                                            <span
+                                                                th:text="${baiGiang.tenBaiGiang}"></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div
+                                                    th:if="${chuong.baiGiangs == null || #lists.isEmpty(chuong.baiGiangs)}"
+                                                    class="ms-3 mt-2 text-muted">
+                                                    Chưa có bài giảng nào trong
+                                                    chương này.
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right side: Purchase card -->
+                        <div class="col-lg-4">
+                            <div class="card sticky-top-card">
+                                <img
+                                    th:src="${khoaHoc.anhBia != null ? '/images/' + khoaHoc.anhBia : '/images/default.png'}"
+                                    class="card-img-top" alt="Ảnh bìa" />
+                                <div class="card-body">
+                                    <h4 class="card-title">Video giới thiệu</h4>
+
+                                    <div class="ratio ratio-16x9"
+                                        th:if="${khoaHoc.urlGioiThieu != null}">
+                                        <iframe th:src="${khoaHoc.urlGioiThieu}"
+                                            title="Video giới thiệu khóa học"
+                                            allowfullscreen></iframe>
+                                    </div>
+                                    <div th:if="${khoaHoc.urlGioiThieu == null}"
+                                        class="text-muted">
+                                        Chưa có video giới thiệu.
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="price text-danger me-2"
+                                            th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                                            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                        <span class="original-price"
+                                            th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-3"
+                                        th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}">
+                                        <span class="price"
+                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <a href="#"
+                                            class="btn btn-danger btn-lg">Thêm
+                                            vào giỏ hàng</a>
+                                        <a href="#"
+                                            class="btn btn-outline-dark btn-lg">Mua
+                                            ngay</a>
+                                    </div>
+                                    <hr />
+                                    <a href="/khoaHoc"
+                                        class="btn btn-secondary w-100">Quay
+                                        lại</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

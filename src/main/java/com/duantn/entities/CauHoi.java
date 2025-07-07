@@ -58,6 +58,7 @@ public class CauHoi implements Serializable {
     @JoinColumn(name = "tracnghiemId", nullable = false)
     private BaiTracNghiem baiTracNghiem;
 
+
     @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @BatchSize(size = 10)
     private List<DapAn> dapAnList = new ArrayList<>();
@@ -68,5 +69,4 @@ public class CauHoi implements Serializable {
 
     @Transient
     private String giaiThich;
-
 }

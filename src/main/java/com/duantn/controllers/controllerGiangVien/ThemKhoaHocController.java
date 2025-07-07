@@ -39,7 +39,7 @@ public class ThemKhoaHocController {
     @GetMapping("/giangvien/them-moi-khoa-hoc")
     public String showCourseForm(Model model) {
         model.addAttribute("course", new KhoaHoc());
-        model.addAttribute("danhmuc", danhMucService.findAll());
+        model.addAttribute("danhmuc", danhMucService.layTatCa());
         return "views/gdienGiangVien/them-khoa-hoc";
     }
 
@@ -50,7 +50,7 @@ public class ThemKhoaHocController {
             @RequestParam("danhMuc.danhmucId") Integer danhMucId,
             Principal principal) throws IOException {
 
-        khoahoc.setDanhMuc(danhMucService.findById(danhMucId));
+        khoahoc.setDanhMuc(danhMucService.layTheoId(danhMucId));
         khoahoc.setGiangVien(taiKhoanService.findByUsername(principal.getName()).getGiangVien());
         khoahoc.setTrangThai(TrangThaiKhoaHoc.DRAFT);
 

@@ -1,0 +1,195 @@
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("form.ajax-form").forEach(form => {
+        form.addEventListener("submit", function(e) {
+            e.preventDefault(); // Ngăn submit mặc định
+
+            const formData = new FormData(form);
+            const action = form.getAttribute("action");
+            const method = form.getAttribute("method") || "post";
+
+            const submitBtn = form.querySelector("button[type='submit']");
+            const originalText = submitBtn.innerHTML;
+
+            // ✅ Đổi nút thành "Đang gửi..." + spinner
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Đang gửi...`;
+            submitBtn.disabled = true;
+
+            fetch(action, {
+                    method: method.toUpperCase(),
+                    body: formData
+                })
+                .then(async response => {
+                    const text = await response.text();
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            throw new Error("Vui lòng đăng nhập để chia sẻ.");
+                        }
+                        throw new Error(text || "Lỗi khi gửi yêu cầu");
+                    }
+                    return text;
+                })
+                .then(data => {
+                    let messageDiv = form.querySelector(".ajax-message");
+                    if (!messageDiv && form.nextElementSibling && form.nextElementSibling.classList.contains("ajax-message")) {
+                        messageDiv = form.nextElementSibling;
+                    }
+
+                    if (messageDiv) {
+                        messageDiv.innerHTML = `<div class="alert alert-success mt-2">${data}</div>`;
+                    } else {
+                        alert(data);
+                    }
+
+                    // ✅ Đổi nút thành "Đã gửi ✅"
+                    submitBtn.innerHTML = `Đã gửi ✅`;
+
+                    // ✅ Đóng modal sau 1.5 giây
+                    const modalElement = form.closest(".modal");
+                    if (modalElement) {
+                        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                            setTimeout(() => modalInstance.hide(), 2000);
+                        }
+                    }
+
+                    // ✅ Reset form + đổi lại text sau 3s
+                    setTimeout(() => {
+                        form.reset();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 3000);
+                })
+                .catch(error => {
+                    let messageDiv = form.querySelector(".ajax-message");
+                    if (!messageDiv && form.nextElementSibling && form.nextElementSibling.classList.contains("ajax-message")) {
+                        messageDiv = form.nextElementSibling;
+                    }
+
+                    if (messageDiv) {
+                        if (error.message.includes("Vui lòng đăng nhập để chia sẻ.")) {
+                            messageDiv.innerHTML = `
+        <div class="alert alert-warning mt-2 d-flex align-items-center">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            <span>${error.message} </span>
+            <a href="/auth/login" class="ms-2 text-primary text-decoration-underline" style="cursor: pointer; font-weight: bold;">Đăng nhập</a>
+        </div>
+    `;
+
+                            // ✅ Tự động ẩn thông báo sau 2 giây
+                            setTimeout(() => {
+                                messageDiv.innerHTML = "";
+                                const modalElement = form.closest(".modal");
+                                if (modalElement) {
+                                    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                                    if (modalInstance) modalInstance.hide();
+                                }
+                            }, 3000);
+                        } else {
+                            messageDiv.innerHTML = `<div class="alert alert-danger mt-2">Lỗi: ${error.message}</div>`;
+                        }
+                    } else {
+                        alert("Lỗi: " + error.message);
+                    }
+
+                    // ✅ Khôi phục lại nút ban đầu
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+
+        });
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    function likeCourse(id) {
+        fetch('/khoaHoc/' + id + '/like', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.status === 401 || response.status === 403) {
+                    const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+                    loginModal.show();
+                    return;
+                }
+                if (!response.ok) throw new Error('Lỗi khi gửi yêu cầu');
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                // Cập nhật tất cả các nút like có cùng data-id
+                document.querySelectorAll('.like-btn[data-id="' + id + '"]').forEach(btn => {
+                    const countSpan = btn.querySelector('span');
+                    countSpan.innerText = data.newLikeCount;
+
+                    if (data.isLiked) {
+                        btn.classList.add('btn-danger');
+                        btn.classList.remove('btn-outline-danger');
+                    } else {
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-outline-danger');
+                    }
+                });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    function bindLikeButtons() {
+        document.querySelectorAll(".like-btn").forEach((btn) => {
+            if (!btn.dataset.bound) {
+                btn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    const courseId = btn.getAttribute("data-id");
+                    likeCourse(courseId);
+                });
+                btn.dataset.bound = "true";
+            }
+        });
+    }
+
+    bindLikeButtons();
+
+    document.querySelectorAll(".share-btn").forEach((btn) => {
+        btn.addEventListener("click", function(e) {
+            e.stopPropagation();
+        });
+    });
+
+    document.querySelectorAll(".add-to-cart-form").forEach((form) => {
+        form.addEventListener("click", function(e) {
+            e.stopPropagation();
+        });
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const tabs = document.querySelectorAll('.tab-link');
+    const contents = document.querySelectorAll('.tab-content');
+
+    // Mặc định active tab đầu tiên
+    if (tabs.length > 0) {
+        tabs[0].classList.add('active');
+        contents.forEach(content => {
+            content.style.display = content.getAttribute('data-dmid') === tabs[0].getAttribute('data-dmid') ? 'block' : 'none';
+        });
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const id = tab.getAttribute('data-dmid');
+
+            // Set tab màu
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Ẩn/hiện phần danh mục tương ứng
+            contents.forEach(content => {
+                content.style.display = content.getAttribute('data-dmid') === id ? 'block' : 'none';
+            });
+        });
+    });
+});

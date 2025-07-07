@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="vi"
   th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
   <head>
@@ -11,7 +11,8 @@
   <body>
     <main class="login">
       <section>
-        <div class="container-fluid" style="margin-top: 65px;">
+        <div class="container-fluid"
+          style="margin-top: 65px; margin-bottom: 65px;">
           <div
             class="row d-flex justify-content-center align-items-center h-100">
             <!-- Cột hình ảnh -->
@@ -26,20 +27,22 @@
                 <h2 class="text-center mb-4">🔑 Đăng nhập để tiếp tục học tập
                   nào bạn</h2>
                 <form action="/login/form" method="post">
-                  <div class="mb-3">
+                  <div class="mb-4">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control"
                       placeholder="Nhập email" autocomplete="off">
                   </div>
-                  <div class="mb-3">
+                  <div class="mb-4">
                     <label class="form-label">Mật khẩu</label>
                     <input type="password" name="password" class="form-control"
                       placeholder="Nhập mật khẩu" autocomplete="new-password">
                   </div>
-                  <!-- ⚠️ THÔNG BÁO LỖI ĐĂNG NHẬP -->
-                  <div th:if="${param.error}" class="error">
-                    Tài khoản hoặc mật khẩu không đúng!
+
+                  <!-- HIỂN THỊ LỖI TỪ SESSION -->
+                  <div th:if="${session.error}">
+                    <p class="text-danger" th:text="${session.error}"></p>
                   </div>
+
                   <div th:if="${param.logout}" class="meesage">
                     Đăng xuất thành công.
                   </div>
@@ -73,16 +76,7 @@
           </div>
         </div>
       </section>
-    </main>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-                new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        });
-    </script>
 
-  </body>
+    </body>
 
-</html>
+  </html>

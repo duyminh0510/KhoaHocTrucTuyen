@@ -167,7 +167,6 @@ public class ThemTracNghiemController {
                     }
                 }
             }
-
             // Thêm 1 câu hỏi trống
             CauHoiDTO cauHoiMoi = new CauHoiDTO();
             List<DapAnDto> ds = new ArrayList<>();

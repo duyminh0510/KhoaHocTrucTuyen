@@ -5,12 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -28,6 +23,9 @@ public class DanhMuc {
 
     @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tenDanhMuc;
+
+    @Column(unique = true)
+    private String slug;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)

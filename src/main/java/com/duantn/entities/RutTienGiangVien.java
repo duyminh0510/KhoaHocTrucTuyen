@@ -19,6 +19,8 @@ import lombok.*;
 @Table(name = "RutTienGiangVien")
 public class RutTienGiangVien implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rutTienId")

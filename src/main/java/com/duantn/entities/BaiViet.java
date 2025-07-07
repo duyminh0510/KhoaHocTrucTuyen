@@ -6,14 +6,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -32,6 +25,10 @@ public class BaiViet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baivietId;
 
+
+    @Column(name = "tenBaiViet", columnDefinition = "NVARCHAR(MAX)")
+    private String tenBaiViet;
+
     @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
     private String noidung;
 
@@ -49,5 +46,4 @@ public class BaiViet implements Serializable {
     @OneToOne
     @JoinColumn(name = "baiGiangId", unique = true)
     private BaiGiang baiGiang;
-
 }

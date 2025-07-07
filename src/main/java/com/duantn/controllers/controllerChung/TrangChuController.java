@@ -1,32 +1,60 @@
 package com.duantn.controllers.controllerChung;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import com.duantn.entities.DanhMuc;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.services.KhoaHocService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TrangChuController {
 
+    @Autowired
+    private KhoaHocService khoaHocService;
+
     @RequestMapping("/")
-    public String home(HttpServletRequest request, Model model, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-
-            // Chưa đăng nhập: chuyển tới trang chủ chung
-            return "views/gdienChung/home";
-        }
-
-        // Đã đăng nhập: tùy vai trò chuyển trang
+    public String home(HttpServletRequest request, Model model, @ModelAttribute("taiKhoan") TaiKhoan taiKhoan) {
         boolean isHocVien = request.isUserInRole("ROLE_HOCVIEN");
         boolean isGiangVien = request.isUserInRole("ROLE_GIANGVIEN");
 
-        if (isHocVien || isGiangVien) {
-            return "views/gdienHocVien/home";
+        // Nếu chưa đăng nhập hoặc không có vai trò
+        if (taiKhoan == null || (!isHocVien && !isGiangVien)) {
+            model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
+            model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
+            return "views/gdienChung/home";
         }
 
-        // Nếu không phải học viên hay giảng viên (phòng trường hợp khác)
-        return "redirect:/login?error=unauthorized";
+        if (isHocVien) {
+            model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
+            model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
+
+            return "views/gdienChung/home";
+        }
+
+        if (isGiangVien) {
+            return "views/gdienGiangVien/home";
+        }
+
+        return "redirect:/auth/login?error=unauthorized";
+    }
+
+    private Map<Integer, List<KhoaHoc>> getKhoaHocTheoDanhMuc() {
+        Map<Integer, List<KhoaHoc>> khoaHocTheoDanhMuc = new HashMap<>();
+        for (DanhMuc dm : khoaHocService.getDanhMucCoKhoaHoc()) {
+            List<KhoaHoc> ds = khoaHocService.getKhoaHocTheoDanhMuc(dm.getDanhmucId());
+            khoaHocTheoDanhMuc.put(dm.getDanhmucId(), ds);
+        }
+        return khoaHocTheoDanhMuc;
     }
 }

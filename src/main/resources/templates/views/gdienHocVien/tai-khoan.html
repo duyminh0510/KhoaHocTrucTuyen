@@ -1,78 +1,55 @@
 <!DOCTYPE html>
-<html lang="vi"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8" />
-        <title th:fragment="title">Tài khoản của tôi</title>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <title th:fragment="title">Tài khoản của tôi</title>
+</head>
 
-    <body>
-        <main class="taikhoan">
-            <div class="taikhoan-container">
-                <h1><i class="fas fa-user-circle"></i> Tài khoản của tôi</h1>
+<body>
+    <main class="taikhoan">
+        <div class="taikhoan-container">
+            <h1><i class="fas fa-user-circle"></i> Tài khoản của tôi</h1>
 
-                <!-- Thông tin cá nhân -->
-                <section class="profile-section">
-                    <h2>👤 Thông tin cá nhân</h2>
-                    <form class="profile-form">
-                        <div class="form-group">
-                            <label for="hoTen">Họ và tên</label>
-                            <input type="text" id="hoTen" name="hoTen"
-                                value="Nguyễn Văn A">
-                        </div>
+            <!-- Thông báo nếu có -->
+            <div th:if="${message}" class="alert" th:text="${message}"></div>
 
-                        <div class="form-group">
-                            <label for="email">Email (không thay đổi)</label>
-                            <input type="email" id="email" name="email"
-                                value="a.nguyen@example.com" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sdt">Số điện thoại</label>
-                            <input type="text" id="sdt" name="sdt"
-                                value="0901234567">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="avatar">Ảnh đại diện</label>
-                            <input type="file" id="avatar" name="avatar">
-                        </div>
-
-                        <button type="submit" class="btn btn-update">Lưu thông
-                            tin</button>
-                    </form>
-                </section>
-
-                <!-- Cập nhật mật khẩu -->
-                <section class="password-section">
-                    <h2>🔒 Cập nhật mật khẩu</h2>
-                    <form class="password-form">
-                        <div class="form-group">
-                            <label for="oldPassword">Mật khẩu hiện tại</label>
-                            <input type="password" id="oldPassword"
-                                name="oldPassword">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newPassword">Mật khẩu mới</label>
-                            <input type="password" id="newPassword"
-                                name="newPassword">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="confirmPassword">Xác nhận mật khẩu
-                                mới</label>
-                            <input type="password" id="confirmPassword"
-                                name="confirmPassword">
-                        </div>
-
-                        <button type="submit" class="btn btn-change">Đổi mật
-                            khẩu</button>
-                    </form>
-                </section>
+            <!-- Avatar hiện tại -->
+            <div class="avatar-wrapper" th:if="${taiKhoan.avatar}">
+                <img th:src="@{${taiKhoan.avatar}}" alt="Avatar">
             </div>
-        </main>
-    </body>
+
+            <!-- Thông tin cá nhân -->
+            <section class="profile-section">
+                <h2>👤 Thông tin cá nhân</h2>
+                <form class="profile-form" th:action="@{/tai-khoan/cap-nhat}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="hoTen">Họ và tên</label>
+                        <input type="text" id="hoTen" name="name" th:value="${taiKhoan.name}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email (không thay đổi)</label>
+                        <input type="email" id="email" name="email" th:value="${taiKhoan.email}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sdt">Số điện thoại</label>
+                        <input type="text" id="sdt" name="phone" th:value="${taiKhoan.phone}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avatar">Ảnh đại diện</label>
+                        <input type="file" id="avatar" name="avatar">
+                    </div>
+
+                    <button type="submit" class="btn btn-update">Lưu thông tin</button>
+                </form>
+            </section>
+
+            
+        </div>
+    </main>
+</body>
 
 </html>

@@ -1,5 +1,6 @@
 package com.duantn.services;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,5 +16,4 @@ public interface BaiGiangService {
     List<BaiGiang> findByChuongId(Integer chuongId);
 
     Optional<BaiGiang> findById(Integer id);
-
 }

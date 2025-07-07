@@ -1,18 +1,18 @@
-        .home .add-new {
-            text-align: center;
-            margin-top: 40px;
-        }
-        
-        .home .btn-add {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        
-        .home .btn-add:hover {
-            background-color: #218838;
-        }
+.home .add-new {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.home .btn-add {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.home .btn-add:hover {
+    background-color: #218838;
+}
