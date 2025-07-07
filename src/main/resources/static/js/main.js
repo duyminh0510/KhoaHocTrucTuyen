@@ -129,6 +129,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         btn.classList.remove('btn-danger');
                         btn.classList.add('btn-outline-danger');
+
+                        const isYeuThichTab = window.location.href.includes("tab=yeu-thich");
+                        if (isYeuThichTab) {
+                            const cardCol = btn.closest('.col-12') || btn.closest('.col-sm-6') || btn.closest('.col-lg-3');
+                            if (cardCol) cardCol.remove();
+                        }
                     }
                 });
             })
