@@ -3,7 +3,8 @@ package com.duantn.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.duantn.enums.TrangThaiKhoaHoc;
@@ -80,7 +81,7 @@ public class KhoaHoc implements Serializable {
     @JoinColumn(name = "danhmuc_id") // tên cột trong bảng hiện tại trỏ đến khóa chính bên DanhMuc
     private DanhMuc danhMuc;
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Chuong> chuongs;
+    private Set<Chuong> chuongs;
 
     @Override
     public String toString() {

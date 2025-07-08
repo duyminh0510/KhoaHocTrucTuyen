@@ -17,22 +17,17 @@ public class DanhMucServiceImpl implements DanhMucService {
     private DanhMucRepository danhMucRepository;
 
     @Override
-    public List<DanhMuc> findAll() {
+    public List<DanhMuc> layTatCa() {
         return danhMucRepository.findAll();
     }
 
     @Override
-    public DanhMuc save(DanhMuc danhMuc) {
+    public DanhMuc capNhat(Integer id, DanhMuc danhMuc) {
         return danhMucRepository.save(danhMuc);
     }
 
     @Override
-    public void deleteById(Integer id) {
-        danhMucRepository.deleteById(id);
-    }
-
-    @Override
-    public DanhMuc findById(Integer id) {
+    public DanhMuc layTheoId(Integer id) {
         Optional<DanhMuc> optional = danhMucRepository.findById(id);
         return optional.orElse(null);
     }
@@ -49,16 +44,26 @@ public class DanhMucServiceImpl implements DanhMucService {
     }
 
     @Override
-    public void voHieuHoaDanhMuc(Integer id) {
-        DanhMuc danhMuc = findById(id);
+    public void voHieuHoa(Integer id) {
+        DanhMuc danhMuc = layTheoId(id);
         danhMuc.setIsDeleted(true);
         danhMucRepository.save(danhMuc);
     }
 
     @Override
-    public void kichHoatDanhMuc(Integer id) {
-        DanhMuc danhMuc = findById(id);
+    public void kichHoat(Integer id) {
+        DanhMuc danhMuc = layTheoId(id);
         danhMuc.setIsDeleted(false);
         danhMucRepository.save(danhMuc);
+    }
+
+    @Override
+    public Optional<DanhMuc> findBySlug(String slug) {
+        return danhMucRepository.findBySlug(slug); // nhớ viết method này trong repository nếu chưa có
+    }
+
+    @Override
+    public DanhMuc taoDanhMuc(DanhMuc danhMuc) {
+        return danhMucRepository.save(danhMuc);
     }
 }

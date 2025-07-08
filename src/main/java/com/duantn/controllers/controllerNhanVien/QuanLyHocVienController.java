@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/{prefix:(?:admin|nhan-vien)}/quanly-hocvien")
+@RequestMapping("/{prefix:(?:admin|nhanvien)}/quanly-hocvien")
 @RequiredArgsConstructor
 public class QuanLyHocVienController {
 

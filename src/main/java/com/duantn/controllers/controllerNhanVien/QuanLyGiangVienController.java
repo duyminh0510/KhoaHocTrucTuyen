@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/{prefix:(?:admin|nhan-vien)}/quanly-giangvien")
+@RequestMapping("/{prefix:(?:admin|nhanvien)}/quanly-giangvien")
 @RequiredArgsConstructor
 public class QuanLyGiangVienController {
 

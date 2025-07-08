@@ -62,6 +62,7 @@ public class QuanLyNhanVienController {
         return luuHoacCapNhat(nhanvien, file);
     }
 
+    @SuppressWarnings("null")
     private String luuHoacCapNhat(TaiKhoan nhanvien, MultipartFile file) {
         try {
             if (!file.isEmpty()) {
