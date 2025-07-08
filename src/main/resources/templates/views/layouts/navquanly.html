@@ -46,6 +46,22 @@
             color: white;
             text-decoration: none;
         }
+
+        #sidebar {
+            position: absolute;
+            top: 152px;
+            /* 👈 Vị trí dưới thanh nav */
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 152px);
+            /* 👈 Chiều cao phần còn lại của màn hình */
+            background-color: #0b1c36;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 10;
+            overflow-y: auto;
+            /* 👈 Cuộn nếu quá nhiều nội dung */
+        }
     </style>
 </head>
 
@@ -128,10 +144,19 @@
         const toggleBtn = document.getElementById("toggle-btn");
         const sidebar = document.getElementById("sidebar");
 
-        toggleBtn.addEventListener("click", () => {
+        toggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
             sidebar.classList.toggle("active");
         });
+
+        document.addEventListener("click", (e) => {
+            const isClickInside = sidebar.contains(e.target) || toggleBtn.contains(e.target);
+            if (!isClickInside) {
+                sidebar.classList.remove("active");
+            }
+        });
     </script>
+
 </body>
 
 </html>
