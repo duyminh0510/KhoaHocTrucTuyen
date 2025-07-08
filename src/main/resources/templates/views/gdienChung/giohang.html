@@ -54,8 +54,10 @@
             <div class="mt-4">
                 <h5>Tổng cộng: <span id="sum">0 ₫</span></h5>
                 <p id="old" class="text-muted"></p>
-                <a id="checkout-btn" href="/hoc-vien/thanh-toan" class="btn btn-primary disabled">Tiến hành thanh
-                    toán</a>
+                <div class="d-flex gap-3 mt-3">
+                    <a id="checkout-btn" href="#" class="btn btn-primary disabled">Tiến hành thanh toán</a>
+                    <button onclick="clearCart()" class="btn btn-outline-secondary">Xóa toàn bộ</button>
+                </div>
             </div>
         </div>
 
@@ -102,6 +104,21 @@
                     const updatedCart = getLocalCart().filter(i => i.khoaHocId !== id);
                     saveLocalCart(updatedCart);
                     loadingMsg.remove();
+                    render();
+                }
+            }
+
+            function clearCart() {
+                if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) return;
+
+                if (isLoggedIn) {
+                    fetch('/gio-hang/clear', { method: 'DELETE' })
+                        .then(res => {
+                            if (res.ok) render();
+                            else alert('Không thể xóa giỏ hàng');
+                        });
+                } else {
+                    saveLocalCart([]);
                     render();
                 }
             }
@@ -175,7 +192,23 @@
                     oldNode.innerText = '';
                 }
 
-                handleCheckboxChange(); // Gắn sự kiện cho checkbox
+                handleCheckboxChange();
+            }
+
+            function syncLocalToServer() {
+                const localCart = getLocalCart();
+                if (!localCart.length) return;
+
+                fetch('/gio-hang/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(localCart)
+                }).then(res => {
+                    if (res.ok) {
+                        localStorage.removeItem('cart');
+                        render();
+                    }
+                });
             }
 
             function render() {
@@ -188,12 +221,14 @@
                             cartBox.innerHTML = '<p>Lỗi khi tải giỏ hàng.</p>';
                         });
                 } else {
-                    const localCart = getLocalCart();
-                    renderItems(localCart);
+                    renderItems(getLocalCart());
                 }
             }
 
             document.addEventListener('DOMContentLoaded', function () {
+                if (isLoggedIn) {
+                    syncLocalToServer();
+                }
                 render();
             });
         </script>

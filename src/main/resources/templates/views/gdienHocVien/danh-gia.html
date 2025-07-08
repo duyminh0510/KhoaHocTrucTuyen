@@ -32,7 +32,7 @@
     <div class="container mt-5">
         <h3>Đánh giá khóa học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h3>
 
-        <form th:action="@{'/danh-gia/' + ${khoaHoc.khoahocId}}" th:object="${danhGiaMoi}" method="post">
+        <form th:action="@{'/hocvien/danh-gia/' + ${khoaHoc.khoahocId}}" th:object="${danhGiaMoi}" method="post">
             <!-- Rating sao -->
             <div class="mb-3">
                 <label class="form-label">Chọn số sao:</label>
@@ -56,7 +56,7 @@
 
             <!-- Nút xóa đánh giá nếu đã có -->
             <th:block th:if="${danhGiaMoi.danhgiaId != null}">
-                <a th:href="@{'/danh-gia/xoa/' + ${khoaHoc.khoahocId}}" class="btn btn-danger ms-2"
+                <a th:href="@{'/hocvien/danh-gia/xoa/' + ${khoaHoc.khoahocId}}" class="btn btn-danger ms-2"
                     onclick="return confirm('Bạn có chắc muốn xóa đánh giá này không?');">
                     Xóa đánh giá
                 </a>

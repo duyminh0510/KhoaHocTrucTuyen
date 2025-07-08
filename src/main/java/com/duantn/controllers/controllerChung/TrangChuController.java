@@ -46,7 +46,7 @@ public class TrangChuController {
             return "views/gdienGiangVien/home";
         }
 
-        return "redirect:/auth/login?error=unauthorized";
+        return "redirect:/auth/dangnhap?error=unauthorized";
     }
 
     private Map<Integer, List<KhoaHoc>> getKhoaHocTheoDanhMuc() {

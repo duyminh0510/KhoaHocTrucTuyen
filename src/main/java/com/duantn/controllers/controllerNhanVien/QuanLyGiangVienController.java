@@ -17,104 +17,110 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/auth/giang-vien")
+@RequestMapping("/{prefix:(?:admin|nhan-vien)}/quanly-giangvien")
 @RequiredArgsConstructor
-public class GiangVienController {
+public class QuanLyGiangVienController {
 
     private final TaiKhoanRepository taiKhoanRepository;
     private final RoleRepository roleRepository;
 
-    // 📄 Hiển thị danh sách giảng viên
+    // 📋 Danh sách giảng viên
     @GetMapping
-    public String list(Model model) {
-        Role role = roleRepository.findByName("ROLE_GIANGVIEN")
+    public String danhSach(@PathVariable String prefix, Model model) {
+        Role giangVienRole = roleRepository.findByName("ROLE_GIANGVIEN")
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy quyền giảng viên"));
 
-        List<TaiKhoan> giangVienList = taiKhoanRepository.findByRole(role);
+        List<TaiKhoan> giangVienList = taiKhoanRepository.findByRole(giangVienRole);
         model.addAttribute("giangVienList", giangVienList);
+        model.addAttribute("prefix", prefix);
         return "views/gdienQuanLy/danhsachgiangvien";
     }
 
-    // ✏️ Hiển thị form chỉnh sửa giảng viên
+    // ✏️ Form chỉnh sửa giảng viên
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+    public String editForm(@PathVariable String prefix,
+            @PathVariable("id") Integer id,
+            Model model,
+            RedirectAttributes ra) {
+
         Optional<TaiKhoan> tkOpt = taiKhoanRepository.findById(id);
         if (tkOpt.isEmpty()) {
             ra.addFlashAttribute("error", "Không tìm thấy giảng viên!");
-            return "redirect:/auth/giang-vien";
+            return "redirect:/" + prefix + "/quanly-giangvien";
         }
 
         TaiKhoan tk = tkOpt.get();
         if (tk.getGiangVien() == null) {
             tk.setGiangVien(new GiangVien());
         }
+
         model.addAttribute("taiKhoan", tk);
+        model.addAttribute("prefix", prefix);
         return "views/gdienQuanLy/formgiangvien";
     }
 
-    // 💾 Lưu chỉnh sửa giảng viên
+    // 💾 Lưu chỉnh sửa
     @PostMapping("/save")
-    public String updateGiangVien(
+    public String update(@PathVariable String prefix,
             @ModelAttribute("taiKhoan") @Valid TaiKhoan taiKhoanForm,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         if (taiKhoanForm.getTaikhoanId() == null) {
-            redirectAttributes.addFlashAttribute("error", "Không cho phép thêm giảng viên mới.");
-            return "redirect:/auth/giang-vien";
+            redirectAttributes.addFlashAttribute("error", "Không thể thêm mới giảng viên.");
+            return "redirect:/" + prefix + "/quanly-giangvien";
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("prefix", prefix);
             return "views/gdienQuanLy/formgiangvien";
         }
 
         Role giangVienRole = roleRepository.findByName("ROLE_GIANGVIEN")
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy quyền giảng viên"));
 
-        TaiKhoan taiKhoanToUpdate = taiKhoanRepository.findById(taiKhoanForm.getTaikhoanId())
+        TaiKhoan existing = taiKhoanRepository.findById(taiKhoanForm.getTaikhoanId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
-        String oldPassword = taiKhoanToUpdate.getPassword();
+        existing.setName(taiKhoanForm.getName());
+        existing.setEmail(taiKhoanForm.getEmail());
+        existing.setPhone(taiKhoanForm.getPhone());
+        existing.setAvatar(taiKhoanForm.getAvatar());
+        existing.setStatus(taiKhoanForm.isStatus());
+        existing.setPassword(existing.getPassword()); // Giữ nguyên
+        existing.setRole(giangVienRole);
 
-        taiKhoanToUpdate.setName(taiKhoanForm.getName());
-        taiKhoanToUpdate.setEmail(taiKhoanForm.getEmail());
-        taiKhoanToUpdate.setPhone(taiKhoanForm.getPhone());
-        taiKhoanToUpdate.setAvatar(taiKhoanForm.getAvatar());
-        taiKhoanToUpdate.setStatus(taiKhoanForm.isStatus());
-        taiKhoanToUpdate.setPassword(oldPassword);
-        taiKhoanToUpdate.setRole(giangVienRole);
-
-        GiangVien gv = taiKhoanToUpdate.getGiangVien();
+        GiangVien gv = existing.getGiangVien();
         if (gv == null) {
             gv = new GiangVien();
-            gv.setTaikhoan(taiKhoanToUpdate);
+            gv.setTaikhoan(existing);
         }
 
-        GiangVien gvForm = taiKhoanForm.getGiangVien();
-        if (gvForm != null) {
-            gv.setKyNang(gvForm.getKyNang());
-            gv.setKinhNghiem(gvForm.getKinhNghiem());
-            gv.setCCCD(gvForm.getCCCD());
-            gv.setCongViec(gvForm.getCongViec());
-
-            if (gvForm.getNgaySinh() != null) {
-                gv.setNgaySinh(gvForm.getNgaySinh());
-            }
-
-            gv.setGioiTinh(gvForm.getGioiTinh());
-            gv.setChuyenNganh(gvForm.getChuyenNganh());
+        GiangVien form = taiKhoanForm.getGiangVien();
+        if (form != null) {
+            gv.setKyNang(form.getKyNang());
+            gv.setKinhNghiem(form.getKinhNghiem());
+            gv.setCCCD(form.getCCCD());
+            gv.setCongViec(form.getCongViec());
+            gv.setNgaySinh(form.getNgaySinh());
+            gv.setGioiTinh(form.getGioiTinh());
+            gv.setChuyenNganh(form.getChuyenNganh());
         }
 
-        taiKhoanToUpdate.setGiangVien(gv);
-        taiKhoanRepository.save(taiKhoanToUpdate);
+        existing.setGiangVien(gv);
+        taiKhoanRepository.save(existing);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin giảng viên thành công!");
-        return "redirect:/auth/giang-vien";
+        return "redirect:/" + prefix + "/quanly-giangvien";
     }
 
-    // 🔒 Khoá / mở khóa tài khoản giảng viên
+    // 🔒 Khoá/Mở khoá tài khoản
     @PostMapping("/toggle-status/{id}")
-    public String toggleStatus(@PathVariable("id") Integer id, RedirectAttributes ra) {
+    public String toggleStatus(@PathVariable String prefix,
+            @PathVariable("id") Integer id,
+            RedirectAttributes ra) {
+
         TaiKhoan giangVien = taiKhoanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy giảng viên"));
 
@@ -125,6 +131,6 @@ public class GiangVienController {
                 ? "Tài khoản đã được mở khóa!"
                 : "Tài khoản đã bị khóa!");
 
-        return "redirect:/auth/giang-vien";
+        return "redirect:/" + prefix + "/quanly-giangvien";
     }
 }

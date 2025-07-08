@@ -19,7 +19,6 @@ import com.duantn.entities.Chuong;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.KhoaHocRepository;
-import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.ChuongService;
 import com.duantn.services.KhoaHocService;
@@ -37,9 +36,6 @@ public class ListKhoaHocController {
 
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
-
-    @Autowired
-    private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
 
     @Autowired
     private JavaMailSender mailSender;

@@ -45,8 +45,8 @@ public class DataInitializer {
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
 
         TaiKhoan superAdminUser = TaiKhoan.builder()
-                .name("Super Admin")
                 .email(superAdminEmail)
+                .name("Super Admin")
                 .password(passwordEncoder.encode("superpassword"))
                 .role(adminRole)
                 .build();

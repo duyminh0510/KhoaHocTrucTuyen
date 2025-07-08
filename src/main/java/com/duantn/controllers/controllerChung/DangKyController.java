@@ -10,6 +10,11 @@ import com.duantn.services.TokenService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -29,24 +35,24 @@ public class DangKyController {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    @GetMapping("/register")
+    @GetMapping("/dangky")
     public String showRegistrationForm(Model model, HttpSession session) {
         model.addAttribute("user", new DangKyHocVienDto());
-        return "views/gdienChung/register";
+        return "views/gdienChung/dangky";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/dangky")
     public String registerUser(@ModelAttribute("user") @Valid DangKyHocVienDto dto,
-                                BindingResult result,
-                                HttpSession session,
-                                Model model) {
+            BindingResult result,
+            HttpSession session,
+            Model model) {
 
         if (result.hasErrors())
-            return "views/gdienChung/register";
+            return "views/gdienChung/dangky";
 
         if (accountRepository.existsByEmail(dto.getEmail())) {
             result.rejectValue("email", "email.exists", "Email đã được sử dụng");
-            return "views/gdienChung/register";
+            return "views/gdienChung/dangky";
         }
 
         session.setAttribute("pendingUser", dto);
@@ -81,10 +87,9 @@ public class DangKyController {
 
     @PostMapping("/verify")
     public String verify(@RequestParam("code") String code,
-                         @RequestParam(value = "type", required = false) String type,
-                         HttpSession session,
-                         Model model) {
-
+            @RequestParam(value = "type", required = false) String type,
+            HttpSession session,
+            Model model) {
 
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
         if (tokenOpt.isEmpty()) {
@@ -118,9 +123,27 @@ public class DangKyController {
                     .build();
 
             accountRepository.save(account);
+
+            // Tự động đăng nhập và cập nhật vào session
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    account, null, List.of(new SimpleGrantedAuthority(account.getRole().getName())));
+
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authToken);
+            SecurityContextHolder.setContext(context);
+
+            // Đây là dòng QUAN TRỌNG để Spring Security nhận ra đăng nhập đã xảy ra
+            session.setAttribute("SPRING_SECURITY_CONTEXT", context);
+
+            // Nếu bạn dùng session để lưu user:
+            session.setAttribute("currentUser", account);
+            // Xóa token và session tạm
             tokenService.delete(token);
             session.removeAttribute("pendingUser");
-            return "redirect:/auth/login";
+
+            // Chuyển hướng đến trang chính sau đăng nhập
+            return "redirect:/";
+
         }
 
         // Xử lý xác minh khôi phục mật khẩu
@@ -157,6 +180,6 @@ public class DangKyController {
         accountRepository.save(tk);
         session.removeAttribute("verifiedEmail");
 
-        return "redirect:/auth/login?resetSuccess";
+        return "redirect:/auth/dangnhap?resetSuccess";
     }
 }
