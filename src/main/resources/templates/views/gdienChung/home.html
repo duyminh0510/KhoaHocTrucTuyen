@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
 <head>
     <meta charset="UTF-8" />
@@ -32,28 +31,26 @@
                         </div>
 
                         <!-- Nút điều hướng trái -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#mainBanner"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Trước</span>
-                        </button>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#mainBanner" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"
+                                    aria-hidden="true"></span>
+                                <span class="visually-hidden">Trước</span>
+                            </button>
 
                         <!-- Nút điều hướng phải -->
-                        <button class="carousel-control-next" type="button" data-bs-target="#mainBanner"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Tiếp</span>
-                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#mainBanner" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"
+                                    aria-hidden="true"></span>
+                                <span class="visually-hidden">Tiếp</span>
+                            </button>
                     </div>
                 </div>
 
                 <!-- 2 ảnh phụ (phải) -->
                 <div class="col-md-4 d-flex flex-column justify-content-between">
-                    <img src="https://phuongnam.edu.vn/storage/media/202405/495b10d3-9a68-412c-a53a-aca90439350f.jpg"
-                        class="img-fluid w-100" alt="Ảnh phụ 1">
+                    <img src="https://phuongnam.edu.vn/storage/media/202405/495b10d3-9a68-412c-a53a-aca90439350f.jpg" class="img-fluid w-100" alt="Ảnh phụ 1">
 
-                    <img src="https://younetmedia.com/wp-content/uploads/2023/10/Banner-Brands-Vietnam-1200x630-1.png"
-                        class="img-fluid w-100" alt="Ảnh phụ 2">
+                    <img src="https://younetmedia.com/wp-content/uploads/2023/10/Banner-Brands-Vietnam-1200x630-1.png" class="img-fluid w-100" alt="Ảnh phụ 2">
 
                 </div>
             </div>
@@ -63,8 +60,7 @@
         <div class="container mt-4">
             <div class="text-center mb-4">
                 <h4 class="fw-bold mb-2 text-chu-dao">
-                    <i class="fas fa-lightbulb me-2"></i> Tất cả các kĩ năng
-                    cần có mọi nơi
+                    <i class="fas fa-lightbulb me-2"></i> Tất cả các kĩ năng cần có mọi nơi
                 </h4>
                 <p class="text-muted">
                     Từ các kĩ năng quan trọng, chuyên môn,
@@ -80,300 +76,10 @@
                     </h4>
                     <div class="d-flex overflow-auto flex-nowrap gap-3 px-2" style="scroll-snap-type: x mandatory;">
                         <th:block th:each="dm : ${danhMucList}">
-                            <a href="javascript:void(0)" class="tab-link" th:attr="data-dmid=${dm.danhmucId}"
-                                th:text="${dm.tenDanhMuc}">
+                            <a href="javascript:void(0)" class="tab-link" th:attr="data-dmid=${dm.danhmucId}" th:text="${dm.tenDanhMuc}">
                             </a>
                         </th:block>
                     </div>
-<<<<<<< HEAD
-                </div>
-                <hr>
-                <!-- Danh sách khóa học theo danh mục -->
-                <div class="course-tabs">
-                    <th:block th:each="dm : ${danhMucList}">
-                        <div class="mb-5 tab-content"
-                            th:attr="data-dmid=${dm.danhmucId}">
-                            <div class="container mt-4">
-                                <div class="row courses-grid">
-                                    <th:block
-                                        th:each="khoaHoc : ${khoaHocTheoDanhMuc[dm.danhmucId]}">
-                                        <div
-                                            class="col-12 col-sm-6 col-lg-3 mb-4">
-                                            <div
-                                                class="card h-100 shadow-sm course-card "
-                                                th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
-                                                <img class="card-img-top"
-                                                    th:src="${khoaHoc.anhBia}"
-                                                    alt="Ảnh khoá học" />
-                                                <div
-                                                    class="card-body d-flex flex-column pb-0">
-                                                    <h5 class="card-title"
-                                                        th:text="${khoaHoc.tenKhoaHoc}">Tên
-                                                        khóa học</h5>
-                                                    <p
-                                                        class="card-text small text-muted mt-auto">
-                                                        <i
-                                                            class="fas fa-chalkboard-teacher me-1"></i>
-                                                        Giảng viên:
-                                                        <span
-                                                            th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}"></span>
-                                                    </p>
-                                                </div>
-                                                <div class="card-footer pt-0">
-                                                    <div class="mb-3">
-                                                        <p
-                                                            th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                                                            class="card-text mb-0">
-                                                            <span
-                                                                class="fw-bold text-danger me-2"
-                                                                th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                                            <del
-                                                                class="text-muted"
-                                                                th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
-                                                        </p>
-                                                        <p
-                                                            th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                                                            class="card-text fw-bold mb-0">
-                                                            <span
-                                                                th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                                        </p>
-                                                    </div>
-
-                                                    <div
-                                                        class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1">
-                                                        <button type="button"
-                                                            class="btn btn-sm like-btn"
-                                                            th:id="'like-btn-' + ${khoaHoc.khoahocId}"
-                                                            th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
-                                                            th:attr="data-id=${khoaHoc.khoahocId}">
-                                                            <i
-                                                                class="fas fa-heart me-1"></i>
-                                                            <span
-                                                                th:id="'like-count-' + ${khoaHoc.khoahocId}"
-                                                                th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
-                                                            </span>
-                                                        </button>
-
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary btn-sm share-btn"
-                                                            data-bs-toggle="modal"
-                                                            th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                                            <i
-                                                                class="fas fa-share me-1"></i>
-                                                        </button>
-
-                                                        <form
-                                                            th:action="@{/gio-hang/them}"
-                                                            method="post"
-                                                            class="d-inline add-to-cart-form">
-                                                            <input type="hidden"
-                                                                name="khoaHocId"
-                                                                th:value="${khoaHoc.khoahocId}" />
-                                                            <button
-                                                                type="submit"
-                                                                class="btn btn-outline-success btn-sm">
-                                                                <i
-                                                                    class="fas fa-cart-plus me-1"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </th:block>
-                                </div>
-                            </div>
-                        </div>
-
-                    </th:block>
-                </div>
-
-                <!-- vì sao chọn chúng tôi -->
-                <section class="bg-light py-5">
-                    <div class="container text-center">
-                        <h3 class="mb-4 text-primary fw-bold">
-                            <i class="fas fa-star me-2"></i>Vì sao nên chọn
-                            GlobalEdu?
-                        </h3>
-                        <div class="row g-4">
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="p-4 bg-white shadow rounded h-100">
-                                    <i
-                                        class="fas fa-chalkboard-teacher fa-2x text-primary mb-3"></i>
-                                    <h5 class="fw-bold">Giảng viên chất lượng
-                                    </h5>
-                                    <p class="text-muted small">Hơn 500+ giảng
-                                        viên có kinh nghiệm thực chiến, giảng
-                                        dạy tận tâm.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="p-4 bg-white shadow rounded h-100">
-                                    <i
-                                        class="fas fa-clock fa-2x text-primary mb-3"></i>
-                                    <h5 class="fw-bold">Học mọi lúc</h5>
-                                    <p class="text-muted small">Truy cập khóa
-                                        học bất kỳ lúc nào, không giới hạn thời
-                                        gian học.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="p-4 bg-white shadow rounded h-100">
-                                    <i
-                                        class="fas fa-certificate fa-2x text-primary mb-3"></i>
-                                    <h5 class="fw-bold">Chứng chỉ uy tín</h5>
-                                    <p class="text-muted small">Cấp chứng nhận
-                                        sau khi hoàn thành khóa học, dễ dàng bổ
-                                        sung vào CV.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="p-4 bg-white shadow rounded h-100">
-                                    <i
-                                        class="fas fa-headset fa-2x text-primary mb-3"></i>
-                                    <h5 class="fw-bold">Hỗ trợ nhanh chóng</h5>
-                                    <p class="text-muted small">Đội ngũ hỗ trợ
-                                        24/7 sẵn sàng giúp bạn giải đáp mọi thắc
-                                        mắc.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Danh sách khóa học -->
-
-                <h3 class="mt-5 mb-4 d-flex align-items-center gap-2"
-                    style="color: #16203b;">
-                    <i class="fas fa-layer-group"></i> Tất cả khóa học nổi bật
-                    của
-                    <strong>GlobalEdu</strong>
-                </h3>
-
-                <div class="row courses-grid">
-                    <th:block th:each="khoaHoc, iterStat : ${khoaHocList}"
-                        th:if="${iterStat.index < 8}">
-                        <div class="col-12 col-sm-6 col-lg-3 mb-4">
-                            <div class="card h-100 shadow-sm course-card"
-                                th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
-                                <img class="card-img-top"
-                                    th:src="${khoaHoc.anhBia}"
-                                    alt="Ảnh khoá học" />
-
-                                <div class="card-body d-flex flex-column pb-0">
-                                    <h5 class="card-title"
-                                        th:text="${khoaHoc.tenKhoaHoc}">Tên khóa
-                                        học
-                                    </h5>
-                                    <p
-                                        class="card-text small text-muted mt-auto">
-                                        <i
-                                            class="fas fa-chalkboard-teacher me-1"></i>
-                                        Giảng viên:
-                                        <span
-                                            th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên
-                                            giảng viên</span>
-                                    </p>
-                                </div>
-
-                                <div class="card-footer pt-0">
-                                    <div class="mb-3">
-                                        <p
-                                            th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                                            class="card-text mb-0">
-                                            <span
-                                                class="fw-bold text-danger me-2"
-                                                th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                            <del class="text-muted"
-                                                th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
-                                        </p>
-                                        <p
-                                            th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                                            class="card-text fw-bold mb-0">
-                                            <span
-                                                th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                        </p>
-                                    </div>
-
-                                    <div
-                                        class="d-flex justify-content-between align-items-center px-2 pb-3 gap-1">
-                                        <button type="button"
-                                            class="btn btn-sm like-btn"
-                                            th:id="'like-btn-' + ${khoaHoc.khoahocId}"
-                                            th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
-                                            th:attr="data-id=${khoaHoc.khoahocId}">
-                                            <i
-                                                class="fas fa-heart me-1"></i>
-                                            <span
-                                                th:id="'like-count-' + ${khoaHoc.khoahocId}"
-                                                th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
-                                            </span>
-                                        </button>
-
-                                        <button type="button"
-                                            class="btn btn-outline-primary btn-sm share-btn"
-                                            data-bs-toggle="modal"
-                                            th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                            <i
-                                                class="fas fa-share me-1"></i>
-                                        </button>
-
-                                        <form th:action="@{/gio-hang/them}"
-                                            method="post"
-                                            class="d-inline add-to-cart-form">
-                                            <input type="hidden"
-                                                name="khoaHocId"
-                                                th:value="${khoaHoc.khoahocId}" />
-                                            <button type="submit"
-                                                class="btn btn-outline-success btn-sm">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal chia sẻ -->
-                            <div class="modal fade"
-                                th:id="'shareModal-' + ${khoaHoc.khoahocId}"
-                                tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Chia sẻ khóa
-                                                học: <span
-                                                    th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
-                                            <button type="button"
-                                                class="btn-close"
-                                                data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <form
-                                            th:action="@{/hoc-vien/share-course}"
-                                            method="post" class="ajax-form">
-                                            <div class="modal-body">
-                                                <input type="hidden"
-                                                    name="courseId"
-                                                    th:value="${khoaHoc.khoahocId}" />
-                                                <div class="mb-3">
-                                                    <label for="recipientEmail"
-                                                        class="form-label">Email
-                                                        người nhận:</label>
-                                                    <input type="email"
-                                                        name="recipientEmail"
-                                                        class="form-control"
-                                                        required
-                                                        placeholder="nhapemail@example.com">
-                                                </div>
-                                                <p>Một email chứa thông tin và
-                                                    liên kết đến khóa học này sẽ
-                                                    được gửi đến địa chỉ trên.
-=======
             </div>
             <hr>
             <!-- Danh sách khóa học theo danh mục -->
@@ -384,64 +90,48 @@
                             <div class="row courses-grid">
                                 <th:block th:each="khoaHoc : ${khoaHocTheoDanhMuc[dm.danhmucId]}">
                                     <div class="col-12 col-sm-6 col-lg-3 mb-4">
-                                        <div class="card h-100 shadow-sm course-card "
-                                            th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
+                                        <div class="card h-100 shadow-sm course-card " th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
                                             <img class="card-img-top" th:src="${khoaHoc.anhBia}" alt="Ảnh khoá học" />
                                             <div class="card-body d-flex flex-column pb-0">
-                                                <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">Tên
-                                                    khóa học</h5>
+                                                <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h5>
                                                 <p class="card-text small text-muted mt-auto">
-                                                    <i class="fas fa-chalkboard-teacher me-1"></i>
-                                                    Giảng viên:
-                                                    <span
-                                                        th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}"></span>
->>>>>>> d1738c111c7bf8f012b57dc4ea531f9ca5e2de38
+                                                    <i class="fas fa-chalkboard-teacher me-1"></i> Giảng viên:
+                                                    <span th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}"></span>
                                                 </p>
                                             </div>
                                             <div class="card-footer pt-0">
                                                 <div class="mb-3">
-                                                    <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                                                        class="card-text mb-0">
-                                                        <span class="fw-bold text-danger me-2"
-                                                            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                                        <del class="text-muted"
-                                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
+                                                    <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}" class="card-text mb-0">
+                                                        <span class="fw-bold text-danger me-2" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                                        <del class="text-muted" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
                                                     </p>
-                                                    <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                                                        class="card-text fw-bold mb-0">
-                                                        <span
-                                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                                    <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}" class="card-text fw-bold mb-0">
+                                                        <span th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
                                                     </p>
                                                 </div>
 
-                                                <div
-                                                    class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1">
-                                                    <button type="button" class="btn btn-sm like-btn"
-                                                        th:id="'like-btn-' + ${khoaHoc.khoahocId}"
-                                                        th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
-                                                        th:attr="data-id=${khoaHoc.khoahocId}">
-                                                        <i class="fas fa-heart me-1"></i>
-                                                        <span th:id="'like-count-' + ${khoaHoc.khoahocId}"
-                                                            th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
-                                                        </span>
-                                                    </button>
+                                                <div class="d-flex justify-content-between align-items-center px-2 pb-2 gap-1">
+                                                    <button type="button" class="btn btn-sm like-btn" th:id="'like-btn-' + ${khoaHoc.khoahocId}" th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'" th:attr="data-id=${khoaHoc.khoahocId}">
+                                                            <i
+                                                                class="fas fa-heart me-1"></i>
+                                                            <span
+                                                                th:id="'like-count-' + ${khoaHoc.khoahocId}"
+                                                                th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
+                                                            </span>
+                                                        </button>
 
-                                                    <button type="button"
-                                                        class="btn btn-outline-primary btn-sm share-btn"
-                                                        data-bs-toggle="modal"
-                                                        th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                                        <i class="fas fa-share me-1"></i>
-                                                    </button>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm share-btn" data-bs-toggle="modal" th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
+                                                            <i
+                                                                class="fas fa-share me-1"></i>
+                                                        </button>
 
-                                                    <!-- Add to Cart -->
-                                                    <button class="btn btn-sm btn-success add-to-cart-btn" th:attr="data-id=${khoaHoc.khoahocId},
-                 data-name=${khoaHoc.tenKhoaHoc},
-                 data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
-                 data-giagoc=${khoaHoc.giagoc},
-                 data-anh=${khoaHoc.anhBia},
-                 data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                                                        <i class="fas fa-cart-plus me-1"></i> Thêm vào giỏ
-                                                    </button>
+                                                    <form th:action="@{/gio-hang/them}" method="post" class="d-inline add-to-cart-form">
+                                                        <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}" />
+                                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                                                <i
+                                                                    class="fas fa-cart-plus me-1"></i>
+                                                            </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -458,8 +148,7 @@
             <section class="bg-light py-5">
                 <div class="container text-center">
                     <h3 class="mb-4 text-primary fw-bold">
-                        <i class="fas fa-star me-2"></i>Vì sao nên chọn
-                        GlobalEdu?
+                        <i class="fas fa-star me-2"></i>Vì sao nên chọn GlobalEdu?
                     </h3>
                     <div class="row g-4">
                         <div class="col-12 col-sm-6 col-lg-3">
@@ -467,9 +156,7 @@
                                 <i class="fas fa-chalkboard-teacher fa-2x text-primary mb-3"></i>
                                 <h5 class="fw-bold">Giảng viên chất lượng
                                 </h5>
-                                <p class="text-muted small">Hơn 500+ giảng
-                                    viên có kinh nghiệm thực chiến, giảng
-                                    dạy tận tâm.</p>
+                                <p class="text-muted small">Hơn 500+ giảng viên có kinh nghiệm thực chiến, giảng dạy tận tâm.</p>
                             </div>
                         </div>
 
@@ -477,9 +164,7 @@
                             <div class="p-4 bg-white shadow rounded h-100">
                                 <i class="fas fa-clock fa-2x text-primary mb-3"></i>
                                 <h5 class="fw-bold">Học mọi lúc</h5>
-                                <p class="text-muted small">Truy cập khóa
-                                    học bất kỳ lúc nào, không giới hạn thời
-                                    gian học.</p>
+                                <p class="text-muted small">Truy cập khóa học bất kỳ lúc nào, không giới hạn thời gian học.</p>
                             </div>
                         </div>
 
@@ -487,9 +172,7 @@
                             <div class="p-4 bg-white shadow rounded h-100">
                                 <i class="fas fa-certificate fa-2x text-primary mb-3"></i>
                                 <h5 class="fw-bold">Chứng chỉ uy tín</h5>
-                                <p class="text-muted small">Cấp chứng nhận
-                                    sau khi hoàn thành khóa học, dễ dàng bổ
-                                    sung vào CV.</p>
+                                <p class="text-muted small">Cấp chứng nhận sau khi hoàn thành khóa học, dễ dàng bổ sung vào CV.</p>
                             </div>
                         </div>
 
@@ -497,9 +180,7 @@
                             <div class="p-4 bg-white shadow rounded h-100">
                                 <i class="fas fa-headset fa-2x text-primary mb-3"></i>
                                 <h5 class="fw-bold">Hỗ trợ nhanh chóng</h5>
-                                <p class="text-muted small">Đội ngũ hỗ trợ
-                                    24/7 sẵn sàng giúp bạn giải đáp mọi thắc
-                                    mắc.
+                                <p class="text-muted small">Đội ngũ hỗ trợ 24/7 sẵn sàng giúp bạn giải đáp mọi thắc mắc.
                                 </p>
                             </div>
                         </div>
@@ -510,99 +191,90 @@
             <!-- Danh sách khóa học -->
 
             <h3 class="mt-5 mb-4 d-flex align-items-center gap-2" style="color: #16203b;">
-                <i class="fas fa-layer-group"></i> Tất cả khóa học nổi bật
-                của
+                <i class="fas fa-layer-group"></i> Tất cả khóa học nổi bật của
                 <strong>GlobalEdu</strong>
             </h3>
 
             <div class="row courses-grid">
                 <th:block th:each="khoaHoc, iterStat : ${khoaHocList}" th:if="${iterStat.index < 8}">
                     <div class="col-12 col-sm-6 col-lg-3 mb-4">
-                        <div class="card h-100 shadow-sm course-card"
-                            th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
+                        <div class="card h-100 shadow-sm course-card" th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
                             <img class="card-img-top" th:src="${khoaHoc.anhBia}" alt="Ảnh khoá học" />
 
                             <div class="card-body d-flex flex-column pb-0">
-                                <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">Tên khóa
-                                    học
+                                <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học
                                 </h5>
                                 <p class="card-text small text-muted mt-auto">
-                                    <i class="fas fa-chalkboard-teacher me-1"></i>
-                                    Giảng viên:
+                                    <i class="fas fa-chalkboard-teacher me-1"></i> Giảng viên:
                                     <span th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên
-                                        giảng viên</span>
+                                            giảng viên</span>
                                 </p>
                             </div>
 
                             <div class="card-footer pt-0">
                                 <div class="mb-3">
-                                    <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                                        class="card-text mb-0">
-                                        <span class="fw-bold text-danger me-2"
-                                            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                        <del class="text-muted"
-                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
+                                    <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}" class="card-text mb-0">
+                                        <span class="fw-bold text-danger me-2" th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                        <del class="text-muted" th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
                                     </p>
-                                    <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                                        class="card-text fw-bold mb-0">
-                                        <span
-                                            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                    <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}" class="card-text fw-bold mb-0">
+                                        <span th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
                                     </p>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center px-2 pb-3 gap-1">
-                                    <button type="button" class="btn btn-sm like-btn"
-                                        th:id="'like-btn-' + ${khoaHoc.khoahocId}"
-                                        th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
-                                        th:attr="data-id=${khoaHoc.khoahocId}">
-                                        <i class="fas fa-heart me-1"></i>
-                                        <span th:id="'like-count-' + ${khoaHoc.khoahocId}"
-                                            th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
-                                        </span>
-                                    </button>
+                                    <button type="button" class="btn btn-sm like-btn" th:id="'like-btn-' + ${khoaHoc.khoahocId}" th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'" th:attr="data-id=${khoaHoc.khoahocId}">
+                                            <i
+                                                class="fas fa-heart me-1"></i>
+                                            <span
+                                                th:id="'like-count-' + ${khoaHoc.khoahocId}"
+                                                th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
+                                            </span>
+                                        </button>
 
-                                    <button type="button" class="btn btn-outline-primary btn-sm share-btn"
-                                        data-bs-toggle="modal"
-                                        th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                        <i class="fas fa-share me-1"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm share-btn" data-bs-toggle="modal" th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
+                                            <i
+                                                class="fas fa-share me-1"></i>
+                                        </button>
 
-                                    <!-- Add to Cart -->
+                                    <!-- <form th:action="@{/gio-hang/them}" method="post" class="d-inline add-to-cart-form">
+                                        <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}" />
+                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                                <i
+                                                    class="fas fa-cart-plus me-1"></i>
+                                            </button>
+                                    </form> -->
+
                                     <button class="btn btn-sm btn-success add-to-cart-btn" th:attr="data-id=${khoaHoc.khoahocId},
                  data-name=${khoaHoc.tenKhoaHoc},
                  data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
                  data-giagoc=${khoaHoc.giagoc},
                  data-anh=${khoaHoc.anhBia},
                  data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                                        <i class="fas fa-cart-plus me-1"></i> Thêm vào giỏ
-                                    </button>
+                                            <i
+                                                class="fas fa-cart-plus me-1"></i>
+                                        </button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Modal chia sẻ -->
-                        <div class="modal fade" th:id="'shareModal-' + ${khoaHoc.khoahocId}" tabindex="-1"
-                            aria-hidden="true">
+                        <div class="modal fade" th:id="'shareModal-' + ${khoaHoc.khoahocId}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Chia sẻ khóa
-                                            học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                        <h5 class="modal-title">Chia sẻ khóa học: <span th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form th:action="@{/hoc-vien/share-course}" method="post" class="ajax-form">
                                         <div class="modal-body">
                                             <input type="hidden" name="courseId" th:value="${khoaHoc.khoahocId}" />
                                             <div class="mb-3">
                                                 <label for="recipientEmail" class="form-label">Email
-                                                    người nhận:</label>
-                                                <input type="email" name="recipientEmail" class="form-control" required
-                                                    placeholder="nhapemail@example.com">
+                                                        người nhận:</label>
+                                                <input type="email" name="recipientEmail" class="form-control" required placeholder="nhapemail@example.com">
                                             </div>
-                                            <p>Một email chứa thông tin và
-                                                liên kết đến khóa học này sẽ
-                                                được gửi đến địa chỉ trên.
+                                            <p>Một email chứa thông tin và liên kết đến khóa học này sẽ được gửi đến địa chỉ trên.
                                             </p>
                                         </div>
 
@@ -611,11 +283,9 @@
 
                                         <div class="modal-footer">
                                             <div class="d-flex justify-content-end gap-2 w-100">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Đóng</button>
-                                                <button type="submit" class="btn fw-semibold text-white"
-                                                    style="background-color: #16203b;">Gửi
-                                                    Email</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                <button type="submit" class="btn fw-semibold text-white" style="background-color: #16203b;">Gửi
+                                                        Email</button>
                                             </div>
                                         </div>
                                     </form>
@@ -630,13 +300,11 @@
                 <p>Không có khóa học nổi bật nào.</p>
             </div>
 
-            <div th:if="${share_success}"
-                class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+            <div th:if="${share_success}" class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
                 <strong th:text="${share_success}"></strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div th:if="${share_error}"
-                class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+            <div th:if="${share_error}" class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
                 <strong th:text="${share_error}"></strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -644,25 +312,20 @@
 
         <section class="container py-5">
             <h3 class="text-primary fw-bold text-center mb-4">
-                <i class="fas fa-question-circle me-2"></i>Câu hỏi thường
-                gặp
+                <i class="fas fa-question-circle me-2"></i>Câu hỏi thường gặp
             </h3>
 
             <div class="accordion" id="faqAccordion">
                 <!-- FAQ 1 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq1">
-                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
-                            💡 Tôi có thể học vào lúc nào?
-                        </button>
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                                💡 Tôi có thể học vào lúc nào?
+                            </button>
                     </h2>
-                    <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faq1"
-                        data-bs-parent="#faqAccordion">
+                    <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            Bạn có thể học bất cứ lúc nào phù hợp, vì khóa
-                            học hoạt động 24/7 và không giới hạn thời gian
-                            truy cập.
+                            Bạn có thể học bất cứ lúc nào phù hợp, vì khóa học hoạt động 24/7 và không giới hạn thời gian truy cập.
                         </div>
                     </div>
                 </div>
@@ -670,17 +333,13 @@
                 <!-- FAQ 2 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq2">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
-                            🧑‍🏫 Giảng viên là ai?
-                        </button>
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                                🧑‍🏫 Giảng viên là ai?
+                            </button>
                     </h2>
-                    <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2"
-                        data-bs-parent="#faqAccordion">
+                    <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            Các giảng viên đều có kinh nghiệm thực tế, đã và
-                            đang làm việc tại các doanh nghiệp, tập đoàn
-                            lớn.
+                            Các giảng viên đều có kinh nghiệm thực tế, đã và đang làm việc tại các doanh nghiệp, tập đoàn lớn.
                         </div>
                     </div>
                 </div>
@@ -688,17 +347,13 @@
                 <!-- FAQ 3 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq3">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
-                            🧾 Có cấp chứng chỉ sau khi học không?
-                        </button>
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                                🧾 Có cấp chứng chỉ sau khi học không?
+                            </button>
                     </h2>
-                    <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3"
-                        data-bs-parent="#faqAccordion">
+                    <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            Có. Sau khi hoàn thành khóa học và vượt qua bài
-                            kiểm tra, bạn sẽ nhận được chứng chỉ từ
-                            GlobalEdu.
+                            Có. Sau khi hoàn thành khóa học và vượt qua bài kiểm tra, bạn sẽ nhận được chứng chỉ từ GlobalEdu.
                         </div>
                     </div>
                 </div>
@@ -706,16 +361,13 @@
                 <!-- FAQ 4 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq4">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
-                            💰 Làm sao để thanh toán khóa học?
-                        </button>
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                                💰 Làm sao để thanh toán khóa học?
+                            </button>
                     </h2>
-                    <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faq4"
-                        data-bs-parent="#faqAccordion">
+                    <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            Bạn có thể thanh toán bằng ví điện tử, chuyển
-                            khoản ngân hàng, hoặc VNPay dễ dàng và bảo mật.
+                            Bạn có thể thanh toán bằng ví điện tử, chuyển khoản ngân hàng, hoặc VNPay dễ dàng và bảo mật.
                         </div>
                     </div>
                 </div>
@@ -723,17 +375,13 @@
                 <!-- FAQ 5 (câu mới) -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq5">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
-                            🛠 Khóa học có cập nhật nội dung mới không?
-                        </button>
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                                🛠 Khóa học có cập nhật nội dung mới không?
+                            </button>
                     </h2>
-                    <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faq5"
-                        data-bs-parent="#faqAccordion">
+                    <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            Có! Các khóa học sẽ được cập nhật kiến thức mới,
-                            bài giảng hoặc tài liệu bổ sung định kỳ để phù
-                            hợp xu hướng thực tế.
+                            Có! Các khóa học sẽ được cập nhật kiến thức mới, bài giảng hoặc tài liệu bổ sung định kỳ để phù hợp xu hướng thực tế.
                         </div>
                     </div>
                 </div>
@@ -741,46 +389,39 @@
         </section>
 
         <!-- Modal cảnh báo chưa đăng nhập -->
-        <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content shadow rounded-4 border-0">
-                    <div class="modal-header"
-                        style="background-color: #16203b; color: white; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
+                    <div class="modal-header" style="background-color: #16203b; color: white; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
                         <h5 class="modal-title d-flex align-items-center gap-2" id="loginRequiredModalLabel">
-                            <i class="fas fa-exclamation-circle"></i> Yêu
-                            cầu đăng nhập
+                            <i class="fas fa-exclamation-circle"></i> Yêu cầu đăng nhập
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Đóng"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
                     <div class="modal-body text-center px-4">
                         <p class="mb-0 fs-5 text-muted">
                             Bạn cần <strong class="text-dark">đăng
-                                nhập</strong> để thêm vào khóa học yêu
-                            thích.
+                                    nhập</strong> để thêm vào khóa học yêu thích.
                         </p>
                     </div>
                     <!-- Nút nằm cùng hàng -->
                     <div class="modal-footer border-0 pb-4">
                         <div class="d-flex justify-content-center gap-3 w-100">
-                            <a href="/auth/dangnhap" class="btn text-white fw-semibold"
-                                style="background-color: #32426d; min-width: 130px; padding: 10px 20px; border-radius: 8px;">
-                                <i class="fas fa-sign-in-alt me-1"></i> Đăng
-                                nhập
+                            <a href="/auth/login" class="btn text-white fw-semibold" style="background-color: #32426d; min-width: 130px; padding: 10px 20px; border-radius: 8px;">
+                                <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
                             </a>
-                            <button type="button" class="btn btn-outline-secondary fw-semibold" data-bs-dismiss="modal"
-                                style="min-width: 130px; padding: 10px 20px; border-radius: 8px;">
-                                Hủy
-                            </button>
+                            <button type="button" class="btn btn-outline-secondary fw-semibold" data-bs-dismiss="modal" style="min-width: 130px; padding: 10px 20px; border-radius: 8px;">
+                                    Hủy
+                                </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- Script xử lý giỏ hàng -->
         <script th:inline="javascript">
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const cartKey = 'cart';
 
                 function getCart() {
@@ -797,7 +438,9 @@
                     if (isLoggedIn) {
                         fetch('/gio-hang/them', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
                             body: JSON.stringify(item)
                         }).then(res => {
                             if (res.ok) {
@@ -836,7 +479,6 @@
             });
         </script>
 
-
         <script th:inline="javascript">
             document.addEventListener('DOMContentLoaded', () => {
                 const isLoggedIn = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
@@ -849,13 +491,15 @@
 
                     fetch('/gio-hang/sync', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify(cart)
                     }).then(res => {
                         if (res.ok) {
-                            localStorage.removeItem('cart');              // Xoá cart
-                            localStorage.setItem('cartSynced', 'true');   // Đánh dấu đã sync
-                            location.reload();                            // Reload
+                            localStorage.removeItem('cart'); // Xoá cart
+                            localStorage.setItem('cartSynced', 'true'); // Đánh dấu đã sync
+                            location.reload(); // Reload
                         }
                     });
                 }
