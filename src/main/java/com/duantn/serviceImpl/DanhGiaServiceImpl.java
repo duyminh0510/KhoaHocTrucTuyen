@@ -82,4 +82,21 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         optional.ifPresent(repo::delete);
     }
 
+    //
+    @Override
+    public long demSoLuongDanhGia(Integer khoaHocId) {
+        return repo.countByKhoahoc_KhoahocId(khoaHocId);
+    }
+
+    @Override
+    public Double diemTrungBinh(Integer khoaHocId) {
+        Double diem = repo.tinhDiemTrungBinhTheoKhoaHoc(khoaHocId);
+        return diem != null ? Math.round(diem * 10.0) / 10.0 : 0.0; // làm tròn 1 chữ số
+    }
+
+    @Override
+    public List<DanhGia> findByDanhGia(Integer khoaHocId) {
+        return repo.findByKhoaHocId(khoaHocId);
+    }
+
 }

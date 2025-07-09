@@ -12,4 +12,5 @@ public interface DangHocRepository extends JpaRepository<DangHoc, Integer> {
     @Query("SELECT dh FROM DangHoc dh JOIN FETCH dh.khoahoc WHERE dh.taikhoan.taikhoanId = :id")
     List<DangHoc> findByTaikhoanIdWithKhoaHoc(@Param("id") Integer id);
 
+    long countByKhoahoc_KhoahocId(Integer khoahocId);
 }

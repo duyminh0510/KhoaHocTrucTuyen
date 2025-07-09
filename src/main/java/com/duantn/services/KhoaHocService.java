@@ -31,8 +31,6 @@ public interface KhoaHocService {
 
     KhoaHoc save(KhoaHoc khoaHoc);
 
-    List<KhoaHoc> timKiemTheoTenIgnoreCase(String tenKhoaHoc);
-
     List<KhoaHoc> timKiemTheoTen(String tenKhoaHoc);
 
     List<KhoaHoc> layKhoaHocDeXuat(int soLuong);
@@ -40,4 +38,12 @@ public interface KhoaHocService {
     List<KhoaHoc> getKhoaHocTheoDanhMuc(Integer danhMucId);
 
     List<DanhMuc> getDanhMucCoKhoaHoc();
+
+    //
+    List<KhoaHoc> timKiemTheoTenPublished(String keyword);
+
+    List<KhoaHoc> getTatCaKhoaHocPublished();
+
+    KhoaHoc getKhoaHocBySlug(String slug);
+
 }

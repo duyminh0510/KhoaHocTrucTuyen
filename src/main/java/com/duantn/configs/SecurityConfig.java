@@ -48,7 +48,7 @@ public class SecurityConfig {
                                                 // All other requests
                                                 .anyRequest().permitAll())
                                 .formLogin(form -> form
-                                                .loginPage("/auth/login")
+                                                .loginPage("/auth/dangnhap")
                                                 .loginProcessingUrl("/login/form")
                                                 .usernameParameter("email")
                                                 .passwordParameter("password")
@@ -64,7 +64,7 @@ public class SecurityConfig {
                                 )
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/auth/login?logout=true")
+                                                .logoutSuccessUrl("/auth/dangnhap?logout=true")
                                                 .deleteCookies("JSESSIONID", "remember-me")
                                                 .permitAll())
                                 .csrf(AbstractHttpConfigurer::disable);

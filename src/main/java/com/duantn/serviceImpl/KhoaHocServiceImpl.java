@@ -140,16 +140,6 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.findByTenKhoaHocContainingSimple(tenKhoaHoc.trim(), TrangThaiKhoaHoc.PUBLISHED);
     }
 
-    // Tìm kiếm khóa học theo tên (không phân biệt hoa thường)
-    @Override
-    public List<KhoaHoc> timKiemTheoTenIgnoreCase(String tenKhoaHoc) {
-        if (tenKhoaHoc == null || tenKhoaHoc.trim().isEmpty()) {
-            return khoaHocRepository.findAllActive(TrangThaiKhoaHoc.PUBLISHED);
-
-        }
-        return khoaHocRepository.timTheoTenIgnoreCase(tenKhoaHoc.trim());
-    }
-
     @Override
     public List<KhoaHoc> layKhoaHocDeXuat(int soLuong) {
         List<KhoaHoc> all = khoaHocRepository.findAllActive(TrangThaiKhoaHoc.PUBLISHED);
@@ -162,4 +152,24 @@ public class KhoaHocServiceImpl implements KhoaHocService {
                 .filter(dm -> !getKhoaHocTheoDanhMuc(dm.getDanhmucId()).isEmpty())
                 .collect(Collectors.toList());
     }
+
+    //
+    @Override
+    public List<KhoaHoc> timKiemTheoTenPublished(String keyword) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return khoaHocRepository.timTheoTenVaTrangThaiPublished(keyword.trim());
+        }
+        return khoaHocRepository.timTheoTenVaTrangThaiPublished(null);
+    }
+
+    @Override
+    public List<KhoaHoc> getTatCaKhoaHocPublished() {
+        return khoaHocRepository.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED);
+    }
+
+    @Override
+    public KhoaHoc getKhoaHocBySlug(String slug) {
+        return khoaHocRepository.findBySlug(slug).orElse(null);
+    }
+
 }

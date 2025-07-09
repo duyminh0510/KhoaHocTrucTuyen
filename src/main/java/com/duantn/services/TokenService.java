@@ -3,6 +3,7 @@ package com.duantn.services;
 import com.duantn.entities.VerificationToken;
 import com.duantn.repositories.VerificationTokenRepository;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +20,7 @@ public class TokenService {
     private final VerificationTokenRepository tokenRepository;
     private final JavaMailSender mailSender;
 
+    @Transactional
     public String generateAndSendToken(String email, String name, String subject, String contentPrefix) {
         String code = String.format("%06d", new Random().nextInt(999999));
 
@@ -75,14 +77,17 @@ public class TokenService {
         return tokenOpt;
     }
 
+    @Transactional
     public void deleteByEmail(String email) {
         tokenRepository.deleteByEmail(email);
     }
 
+    @Transactional
     public void delete(VerificationToken token) {
         tokenRepository.delete(token);
     }
-public String validateToken(String token) {
+
+    public String validateToken(String token) {
         Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(token);
         if (tokenOpt.isPresent()) {
             VerificationToken vt = tokenOpt.get();

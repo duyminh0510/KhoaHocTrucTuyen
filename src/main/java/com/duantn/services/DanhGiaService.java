@@ -25,4 +25,11 @@ public interface DanhGiaService {
 
     void xoaDanhGia(KhoaHoc khoaHoc, TaiKhoan taiKhoan);
 
+    //
+    long demSoLuongDanhGia(Integer khoaHocId);
+
+    Double diemTrungBinh(Integer khoaHocId);
+
+    List<DanhGia> findByDanhGia(Integer khoaHocId);
+
 }

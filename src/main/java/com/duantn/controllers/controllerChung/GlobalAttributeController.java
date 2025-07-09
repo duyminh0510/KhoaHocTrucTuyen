@@ -3,6 +3,7 @@ package com.duantn.controllers.controllerChung;
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
+import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.KhoaHocService;
 
@@ -25,6 +26,9 @@ public class GlobalAttributeController {
     KhoaHocService khoaHocService;
 
     @Autowired
+    TaiKhoanRepository taiKhoanRepository;
+
+    @Autowired
     NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
 
     @ModelAttribute("danhMucList")
@@ -43,8 +47,9 @@ public class GlobalAttributeController {
     @ModelAttribute("tenNguoiDung")
     public String getTenNguoiDung(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            TaiKhoan taiKhoan = ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
-            return taiKhoan.getName();
+            TaiKhoan taiKhoanCu = ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
+            TaiKhoan taiKhoanMoi = taiKhoanRepository.findById(taiKhoanCu.getTaikhoanId()).orElse(taiKhoanCu);
+            return taiKhoanMoi.getName();
         }
         return null;
     }

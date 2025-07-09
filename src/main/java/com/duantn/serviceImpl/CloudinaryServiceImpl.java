@@ -46,23 +46,55 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         }
     }
 
+    // @Override
+    // public String extractPublicIdFromUrl(String imageUrl) {
+    // if (imageUrl == null || !imageUrl.contains("/"))
+    // return null;
+
+    // String[] parts = imageUrl.split("/");
+    // String fileNameWithExtension = parts[parts.length - 1];
+
+    // // Loại bỏ đuôi mở rộng
+    // String fileName = fileNameWithExtension.contains(".")
+    // ? fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf('.'))
+    // : fileNameWithExtension;
+
+    // // Lấy thư mục chứa file
+    // String folder = parts.length >= 2 ? parts[parts.length - 2] : "";
+
+    // return folder + "/" + fileName;
+    // }
+
     @Override
     public String extractPublicIdFromUrl(String imageUrl) {
-        if (imageUrl == null || !imageUrl.contains("/"))
+        if (imageUrl == null || imageUrl.isEmpty())
             return null;
 
-        String[] parts = imageUrl.split("/");
-        String fileNameWithExtension = parts[parts.length - 1];
+        try {
+            int uploadIndex = imageUrl.indexOf("/upload/");
+            if (uploadIndex == -1)
+                return null;
 
-        // Loại bỏ đuôi mở rộng
-        String fileName = fileNameWithExtension.contains(".")
-                ? fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf('.'))
-                : fileNameWithExtension;
+            String path = imageUrl.substring(uploadIndex + "/upload/".length());
 
-        // Lấy thư mục chứa file
-        String folder = parts.length >= 2 ? parts[parts.length - 2] : "";
+            // Bỏ version nếu có (v1234567890/)
+            if (path.startsWith("v")) {
+                int slashAfterVersion = path.indexOf("/", 1);
+                if (slashAfterVersion != -1) {
+                    path = path.substring(slashAfterVersion + 1);
+                }
+            }
 
-        return folder + "/" + fileName;
+            // Bỏ đuôi mở rộng
+            int dotIndex = path.lastIndexOf('.');
+            if (dotIndex != -1) {
+                path = path.substring(0, dotIndex);
+            }
+
+            return path;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
