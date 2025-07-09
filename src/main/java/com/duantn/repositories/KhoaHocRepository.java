@@ -1,5 +1,6 @@
 package com.duantn.repositories;
 
+import com.duantn.entities.GiangVien;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.enums.TrangThaiKhoaHoc;
@@ -77,12 +78,14 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
                         SELECT k FROM KhoaHoc k
                         JOIN FETCH k.giangVien gv
                         WHERE k.trangThai = 'PUBLISHED'
-                            AND (:keyword IS NULL OR LOWER(k.tenKhoaHoc) LIKE LOWER(CONCAT('%', :keyword, '%')))
+                        AND (:keyword IS NULL OR LOWER(k.tenKhoaHoc) LIKE LOWER(CONCAT('%', :keyword, '%')))
                         """)
         List<KhoaHoc> timTheoTenVaTrangThaiPublished(@Param("keyword") String keyword);
 
         List<KhoaHoc> findByTrangThai(TrangThaiKhoaHoc trangThai);
 
         Optional<KhoaHoc> findBySlug(String slug);
+
+        List<KhoaHoc> findByGiangVien(GiangVien giangVien);
 
 }

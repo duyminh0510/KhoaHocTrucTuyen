@@ -9,72 +9,61 @@ import org.springframework.stereotype.Service;
 import com.duantn.entities.DanhMuc;
 import com.duantn.repositories.DanhMucRepository;
 import com.duantn.services.DanhMucService;
-import com.duantn.validators.SlugUtil;
 
 @Service
 public class DanhMucServiceImpl implements DanhMucService {
 
     @Autowired
-    private DanhMucRepository repository;
-
-    @Override
-    public DanhMuc taoDanhMuc(DanhMuc danhMuc) {
-        if (repository.existsByTenDanhMuc(danhMuc.getTenDanhMuc())) {
-            throw new IllegalArgumentException("Danh mục đã tồn tại!");
-        }
-        danhMuc.setSlug(SlugUtil.toSlug(danhMuc.getTenDanhMuc()));
-        return repository.save(danhMuc);
-    }
-
-    @Override
-    public DanhMuc layTheoId(Integer id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy DanhMuc với id " + id));
-    }
+    private DanhMucRepository danhMucRepository;
 
     @Override
     public List<DanhMuc> layTatCa() {
-        return repository.findAll();
+        return danhMucRepository.findAll();
     }
 
     @Override
     public DanhMuc capNhat(Integer id, DanhMuc danhMuc) {
-        DanhMuc existing = layTheoId(id);
-        existing.setTenDanhMuc(danhMuc.getTenDanhMuc());
+        return danhMucRepository.save(danhMuc);
+    }
 
-        existing.setSlug(SlugUtil.toSlug(danhMuc.getTenDanhMuc()));
-
-        return repository.save(existing);
+    @Override
+    public DanhMuc layTheoId(Integer id) {
+        Optional<DanhMuc> optional = danhMucRepository.findById(id);
+        return optional.orElse(null);
     }
 
     @Override
     public boolean daTonTaiTen(String tenDanhMuc) {
-        return repository.existsByTenDanhMucIgnoreCase(tenDanhMuc);
+        return danhMucRepository.existsByTenDanhMucIgnoreCase(tenDanhMuc);
     }
 
     @Override
     public boolean daTonTaiTenKhacId(String tenDanhMuc, Integer idHienTai) {
-        DanhMuc dm = repository.findByTenDanhMucIgnoreCase(tenDanhMuc);
+        DanhMuc dm = danhMucRepository.findByTenDanhMucIgnoreCase(tenDanhMuc);
         return dm != null && !dm.getDanhmucId().equals(idHienTai);
     }
 
     @Override
     public void voHieuHoa(Integer id) {
         DanhMuc danhMuc = layTheoId(id);
-        danhMuc.setIsDeleted(false); // hoặc true nếu bạn dùng ngược
-        repository.save(danhMuc);
+        danhMuc.setIsDeleted(true);
+        danhMucRepository.save(danhMuc);
     }
 
     @Override
     public void kichHoat(Integer id) {
         DanhMuc danhMuc = layTheoId(id);
-        danhMuc.setIsDeleted(true); // bật lại
-        repository.save(danhMuc);
+        danhMuc.setIsDeleted(false);
+        danhMucRepository.save(danhMuc);
     }
 
     @Override
     public Optional<DanhMuc> findBySlug(String slug) {
-        return repository.findBySlug(slug);
+        return danhMucRepository.findBySlug(slug); // nhớ viết method này trong repository nếu chưa có
     }
 
+    @Override
+    public DanhMuc taoDanhMuc(DanhMuc danhMuc) {
+        return danhMucRepository.save(danhMuc);
+    }
 }

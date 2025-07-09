@@ -21,4 +21,5 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
         @Query(value = "SELECT * FROM GiangVien gv JOIN TaiKhoan tk ON gv.taikhoanId = tk.taikhoanId WHERE LOWER(tk.name) LIKE LOWER(CONCAT('%', :ten, '%'))", nativeQuery = true)
         java.util.List<GiangVien> findByTenGiangVienContainingIgnoreCaseNative(
                         @org.springframework.data.repository.query.Param("ten") String ten);
+
 }

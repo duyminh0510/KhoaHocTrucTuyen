@@ -8,7 +8,6 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 
 import lombok.*;
 
@@ -57,6 +55,7 @@ public class Chuong implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @Column(name = "trangthai")
+    @Builder.Default
     private Boolean trangthai = true;
 
     @ManyToOne
@@ -65,6 +64,7 @@ public class Chuong implements Serializable {
 
     @OneToMany(mappedBy = "chuong", cascade = CascadeType.ALL, orphanRemoval = true)
 
+    @Builder.Default
     private List<BaiGiang> baiGiangs = new ArrayList<>();
 
     @Override

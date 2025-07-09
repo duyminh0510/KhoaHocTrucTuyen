@@ -25,7 +25,6 @@ public class BaiViet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer baivietId;
 
-
     @Column(name = "tenBaiViet", columnDefinition = "NVARCHAR(MAX)")
     private String tenBaiViet;
 
@@ -40,6 +39,7 @@ public class BaiViet implements Serializable {
     @Column(name = "ngay_cap_nhat")
     private LocalDateTime ngayCapNhat;
 
+    @Builder.Default
     @Column(name = "trangthai")
     private Boolean trangthai = true;
 

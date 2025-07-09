@@ -16,6 +16,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +34,7 @@ import java.util.Random;
 @Controller
 @RequestMapping("/dang-ky-giang-vien")
 @RequiredArgsConstructor
-public class InstructorRegistrationController {
+public class DangKyGiangVienController {
 
     private final TaiKhoanRepository taiKhoanRepository;
     private final JavaMailSender mailSender;
@@ -38,10 +42,11 @@ public class InstructorRegistrationController {
     private final GiangVienRepository giangVienRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository tokenRepository;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping
     public String showEmailForm() {
-        return "views/gdienChung/register_instructor_email";
+        return "views/gdienChung/dangkygiangvien";
     }
 
     @PostMapping("/send-otp")
@@ -147,7 +152,7 @@ public class InstructorRegistrationController {
 
     @GetMapping("/verify-otp")
     public String showOtpForm() {
-        return "views/gdienChung/register_instructor_otp";
+        return "views/gdienChung/xacminhemailgiangvien";
     }
 
     @PostMapping("/verify-otp")
@@ -157,14 +162,14 @@ public class InstructorRegistrationController {
 
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã OTP không chính xác.");
-            return "views/gdienChung/register_instructor_otp";
+            return "views/gdienChung/xacminhemailgiangvien";
         }
 
         VerificationToken token = tokenOpt.get();
         if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "Mã OTP đã hết hạn.");
             tokenRepository.delete(token);
-            return "views/gdienChung/register_instructor_otp";
+            return "views/gdienChung/xacminhemailgiangvien";
         }
 
         String email = token.getEmail();
@@ -189,7 +194,7 @@ public class InstructorRegistrationController {
         GiangVienRegistrationDto dto = new GiangVienRegistrationDto();
         dto.setEmail(email);
         model.addAttribute("giangVienDto", dto);
-        return "views/gdienChung/register_instructor_new";
+        return "views/gdienChung/hoantatdangkygiangvien";
     }
 
     @PostMapping("/register-new")
@@ -198,7 +203,7 @@ public class InstructorRegistrationController {
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            return "views/gdienChung/register_instructor_new";
+            return "views/gdienChung/hoantatdangkygiangvien";
         }
 
         try {
@@ -215,6 +220,10 @@ public class InstructorRegistrationController {
             newAccount.setStatus(true); // Active by default
 
             TaiKhoan savedAccount = taiKhoanRepository.save(newAccount);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(savedAccount.getEmail());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
 
             // Tạo GiangVien
             GiangVien newInstructor = new GiangVien();
@@ -243,7 +252,7 @@ public class InstructorRegistrationController {
         if (email == null) {
             return "redirect:/dang-ky-giang-vien";
         }
-        return "views/gdienChung/register_instructor_upgrade_confirm";
+        return "views/gdienChung/xacnhannangcap";
     }
 
     @GetMapping("/upgrade-details")
@@ -253,7 +262,7 @@ public class InstructorRegistrationController {
             return "redirect:/dang-ky-giang-vien";
         }
         model.addAttribute("giangVienDto", new DangKyGiangVienDto());
-        return "views/gdienChung/register_instructor_upgrade_details";
+        return "views/gdienChung/thongtinnangcapchitiet";
     }
 
     @PostMapping("/upgrade-details")
@@ -262,7 +271,7 @@ public class InstructorRegistrationController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return "views/gdienChung/register_instructor_upgrade_details";
+            return "views/gdienChung/thongtinnangcapchitiet";
         }
         String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
@@ -282,7 +291,7 @@ public class InstructorRegistrationController {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");
             return "redirect:/dang-ky-giang-vien";
         }
-        return "views/gdienChung/register_instructor_verify_password";
+        return "views/gdienChung/xacnhanmatkhaugiangvien";
     }
 
     @PostMapping("/verify-password")
@@ -317,6 +326,10 @@ public class InstructorRegistrationController {
             account.setRole(instructorRole);
 
             taiKhoanRepository.save(account);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
 
             // Tìm hoặc tạo mới thông tin giảng viên
             GiangVien instructor = giangVienRepository.findByTaikhoan(account)

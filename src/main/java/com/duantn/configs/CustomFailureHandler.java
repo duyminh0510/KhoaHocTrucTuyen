@@ -27,6 +27,6 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
         }
 
         request.getSession().setAttribute("error", errorMessage);
-        response.sendRedirect("/auth/login?error=true");
+        response.sendRedirect("/auth/dangnhap?error=true");
     }
 }

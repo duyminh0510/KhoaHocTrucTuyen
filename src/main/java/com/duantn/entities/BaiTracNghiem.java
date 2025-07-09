@@ -50,6 +50,7 @@ public class BaiTracNghiem implements Serializable {
     private LocalDateTime ngayCapNhat;
 
     @Column(name = "trangthai")
+    @Builder.Default
     private Boolean trangthai = true;
 
     @OneToOne(optional = false)
@@ -58,6 +59,7 @@ public class BaiTracNghiem implements Serializable {
 
     @OneToMany(mappedBy = "baiTracNghiem", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @BatchSize(size = 10)
+    @Builder.Default
     private List<CauHoi> cauHoiList = new ArrayList<>();
 
 }

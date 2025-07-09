@@ -58,7 +58,6 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         if (repository.findByEmail(taiKhoan.getEmail()).isPresent()) {
             throw new RuntimeException("Email đã tồn tại");
         }
-        // TODO: mã hóa mật khẩu nếu cần
         return repository.save(taiKhoan);
     }
 

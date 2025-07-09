@@ -35,7 +35,7 @@ public class SecurityConfig {
                                                 .permitAll()
 
                                                 // Public pages
-                                                .requestMatchers("/auth/**", "/", "/home", "/register", "/verify")
+                                                .requestMatchers("/auth/**", "/", "/home", "/dangky", "/verify")
                                                 .permitAll()
 
                                                 // Role-based access

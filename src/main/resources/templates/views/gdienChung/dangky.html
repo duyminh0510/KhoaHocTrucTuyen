@@ -2,6 +2,7 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
+<<<<<<< HEAD
   <head>
     <meta charset="UTF-8">
     <title>Globaledu Register</title>
@@ -120,5 +121,117 @@
         </script>
     </main>
   </body>
+=======
+<head>
+  <meta charset="UTF-8">
+  <title>Globaledu Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <main class="register">
+    <section>
+      <div class="container-fluid" style="margin-top: 35px; margin-bottom: 55px;">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <!-- Hình ảnh bên trái -->
+          <div class="col-md-6 image-side">
+            <img th:src="@{/photos/logodangky.png}" alt="Hình minh họa" style="width: 400px; height: 400px;">
+          </div>
+
+          <!-- Form bên phải -->
+          <div class="col-md-6 form-side">
+            <div style="width: 100%; max-width: 450px;">
+              <h4 class="text-primary fw-bold mb-4 text-center">📝 Đăng ký tài
+                khoản học tập</h4>
+
+              <form th:action="@{/auth/dangky}" th:object="${user}" method="post" enctype="multipart/form-data"
+                id="formDangKy">
+
+                <div th:if="${message}" class="alert alert-danger">
+                  <p th:text="${message}"></p>
+                </div>
+
+                <!-- Họ tên -->
+                <div class="mb-3">
+                  <label>Họ tên:</label>
+                  <input type="text" th:field="*{name}" placeholder="Họ và tên" autocomplete="off" required
+                    minlength="3" class="form-control" title="Họ tên không được để trống và phải dài ít nhất 3 ký tự" />
+                  <div th:if="${#fields.hasErrors('name')}" style="color: red;">
+                    <span th:text="${#fields.errors('name')[0]}"></span>
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                  <label>Email:</label>
+                  <input type="email" th:field="*{email}" placeholder="Email" required
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control"
+                    title="Vui lòng nhập email hợp lệ" />
+                  <div th:if="${#fields.hasErrors('email')}" style="color: red;">
+                    <span th:text="${#fields.errors('email')[0]}"></span>
+                  </div>
+                </div>
+
+                <!-- Số điện thoại -->
+                <div class="mb-3">
+                  <label>Số điện thoại:</label>
+                  <input type="text" th:field="*{phone}" placeholder="Số điện thoại" pattern="^0[0-9]{9}$"
+                    class="form-control" title="Số điện thoại phải có 10 chữ số và bắt đầu bằng 0" />
+                  <div th:if="${#fields.hasErrors('phone')}" style="color: red;">
+                    <span th:text="${#fields.errors('phone')[0]}"></span>
+                  </div>
+                </div>
+
+                <!-- Mật khẩu -->
+                <div class="mb-3">
+                  <label>Mật khẩu:</label>
+                  <input type="password" th:field="*{password}" placeholder="Mật khẩu" required minlength="6"
+                    class="form-control" title="Mật khẩu tối thiểu 6 ký tự" />
+                  <div th:if="${#fields.hasErrors('password')}" style="color: red;">
+                    <span th:text="${#fields.errors('password')[0]}"></span>
+                  </div>
+                </div>
+
+                <!-- Nút đăng ký -->
+                <button type="submit" class="btn btn-primary w-100 mt-3">Đăng ký</button>
+
+                <!-- Tùy chọn khác -->
+                <div class="text-center mt-3">
+                  <div class="d-flex align-items-center text-center my-3">
+                    <hr class="flex-grow-1 me-2">
+                    <p class="mb-0">Tùy chọn đăng nhập khác:</p>
+                    <hr class="flex-grow-1 ms-2">
+                  </div>
+
+                  <div class="d-flex justify-content-center">
+                    <a href="#" class="btn-google" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="Đăng nhập bằng Google">
+                      <img th:src="@{/photos/google.png}" alt="Đăng nhập với Google">
+                    </a>
+                  </div>
+                </div>
+
+                <div class="text-center mt-3">
+                  Đã có tài khoản? <a style="text-decoration: none;" th:href="@{/auth/dangnhap}">Đăng nhập</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function previewAvatar(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const preview = document.getElementById("avatarPreview");
+          preview.src = URL.createObjectURL(file);
+        }
+      }
+    </script>
+  </main>
+</body>
+>>>>>>> d1738c111c7bf8f012b57dc4ea531f9ca5e2de38
 
 </html>

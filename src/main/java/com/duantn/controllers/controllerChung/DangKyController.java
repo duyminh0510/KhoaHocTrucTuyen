@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,9 +37,7 @@ public class DangKyController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping("/dangky")
     public String showRegistrationForm(Model model, HttpSession session) {
@@ -115,7 +112,7 @@ public class DangKyController {
             return "views/gdienChung/verify";
         }
 
-        // Xử lý xác minh đăng ký
+        // ✅ Xử lý xác minh đăng ký
         DangKyHocVienDto pending = (DangKyHocVienDto) session.getAttribute("pendingUser");
         if (pending != null && pending.getEmail().equals(token.getEmail())) {
             Role studentRole = roleRepository.findByName("ROLE_HOCVIEN")
@@ -132,6 +129,7 @@ public class DangKyController {
 
             accountRepository.save(account);
 
+            // ✅ Tự động đăng nhập
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     account, null, List.of(new SimpleGrantedAuthority(account.getRole().getName())));
 
@@ -141,10 +139,11 @@ public class DangKyController {
 
             tokenService.delete(token);
             session.removeAttribute("pendingUser");
-            return "redirect:/";
+
+            return "redirect:/"; // hoặc redirect đến /tai-khoan
         }
 
-        // Xử lý xác minh khôi phục mật khẩu
+        // ✅ Xử lý xác minh khôi phục mật khẩu
         String resetEmail = (String) session.getAttribute("resetEmail");
         if (resetEmail != null && resetEmail.equals(token.getEmail())) {
             session.setAttribute("verifiedEmail", resetEmail);
@@ -153,7 +152,7 @@ public class DangKyController {
             return "redirect:/auth/reset-password";
         }
 
-        // Xử lý xác minh cập nhật email
+        // ✅ Xử lý xác minh cập nhật email
         String pendingEmailUpdate = (String) session.getAttribute("pendingEmailUpdate");
         String oldEmail = (String) session.getAttribute("currentEmail");
 
@@ -172,7 +171,6 @@ public class DangKyController {
                         newDetails, newDetails.getPassword(), newDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-                // return "redirect:/tai-khoan?emailUpdated";
                 redirectAttributes.addFlashAttribute("message", "Cập nhật email thành công.");
                 redirectAttributes.addFlashAttribute("tab", "tab-email");
                 return "redirect:/tai-khoan";
@@ -204,6 +202,6 @@ public class DangKyController {
         accountRepository.save(tk);
         session.removeAttribute("verifiedEmail");
 
-        return "redirect:/auth/login?resetSuccess";
+        return "redirect:/auth/dangnhap?resetSuccess";
     }
 }

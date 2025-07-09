@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/danh-gia")
+@RequestMapping("hocvien/danh-gia")
 public class DanhGiaController {
 
     private final KhoaHocService khoaHocService;
