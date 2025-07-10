@@ -7,7 +7,7 @@
 }
 
 .khoahocchitiet .course-header {
-    background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(90deg, #e1f0fe, #eef5fa);
     padding: 2rem 0;
     border-bottom: 1px solid #cacbcd;
 }
@@ -44,7 +44,7 @@
 
 .khoahocchitiet .original-price {
     text-decoration: line-through;
-    color: #6c757d;
+    color: black;
 }
 
 .khoahocchitiet .sticky-top-card {
@@ -60,7 +60,7 @@
 
 .khoahocchitiet .card-title {
     font-weight: 600;
-    color: #343a40;
+    color: black;
 }
 
 .khoahocchitiet .list-group li {
@@ -77,11 +77,11 @@
 .khoahocchitiet .course-header p.lead {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
-    color: #495057;
+    color: black;
 }
 
 .khoahocchitiet .course-header .text-secondary {
-    color: #6c757d !important;
+    color: black !important;
 }
 
 .khoahocchitiet .course-header .text-warning {
@@ -91,12 +91,12 @@
 .khoahocchitiet .course-header .d-flex p {
     margin-bottom: 0;
     font-size: 0.98rem;
-    color: #343a40;
+    color: black;
 }
 
 .khoahocchitiet .course-header .fst-italic {
     font-size: 0.95rem;
-    color: #6c757d;
+    color: black;
 }
 
 .khoahocchitiet .card.shadow-sm {

@@ -27,26 +27,16 @@ public class TrangChuController {
     public String home(HttpServletRequest request, Model model, @ModelAttribute("taiKhoan") TaiKhoan taiKhoan) {
         boolean isHocVien = request.isUserInRole("ROLE_HOCVIEN");
         boolean isGiangVien = request.isUserInRole("ROLE_GIANGVIEN");
+        boolean isAdmin = request.isUserInRole("ROLE_ADMIN");
+        boolean isNhanVien = request.isUserInRole("ROLE_NHANVIEN");
 
-        // Nếu chưa đăng nhập hoặc không có vai trò
-        if (taiKhoan == null || (!isHocVien && !isGiangVien)) {
-            model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
-            model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
-            return "views/gdienChung/home";
+        if (isAdmin || isNhanVien) {
+            return "redirect:/auth/dangnhap?error=unauthorized";
         }
 
-        if (isHocVien) {
-            model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
-            model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
-
-            return "views/gdienChung/home";
-        }
-
-        if (isGiangVien) {
-            return "views/gdienGiangVien/home";
-        }
-
-        return "redirect:/auth/dangnhap?error=unauthorized";
+        model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
+        model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
+        return "views/gdienChung/home";
     }
 
     private Map<Integer, List<KhoaHoc>> getKhoaHocTheoDanhMuc() {

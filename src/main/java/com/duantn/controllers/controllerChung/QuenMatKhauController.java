@@ -42,7 +42,8 @@ public class QuenMatKhauController {
     }
 
     @PostMapping()
-    public String handleEmail(@RequestParam("email") String email, HttpSession session, Model model) {
+    public String handleEmail(@RequestParam("email") String email, HttpSession session, Model model,
+            RedirectAttributes redirectAttributes) {
         Optional<TaiKhoan> tkOpt = taiKhoanRepository.findByEmail(email);
         if (tkOpt.isEmpty()) {
             model.addAttribute("error", "Email không tồn tại trong hệ thống.");
@@ -57,7 +58,7 @@ public class QuenMatKhauController {
         VerificationToken token = new VerificationToken();
         token.setEmail(email);
         token.setToken(code);
-        token.setExpiryTime(LocalDateTime.now().plusMinutes(10));
+        token.setExpiryTime(LocalDateTime.now().plusMinutes(2));
         tokenRepository.save(token);
 
         // Gửi email xác minh
@@ -65,13 +66,21 @@ public class QuenMatKhauController {
 
         // Lưu email vào session
         session.setAttribute("resetEmail", email);
+
+        redirectAttributes.addFlashAttribute("resetVerify", true);
         return "redirect:/lay-lai-mat-khau/verify";
     }
 
     @GetMapping("/verify")
-    public String showVerifyForm(Model model, HttpSession session) {
+    public String showVerifyForm(Model model, HttpSession session,
+            @ModelAttribute("resetVerify") Object resetVerifyAttr) {
         model.addAttribute("type", "forgot");
         model.addAttribute("email", session.getAttribute("resetEmail")); // để hidden input có giá trị
+
+        if (resetVerifyAttr != null) {
+            model.addAttribute("resetVerify", true); // ✅ Truyền lại vào model để JS sử dụng
+        }
+
         return "views/gdienChung/verify";
     }
 
@@ -86,15 +95,23 @@ public class QuenMatKhauController {
         }
 
         Optional<VerificationToken> tokenOpt = tokenRepository.findByEmailAndToken(email, code);
+
         if (tokenOpt.isEmpty()) {
             model.addAttribute("error", "Mã xác minh không đúng.");
+            model.addAttribute("type", "forgot");
+            model.addAttribute("email", email);
             return "views/gdienChung/verify";
         }
 
         VerificationToken token = tokenOpt.get();
+
         if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
-            model.addAttribute("error", "Mã xác minh đã hết hạn.");
-            return "views/gdienChung/verify";
+            tokenRepository.delete(token);
+            // KHÔNG remove session.resetEmail — vẫn giữ để tiếp tục gửi lại mã
+            model.addAttribute("error", "Mã xác minh đã hết hạn. Vui lòng gửi lại mã xác thực.");
+            model.addAttribute("type", "forgot");
+            model.addAttribute("email", email);
+            return "views/gdienChung/verify"; // ✅ Vẫn ở trang xác minh
         }
 
         session.setAttribute("verifiedEmail", email);
@@ -111,7 +128,8 @@ public class QuenMatKhauController {
     public String handleReset(@RequestParam("password") String password,
             @RequestParam("confirm") String confirm,
             HttpSession session,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         String email = (String) session.getAttribute("verifiedEmail");
 
@@ -148,8 +166,8 @@ public class QuenMatKhauController {
         session.removeAttribute("verifiedEmail");
         session.removeAttribute("resetEmail");
 
-        redirectAttributes.addFlashAttribute("success", "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.");
-        return "redirect:/auth/dangnhap";
+        model.addAttribute("message", "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.");
+        return "views/gdienChung/buoc2quenmatkhau";
     }
 
     private void sendVerificationEmail(String to, String code) {
@@ -167,7 +185,7 @@ public class QuenMatKhauController {
                                 <p>Bạn vừa yêu cầu đặt lại mật khẩu tại <strong>GlobalEdu</strong>.</p>
                                 <p>Mã xác minh của bạn là:</p>
                                 <div style="font-size: 24px; font-weight: bold; color: #2c3e50; text-align: center; margin: 20px 0;">%s</div>
-                                <p>Mã xác minh sẽ hết hạn sau <strong>10 phút</strong>. Vui lòng không chia sẻ mã này với người khác.</p>
+                                <p>Mã xác minh sẽ hết hạn sau <strong>2 phút</strong>. Vui lòng không chia sẻ mã này với người khác.</p>
                                 <p>Nếu bạn không thực hiện hành động này, vui lòng bỏ qua email này.</p>
                                 <br>
                                 <p>Trân trọng,<br><strong>Đội ngũ GlobalEdu</strong></p>

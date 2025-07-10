@@ -162,6 +162,7 @@ public class ThongTinCaNhanController {
 
         session.setAttribute("pendingEmailUpdate", dto.getEmail());
         session.setAttribute("currentEmail", tk.getEmail());
+        session.setAttribute("currentUserName", tk.getName());
 
         tokenService.generateAndSendToken(dto.getEmail(), tk.getName(),
                 "Xác minh thay đổi email", "Mã xác minh của bạn là:");

@@ -83,3 +83,16 @@
 .hoctapcuatoi .add-to-cart-form .btn {
     padding: 4px 8px;
 }
+
+.hoctapcuatoi .nav-tabs .nav-link {
+    color: #16203b !important;
+}
+
+.hoctapcuatoi .nav-tabs .nav-link:hover {
+    color: #126ffc !important;
+}
+
+.hoctapcuatoi .nav-tabs .nav-link.active {
+    color: #126ffc !important;
+    font-weight: bold;
+}

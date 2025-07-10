@@ -65,24 +65,6 @@ public class DangKyController {
         return "redirect:/auth/verify?type=register";
     }
 
-    @GetMapping("/forgot-password")
-    public String showForgotPasswordForm() {
-        return "views/gdienChung/forgot-password";
-    }
-
-    @PostMapping("/forgot-password")
-    public String handleForgotPassword(@RequestParam("email") String email, HttpSession session, Model model) {
-        Optional<TaiKhoan> tk = accountRepository.findByEmail(email);
-        if (tk.isEmpty()) {
-            model.addAttribute("error", "Email không tồn tại");
-            return "views/gdienChung/forgot-password";
-        }
-        session.setAttribute("resetEmail", email);
-        tokenService.generateAndSendToken(email, tk.get().getName(), "Khôi phục mật khẩu",
-                "Mã xác minh khôi phục mật khẩu:");
-        return "redirect:/auth/verify?type=reset";
-    }
-
     @GetMapping("/verify")
     public String showVerifyForm(Model model, @RequestParam(value = "type", defaultValue = "register") String type) {
         model.addAttribute("type", type);
@@ -97,8 +79,9 @@ public class DangKyController {
             Model model) {
 
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
+
         if (tokenOpt.isEmpty()) {
-            model.addAttribute("error", "Mã xác minh không đúng hoặc đã hết hạn.");
+            model.addAttribute("error", "Mã xác minh không đúng.");
             model.addAttribute("type", type != null ? type : "register");
             return "views/gdienChung/verify";
         }
@@ -107,6 +90,7 @@ public class DangKyController {
 
         // Kiểm tra hạn sử dụng mã
         if (token.getExpiryTime().isBefore(LocalDateTime.now())) {
+            tokenService.delete(token); // xoá token đã hết hạn
             model.addAttribute("error", "Mã xác minh đã hết hạn.");
             model.addAttribute("type", type != null ? type : "register");
             return "views/gdienChung/verify";
@@ -129,7 +113,6 @@ public class DangKyController {
 
             accountRepository.save(account);
 
-            // ✅ Tự động đăng nhập
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     account, null, List.of(new SimpleGrantedAuthority(account.getRole().getName())));
 
@@ -140,19 +123,10 @@ public class DangKyController {
             tokenService.delete(token);
             session.removeAttribute("pendingUser");
 
-            return "redirect:/"; // hoặc redirect đến /tai-khoan
+            return "redirect:/";
         }
 
-        // ✅ Xử lý xác minh khôi phục mật khẩu
-        String resetEmail = (String) session.getAttribute("resetEmail");
-        if (resetEmail != null && resetEmail.equals(token.getEmail())) {
-            session.setAttribute("verifiedEmail", resetEmail);
-            session.removeAttribute("resetEmail");
-            tokenService.delete(token);
-            return "redirect:/auth/reset-password";
-        }
-
-        // ✅ Xử lý xác minh cập nhật email
+        // Xử lý xác minh cập nhật email
         String pendingEmailUpdate = (String) session.getAttribute("pendingEmailUpdate");
         String oldEmail = (String) session.getAttribute("currentEmail");
 
@@ -182,26 +156,33 @@ public class DangKyController {
         return "views/gdienChung/verify";
     }
 
-    @GetMapping("/reset-password")
-    public String showResetForm(HttpSession session) {
-        if (session.getAttribute("verifiedEmail") == null) {
-            return "redirect:/auth/forgot-password";
-        }
-        return "views/gdienChung/reset-password";
-    }
-
-    @PostMapping("/reset-password")
-    public String handleReset(@RequestParam("password") String password, HttpSession session) {
-        String email = (String) session.getAttribute("verifiedEmail");
-        if (email == null) {
-            return "redirect:/auth/forgot-password";
+    // Gửi lại mã xác minh khi đăng ký
+    @PostMapping("/resend-register")
+    public String resendRegister(HttpSession session, RedirectAttributes redirectAttributes) {
+        DangKyHocVienDto dto = (DangKyHocVienDto) session.getAttribute("pendingUser");
+        if (dto == null) {
+            redirectAttributes.addFlashAttribute("error", "Phiên đăng ký không hợp lệ.");
+            return "redirect:/auth/dangky";
         }
 
-        TaiKhoan tk = accountRepository.findByEmail(email).orElseThrow();
-        tk.setPassword(passwordEncoder.encode(password));
-        accountRepository.save(tk);
-        session.removeAttribute("verifiedEmail");
-
-        return "redirect:/auth/dangnhap?resetSuccess";
+        tokenService.generateAndSendToken(dto.getEmail(), dto.getName(), "Xác minh tài khoản",
+                "Mã xác minh của bạn là:");
+        return "redirect:/auth/verify?type=register";
     }
+
+    // Gửi lại mã xác minh khi cập nhật email
+    @PostMapping("/resend-update-email")
+    public String resendUpdateEmail(HttpSession session, RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("pendingEmailUpdate");
+        String name = (String) session.getAttribute("currentUserName"); // giả sử đã lưu tên
+
+        if (email == null || name == null) {
+            redirectAttributes.addFlashAttribute("error", "Phiên xác minh không hợp lệ.");
+            return "redirect:/tai-khoan";
+        }
+
+        tokenService.generateAndSendToken(email, name, "Xác minh cập nhật email", "Mã xác minh của bạn là:");
+        return "redirect:/auth/verify?type=update-email";
+    }
+
 }

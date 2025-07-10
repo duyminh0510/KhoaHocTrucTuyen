@@ -29,7 +29,7 @@ public class TokenService {
         VerificationToken token = VerificationToken.builder()
                 .email(email)
                 .token(code)
-                .expiryTime(LocalDateTime.now().plusMinutes(10))
+                .expiryTime(LocalDateTime.now().plusMinutes(2))
                 .build();
         tokenRepository.save(token);
 
@@ -54,7 +54,7 @@ public class TokenService {
                             <h3>Xin chào %s,</h3>
                             <p>%s</p>
                             <p style=\"font-size: 22px; font-weight: bold; text-align: center;\">%s</p>
-                            <p>Mã xác thực sẽ hết hạn sau <strong>10 phút</strong>.</p>
+                            <p>Mã xác thực sẽ hết hạn sau <strong>2 phút</strong>.</p>
                         </div>
                     """, name, contentPrefix, code);
 
@@ -67,14 +67,7 @@ public class TokenService {
     }
 
     public Optional<VerificationToken> verifyToken(String token) {
-        Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(token);
-        if (tokenOpt.isEmpty())
-            return Optional.empty();
-        if (tokenOpt.get().getExpiryTime().isBefore(LocalDateTime.now())) {
-            tokenRepository.delete(tokenOpt.get());
-            return Optional.empty();
-        }
-        return tokenOpt;
+        return tokenRepository.findByToken(token); // Không kiểm tra thời gian ở đây
     }
 
     @Transactional
@@ -86,22 +79,4 @@ public class TokenService {
     public void delete(VerificationToken token) {
         tokenRepository.delete(token);
     }
-
-    public String validateToken(String token) {
-        Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(token);
-        if (tokenOpt.isPresent()) {
-            VerificationToken vt = tokenOpt.get();
-            if (vt.getExpiryTime().isAfter(LocalDateTime.now())) {
-                return vt.getEmail(); // Token hợp lệ -> trả về email
-            } else {
-                tokenRepository.delete(vt); // Token hết hạn -> xóa
-            }
-        }
-        return null; // Token không hợp lệ hoặc đã hết hạn
-    }
-
-    public void deleteTokenByEmail(String email) {
-        deleteByEmail(email);
-    }
-
 }
