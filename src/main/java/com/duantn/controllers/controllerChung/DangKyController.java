@@ -113,10 +113,18 @@ public class DangKyController {
 
             accountRepository.save(account);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    account, null, List.of(new SimpleGrantedAuthority(account.getRole().getName())));
+            // UsernamePasswordAuthenticationToken authToken = new
+            // UsernamePasswordAuthenticationToken(
+            // account, null, List.of(new
+            // SimpleGrantedAuthority(account.getRole().getName())));
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+            // SecurityContextHolder.getContext().setAuthentication(authToken);
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                    userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
             session.setAttribute("currentUser", account);
 
