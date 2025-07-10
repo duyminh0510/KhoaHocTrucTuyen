@@ -85,3 +85,10 @@
         height: 140px;
     }
 }
+
+.timkiem .add-to-cart-btn {
+    border: none !important;
+    box-shadow: none;
+    font-size: 16px;
+    /* nếu Bootstrap thêm shadow */
+}

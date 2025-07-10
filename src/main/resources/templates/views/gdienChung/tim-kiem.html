@@ -23,7 +23,7 @@
                     <th:block th:each="khoaHoc, iterStat : ${ketQuaTimKiem}">
                         <div class="col-12 col-sm-6 col-lg-3 mb-4">
                             <div class="card h-100 shadow-sm course-card"
-                                th:onclick="|window.location.href='/khoa-hoc/${khoaHoc.khoahocId}'|">
+                                th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
                                 <img class="card-img-top"
                                     th:src="${khoaHoc.anhBia}"
                                     alt="Ảnh khoá học" />
@@ -82,18 +82,17 @@
                                             <i class="fas fa-share me-1"></i>
                                         </button>
 
-                                        <form th:action="@{/gio-hang/them}"
-                                            method="post"
-                                            class="d-inline add-to-cart-form">
-                                            <input type="hidden"
-                                                name="khoaHocId"
-                                                th:value="${khoaHoc.khoahocId}" />
-                                            <button type="submit"
-                                                class="btn btn-outline-success btn-sm">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                        </form>
+                                        <button
+                                            class="btn btn-sm btn-outline-success add-to-cart-btn"
+                                            th:attr="data-id=${khoaHoc.khoahocId},
+                                                            data-name=${khoaHoc.tenKhoaHoc},
+                                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                                            data-giagoc=${khoaHoc.giagoc},
+                                                            data-anh=${khoaHoc.anhBia},
+                                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                                            <i
+                                                class="fas fa-cart-plus me-1"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -237,19 +236,17 @@
                                             th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
                                             <i class="fas fa-share me-1"></i>
                                         </button>
-
-                                        <form th:action="@{/gio-hang/them}"
-                                            method="post"
-                                            class="d-inline add-to-cart-form">
-                                            <input type="hidden"
-                                                name="khoaHocId"
-                                                th:value="${khoaHoc.khoahocId}" />
-                                            <button type="submit"
-                                                class="btn btn-outline-success btn-sm">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                        </form>
+                                        <button
+                                            class="btn btn-sm btn-outline-success add-to-cart-btn"
+                                            th:attr="data-id=${khoaHoc.khoahocId},
+                                                            data-name=${khoaHoc.tenKhoaHoc},
+                                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                                            data-giagoc=${khoaHoc.giagoc},
+                                                            data-anh=${khoaHoc.anhBia},
+                                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                                            <i
+                                                class="fas fa-cart-plus me-1"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
