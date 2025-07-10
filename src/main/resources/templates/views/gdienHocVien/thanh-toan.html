@@ -1,99 +1,117 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" lang="vi"
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Xác nhận thanh toán</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        .summary-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Xác nhận thanh toán</title>
+    </head>
 
-        .course-img {
-            max-width: 250px;
-            border-radius: 10px;
-        }
-
-        .price {
-            font-size: 1.6rem;
-            color: #dc3545;
-            font-weight: bold;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: #888;
-            margin-left: 10px;
-        }
-
-        .student-info {
-            font-size: 1rem;
-        }
-    </style>
-</head>
-
-<body>
-    <main>
-        <div class="container mt-5">
+    <body>
+        <main class="container my-5">
             <h2 class="mb-4">Xác nhận thanh toán</h2>
 
-            <div class="row">
-                <!-- Khóa học -->
-                <div class="col-md-7">
-                    <div class="summary-card">
-                        <h5>Thông tin khóa học</h5>
-                        <div class="d-flex mt-3">
-                            <img th:src="@{'/images/' + ${khoaHoc.anhBia}}" class="course-img me-4"
-                                alt="Ảnh bìa khóa học">
+            <div class="card p-4">
+                <h5>Các khóa học bạn đã chọn:</h5>
+                <ul class="list-group list-group-flush">
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                        th:each="kh : ${dsKhoaHoc}">
+                        <span th:text="${kh.tenKhoaHoc}">Tên khóa học</span>
+                        <strong class="text-danger"
+                            th:text="${#numbers.formatDecimal(kh.giagoc, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0
+                            ₫</strong>
+                    </li>
+                </ul>
 
-                            <div>
-                                <h4 th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h4>
-                                <p class="text-muted mb-2">
-                                    Giảng viên:
-                                    <span th:text="${khoaHoc.giangVien.taikhoan.name}">Tên giảng viên</span>
-                                </p>
-                                <p>
-                                    <span class="price"
-                                        th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0
-                                        ₫</span>
-                                    <span class="old-price"
-                                        th:if="${khoaHoc.giagoc != null and khoaHoc.giagoc > khoaHoc.giaKhuyenMai}"
-                                        th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0
-                                        ₫</span>
-                                </p>
-                                <p class="text-success" th:if="${khoaHoc.phanTramGiam > 0}">
-                                    Tiết kiệm <span th:text="${khoaHoc.phanTramGiam}"></span>%
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thông tin người mua & nút thanh toán -->
-                <div class="col-md-5">
-                    <div class="summary-card">
-                        <h5>Thông tin người mua</h5>
-                        <p class="student-info">
-                            <strong>Họ tên:</strong> <span th:text="${taiKhoan.name}">Tên</span><br>
-                            <strong>Email:</strong> <span th:text="${taiKhoan.email}">Email</span><br>
-                            <strong>SĐT:</strong> <span th:text="${taiKhoan.phone}">SĐT</span>
-                        </p>
-
-                        <form th:action="@{/hoc-vien/thanh-toan/xu-ly}" method="post">
-                            <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}">
-                            <button class="btn btn-success w-100 mt-3" type="submit">Xác nhận & Thanh toán</button>
-                        </form>
-
-                        <a href="/gio-hang" class="btn btn-link mt-2">← Quay lại giỏ hàng</a>
-                    </div>
+                <div class="mt-4 text-end">
+                    <h5>Tổng cộng:
+                        <span class="text-danger fs-4"
+                            th:text="${#numbers.formatDecimal(tongTien, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0
+                            ₫</span>
+                    </h5>
+                    <a href="#" id="xacNhanBtn" class="btn btn-success mt-3">Xác
+                        nhận thanh toán</a>
                 </div>
             </div>
-        </div>
-    </main>
-</body>
+
+            <script th:inline="javascript">
+            document.getElementById("xacNhanBtn").addEventListener("click", function(e) {
+                e.preventDefault();
+
+                const noiDung = "[[${userName}]]"; // tên người dùng
+                const tien = "[[${tongTien}]]".replace(/\./g, '').replace(/ ₫/, '');
+                const qrUrl = `https://img.vietqr.io/image/MBBank-40102200588888-compact.jpg?amount=${tien}&addInfo=${noiDung}`;
+
+                const khoaHocIds = /*[[${khoaHocIds}]]*/ [];
+
+                const img = document.createElement("img");
+                img.src = qrUrl;
+                img.style.width = "400px";
+
+                const modal = document.createElement("div");
+                modal.className = "modal fade show d-block";
+                modal.style.backgroundColor = "rgba(0,0,0,0.6)";
+                modal.style.position = "fixed";
+                modal.style.top = 0;
+                modal.style.left = 0;
+                modal.style.width = "100%";
+                modal.style.height = "100%";
+                modal.style.zIndex = 9999;
+
+                const box = document.createElement("div");
+                box.className = "bg-white p-4 rounded";
+                box.style.maxWidth = "450px";
+                box.style.margin = "100px auto";
+                box.style.textAlign = "center";
+                box.innerHTML = `<h5>Quét mã QR để thanh toán</h5>`;
+                box.appendChild(img);
+                modal.appendChild(box);
+                document.body.appendChild(modal);
+
+                let attempts = 0;
+                const interval = setInterval(async() => {
+                    attempts++;
+                    try {
+                        const res = await fetch("https://script.google.com/macros/s/.../exec");
+                        const data = await res.json();
+                        const last = data.data[data.data.length - 1];
+
+                        const giaTri = last["Giá trị"];
+                        const moTa = last["Mô tả"].normalize("NFD").replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+                        if (giaTri == tien && moTa.includes(noiDung.toLowerCase())) {
+                            clearInterval(interval);
+                            alert("✅ Thanh toán thành công!");
+
+                            await fetch("/hoc-vien/api/thanh-toan/thanh-cong", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    tenHocVien: noiDung,
+                                    tongTien: tien,
+                                    khoaHocIds: khoaHocIds
+                                })
+                            });
+
+                            window.location.href = "/lich-su-thanh-toan";
+                        }
+
+                        if (attempts > 60) {
+                            clearInterval(interval);
+                            alert("⛔ Hết thời gian thanh toán!");
+                            document.body.removeChild(modal);
+                        }
+                    } catch (e) {
+                        console.error("Lỗi khi kiểm tra thanh toán:", e);
+                    }
+                }, 3000);
+            });
+        </script>
+
+        </main>
+    </body>
 
 </html>

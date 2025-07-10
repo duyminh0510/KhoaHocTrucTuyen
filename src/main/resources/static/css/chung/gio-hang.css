@@ -1,131 +1,90 @@
-.giohang {
-    font-size: 18px;
-    font-weight: bold;
-    color: #16203b;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+body {
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.giohang i {
-    font-size: 30px;
-    color: #16203b;
+.giohang .cart-container {
+    max-width: 1100px;
+    margin: 50px auto;
 }
 
-.giohang .cart-wrapper {
-    padding: 40px 20px;
-}
-
-.giohang .cart-title {
-    font-weight: bold;
-    font-size: 32px;
-    color: #16203b;
+.giohang .cart-title-page {
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 30px;
 }
 
 .giohang .cart-item {
-    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    gap: 15px;
     padding: 20px 0;
+    border-bottom: 1px solid #ddd;
 }
 
-.giohang .cart-item img {
-    width: 120px;
-    height: 70px;
+.giohang .cart-image {
+    width: 140px;
+    height: 90px;
     object-fit: cover;
-    border-radius: 8px;
-}
-
-.giohang .item-title {
-    font-weight: 600;
-    font-size: 17px;
-    color: #16203b;
-    margin-bottom: 6px;
-}
-
-.giohang .item-meta {
-    font-size: 14px;
-    color: #555;
-}
-
-.giohang .label-tag {
-    font-size: 13px;
-    background-color: #d1e7dd;
-    color: #0f5132;
-    padding: 3px 8px;
     border-radius: 5px;
-    margin-right: 6px;
+}
+
+.giohang .cart-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.giohang .cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.giohang .cart-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.giohang .cart-teacher {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.giohang .cart-price {
+    margin-top: 5px;
 }
 
 .giohang .item-price {
+    color: #b32d0f;
     font-weight: bold;
-    font-size: 18px;
-    color: #16203b;
+    font-size: 1rem;
 }
 
 .giohang .item-old-price {
     text-decoration: line-through;
-    font-size: 13px;
-    color: #888;
+    color: #777;
+    margin-left: 10px;
+    font-size: 0.9rem;
 }
 
-.giohang .item-action {
-    color: #6f42c1;
-    font-size: 14px;
-    cursor: pointer;
+.giohang .btn-purple {
+    background-color: #a435f0;
+    color: white;
     font-weight: 500;
+    border: none;
+}
+
+.giohang .btn-purple:hover {
+    background-color: #8c2cd1;
 }
 
 .giohang .cart-summary {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background: #fafafa;
+    border: 1px solid #eee;
     padding: 20px;
-    border-radius: 12px;
-}
-
-.giohang .summary-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #16203b;
-}
-
-.giohang .summary-price {
-    font-size: 24px;
-    font-weight: bold;
-    color: #16203b;
-}
-
-.giohang .summary-note {
-    font-size: 13px;
-    color: #666;
-}
-
-.giohang .checkout-btn {
-    background-color: #16203b;
-    color: white;
-    font-weight: 600;
-    width: 100%;
-    padding: 12px;
     border-radius: 8px;
-    border: none;
+}
+
+.giohang .remove-btn {
     margin-top: 10px;
-}
-
-.giohang .checkout-btn:hover {
-    background-color: #0f172a;
-}
-
-.giohang .coupon-btn {
-    margin-top: 15px;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #16203b;
-    color: #16203b;
-    font-weight: 600;
-    border-radius: 8px;
-    background: transparent;
-}
-
-.giohang .coupon-btn:hover {
-    background-color: #16203b;
-    color: white;
 }

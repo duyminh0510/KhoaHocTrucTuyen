@@ -21,6 +21,7 @@ import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.GioHangChiTietRepository;
 import com.duantn.repositories.KhoaHocRepository;
+import com.duantn.services.DanhGiaService;
 import com.duantn.services.GioHangService;
 import com.duantn.services.TaiKhoanService;
 
@@ -42,6 +43,9 @@ public class GioHangController {
 
     @Autowired
     private GioHangChiTietRepository chiTietRepo;
+
+    @Autowired
+    private DanhGiaService danhGiaService;
 
     @RequestMapping()
     public String requestMethodName() {
@@ -107,13 +111,19 @@ public class GioHangController {
 
         List<CartItem> result = list.stream().map(ct -> {
             KhoaHoc k = ct.getKhoahoc();
+
+            long soLuongDanhGia = danhGiaService.demSoLuongDanhGia(k.getKhoahocId());
+            double diemTrungBinh = danhGiaService.diemTrungBinh(k.getKhoahocId());
+
             return new CartItem(
                     k.getKhoahocId(),
                     k.getTenKhoaHoc(),
                     ct.getDongia(),
                     k.getGiagoc(),
                     k.getAnhBia(),
-                    k.getGiangVien().getTaikhoan().getName());
+                    k.getGiangVien().getTaikhoan().getName(),
+                    (int) soLuongDanhGia,
+                    diemTrungBinh);
         }).toList();
 
         return ResponseEntity.ok(result);

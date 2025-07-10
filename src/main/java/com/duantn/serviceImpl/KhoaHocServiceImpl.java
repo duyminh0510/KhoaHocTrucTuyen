@@ -172,4 +172,14 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.findBySlug(slug).orElse(null);
     }
 
+    @Override
+    public List<KhoaHoc> findByIds(List<Integer> ids) {
+        return khoaHocRepository.findAllByKhoahocIdIn(ids);
+    }
+
+    @Override
+    public List<KhoaHoc> findAllByIds(List<Integer> ids) {
+        return khoaHocRepository.findAllById(ids);
+    }
+
 }

@@ -1,5 +1,5 @@
 package com.duantn.enums;
 
 public enum HinhThucThanhToan {
-    VNPAY, MOMO;
+    VNPAY, MOMO, CHUYEN_KHOAN;
 }

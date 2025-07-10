@@ -1,68 +1,47 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Giỏ hàng</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .cart-item {
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0;
-        }
-        
-        .item-price {
-            color: #d00;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        
-        .item-old-price {
-            text-decoration: line-through;
-            color: #777;
-            font-size: 0.9em;
-        }
-        
-        .cart-title {
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 4px;
-        }
-        
-        .cart-teacher {
-            font-size: 0.9rem;
-            color: #555;
-        }
-        
-        .cart-image {
-            width: 120px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-    </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Giỏ hàng</title>
+    </head>
 
-<body>
-    <main>
-        <div class="container mt-5">
-            <h2 class="mb-4">Giỏ hàng của bạn</h2>
+    <body>
+        <main class="giohang">
+            <div class="container cart-container">
+                <h2 class="cart-title-page">Giỏ hàng</h2>
 
-            <div id="cart-box"></div>
+                <div class="row">
+                    <!-- Danh sách khóa học -->
+                    <div class="col-lg-8">
+                        <div id="cart-box"></div>
+                    </div>
 
-            <div class="mt-4">
-                <h5>Tổng cộng: <span id="sum">0 ₫</span></h5>
-                <p id="old" class="text-muted"></p>
-                <div class="d-flex gap-3 mt-3">
-                    <a id="checkout-btn" href="#" class="btn btn-primary disabled">Tiến hành thanh
-                            toán</a>
-                    <button onclick="clearCart()" class="btn btn-outline-secondary">Xóa toàn
-                            bộ</button>
+                    <!-- Tổng tiền và nút thanh toán -->
+                    <div class="col-lg-4">
+                        <div class="cart-summary shadow-sm">
+                            <h5 class="fw-bold">Tổng cộng:</h5>
+                            <p id="sum"
+                                class="text-danger fs-4 fw-semibold mb-1">0 ₫
+                            </p>
+                            <p id="old" class="text-muted small"></p>
+
+                            <div class="d-grid gap-2 mt-3">
+                                <a id="checkout-btn" href="#"
+                                    class="btn btn-purple disabled">Tiến hành
+                                    thanh toán</a>
+                                <button onclick="clearCart()"
+                                    class="btn btn-outline-secondary">Xóa toàn
+                                    bộ</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <script th:inline="javascript">
+            <!-- Script -->
+            <script th:inline="javascript">
             const cartBox = document.getElementById('cart-box');
             const sumNode = document.getElementById('sum');
             const oldNode = document.getElementById('old');
@@ -83,28 +62,19 @@
             }
 
             function removeCart(id) {
-                const loadingMsg = document.createElement('p');
-                loadingMsg.innerText = 'Đang xử lý...';
-                cartBox.appendChild(loadingMsg);
-
                 if (isLoggedIn) {
                     fetch(`/gio-hang/xoa/${id}`, {
-                        method: 'DELETE'
-                    }).then(res => {
-                        loadingMsg.remove();
-                        if (res.ok) {
-                            render();
-                        } else {
-                            alert("Lỗi khi xóa khỏi giỏ hàng");
-                        }
-                    }).catch(() => {
-                        loadingMsg.remove();
-                        alert("Không thể kết nối đến máy chủ.");
-                    });
+                            method: 'DELETE'
+                        })
+                        .then(res => {
+                            if (res.ok) render();
+                            else alert("Lỗi khi xóa khỏi giỏ hàng");
+                        }).catch(() => {
+                            alert("Không thể kết nối đến máy chủ.");
+                        });
                 } else {
                     const updatedCart = getLocalCart().filter(i => i.khoaHocId !== id);
                     saveLocalCart(updatedCart);
-                    loadingMsg.remove();
                     render();
                 }
             }
@@ -128,23 +98,40 @@
 
             function handleCheckboxChange() {
                 const checkboxes = document.querySelectorAll('.select-one');
-                checkboxes.forEach(cb => {
-                    cb.addEventListener('change', function() {
-                        checkboxes.forEach(other => {
-                            if (other !== cb) other.checked = false;
-                        });
 
-                        if (cb.checked) {
-                            const khoaHocId = cb.value;
-                            checkoutBtn.href = `/hoc-vien/thanh-toan?khoahocId=${khoaHocId}`;
-                            checkoutBtn.classList.remove('disabled');
-                        } else {
-                            checkoutBtn.href = '#';
-                            checkoutBtn.classList.add('disabled');
-                        }
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        updateSelectedTotal();
                     });
                 });
             }
+
+            function updateSelectedTotal() {
+                const checkboxes = document.querySelectorAll('.select-one:checked');
+
+                const selectedIds = [];
+                let selectedTotal = 0;
+
+                checkboxes.forEach(cb => {
+                    selectedIds.push(cb.value);
+                    selectedTotal += parseFloat(cb.dataset.gia || 0);
+                });
+
+                // Cập nhật link thanh toán
+                if (selectedIds.length > 0) {
+                    const query = selectedIds.map(id => `khoahocId=${id}`).join('&');
+                    checkoutBtn.href = `/hoc-vien/thanh-toan?${query}`;
+                    checkoutBtn.classList.remove('disabled');
+                } else {
+                    checkoutBtn.href = '#';
+                    checkoutBtn.classList.add('disabled');
+                }
+
+                // Hiển thị tổng tiền đã chọn
+                sumNode.innerText = fmt(selectedTotal);
+                oldNode.innerText = selectedIds.length > 0 ? '(Tổng tiền của các khóa học đã chọn)' : '';
+            }
+
 
             function renderItems(items) {
                 cartBox.innerHTML = '';
@@ -158,45 +145,48 @@
                     return;
                 }
 
-                let total = 0;
-                let oldTotal = 0;
-
                 items.forEach(i => {
                             const gia = i.gia || 0;
                             const giagoc = i.giaGoc || gia;
 
-                            total += gia;
-                            oldTotal += giagoc;
-
                             const item = document.createElement('div');
-                            item.className = 'cart-item d-flex align-items-start';
+                            item.className = 'cart-item d-flex gap-3 align-items-start';
 
                             item.innerHTML = `
-                        <input type="checkbox" class="form-check-input me-3 mt-2 select-one" value="${i.khoaHocId}">
-                        <img src="/images/${i.anhBia || 'default.png'}" class="cart-image me-3" alt="Ảnh bìa">
-                        <div class="flex-grow-1">
-                            <div class="cart-title">${i.tenKhoaHoc}</div>
-                            <div class="cart-teacher">Bởi ${i.giangVien}</div>
-                            <div class="mt-2">
-                                <span class="item-price">${fmt(gia)}</span>
-                                ${giagoc > gia ? `<span class="item-old-price ms-2">${fmt(giagoc)}</span>` : ''}
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger mt-2" onclick="removeCart(${i.khoaHocId})">Xóa</button>
-                        </div>
-                    `;
+            <div class="form-check mt-2">
+                <input class="form-check-input select-one" type="checkbox"
+                    value="${i.khoaHocId}" data-gia="${gia}">
+            </div>
+            <img src="${i.anhBia}" class="cart-image" alt="Ảnh bìa">
+            <div class="cart-info">
+                <div class="cart-header">
+                    <div class="cart-title">${i.tenKhoaHoc}</div>
+                    <button class="btn btn-sm btn-outline-danger remove-btn"
+                        onclick="removeCart(${i.khoaHocId})">Xóa</button>
+                </div>
+                <div class="cart-teacher">Bởi ${i.giangVien}</div>
 
-                    cartBox.appendChild(item);
-                });
+                <div class="d-flex align-items-center gap-3 small text-secondary mt-1">
+                    <div><i class="fas fa-star text-warning me-1"></i> 
+                        <strong>${i.soLuongDanhGia || 0}</strong> đánh giá</div>
+                    <div><i class="fas fa-star text-warning me-1"></i> 
+                        <strong>${(i.diemTrungBinh || 0).toFixed(1)}</strong>/5</div>
+                </div>
 
-                sumNode.innerText = fmt(total);
-                if (oldTotal > total) {
-                    oldNode.innerText = `Giá gốc: ${fmt(oldTotal)} – Tiết kiệm ${Math.round((1 - total / oldTotal) * 100)}%`;
-                } else {
-                    oldNode.innerText = '';
-                }
+                <div class="cart-price mt-1">
+                    <span class="item-price">${fmt(gia)}</span>
+                    ${giagoc > gia ? `<span class="item-old-price">${fmt(giagoc)}</span>` : ''}
+                </div>
+            </div>
+        `;
 
-                handleCheckboxChange();
-            }
+        cartBox.appendChild(item);
+    });
+
+    handleCheckboxChange();
+    updateSelectedTotal(); // cập nhật ngay tổng giá trị khóa học đã chọn
+}
+
 
             function syncLocalToServer() {
                 const localCart = getLocalCart();
@@ -235,7 +225,7 @@
                 render();
             });
         </script>
-    </main>
-</body>
+        </main>
+    </body>
 
 </html>

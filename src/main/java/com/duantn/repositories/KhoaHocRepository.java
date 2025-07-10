@@ -88,4 +88,6 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
         List<KhoaHoc> findByGiangVien(GiangVien giangVien);
 
+        List<KhoaHoc> findAllByKhoahocIdIn(List<Integer> ids);
+
 }

@@ -46,4 +46,8 @@ public interface KhoaHocService {
 
     KhoaHoc getKhoaHocBySlug(String slug);
 
+    List<KhoaHoc> findByIds(List<Integer> ids);
+
+    List<KhoaHoc> findAllByIds(List<Integer> ids);
+
 }
