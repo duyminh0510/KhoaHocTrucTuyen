@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Thống kê giảng viên</title>
+    </head>
+
+    <body>
+        <main class="thongke">
+            <div class="thongke-container">
+                <div class="thongke-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>Bảng điều khiển giảng viên</h1>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h2>1,250</h2>
+                        <p>Học viên đăng ký</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-book"></i>
+                        <h2>12</h2>
+                        <p>Khóa học đang dạy</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h2>4.8</h2>
+                        <p>Điểm đánh giá trung bình</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dollar-sign"></i>
+                        <h2>35,000,000₫</h2>
+                        <p>Doanh thu tháng này</p>
+                    </div>
+                </div>
+
+                <div class="chart-placeholder">
+                    Biểu đồ: Số học viên hoặc doanh thu theo thời gian (tích hợp sau)
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

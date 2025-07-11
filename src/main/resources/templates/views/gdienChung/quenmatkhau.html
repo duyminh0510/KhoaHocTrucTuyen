@@ -1,0 +1,33 @@
+<!-- forgot-password.html -->
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Quên mật khẩu</title>
+    </head>
+
+    <body>
+        <main class="quenmatkhau">
+            <div class="forgot-container">
+                <h3 class="forgot-title">Quên mật khẩu</h3>
+                <p class="text-center">Nhập email của bạn để nhận liên kết đặt
+                    lại mật khẩu.</p>
+
+                <form th:action="@{/lay-lai-mat-khau}" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email"
+                            name="email" required placeholder="abc@example.com">
+                    </div>
+                    <button type="submit" class="btn btn-continue w-100">Tiếp
+                        tục</button>
+                </form>
+            </div>
+        </main>
+
+    </body>
+
+</html>

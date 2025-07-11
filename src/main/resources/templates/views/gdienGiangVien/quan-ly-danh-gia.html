@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Quản lý đánh giá</title>
+    </head>
+
+    <body>
+        <main class="quanlydanhgia">
+            <div class="danhgia">
+                <h1><i class="fas fa-star-half-alt"></i> Quản lý đánh giá</h1>
+
+                <!-- Bộ lọc khóa học -->
+                <div class="filter-course">
+                    <label for="courseSelect"><strong>Chọn khóa học:</strong></label>
+                    <select id="courseSelect" onchange="filterByCourse()">
+                        <option value="all">Tất cả</option>
+                        <option value="java">Java Spring Boot Cơ Bản</option>
+                        <option value="react">React JS Nâng Cao</option>
+                    </select>
+                </div>
+
+                <!-- Danh sách đánh giá -->
+                <div class="review-list">
+                    <div class="review-card" data-course="java">
+                        <div class="review-header">
+                            <span class="name">Nguyễn Văn A</span>
+                            <span class="date">10/06/2025</span>
+                        </div>
+                        <div class="review-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div class="review-content">
+                            Khóa học rất dễ hiểu, giảng viên giảng chi tiết từng phần. Tuy nhiên có thể bổ sung thêm ví dụ thực tế.
+                        </div>
+                    </div>
+
+                    <div class="review-card" data-course="react">
+                        <div class="review-header">
+                            <span class="name">Trần Thị B</span>
+                            <span class="date">12/06/2025</span>
+                        </div>
+                        <div class="review-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div class="review-content">
+                            Nội dung ổn nhưng phần nâng cao cần thêm video giải thích rõ hơn.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            function filterByCourse() {
+                const selected = document.getElementById("courseSelect").value;
+                const reviews = document.querySelectorAll(".review-card");
+
+                reviews.forEach(r => {
+                    const course = r.getAttribute("data-course");
+                    r.style.display = (selected === "all" || selected === course) ? "block" : "none";
+                });
+            }
+            </script>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,94 @@
+.timkiem {
+    padding: 20px 70px;
+    margin-bottom: 30px;
+}
+
+.timkiem .course-card {
+    border: 1px solid #b7b8ba;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.timkiem .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(22, 32, 59, 0.2);
+}
+
+.timkiem .course-card img {
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+
+.timkiem .card-body {
+    padding: 0.75rem 1rem;
+}
+
+.timkiem .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #16203b !important;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.timkiem .card-text {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 0.45rem;
+}
+
+.timkiem .card-footer {
+    padding: 0.75rem 1rem 1rem;
+    border-top: none;
+}
+
+.timkiem .fw-bold.text-danger {
+    font-size: 0.95rem;
+}
+
+.timkiem .text-muted del {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.timkiem .like-btn,
+.timkiem .share-btn,
+.timkiem .add-to-cart-form button {
+    font-size: 1.1rem;
+    padding: 0.1rem 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    border: none !important;
+}
+
+.timkiem .like-btn:hover,
+.timkiem .share-btn:hover,
+.timkiem .add-to-cart-form button:hover {
+    transform: scale(1.1);
+}
+
+.timkiem .result-summary {
+    display: inline-block;
+    background-color: #eaeafe;
+    color: #16203b;
+    font-weight: 500;
+    box-shadow: 0 12px 24px rgba(22, 32, 59, 0.2);
+}
+
+@media (max-width: 768px) {
+    .timkiem .course-card img {
+        height: 140px;
+    }
+}
+
+.timkiem .add-to-cart-btn {
+    border: none !important;
+    box-shadow: none;
+    font-size: 16px;
+    /* nếu Bootstrap thêm shadow */
+}

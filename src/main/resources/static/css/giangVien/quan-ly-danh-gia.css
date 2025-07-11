@@ -1,0 +1,71 @@
+.quanlydanhgia .danhgia {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.quanlydanhgia .danhgia h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #16203b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quanlydanhgia .filter-course {
+    margin-bottom: 25px;
+}
+
+.quanlydanhgia .filter-course select {
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    min-width: 250px;
+}
+
+.quanlydanhgia .review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.quanlydanhgia .review-card {
+    background-color: #f9fafb;
+    border: 1px solid #e1e1e1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.quanlydanhgia .review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.quanlydanhgia .review-header .name {
+    font-weight: 600;
+    color: #16203b;
+}
+
+.quanlydanhgia .review-header .date {
+    font-size: 14px;
+    color: #888;
+}
+
+.quanlydanhgia .review-stars {
+    color: #f5c518;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.quanlydanhgia .review-content {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+}

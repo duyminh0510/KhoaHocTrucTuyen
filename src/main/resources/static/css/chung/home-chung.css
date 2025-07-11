@@ -1,0 +1,274 @@
+.homechung .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 24px;
+}
+
+.homechung #mainBanner .carousel-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.homechung #mainBanner {
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.homechung .col-md-8 {
+    padding: 8px;
+}
+
+.homechung .col-md-4 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    /* Khoảng cách giữa 2 ảnh */
+    padding: 8px;
+}
+
+.homechung .col-md-4 img {
+    flex: 1;
+    width: 100%;
+    object-fit: cover;
+    height: 250px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.homechung h4 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e1e1e;
+    margin-bottom: 10px;
+}
+
+.homechung p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 24px;
+}
+
+.homechung .course-tabs {
+    margin-bottom: 32px;
+}
+
+.homechung .course-tabs .nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.homechung .course-tabs .nav-link {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: 500;
+    color: #495057;
+    background-color: #f1f1f1;
+    transition: all 0.3s ease;
+}
+
+.homechung .course-tabs .nav-link:hover {
+    background-color: #e2e6ea;
+    color: #007bff;
+}
+
+.homechung .course-tabs .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+
+/* danh  sách khóa học */
+
+
+/* Giao diện tổng quan khối chứa danh sách khóa học */
+
+.homechung .home-khoahoc-grid {
+    margin-top: 2rem;
+}
+
+
+/* Card khóa học */
+
+.homechung .course-card {
+    border: 1px solid #b7b8ba;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.homechung .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(22, 32, 59, 0.2);
+}
+
+
+/* Ảnh đại diện khóa học */
+
+.homechung .course-card .card-img-top {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+    display: block;
+}
+
+
+/* Nội dung body */
+
+.homechung .course-card .card-body {
+    padding: 0.75rem 1rem;
+}
+
+.homechung .course-card .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #16203b;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.homechung .course-card .card-text {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 0.45rem;
+}
+
+.homechung .course-card .text-muted {
+    font-size: 14px;
+    color: #888;
+}
+
+
+/* Footer hiển thị giá và các nút */
+
+.homechung .course-card .card-footer {
+    padding: 0.75rem 1rem 1rem;
+    border-top: none;
+}
+
+.homechung .course-card .card-body,
+.homechung .course-card .card-footer {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Giá */
+
+.homechung .course-card .fw-bold.text-danger {
+    font-size: 0.95rem;
+}
+
+.homechung .course-card del {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+
+/* Nút hành động: Thích, Chia sẻ, Giỏ hàng */
+
+.homechung .course-card .btn {
+    font-size: 1.1rem;
+    padding: 0.1rem 0.7rem;
+}
+
+.homechung .course-card .btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.homechung .course-card .btn-outline-danger:hover,
+.homechung .course-card .btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.homechung .course-card .btn-outline-primary {
+    color: #16203b;
+    border-color: #16203b;
+}
+
+.homechung .course-card .btn-outline-primary:hover {
+    background-color: #16203b;
+    color: #fff;
+}
+
+.homechung .course-card .btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+}
+
+.homechung .course-card .btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
+
+/* Nút xem thêm khóa học */
+
+.homechung .course-btn {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.homechung .course-btn .btn-outline-primary {
+    border-color: #16203b;
+    color: #16203b;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.4rem;
+}
+
+.homechung .course-btn .btn-outline-primary:hover {
+    background-color: #16203b;
+    color: #fff;
+}
+
+
+/* Responsive padding cho item */
+
+@media (max-width: 768px) {
+    .homechung .course-card {
+        margin-bottom: 1rem;
+    }
+}
+
+.homechung .tab-link {
+    border: none;
+    background: none;
+    color: black;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.homechung .tab-link.active {
+    color: #0d6efd;
+    /* màu xanh Bootstrap */
+    font-weight: 700;
+    border-bottom: 2px solid #0d6efd;
+}
+
+.homechung .tab-link:focus {
+    outline: none;
+}
+
+.homechung .text-chu-dao {
+    color: #16203b !important;
+}
+
+.homechung .text-primary {
+    color: #224195 !important;
+}

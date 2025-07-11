@@ -1,0 +1,98 @@
+.hoctapcuatoi .course-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.hoctapcuatoi .course-card,
+.hoctapcuatoi .hoctap-card {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.hoctapcuatoi .course-card:hover,
+.hoctapcuatoi .hoctap-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.hoctapcuatoi .course-card .card-img-top,
+.hoctapcuatoi .hoctap-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.hoctapcuatoi .course-card .card-title,
+.hoctapcuatoi .hoctap-card .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.hoctapcuatoi .course-card .card-footer,
+.hoctapcuatoi .hoctap-card .card-footer {
+    padding-top: 0;
+    border: none !important;
+    background-color: white !important;
+}
+
+.hoctapcuatoi .course-card .card-footer .btn,
+.hoctapcuatoi .hoctap-card .card-footer .btn {
+    white-space: nowrap;
+}
+
+.hoctapcuatoi .hoctap-card .btn-share {
+    padding: 4px 6px;
+}
+
+.hoctapcuatoi .hoctap-card .btn-vao-hoc {
+    padding: 4px 8px;
+}
+
+.hoctapcuatoi .hoctap-card .btn-danh-gia {
+    padding: 4px 8px;
+}
+
+.hoctapcuatoi .hoctap-card .trangthai {
+    text-align: center;
+}
+
+.hoctapcuatoi .certificate-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 5px solid #198754;
+}
+
+.hoctapcuatoi .like-btn {
+    min-width: 48px;
+    padding: 4px 8px;
+}
+
+.hoctapcuatoi .share-btn {
+    padding: 4px 8px;
+}
+
+.hoctapcuatoi .add-to-cart-form .btn {
+    padding: 4px 8px;
+}
+
+.hoctapcuatoi .nav-tabs .nav-link {
+    color: #16203b !important;
+}
+
+.hoctapcuatoi .nav-tabs .nav-link:hover {
+    color: #126ffc !important;
+}
+
+.hoctapcuatoi .nav-tabs .nav-link.active {
+    color: #126ffc !important;
+    font-weight: bold;
+}

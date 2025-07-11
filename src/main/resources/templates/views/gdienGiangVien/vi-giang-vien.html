@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ví Giảng Viên</title>
+    <link rel="stylesheet" th:href="@{/css/giangVien/home.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4">Ví Giảng Viên</h2>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Số Dư Hiện Tại
+            </div>
+            <div class="card-body">
+                <h3 class="card-title text-success">
+                    <span th:text="${#numbers.formatDecimal(soDu, 0, 'COMMA', 0, 'POINT')}"></span> VNĐ
+                </h3>
+            </div>
+        </div>
+
+        <!-- Form rút tiền -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Yêu Cầu Rút Tiền
+            </div>
+            <div class="card-body">
+                <form th:action="@{/giangvien/vi-giang-vien/rut-tien}" method="post">
+                    <div class="mb-3">
+                        <label for="soTienRut" class="form-label">Số tiền muốn rút (VNĐ, tối thiểu 100.000)</label>
+                        <input type="number" class="form-control" id="soTienRut" name="soTienRut" min="100000" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi Yêu Cầu Rút Tiền</button>
+                </form>
+                <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
+                    Yêu cầu rút tiền đã được gửi thành công!
+                </div>
+                <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                    Số tiền rút không hợp lệ hoặc vượt quá số dư hiện có!
+                </div>
+            </div>
+        </div>
+
+        <!-- Lịch sử nhận tiền -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Lịch Sử Nhận Tiền
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã giao dịch</th>
+                            <th>Số tiền nhận</th>
+                            <th>Ngày nhận</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${lichSuThuNhap}">
+                            <td th:text="${item.doanhthuId}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.sotiennhan, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                            <td th:text="${#temporals.format(item.ngaynhan, 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:text="${item.mota}"></td>
+                        </tr>
+                        <tr th:if="${lichSuThuNhap.isEmpty()}">
+                            <td colspan="4" class="text-center">Không có lịch sử nhận tiền.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Lịch sử rút tiền -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Lịch Sử Rút Tiền
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Số tiền rút</th>
+                            <th>Ngày rút</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${lichSuRutTien}">
+                            <td th:text="${item.ruttienId}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                            <td th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:text="${item.trangthai.displayName}"></td>
+                        </tr>
+                        <tr th:if="${lichSuRutTien.isEmpty()}">
+                            <td colspan="4" class="text-center">Không có lịch sử rút tiền.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Yêu cầu rút đang chờ xử lý -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Yêu Cầu Rút Tiền Đang Chờ Xử Lý
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Số tiền rút</th>
+                            <th>Ngày yêu cầu</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${yeuCauDangXuLy}">
+                            <td th:text="${item.ruttienId}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                            <td th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:text="${item.trangthai.displayName}"></td>
+                        </tr>
+                        <tr th:if="${yeuCauDangXuLy.isEmpty()}">
+                            <td colspan="4" class="text-center">Không có yêu cầu rút tiền đang chờ xử lý.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html> 

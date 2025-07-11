@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách Khóa học cần phê duyệt</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        margin: 2px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-view {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .btn-approve {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .btn-reject {
+        background-color: #dc3545;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Danh sách Khóa học cần phê duyệt</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tên Khóa học</th>
+          <th>Giá Gốc</th>
+          <th>Giá KM</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="khoaHoc : ${danhSach}">
+          <td th:text="${khoaHoc.tenKhoaHoc}">Tên KH</td>
+          <td
+            th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+          >
+            0 ₫
+          </td>
+          <td
+            th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+          >
+            0 ₫
+          </td>
+          <td th:text="${khoaHoc.trangThai}">Trạng thái</td>
+          <td>
+            <a
+              th:href="@{/duyetChiTiet/{id}(id=${khoaHoc.khoahocId})}"
+              class="btn btn-view"
+              >Xem chi tiết</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

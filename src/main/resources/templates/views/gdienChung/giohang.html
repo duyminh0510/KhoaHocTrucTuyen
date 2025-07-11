@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+        
+        .item-price {
+            color: #d00;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .item-old-price {
+            text-decoration: line-through;
+            color: #777;
+            font-size: 0.9em;
+        }
+        
+        .cart-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+        
+        .cart-teacher {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .cart-image {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container mt-5">
+            <h2 class="mb-4">Giỏ hàng của bạn</h2>
+
+            <div id="cart-box"></div>
+
+            <div class="mt-4">
+                <h5>Tổng cộng: <span id="sum">0 ₫</span></h5>
+                <p id="old" class="text-muted"></p>
+                <div class="d-flex gap-3 mt-3">
+                    <a id="checkout-btn" href="#" class="btn btn-primary disabled">Tiến hành thanh
+                            toán</a>
+                    <button onclick="clearCart()" class="btn btn-outline-secondary">Xóa toàn
+                            bộ</button>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            const cartBox = document.getElementById('cart-box');
+            const sumNode = document.getElementById('sum');
+            const oldNode = document.getElementById('old');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            const isLoggedIn = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+
+            function fmt(n) {
+                return new Intl.NumberFormat('vi-VN').format(n) + ' ₫';
+            }
+
+            function getLocalCart() {
+                return JSON.parse(localStorage.getItem('cart')) || [];
+            }
+
+            function saveLocalCart(cart) {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            function removeCart(id) {
+                const loadingMsg = document.createElement('p');
+                loadingMsg.innerText = 'Đang xử lý...';
+                cartBox.appendChild(loadingMsg);
+
+                if (isLoggedIn) {
+                    fetch(`/gio-hang/xoa/${id}`, {
+                        method: 'DELETE'
+                    }).then(res => {
+                        loadingMsg.remove();
+                        if (res.ok) {
+                            render();
+                        } else {
+                            alert("Lỗi khi xóa khỏi giỏ hàng");
+                        }
+                    }).catch(() => {
+                        loadingMsg.remove();
+                        alert("Không thể kết nối đến máy chủ.");
+                    });
+                } else {
+                    const updatedCart = getLocalCart().filter(i => i.khoaHocId !== id);
+                    saveLocalCart(updatedCart);
+                    loadingMsg.remove();
+                    render();
+                }
+            }
+
+            function clearCart() {
+                if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) return;
+
+                if (isLoggedIn) {
+                    fetch('/gio-hang/clear', {
+                            method: 'DELETE'
+                        })
+                        .then(res => {
+                            if (res.ok) render();
+                            else alert('Không thể xóa giỏ hàng');
+                        });
+                } else {
+                    saveLocalCart([]);
+                    render();
+                }
+            }
+
+            function handleCheckboxChange() {
+                const checkboxes = document.querySelectorAll('.select-one');
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        checkboxes.forEach(other => {
+                            if (other !== cb) other.checked = false;
+                        });
+
+                        if (cb.checked) {
+                            const khoaHocId = cb.value;
+                            checkoutBtn.href = `/hoc-vien/thanh-toan?khoahocId=${khoaHocId}`;
+                            checkoutBtn.classList.remove('disabled');
+                        } else {
+                            checkoutBtn.href = '#';
+                            checkoutBtn.classList.add('disabled');
+                        }
+                    });
+                });
+            }
+
+            function renderItems(items) {
+                cartBox.innerHTML = '';
+
+                if (!items.length) {
+                    cartBox.innerHTML = '<p>Giỏ hàng trống.</p>';
+                    sumNode.innerText = '0 ₫';
+                    oldNode.innerText = '';
+                    checkoutBtn.classList.add('disabled');
+                    checkoutBtn.href = '#';
+                    return;
+                }
+
+                let total = 0;
+                let oldTotal = 0;
+
+                items.forEach(i => {
+                            const gia = i.gia || 0;
+                            const giagoc = i.giaGoc || gia;
+
+                            total += gia;
+                            oldTotal += giagoc;
+
+                            const item = document.createElement('div');
+                            item.className = 'cart-item d-flex align-items-start';
+
+                            item.innerHTML = `
+                        <input type="checkbox" class="form-check-input me-3 mt-2 select-one" value="${i.khoaHocId}">
+                        <img src="/images/${i.anhBia || 'default.png'}" class="cart-image me-3" alt="Ảnh bìa">
+                        <div class="flex-grow-1">
+                            <div class="cart-title">${i.tenKhoaHoc}</div>
+                            <div class="cart-teacher">Bởi ${i.giangVien}</div>
+                            <div class="mt-2">
+                                <span class="item-price">${fmt(gia)}</span>
+                                ${giagoc > gia ? `<span class="item-old-price ms-2">${fmt(giagoc)}</span>` : ''}
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger mt-2" onclick="removeCart(${i.khoaHocId})">Xóa</button>
+                        </div>
+                    `;
+
+                    cartBox.appendChild(item);
+                });
+
+                sumNode.innerText = fmt(total);
+                if (oldTotal > total) {
+                    oldNode.innerText = `Giá gốc: ${fmt(oldTotal)} – Tiết kiệm ${Math.round((1 - total / oldTotal) * 100)}%`;
+                } else {
+                    oldNode.innerText = '';
+                }
+
+                handleCheckboxChange();
+            }
+
+            function syncLocalToServer() {
+                const localCart = getLocalCart();
+                if (!localCart.length) return;
+
+                fetch('/gio-hang/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(localCart)
+                }).then(res => {
+                    if (res.ok) {
+                        localStorage.removeItem('cart');
+                        render();
+                    }
+                });
+            }
+
+            function render() {
+                if (isLoggedIn) {
+                    fetch('/gio-hang/data')
+                        .then(res => res.json())
+                        .then(data => renderItems(data))
+                        .catch(err => {
+                            console.error('Lỗi khi tải giỏ hàng từ DB:', err);
+                            cartBox.innerHTML = '<p>Lỗi khi tải giỏ hàng.</p>';
+                        });
+                } else {
+                    renderItems(getLocalCart());
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                if (isLoggedIn) {
+                    syncLocalToServer();
+                }
+                render();
+            });
+        </script>
+    </main>
+</body>
+
+</html>
