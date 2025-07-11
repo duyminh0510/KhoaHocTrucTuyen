@@ -65,12 +65,25 @@ public class ThanhToanController {
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // Lưu giao dịch sơ bộ
+        GiaoDichKhoaHoc giaoDich = GiaoDichKhoaHoc.builder()
+                .tongtien(tongTien)
+                .tenhocvien(tk.getName())
+                .taikhoan(tk)
+                .trangthai(TrangThaiGiaoDich.CHO_XU_LY)
+                .hinhThucThanhToan(HinhThucThanhToan.CHUYEN_KHOAN)
+                .build();
+
+        giaoDichKhoaHocRepository.save(giaoDich);
+
+        // Truyền giaoDichId sang giao diện (nếu cần dùng lại)
+        model.addAttribute("giaoDichId", giaoDich.getGiaodichId());
+
         List<Integer> khoaHocIds = dsKhoaHoc.stream()
                 .map(KhoaHoc::getKhoahocId)
-                .toList(); // Java 16+ hoặc dùng .collect(Collectors.toList()) nếu bạn dùng Java 8-11
+                .toList();
 
         model.addAttribute("khoaHocIds", khoaHocIds);
-
         model.addAttribute("dsKhoaHoc", dsKhoaHoc);
         model.addAttribute("tongTien", tongTien);
 
