@@ -73,6 +73,13 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
         List<KhoaHoc> findByDanhMuc_danhmucId(Integer danhMucId);
 
+        // Lấy các khoá học theo danh mục và trạng thái PUBLISHED
+        List<KhoaHoc> findByDanhMuc_danhmucIdAndTrangThai(Integer danhMucId, com.duantn.enums.TrangThaiKhoaHoc trangThai);
+
+        // Lấy các khoá học theo danh mục và trạng thái PUBLISHED (tạo mới, dùng @Query)
+        @Query("SELECT k FROM KhoaHoc k WHERE k.danhMuc.danhmucId = :danhMucId AND k.trangThai = 'PUBLISHED'")
+        List<KhoaHoc> findPublishedByDanhMucId(@Param("danhMucId") Integer danhMucId);
+
         //
         @Query("""
                         SELECT k FROM KhoaHoc k

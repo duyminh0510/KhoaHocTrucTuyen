@@ -46,4 +46,8 @@ public interface KhoaHocService {
 
     KhoaHoc getKhoaHocBySlug(String slug);
 
+    List<KhoaHoc> getKhoaHocTheoDanhMucAndTrangThai(Integer danhMucId, com.duantn.enums.TrangThaiKhoaHoc trangThai);
+
+    // Lấy khoá học PUBLISHED theo danh mục (tạo mới)
+    List<KhoaHoc> getPublishedKhoaHocByDanhMuc(Integer danhMucId);
 }

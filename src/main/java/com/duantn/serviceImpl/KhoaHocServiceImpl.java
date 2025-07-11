@@ -172,4 +172,14 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.findBySlug(slug).orElse(null);
     }
 
+    @Override
+    public List<KhoaHoc> getKhoaHocTheoDanhMucAndTrangThai(Integer danhMucId, com.duantn.enums.TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.findByDanhMuc_danhmucIdAndTrangThai(danhMucId, trangThai);
+    }
+
+    @Override
+    public List<KhoaHoc> getPublishedKhoaHocByDanhMuc(Integer danhMucId) {
+        return khoaHocRepository.findPublishedByDanhMucId(danhMucId);
+    }
+
 }
