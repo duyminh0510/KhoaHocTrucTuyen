@@ -14,7 +14,7 @@ import com.duantn.services.ChuongService;
 import com.duantn.services.KhoaHocService;
 
 @Controller
-@RequestMapping("/duyetChiTiet")
+@RequestMapping("/{prefix:(?:admin|nhanvien)}")
 @PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
 public class ChiTietPheDuyetController {
 
@@ -24,19 +24,23 @@ public class ChiTietPheDuyetController {
     @Autowired
     private ChuongService chuongService;
 
-    // Xem chi tiết khóa học
+    // ✅ Xem chi tiết khóa học
     @GetMapping("/{id}")
-    public String chiTietKhoaHoc(@PathVariable("id") Integer id, Model model) {
+    public String chiTietKhoaHoc(@PathVariable("prefix") String prefix, // 👈 THÊM DÒNG NÀY
+            @PathVariable("id") Integer id, Model model) {
+
         KhoaHoc khoaHoc = khoaHocService.getKhoaHocById(id);
         if (khoaHoc == null) {
-            // Nếu không tìm thấy khóa học, chuyển hướng về trang danh sách với thông báo lỗi
             return "redirect:/duyetChiTiet/danh-sach?error=notfound";
         }
 
         List<Chuong> chuongs = chuongService != null ? chuongService.findByKhoaHocId(id) : null;
 
+        // ✅ Gán prefix vào model
+        model.addAttribute("prefix", prefix);
         model.addAttribute("khoaHoc", khoaHoc);
         model.addAttribute("chuongs", chuongs);
+
         return "views/gdienQuanLy/duyetKhoaHocChiTiet";
     }
 }

@@ -230,78 +230,57 @@
     </div>
 
    <!-- Modal từ chối và nút duyệt/chối chỉ hiển thị nếu trạng thái là PENDING_APPROVAL -->
+ <!-- ✅ Chỉ hiển thị khi khóa học đang chờ phê duyệt -->
 <div th:if="${khoaHoc.trangThai.name() == 'PENDING_APPROVAL'}">
   <div class="approve-reject-row">
-    <form
-      th:action="@{/phe-duyet/{id}(id=${khoaHoc.khoahocId})}"
-      method="post"
-      style="margin: 0"
-    >
+
+    <!-- ✅ Nút DUYỆT khóa học với đường dẫn động theo prefix -->
+    <form th:action="@{'/' + ${prefix} + '/phe-duyet/' + ${khoaHoc.khoahocId}}" method="post" style="display:inline;">
       <button type="submit" class="btn btn-approve btn-lg">
         Duyệt khóa học
       </button>
     </form>
-    <button
-      type="button"
-      class="btn btn-reject btn-lg"
-      data-bs-toggle="modal"
-      data-bs-target="#tuChoiModal"
-      style="margin: 0"
-    >
+
+    <!-- ✅ Nút mở MODAL TỪ CHỐI -->
+    <button type="button" class="btn btn-reject btn-lg" data-bs-toggle="modal"
+            th:attr="data-bs-target='#tuChoiModal_' + ${khoaHoc.khoahocId}">
       Từ chối khóa học
     </button>
-  </div>
 
-  <!-- Modal từ chối -->
-  <div
-    class="modal fade"
-    id="tuChoiModal"
-    tabindex="-1"
-    aria-labelledby="tuChoiModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <form
-        th:action="@{/tu-choi/{id}(id=${khoaHoc.khoahocId})}"
-        method="post"
-      >
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="tuChoiModalLabel">Từ chối khóa học</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="lyDoTuChoi" class="form-label">Lý do từ chối</label>
-              <textarea
-                class="form-control"
-                id="lyDoTuChoi"
-                name="lyDoTuChoi"
-                rows="4"
-                required
-              ></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Hủy
-            </button>
-            <button type="submit" class="btn btn-danger">Gửi từ chối</button>
-          </div>
-        </div>
-      </form>
-    </div>
   </div>
 </div>
+
+<!-- ✅ MODAL từ chối khóa học -->
+<div class="modal fade" th:id="'tuChoiModal_' + ${khoaHoc.khoahocId}" tabindex="-1" aria-labelledby="tuChoiModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <!-- ✅ Form từ chối: dùng prefix động trong đường dẫn -->
+    <form th:action="@{'/' + ${prefix} + '/tu-choi/' + ${khoaHoc.khoahocId}}" method="post">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="tuChoiModalLabel">Lý do từ chối khóa học</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="lyDoTuChoi" class="form-label">Lý do:</label>
+            <textarea class="form-control" name="lyDoTuChoi" rows="4" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-danger">Xác nhận từ chối</button>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
