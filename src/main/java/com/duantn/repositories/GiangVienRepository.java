@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.duantn.entities.GiangVien;
 import com.duantn.entities.TaiKhoan;
@@ -22,4 +23,32 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
         java.util.List<GiangVien> findByTenGiangVienContainingIgnoreCaseNative(
                         @org.springframework.data.repository.query.Param("ten") String ten);
 
+        // Thống kê doanh thu từng khóa học của giảng viên
+        @Query("SELECT new com.duantn.dtos.DoanhThuKhoaHocGiangVienDto(" +
+                        "kh.tenKhoaHoc, COUNT(dh.danghocId), SUM(gtkh.tongtien), SUM(dtgv.sotiennhan)) " +
+                        "FROM GiangVien gv " +
+                        "JOIN KhoaHoc kh ON gv.giangvienId = kh.giangVien.giangvienId " +
+                        "JOIN DangHoc dh ON kh.khoahocId = dh.khoahoc.khoahocId " +
+                        "JOIN GiaoDichKhoaHoc gtkh ON gtkh.taikhoan.taikhoanId = dh.taikhoan.taikhoanId " +
+                        "JOIN DoanhThuGiangVien dtgv ON dtgv.dangHoc.danghocId = dh.danghocId " +
+                        "WHERE gv.giangvienId = :giangVienId " +
+                        "GROUP BY kh.tenKhoaHoc")
+        java.util.List<com.duantn.dtos.DoanhThuKhoaHocGiangVienDto> thongKeDoanhThuTheoGiangVien(
+                        @org.springframework.data.repository.query.Param("giangVienId") Integer giangVienId);
+
+        // Tính điểm đánh giá trung bình của giảng viên
+        @Query("SELECT AVG(dg.diemDanhGia) FROM DanhGia dg WHERE dg.khoahoc.giangVien.giangvienId = :giangVienId")
+        Double tinhDiemDanhGiaTrungBinh(@Param("giangVienId") Integer giangVienId);
+
+        // Tính doanh thu tháng này (lọc theo ngày trong bảng GiaoDichKhoaHoc)
+        @Query("SELECT SUM(gtkh.tongtien) " +
+                        "FROM GiaoDichKhoaHoc gtkh " +
+                        "JOIN DangHoc dh ON dh.taikhoan.taikhoanId = gtkh.taikhoan.taikhoanId " +
+                        "JOIN KhoaHoc kh ON kh.khoahocId = dh.khoahoc.khoahocId " +
+                        "WHERE kh.giangVien.giangvienId = :giangVienId " +
+                        "AND gtkh.ngayGiaoDich BETWEEN :startDate AND :endDate")
+        Double tinhDoanhThuTrongKhoangThoiGian(
+                        @Param("giangVienId") Integer giangVienId,
+                        @Param("startDate") java.time.LocalDateTime startDate,
+                        @Param("endDate") java.time.LocalDateTime endDate);
 }
