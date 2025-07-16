@@ -40,7 +40,8 @@ public class RutTienGiangVien implements Serializable {
     @Column(name = "tenGiangVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenGiangVien;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "trangthai", nullable = false)
-    private TrangThaiRutTien trangthai;
+    private TrangThaiRutTien trangthai = TrangThaiRutTien.DANG_CHO_XU_LY;
 }

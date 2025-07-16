@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi"
+<html lang="en"
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
     <head>
@@ -16,29 +16,28 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><b>ID:</b> <span
-                                    th:text="${gd.id}"></span></li>
+                                    th:text="${gd.giaodichId}"></span></li>
                             <li class="list-group-item"><b>Học viên:</b> <span
-                                    th:text="${gd.tenHocVien}"></span></li>
+                                    th:text="${gd.tenhocvien}"></span></li>
                             <li class="list-group-item"><b>Email:</b> <span
-                                    th:text="${gd.email}"></span></li>
+                                    th:text="${gd.taikhoan.email}"></span></li>
                             <li class="list-group-item"><b>Ngày giao dịch:</b>
                                 <span th:text="${gd.ngayGiaoDich}"></span></li>
                             <li class="list-group-item"><b>Hình thức:</b> <span
-                                    th:text="${gd.hinhThuc}"></span></li>
+                                    th:text="${gd.hinhThucThanhToan}"></span></li>
                             <li class="list-group-item"><b>Tổng tiền:</b> <span
-                                    th:text="${#numbers.formatDecimal(gd.tongTien, 0, 'COMMA', 2, 'POINT')} + ' đ'"></span></li>
+                                    th:text="${#numbers.formatDecimal(gd.tongtien, 0, 'COMMA', 2, 'POINT')} + ' đ'"></span></li>
                             <li class="list-group-item"><b>Trạng thái:</b> <span
-                                    th:text="${gd.trangThai}"></span></li>
-                            <li class="list-group-item"><b>Khóa học:</b> <span
-                                    th:text="${gd.tenKhoaHoc}"></span></li>
-                            <li class="list-group-item"><b>Mã giao dịch:</b>
-                                <span th:text="${gd.maGiaoDich}"></span></li>
-                            <li class="list-group-item"><b>Ghi chú:</b> <span
-                                    th:text="${gd.ghiChu}"></span></li>
+                                    th:text="${gd.trangthai}"></span></li>
+                            <li class="list-group-item"><b>Khóa học:</b>
+                                <ul>
+                                    <li th:each="ct : ${gd.chiTietGiaoDich}" th:text="${ct.khoahoc.tenKhoaHoc}"></li>
+                                </ul>
+                            </li>
                         </ul>
                         <div class="text-center">
-                            <a href="/admin/quanly-giao-dich" class="btn-back">⬅
-                                Quay lại danh sách</a>
+                            <a th:href="@{/{basePath}/quanly-giao-dich(basePath=${basePath})}" class="btn-back">⬅ Quay lại danh sách</a>
+
                         </div>
                     </div>
                 </div>

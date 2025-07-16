@@ -12,25 +12,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.duantn.dtos.GiaoDichRequest;
+import com.duantn.entities.DangHoc;
+import com.duantn.entities.DoanhThuGiangVien;
 import com.duantn.entities.GiaoDichKhoaHoc;
 import com.duantn.entities.GiaoDichKhoaHocChiTiet;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.enums.HinhThucThanhToan;
 import com.duantn.enums.TrangThaiGiaoDich;
+import com.duantn.repositories.DangHocRepository;
+import com.duantn.repositories.DoanhThuGiangVienRepository;
 import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.GiaoDichKhoaHocRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.services.CustomUserDetails;
+import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.KhoaHocService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/hoc-vien")
@@ -46,7 +50,16 @@ public class ThanhToanController {
     private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
 
     @Autowired
+    private DangHocRepository dangHocRepository;
+
+    @Autowired
     private KhoaHocRepository khoaHocRepo;
+
+    @Autowired
+    private DoanhThuGiangVienRepository doanhThuGiangVienRepository;
+
+    @Autowired
+    private EmailThanhToanThanhCongService emailThanhToanThanhCongService;
 
     @GetMapping("/thanh-toan")
     public String hienThiThanhToan(@RequestParam("khoahocId") List<Integer> ids, Model model) {
@@ -61,7 +74,7 @@ public class ThanhToanController {
         List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(ids);
 
         BigDecimal tongTien = dsKhoaHoc.stream()
-                .map(KhoaHoc::getGiagoc)
+                .map(KhoaHoc::getGiaHienTai)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -71,7 +84,7 @@ public class ThanhToanController {
                 .tenhocvien(tk.getName())
                 .taikhoan(tk)
                 .trangthai(TrangThaiGiaoDich.CHO_XU_LY)
-                .hinhThucThanhToan(HinhThucThanhToan.CHUYEN_KHOAN)
+                .hinhThucThanhToan(HinhThucThanhToan.SmartBanking)
                 .build();
 
         giaoDichKhoaHocRepository.save(giaoDich);
@@ -91,54 +104,92 @@ public class ThanhToanController {
     }
 
     @PostMapping("/api/thanh-toan/thanh-cong")
-    @ResponseBody
-    public ResponseEntity<?> luuGiaoDich(@RequestBody GiaoDichRequest request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<?> xuLyThanhToanThanhCong(@RequestBody GiaoDichRequest request) {
+        Integer giaoDichId = Integer.valueOf(request.getGiaoDichId()); // hoặc parseInt()
+        Optional<GiaoDichKhoaHoc> optionalGDKH = giaoDichKhoaHocRepository.findById(giaoDichId);
 
-        if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn chưa đăng nhập");
+        if (optionalGDKH.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy giao dịch");
         }
 
-        TaiKhoan taiKhoan = userDetails.getTaiKhoan();
+        GiaoDichKhoaHoc giaoDichKH = optionalGDKH.get();
 
-        try {
-            // Tạo giao dịch chính
-            // Tạo giao dịch chính
-            GiaoDichKhoaHoc giaoDich = GiaoDichKhoaHoc.builder()
-                    .tongtien(request.getTongTien())
-                    .tenhocvien(taiKhoan.getName())
-                    .taikhoan(taiKhoan)
-                    .trangthai(TrangThaiGiaoDich.HOAN_THANH)
-                    .hinhThucThanhToan(HinhThucThanhToan.CHUYEN_KHOAN)
-                    .build();
+        // ✅ Cập nhật trạng thái giao dịch thành HOAN_THANH
+        giaoDichKH.setTrangthai(TrangThaiGiaoDich.HOAN_THANH);
+        giaoDichKhoaHocRepository.save(giaoDichKH); 
 
-            giaoDichKhoaHocRepository.save(giaoDich); // lưu để có ID
+        TaiKhoan taiKhoan = giaoDichKH.getTaikhoan(); // Lấy tài khoản từ giao dịch
 
-            // Tạo danh sách chi tiết (không dùng lambda trực tiếp)
-            List<GiaoDichKhoaHocChiTiet> danhSachChiTiet = new ArrayList<>();
+        for (Integer khoaHocId : request.getKhoaHocIds()) {
+            Optional<KhoaHoc> optionalKH = khoaHocRepo.findById(khoaHocId);
+            if (optionalKH.isPresent()) {
+                KhoaHoc kh = optionalKH.get();
 
-            for (Integer id : request.getKhoaHocIds()) {
-                KhoaHoc khoaHoc = khoaHocRepo.findById(id).orElse(null);
-                if (khoaHoc == null)
-                    continue;
+                GiaoDichKhoaHocChiTiet chiTiet = new GiaoDichKhoaHocChiTiet();
+                chiTiet.setGiaoDichKhoaHoc(giaoDichKH);
+                chiTiet.setKhoahoc(kh);
+                chiTiet.setDongia(kh.getGiaHienTai()); // hoặc kh.getGiaGoc()
 
-                GiaoDichKhoaHocChiTiet chiTiet = GiaoDichKhoaHocChiTiet.builder()
-                        .giaoDichKhoaHoc(giaoDich)
-                        .khoahoc(khoaHoc)
-                        .dongia(khoaHoc.getGiaKhuyenMai())
+                giaoDichChiTietRepo.save(chiTiet);
+
+                // ✅ Tạo bản ghi vào bảng DangHoc
+                DangHoc dangHoc = DangHoc.builder()
+                        .taikhoan(taiKhoan)
+                        .khoahoc(kh)
+                        .dongia(kh.getGiaHienTai())
+                        .trangthai(false)
+                        .daCap_ChungChi(false)
+                        .build();
+                dangHocRepository.save(dangHoc);
+
+                // ➕ Sau khi đã lưu DangHoc, lưu luôn DoanhThu
+                BigDecimal tiLeHoaHong = BigDecimal.valueOf(0.7); // 70% hoa hồng
+                BigDecimal tienNhan = kh.getGiaHienTai().multiply(tiLeHoaHong); // Tính tiền giảng viên nhận được
+
+                DoanhThuGiangVien doanhThu = DoanhThuGiangVien.builder()
+                        .sotiennhan(tienNhan) // Tiền sẽ trả cho giảng viên
+                        .tenGiangVien(kh.getGiangVien().getTaikhoan().getName()) // Lưu tên giảng viên để hiển thị
+                        .taikhoanGV(kh.getGiangVien().getTaikhoan()) // Liên kết tới tài khoản giảng viên
+                        .dangHoc(dangHoc) // Gắn với học viên đang học khóa đó
                         .build();
 
-                danhSachChiTiet.add(chiTiet);
+                doanhThuGiangVienRepository.save(doanhThu); // ✅ Lưu vào DB 
+                
+
             }
-
-            giaoDichChiTietRepo.saveAll(danhSachChiTiet);
-
-            return ResponseEntity.ok("Đã lưu giao dịch thành công");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Có lỗi xảy ra khi lưu giao dịch");
         }
+
+        // ✅ Lấy danh sách khóa học từ danh sách ID gửi lên
+        List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(request.getKhoaHocIds());
+        // ✅ Gửi email xác nhận
+        emailThanhToanThanhCongService.sendPaymentSuccessEmail(
+            taiKhoan.getEmail(),
+            taiKhoan.getName(),
+            giaoDichKH.getGiaodichId().toString(),
+            giaoDichKH.getTongtien().toPlainString(),
+            dsKhoaHoc // List<KhoaHoc>
+        );
+
+
+        return ResponseEntity.ok("Đã lưu chi tiết giao dịch thành công");
+    }
+
+    @PostMapping("/api/thanh-toan/that-bai")
+    public ResponseEntity<?> xuLyThanhToanThatBai(@RequestBody GiaoDichRequest request) {
+        Integer giaoDichId = Integer.valueOf(request.getGiaoDichId());
+        Optional<GiaoDichKhoaHoc> optionalGDKH = giaoDichKhoaHocRepository.findById(giaoDichId);
+
+        if (optionalGDKH.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy giao dịch");
+        }
+
+        GiaoDichKhoaHoc giaoDichKH = optionalGDKH.get();
+
+        // ❌ Cập nhật trạng thái giao dịch thành THAT_BAI
+        giaoDichKH.setTrangthai(TrangThaiGiaoDich.THAT_BAI);
+        giaoDichKhoaHocRepository.save(giaoDichKH);
+
+        return ResponseEntity.ok("Đã cập nhật trạng thái thất bại cho giao dịch");
     }
 
 }

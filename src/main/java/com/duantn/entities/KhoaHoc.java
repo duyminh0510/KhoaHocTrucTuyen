@@ -110,4 +110,14 @@ public class KhoaHoc implements Serializable {
                 ", danhMucId=" + (danhMuc != null ? danhMuc.getDanhmucId() : "null") +
                 '}';
     }
+
+    public BigDecimal getGiaHienTai() {
+        LocalDateTime now = LocalDateTime.now();
+        if (giaKhuyenMai != null && ngaybatdau != null && ngayketthuc != null) {
+            if (!now.isBefore(ngaybatdau) && !now.isAfter(ngayketthuc)) {
+                return giaKhuyenMai;
+            }
+        }
+        return giagoc != null ? giagoc : BigDecimal.ZERO;
+    }
 }

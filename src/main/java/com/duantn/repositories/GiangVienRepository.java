@@ -12,6 +12,12 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
 
         Optional<GiangVien> findByTaikhoan(TaiKhoan taikhoan);
 
+        Optional<GiangVien> findByTaikhoan_TaikhoanId(Integer id);
+
+        GiangVien getByTaikhoan(TaiKhoan taiKhoan);
+
+        
+
         // Tìm kiếm giảng viên theo tên (không phân biệt hoa thường)
         @Query("SELECT gv FROM GiangVien gv WHERE LOWER(gv.taikhoan.name) LIKE LOWER(CONCAT('%', :ten, '%'))")
         java.util.List<GiangVien> findByTenGiangVienContainingIgnoreCase(
