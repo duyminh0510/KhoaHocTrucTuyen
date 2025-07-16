@@ -88,4 +88,13 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
         List<KhoaHoc> findByGiangVien(GiangVien giangVien);
 
+        @Query("SELECT COUNT(kh) FROM KhoaHoc kh")
+        int countKhoaHoc();
+
+        @Query("SELECT kh.danhMuc.tenDanhMuc, COUNT(kh) FROM KhoaHoc kh GROUP BY kh.danhMuc.tenDanhMuc")
+        List<Object[]> tiLeDanhMuc();
+
+        @Query("SELECT kh.tenKhoaHoc, COUNT(dh), SUM(gd.tongtien), COUNT(ndth), gv.taikhoan.name FROM KhoaHoc kh LEFT JOIN DangHoc dh ON kh = dh.khoahoc LEFT JOIN GiaoDichKhoaHoc gd ON gd.taikhoan = dh.taikhoan LEFT JOIN NguoiDungThichKhoaHoc ndth ON ndth.khoaHoc = kh LEFT JOIN GiangVien gv ON kh.giangVien = gv GROUP BY kh.tenKhoaHoc, gv.taikhoan.name")
+        List<Object[]> chiTietKhoaHoc();
+
 }

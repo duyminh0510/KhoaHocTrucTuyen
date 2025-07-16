@@ -51,4 +51,7 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
                         @Param("giangVienId") Integer giangVienId,
                         @Param("startDate") java.time.LocalDateTime startDate,
                         @Param("endDate") java.time.LocalDateTime endDate);
+
+        @Query("SELECT COUNT(gv) FROM GiangVien gv")
+        int countGiangVien();
 }
