@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.duantn.repositories;
 
 import java.util.List;
@@ -18,22 +17,3 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     List<GioHangChiTiet> findByGiohang(GioHang giohang);
 
 }
-=======
-package com.duantn.repositories;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.duantn.entities.GioHang;
-import com.duantn.entities.GioHangChiTiet;
-import com.duantn.entities.KhoaHoc;
-
-public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, Integer> {
-    Optional<GioHangChiTiet> findByGiohangAndKhoahoc(GioHang gioHang, KhoaHoc khoaHoc);
-
-    List<GioHangChiTiet> findByGiohang(GioHang giohang);
-
-}
->>>>>>> e980eb867ad2568a9f95f59345177139d7fd0014
