@@ -3,101 +3,282 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xem khóa học</title>
+    <style>
+        .active-bai-giang {
+            background-color: #eaf4ff;
+            font-weight: bold;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1faff;
+            cursor: pointer;
+        }
+
+        .bai-giang-content {
+            min-height: 400px;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .comment-actions {
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .comment-actions button {
+            border: none;
+            background: none;
+            color: #666;
+            padding: 2px 6px;
+            margin-right: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .comment-actions button:hover {
+            text-decoration: underline;
+            color: #0d6efd;
+        }
+    </style>
 </head>
 
-<body>
-    <main class="xemkhoahoc">
-        <div th:if="${khoaHoc != null}">
-            <div class="container">
-                <div class="row gx-1">
-                    <div class="col-lg-8">
-                        <div class="border px-4 d-flex flex-column" style="height: 350px; overflow: hidden;">
-                            <div th:if="${baiGiang != null}">
-                                <!-- VIDEO -->
-                                <div th:if="${baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
-                                    <iframe class="w-100" height="350" th:src="${baiGiang.videoBaiGiang.url_video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                        </iframe>
 
-                                </div>
+<!-- FRAGMENT PHẢI ĐƯỢC KHAI BÁO TRƯỚC KHI GỌI -->
+<div th:fragment="commentBlock(comment)">
+    <div class="d-flex mb-3" th:classappend="${comment.parent != null ? 'ms-4' : ''}">
+        <!-- Avatar -->
+        <img th:src="${#strings.isEmpty(comment.taikhoan.avatar) ? '/images/default-avatar.png' : comment.taikhoan.avatar}"
+            alt="avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
 
-                                <!-- BÀI VIẾT -->
-                                <div th:if="${baiGiang.loaiBaiGiang.name() == 'TAILIEU'}" class="flex-grow-1 overflow-auto">
-                                    <div th:utext="${baiViet.noidung}"></div>
-                                </div>
+        <!-- Nội dung bình luận -->
+        <div class="flex-grow-1">
+            <div class="bg-light rounded px-3 py-2 shadow-sm">
+                <div class="d-flex align-items-center gap-2">
+                    <strong class="me-1" th:text="${comment.taikhoan.name}">Tên người dùng</strong>
+                    <span th:if="${comment.taikhoan.role.name == 'ROLE_GIANGVIEN'}" class="badge bg-primary">Tác
+                        giả</span>
+                </div>
+                <p class="mb-1 mt-1" th:text="${comment.noiDung}">Nội dung bình luận</p>
+            </div>
 
-                                <!-- TRẮC NGHIỆM -->
-                                <div th:if="${baiGiang.loaiBaiGiang.name() == 'TRACNGHIEM'}" class="flex-grow-1 overflow-auto">
-                                    <p><strong>Câu hỏi trắc nghiệm sẽ hiển
-                                                thị
-                                                tại đây.</strong></p>
-                                    <!-- Bạn có thể lặp qua baiTracNghiem.cauHoiList nếu muốn -->
-                                </div>
+            <!-- Nút hành động -->
+            <div class="d-flex gap-3 mt-1 ps-2 small text-muted">
+                <button class="btn btn-link p-0 text-decoration-none text-muted" onclick="showReplyForm(this)"
+                    th:attr="data-comment-id=${comment.binhluanId}, data-commenter-name=${comment.taikhoan.name}">
+                    Trả lời
+                </button>
+
+                <button class="btn btn-link p-0 text-decoration-none text-danger"
+                    th:if="${loggedInEmail == comment.taikhoan.email}"
+                    th:attr="onclick='deleteComment(' + ${comment.binhluanId} + ')'">
+                    Xóa
+                </button>
+            </div>
+
+            <!-- Form trả lời -->
+            <div th:id="'reply-container-' + ${comment.binhluanId}" class="mt-2 ps-2"></div>
+
+            <!-- Đệ quy bình luận con -->
+            <div th:if="${childrenMap[comment.binhluanId] != null}" class="mt-3 ps-3 border-start">
+                <div th:each="child : ${childrenMap[comment.binhluanId]}">
+                    <div th:replace="~{::commentBlock(comment=${child})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<main class="xemkhoahoc py-5 bg-light" th:attr="data-bai-giang-id=${baiGiang.baiGiangId}">
+    <div th:if="${khoaHoc != null}">
+        <div class="container">
+            <div class="row gx-4 gy-4">
+                <!-- Cột trái: Bài giảng + bình luận -->
+                <div class="col-lg-8">
+                    <div class="bai-giang-content">
+                        <div th:if="${baiGiang != null}">
+                            <!-- VIDEO -->
+                            <div th:if="${baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
+                                <iframe class="w-100 rounded" height="400" th:src="${baiGiang.videoBaiGiang.url_video}"
+                                    frameborder="0" allowfullscreen></iframe>
+                            </div>
+
+                            <!-- BÀI VIẾT -->
+                            <div th:if="${baiGiang.loaiBaiGiang.name() == 'TAILIEU'}" class="overflow-auto"
+                                style="max-height: 400px;">
+                                <div th:utext="${baiViet.noidung}"></div>
+                            </div>
+
+                            <!-- TRẮC NGHIỆM -->
+                            <div th:if="${baiGiang.loaiBaiGiang.name() == 'TRACNGHIEM'}">
+                                <p class="fw-bold text-secondary">Câu hỏi trắc nghiệm sẽ hiển thị tại đây.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
-                        <div class="card shadow-sm rounded-4 mb-4 border-0">
-                            <div class="card-body" id="chuong-list">
-                                <div th:if="${#lists.isEmpty(chuongs)}">
-                                    <p class="text-muted fst-italic">Chưa có chương nào cho khóa học này.</p>
-                                </div>
+                    <!-- FORM GỬI BÌNH LUẬN -->
+                    <div class="card mt-4 shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5 text-primary" th:text="'Bình luận về: ' + ${baiGiang.tenBaiGiang}"></h2>
 
-                                <div th:if="${!#lists.isEmpty(chuongs)}" class="accordion" id="accordionChuong">
-                                    <div class="accordion-item mb-2" th:each="chuong, iterStat : ${chuongs}">
-                                        <h2 class="accordion-header" th:attr="id='heading' + ${iterStat.index}">
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapse' + ${iterStat.index}" aria-expanded="false" th:attrappend="aria-controls='collapse' + ${iterStat.index}">
-                                                    <strong
-                                                        th:text="${chuong.tenchuong}">Tên
-                                                        chương</strong>
-                                                </button>
-                                        </h2>
-                                        <div th:attr="id='collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:classappend="${chuong.chuongId == chuongDangMoId} ? ' show' : ''" th:attrappend="aria-labelledby='heading' + ${iterStat.index}" data-bs-parent="#accordionChuong">
-
-                                            <div class="accordion-body">
-
-                                                <!-- Có bài giảng -->
-                                                <ul class="list-group list-group-flush mb-0" th:if="${chuong.baiGiangs != null && !#lists.isEmpty(chuong.baiGiangs)}">
-                                                    <li class="list-group-item ps-4" th:each="baiGiang : ${chuong.baiGiangs}" th:classappend="${baiGiang.baiGiangId == baiGiangDangHocId} ? 'active-bai-giang' : ''">
-
-                                                        <a th:href="@{'/khoa-hoc/bai-giang/' + ${baiGiang.baiGiangId}}" class="text-decoration-none text-dark">
-                                                            <i class="fas fa-book-open text-primary me-2"></i>
-                                                            <span th:text="${baiGiang.tenBaiGiang}">Tên
-                                                                    bài
-                                                                    giảng</span>
-                                                        </a>
-
-                                                    </li>
-                                                </ul>
-
-                                                <!-- Không có bài giảng -->
-                                                <p th:if="${chuong.baiGiangs == null || #lists.isEmpty(chuong.baiGiangs)}" class="text-muted fst-italic mt-2 ps-2">
-                                                    <i class="fas fa-exclamation-circle me-1"></i> Chưa có bài giảng nào trong chương này.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div th:if="${successMessage}" class="alert alert-success mt-3" th:text="${successMessage}">
                             </div>
+                            <div th:if="${errorMessage}" class="alert alert-danger mt-3" th:text="${errorMessage}">
+                            </div>
+
+                            <form class="mt-3"
+                                th:action="@{/bai-giang/{baiGiangId}/binh-luan/add(baiGiangId=${baiGiang.baiGiangId})}"
+                                method="post">
+                                <div class="mb-3">
+                                    <textarea name="noiDung" class="form-control" rows="4" required
+                                        placeholder="Nhập bình luận..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Gửi bình luận</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- HIỂN THỊ DANH SÁCH BÌNH LUẬN -->
+                    <div class="mt-4">
+                        <h5 class="text-primary mb-3">Bình luận</h5>
+                        <div th:if="${#lists.isEmpty(rootComments)}">
+                            <p class="text-muted fst-italic">Chưa có bình luận nào.</p>
+                        </div>
+                        <div th:each="comment : ${rootComments}">
+                            <div th:replace="~{::commentBlock(comment=${comment})}"></div>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <!-- Cột phải: Danh sách chương & bài giảng -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body" id="chuong-list">
+                            <h5 class="mb-3 text-primary">Danh sách chương</h5>
 
-        <style>
-            .active-bai-giang {
-                background-color: #eaf4ff;
-                font-weight: bold;
-                border-left: 4px solid #007bff;
+                            <div th:if="${#lists.isEmpty(chuongs)}">
+                                <p class="text-muted fst-italic">Chưa có chương nào cho khóa học này.</p>
+                            </div>
+
+                            <div th:if="${!#lists.isEmpty(chuongs)}" class="accordion" id="accordionChuong">
+                                <div class="accordion-item mb-2" th:each="chuong, iterStat : ${chuongs}">
+                                    <h2 class="accordion-header" th:attr="id='heading' + ${iterStat.index}">
+                                        <button class="accordion-button collapsed bg-light fw-semibold" type="button"
+                                            data-bs-toggle="collapse"
+                                            th:attr="data-bs-target='#collapse' + ${iterStat.index}"
+                                            aria-expanded="false"
+                                            th:attrappend="aria-controls='collapse' + ${iterStat.index}">
+                                            <i class="fas fa-folder-open me-2 text-secondary"></i>
+                                            <span th:text="${chuong.tenchuong}">Tên chương</span>
+                                        </button>
+                                    </h2>
+
+                                    <div th:attr="id='collapse' + ${iterStat.index}" class="accordion-collapse collapse"
+                                        th:classappend="${chuong.chuongId == chuongDangMoId} ? ' show' : ''"
+                                        th:attrappend="aria-labelledby='heading' + ${iterStat.index}"
+                                        data-bs-parent="#accordionChuong">
+
+                                        <div class="accordion-body px-2 py-2">
+                                            <ul class="list-group list-group-flush"
+                                                th:if="${chuong.baiGiangs != null && !#lists.isEmpty(chuong.baiGiangs)}">
+                                                <li class="list-group-item px-3"
+                                                    th:each="baiGiang : ${chuong.baiGiangs}"
+                                                    th:classappend="${baiGiang.baiGiangId == baiGiangDangHocId} ? 'active-bai-giang' : ''">
+
+                                                    <a th:href="@{'/khoahoc/baigiang/' + ${baiGiang.baiGiangId}}"
+                                                        class="text-decoration-none text-dark d-flex align-items-center">
+                                                        <i class="fas fa-play-circle text-primary me-2"></i>
+                                                        <span th:text="${baiGiang.tenBaiGiang}">Tên bài giảng</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <p th:if="${chuong.baiGiangs == null || #lists.isEmpty(chuong.baiGiangs)}"
+                                                class="text-muted fst-italic mt-2 ps-2">
+                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                                Chưa có bài giảng nào trong chương này.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end accordion -->
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+
+    <!-- JavaScript xử lý reply + delete -->
+    <script>
+        const baiGiangId = document.querySelector('main').getAttribute('data-bai-giang-id');
+
+        function showReplyForm(button) {
+            const commentId = button.getAttribute('data-comment-id');
+            const commenterName = button.getAttribute('data-commenter-name');
+            const container = document.getElementById('reply-container-' + commentId);
+
+            if (container.innerHTML.trim() !== "") {
+                container.innerHTML = "";
+                return;
             }
-        </style>
 
-    </main>
+            container.innerHTML = `
+            <form onsubmit="submitReply(event, '${commentId}')" class="reply-form mt-2">
+                <div class="mb-2">
+                    <label class="form-label">Trả lời ${commenterName}:</label>
+                    <textarea name="noiDung" class="form-control" rows="2" required placeholder="Nhập nội dung..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-sm btn-success">Gửi trả lời</button>
+            </form>
+        `;
+        }
 
+        function submitReply(event, commentId) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(`/bai-giang/${baiGiangId}/binh-luan/reply/${commentId}`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('reply-container-' + commentId).innerHTML = "";
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("Lỗi gửi trả lời:", err);
+                    alert("Lỗi khi gửi trả lời. Vui lòng thử lại.");
+                });
+        }
+
+        function deleteComment(commentId) {
+            if (!confirm("Bạn có chắc chắn muốn xóa bình luận này?")) return;
+
+            fetch(`/bai-giang/${baiGiangId}/binh-luan/delete/${commentId}`, {
+                method: 'DELETE'
+            })
+                .then(res => {
+                    if (res.ok) location.reload();
+                    else alert("Không thể xóa bình luận.");
+                })
+                .catch(err => {
+                    console.error("Lỗi khi xóa bình luận:", err);
+                    alert("Lỗi xảy ra. Vui lòng thử lại.");
+                });
+        }
+
+    </script>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</main>
 </body>
 
 </html>

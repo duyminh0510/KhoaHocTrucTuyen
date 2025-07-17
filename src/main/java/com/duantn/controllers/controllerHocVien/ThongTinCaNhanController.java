@@ -136,6 +136,7 @@ public class ThongTinCaNhanController {
         return "redirect:/tai-khoan";
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/tai-khoan/cap-nhat-email")
     public String capNhatEmail(
             @Valid @ModelAttribute("emailDto") TaiKhoanEmailDto dto,
@@ -172,6 +173,7 @@ public class ThongTinCaNhanController {
         return "redirect:/auth/verify?type=update-email";
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/tai-khoan/doi-mat-khau")
     public String doiMatKhau(
             @Valid @ModelAttribute("passwordDto") TaiKhoanPasswordDto dto,
