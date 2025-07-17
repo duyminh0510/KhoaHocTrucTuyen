@@ -10,6 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import com.duantn.services.GiangVienService;
+import com.duantn.services.TaiKhoanService;
+
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.DefaultRedirectStrategy;
 

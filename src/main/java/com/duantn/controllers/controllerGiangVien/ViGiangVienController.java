@@ -5,33 +5,15 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import java.math.BigDecimal;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.duantn.entities.GiangVien;
-import com.duantn.entities.TaiKhoan;
-import com.duantn.services.CustomUserDetails;
-import com.duantn.services.GiangVienService;
-import com.duantn.services.ViGiangVienService;
-
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.duantn.entities.GiangVien;
 import com.duantn.entities.TaiKhoan;
@@ -42,7 +24,6 @@ import com.duantn.services.ViGiangVienService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/giangvien/vi-giang-vien")
 @RequestMapping("/giangvien/vi-giang-vien")
 public class ViGiangVienController {
     @Autowired
