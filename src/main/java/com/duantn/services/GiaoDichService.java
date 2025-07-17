@@ -5,7 +5,6 @@ import com.duantn.entities.GiaoDichKhoaHocChiTiet;
 import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.GiaoDichKhoaHocRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,21 +12,20 @@ import java.util.Optional;
 
 @Service
 public class GiaoDichService {
-    
+
     @Autowired
     private GiaoDichKhoaHocChiTietRepository giaoDichKhoaHocChiTietRepository;
 
     @Autowired
     private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
-    
-    // Lấy tất cả chi tiết giao dịch (cách cũ)
+
     public List<GiaoDichKhoaHocChiTiet> getAllGiaoDichChiTiet() {
         return giaoDichKhoaHocChiTietRepository.findAllWithDetails();
     }
-    
-    // Lấy tất cả giao dịch từ bảng chính (cách mới)
+
+    // ✅ Sửa lại để chỉ lấy giao dịch trạng thái HOAN_THANH
     public List<GiaoDichKhoaHoc> getAllGiaoDich() {
-        return giaoDichKhoaHocRepository.findAllWithDetails();
+        return giaoDichKhoaHocRepository.findAllHoanThanhWithDetails();
     }
 
     public GiaoDichKhoaHoc getGiaoDichById(Integer id) {
@@ -42,4 +40,4 @@ public class GiaoDichService {
     public List<GiaoDichKhoaHoc> findByTaiKhoanId(Integer taiKhoanId) {
         return giaoDichKhoaHocRepository.findByTaikhoan_TaikhoanId(taiKhoanId);
     }
-} 
+}
