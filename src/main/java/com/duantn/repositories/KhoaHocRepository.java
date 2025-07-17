@@ -1,5 +1,6 @@
 package com.duantn.repositories;
 
+import com.duantn.dtos.KhoaHocDiemDto;
 import com.duantn.entities.GiangVien;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.enums.TrangThaiGiaoDich;
@@ -71,7 +72,7 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
         @Query("SELECT k FROM KhoaHoc k WHERE k.trangThai = :trangThai ORDER BY k.ngayTao DESC")
         List<KhoaHoc> findAllActive(@Param("trangThai") TrangThaiKhoaHoc trangThai);
 
-        List<KhoaHoc> findByDanhMuc_danhmucId(Integer danhMucId);
+        List<KhoaHoc> findByDanhMuc_DanhmucIdAndTrangThai(Integer danhMucId, TrangThaiKhoaHoc trangThai);
 
         //
         @Query("""
@@ -89,5 +90,23 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
         List<KhoaHoc> findByGiangVien(GiangVien giangVien);
 
         List<KhoaHoc> findAllByKhoahocIdIn(List<Integer> ids);
+
+        //
+        @Query("SELECT COUNT(kh) FROM KhoaHoc kh")
+        int countKhoaHoc();
+
+        @Query("SELECT kh.danhMuc.tenDanhMuc, COUNT(kh) FROM KhoaHoc kh GROUP BY kh.danhMuc.tenDanhMuc")
+        List<Object[]> tiLeDanhMuc();
+
+        @Query("SELECT kh.tenKhoaHoc, COUNT(dh), SUM(gd.tongtien), COUNT(ndth), gv.taikhoan.name FROM KhoaHoc kh LEFT JOIN DangHoc dh ON kh = dh.khoahoc LEFT JOIN GiaoDichKhoaHoc gd ON gd.taikhoan = dh.taikhoan LEFT JOIN NguoiDungThichKhoaHoc ndth ON ndth.khoaHoc = kh LEFT JOIN GiangVien gv ON kh.giangVien = gv GROUP BY kh.tenKhoaHoc, gv.taikhoan.name")
+        List<Object[]> chiTietKhoaHoc();
+
+        List<KhoaHoc> findByGiangVien_GiangvienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai);
+
+        @Query("SELECT new com.duantn.dtos.KhoaHocDiemDto(k.tenKhoaHoc, AVG(d.diemDanhGia)) " +
+                        "FROM KhoaHoc k JOIN k.danhGiaList d " +
+                        "WHERE k.giangVien.giangvienId = :gvId AND k.trangThai = 'PUBLISHED' " +
+                        "GROUP BY k.tenKhoaHoc")
+        List<KhoaHocDiemDto> findDiemTrungBinhTheoKhoaHocXuatBan(@Param("gvId") Integer giangVienId);
 
 }

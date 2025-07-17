@@ -34,8 +34,13 @@
                     <label>Ngày kết thúc:</label>
                     <input type="datetime-local" th:field="*{ngayketthuc}" />
 
-                    <button class="btn btn-success" type="submit">Hoàn
-                        tất</button>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="button" class="btn custom-outline me-2"
+                            onclick="history.back()">← Quay lại</button>
+                        <button class="btn custom-outline" type="submit">Hoàn
+                            tất</button>
+                    </div>
+
                 </form>
 
             </div>

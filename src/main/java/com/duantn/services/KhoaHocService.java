@@ -50,4 +50,6 @@ public interface KhoaHocService {
 
     List<KhoaHoc> findAllByIds(List<Integer> ids);
 
+    KhoaHoc layTheoId(Integer id);
+
 }

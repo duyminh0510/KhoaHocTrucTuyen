@@ -26,6 +26,9 @@ public class SecurityConfig {
         @Autowired
         private CustomFailureHandler customFailureHandler;
 
+        @Autowired
+        private CustomAccessDeniedHandler customAccessDeniedHandler;
+
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
@@ -67,6 +70,10 @@ public class SecurityConfig {
                                                 .logoutSuccessUrl("/auth/dangnhap?logout=true")
                                                 .deleteCookies("JSESSIONID", "remember-me")
                                                 .permitAll())
+                                .exceptionHandling(exception -> exception
+                                                .accessDeniedHandler(customAccessDeniedHandler)
+
+                                )
                                 .csrf(AbstractHttpConfigurer::disable);
 
                 return http.build();

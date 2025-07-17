@@ -234,11 +234,19 @@
 
                   <!-- Nút hành động -->
                   <div class="d-flex gap-2 mb-3">
-                    <a href="#"
-                      class="btn flex-fill text-white fw-semibold small"
-                      style="background-color: #16203b;">
-                      <i class="fas fa-cart-plus me-1"></i> Thêm vào giỏ
-                    </a>
+                    <button
+                      class="btn flex-fill text-white fw-semibold small btn-sm add-to-cart-btn"
+                      style="background-color: #16203b;"
+                      th:attr="data-id=${khoaHoc.khoahocId},
+                                                            data-name=${khoaHoc.tenKhoaHoc},
+                                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                                            data-giagoc=${khoaHoc.giagoc},
+                                                            data-anh=${khoaHoc.anhBia},
+                                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                      <i
+                        class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
+                    </button>
+
                     <button type="button" class="btn btn-sm like-btn"
                       th:id="'like-btn-' + ${khoaHoc.khoahocId}"
                       th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"

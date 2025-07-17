@@ -15,10 +15,11 @@
                 <form th:action="@{/giangvien/them-moi-khoa-hoc/save-info}"
                     th:object="${course}" method="post"
                     enctype="multipart/form-data" class="mb-5">
+                    <input type="hidden" th:field="*{khoahocId}" />
 
                     <label>Tên khóa học:</label>
                     <input type="text" th:field="*{tenKhoaHoc}"
-                        placeholder="VD: Java cho người mới bắt đầu" required
+                        placeholder="VD: Java cho người mới bắt đầu"
                         autocomplete="off" />
                     <p th:if="${#fields.hasErrors('tenKhoaHoc')}"
                         th:errors="*{tenKhoaHoc}" class="text-danger"></p>

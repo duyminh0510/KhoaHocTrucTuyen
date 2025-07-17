@@ -41,7 +41,7 @@ public class DoanhThuGiangVien implements Serializable {
     @Column(name = "ngaynhan", updatable = false)
     private LocalDateTime ngaynhan;
 
-    @Column(name = "tenGiangVien")
+    @Column(name = "tenGiangVien", columnDefinition = "NVARCHAR(MAX)")
     private String tenGiangVien;
 
     @Builder.Default

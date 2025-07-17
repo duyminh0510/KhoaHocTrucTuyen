@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -200,7 +201,8 @@ public class DangKyGiangVienController {
     @PostMapping("/register-new")
     public String processNewInstructorRegistration(@Valid @ModelAttribute("giangVienDto") GiangVienRegistrationDto dto,
             BindingResult result,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
 
         if (result.hasErrors()) {
             return "views/gdienChung/hoantatdangkygiangvien";
@@ -220,10 +222,16 @@ public class DangKyGiangVienController {
             newAccount.setStatus(true); // Active by default
 
             TaiKhoan savedAccount = taiKhoanRepository.save(newAccount);
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(savedAccount.getEmail());
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authToken);
+            session.setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext());
+            session.setAttribute("currentUser", savedAccount);
 
             // Tạo GiangVien
             GiangVien newInstructor = new GiangVien();
@@ -237,7 +245,6 @@ public class DangKyGiangVienController {
             newInstructor.setChuyenNganh(dto.getChuyenNganh());
             giangVienRepository.save(newInstructor);
 
-            redirectAttributes.addFlashAttribute("success", "Đăng ký giảng viên thành công! Vui lòng đăng nhập.");
             return "views/gdienGiangVien/home";
 
         } catch (Exception e) {

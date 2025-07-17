@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.duantn.entities.BaiGiang;
-import com.duantn.repositories.BaiGiangRepositories;
+import com.duantn.repositories.BaiGiangRepository;
 import com.duantn.services.BaiGiangService;
 
 @Service
 public class BaiGiangServiceImpl implements BaiGiangService {
     @Autowired
-    BaiGiangRepositories baiGiangRepositories;
+    private BaiGiangRepository baiGiangRepositories;
 
     @Override
     public BaiGiang findBaiGiangById(Integer id) {
@@ -40,6 +40,11 @@ public class BaiGiangServiceImpl implements BaiGiangService {
     @Override
     public Optional<BaiGiang> findById(Integer id) {
         return baiGiangRepositories.findById(id);
+    }
+
+    @Override
+    public BaiGiang findByTracNghiemId(Integer baiTracNghiemId) {
+        return baiGiangRepositories.findByTracNghiemId(baiTracNghiemId);
     }
 
 }

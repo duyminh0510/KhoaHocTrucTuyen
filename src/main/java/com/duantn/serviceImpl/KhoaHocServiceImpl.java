@@ -44,7 +44,7 @@ public class KhoaHocServiceImpl implements KhoaHocService {
 
     @Override
     public List<KhoaHoc> getKhoaHocTheoDanhMuc(Integer danhMucId) {
-        return khoaHocRepository.findByDanhMuc_danhmucId(danhMucId);
+        return khoaHocRepository.findByDanhMuc_DanhmucIdAndTrangThai(danhMucId, TrangThaiKhoaHoc.PUBLISHED);
     }
 
     @Override
@@ -180,6 +180,12 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     @Override
     public List<KhoaHoc> findAllByIds(List<Integer> ids) {
         return khoaHocRepository.findAllById(ids);
+    }
+
+    @Override
+    public KhoaHoc layTheoId(Integer id) {
+        return khoaHocRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học với ID: " + id));
     }
 
 }

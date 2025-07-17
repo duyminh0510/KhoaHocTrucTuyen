@@ -46,12 +46,29 @@ public class ThemKhoaHocController {
 
     // Lưu thông tin cơ bản và chuyển qua bước 2
     @PostMapping("/giangvien/them-moi-khoa-hoc/save-info")
-    public String saveBasicInfo(@ModelAttribute("course") KhoaHoc khoahoc,
+    public String saveBasicInfo(@ModelAttribute("course") KhoaHoc formCourse,
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("danhMuc.danhmucId") Integer danhMucId,
             Principal principal) throws IOException {
 
+        KhoaHoc khoahoc;
+
+        // ✅ Nếu có ID thì load từ DB để cập nhật
+        if (formCourse.getKhoahocId() != null) {
+            khoahoc = khoaHocService.layTheoId(formCourse.getKhoahocId());
+            if (khoahoc == null) {
+                // fallback nếu không tồn tại
+                khoahoc = new KhoaHoc();
+            }
+        } else {
+            khoahoc = new KhoaHoc();
+        }
+
+        // Cập nhật lại thông tin từ form
+        khoahoc.setTenKhoaHoc(formCourse.getTenKhoaHoc());
+        khoahoc.setMoTa(formCourse.getMoTa());
         khoahoc.setDanhMuc(danhMucService.layTheoId(danhMucId));
+        khoahoc.setUrlGioiThieu(formCourse.getUrlGioiThieu());
         khoahoc.setGiangVien(taiKhoanService.findByUsername(principal.getName()).getGiangVien());
         khoahoc.setTrangThai(TrangThaiKhoaHoc.DRAFT);
 
@@ -61,13 +78,15 @@ public class ThemKhoaHocController {
             khoahoc.setAnhBiaPublicId(cloudinaryService.extractPublicIdFromUrl(imageUrl));
         }
 
+        // Save
         khoaHocService.save(khoahoc);
 
-        String slug = SlugUtil.toSlug(khoahoc.getTenKhoaHoc()) + khoahoc.getKhoahocId();
-        khoahoc.setSlug(slug);
-
-        // Lưu lần 2 để cập nhật slug
-        khoaHocService.save(khoahoc);
+        // Slug chỉ tạo mới nếu chưa có
+        if (khoahoc.getSlug() == null || khoahoc.getSlug().isEmpty()) {
+            String slug = SlugUtil.toSlug(khoahoc.getTenKhoaHoc()) + khoahoc.getKhoahocId();
+            khoahoc.setSlug(slug);
+            khoaHocService.save(khoahoc);
+        }
 
         return "redirect:/giangvien/them-moi-khoa-hoc/gia?khoahocId=" + khoahoc.getKhoahocId();
     }

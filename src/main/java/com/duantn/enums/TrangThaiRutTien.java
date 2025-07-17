@@ -2,5 +2,5 @@ package com.duantn.enums;
 
 public enum TrangThaiRutTien {
 
-    DAGUI_YEUCAU, DA_RUT;
+    DANG_CHO_XU_LY, THANH_CONG, TU_CHOI;
 }

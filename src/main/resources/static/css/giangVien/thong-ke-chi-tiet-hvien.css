@@ -1,0 +1,90 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chitiethocvien {
+    padding: 50px 80px;
+    margin-bottom: 30px;
+}
+
+.chitiethocvien h3 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: #2c3e50;
+}
+
+.chitiethocvien .back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1F2A48;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-bottom: 24px;
+}
+
+.chitiethocvien .back-button:hover {
+    background-color: #0F172A;
+}
+
+.chitiethocvien .back-button i {
+    margin-right: 8px;
+}
+
+.chitiethocvien table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+}
+
+.chitiethocvien thead {
+    background-color: #1F2A48;
+    color: white;
+}
+
+.chitiethocvien th,
+.chitiethocvien td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chitiethocvien tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+    .chitiethocvien table,
+    .chitiethocvien thead,
+    .chitiethocvien tbody,
+    .chitiethocvien th,
+    .chitiethocvien td,
+    .chitiethocvien tr {
+        display: block;
+    }
+    .chitiethocvien th {
+        text-align: left;
+        background-color: transparent;
+        color: #333;
+    }
+    .chitiethocvien td {
+        padding-left: 50%;
+        position: relative;
+    }
+    .chitiethocvien td::before {
+        position: absolute;
+        left: 16px;
+        top: 12px;
+        font-weight: bold;
+    }
+    .chitiethocvien td:nth-child(1)::before {
+        content: "Tên khóa học";
+    }
+    .chitiethocvien td:nth-child(2)::before {
+        content: "Số học viên";
+    }
+}
