@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý yêu cầu rút tiền</title>
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/giangVien/home.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{views/layouts/header}"></header>
+<nav th:replace="~{views/layouts/navquanly}"></nav>
+
+<div class="container mt-4">
+    <h2>Quản lý yêu cầu rút tiền</h2>
+    <div class="card mt-3">
+        <div class="card-header">Danh sách yêu cầu rút tiền</div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã</th>
+                        <th>Tên giảng viên</th>
+                        <th>Số tiền rút</th>
+                        <th>Ngày yêu cầu</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${danhSach}">
+                    <td th:text="${item.rutTienId}"></td>
+                    <td th:text="${item.tenGiangVien}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                    <td th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:switch="${item.trangthai.name()}">
+                        <span th:case="'DANG_CHO_XU_LY'" class="text-warning">Đang chờ xử lý</span>
+                        <span th:case="'THANH_CONG'" class="text-success">Thành công</span>
+                        <span th:case="'TU_CHOI'" class="text-danger">Từ chối</span>
+                        <span th:case="*">Không xác định</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/{id}(id=${item.rutTienId})}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                    </td>
+                </tr>
+                <tr th:if="${danhSach.isEmpty()}">
+                    <td colspan="6" class="text-center">Không có yêu cầu nào</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{views/layouts/footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

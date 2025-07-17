@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.duantn.repositories;
 
 import java.util.Optional;
@@ -11,4 +12,17 @@ import com.duantn.entities.TaiKhoan;
 @Repository
 public interface GioHangRepository extends JpaRepository<GioHang, Integer> {
     Optional<GioHang> findByTaikhoan(TaiKhoan taiKhoan);
+=======
+package com.duantn.repositories;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.duantn.entities.GioHang;
+import com.duantn.entities.TaiKhoan;
+
+public interface GioHangRepository extends JpaRepository<GioHang, Integer> {
+    Optional<GioHang> findByTaikhoan(TaiKhoan taiKhoan);
+>>>>>>> e980eb867ad2568a9f95f59345177139d7fd0014
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.duantn.dtos.GiaoDichRequest;
 import com.duantn.entities.DangHoc;
 import com.duantn.entities.DoanhThuGiangVien;
+import com.duantn.entities.DangHoc;
+import com.duantn.entities.DoanhThuGiangVien;
 import com.duantn.entities.GiaoDichKhoaHoc;
 import com.duantn.entities.GiaoDichKhoaHocChiTiet;
 import com.duantn.entities.KhoaHoc;
@@ -25,11 +27,14 @@ import com.duantn.enums.HinhThucThanhToan;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.repositories.DangHocRepository;
 import com.duantn.repositories.DoanhThuGiangVienRepository;
+import com.duantn.repositories.DangHocRepository;
+import com.duantn.repositories.DoanhThuGiangVienRepository;
 import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.GiaoDichKhoaHocRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.ThuNhapNenTangRepository;
 import com.duantn.services.CustomUserDetails;
+import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.KhoaHocService;
 
@@ -159,20 +164,6 @@ public class ThanhToanController {
                         .build();
 
                 doanhThuGiangVienRepository.save(doanhThu); // ✅ Lưu vào DB
-
-                // ✅ Tính phần thu nhập nền tảng (30%)
-                BigDecimal tiLeNenTang = BigDecimal.valueOf(0.3);
-                BigDecimal tienNenTang = kh.getGiaHienTai().multiply(tiLeNenTang);
-
-                // ✅ Tạo bản ghi thu nhập nền tảng
-                ThuNhapNenTang thuNhapNenTang = ThuNhapNenTang.builder()
-                        .sotiennhan(tienNenTang)
-                        .dangHoc(dangHoc)
-                        .tenKhoaHoc(kh.getTenKhoaHoc())
-                        .thuocGiangVien(kh.getGiangVien().getTaikhoan().getName())
-                        .build();
-
-                thuNhapNenTangRepository.save(thuNhapNenTang); // ✅ Lưu vào DB
 
             }
         }

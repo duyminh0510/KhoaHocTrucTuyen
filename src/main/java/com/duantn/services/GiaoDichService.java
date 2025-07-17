@@ -1,39 +1,43 @@
-// package com.duantn.services;
+package com.duantn.services;
 
-// import com.duantn.entities.GiaoDichKhoaHoc;
-// import com.duantn.entities.GiaoDichKhoaHocChiTiet;
-// import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
-// import com.duantn.repositories.GiaoDichKhoaHocRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.data.domain.Sort;
-// import org.springframework.stereotype.Service;
+import com.duantn.entities.GiaoDichKhoaHoc;
+import com.duantn.entities.GiaoDichKhoaHocChiTiet;
+import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
+import com.duantn.repositories.GiaoDichKhoaHocRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-// import java.util.List;
+import java.util.List;
+import java.util.Optional;
 
-// @Service
-// public class GiaoDichService {
-    
-//     @Autowired
-//     private GiaoDichKhoaHocChiTietRepository giaoDichKhoaHocChiTietRepository;
+@Service
+public class GiaoDichService {
 
-//     @Autowired
-//     private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
-    
-//     // Lấy tất cả chi tiết giao dịch (cách cũ)
-//     public List<GiaoDichKhoaHocChiTiet> getAllGiaoDichChiTiet() {
-//         return giaoDichKhoaHocChiTietRepository.findAllWithDetails();
-//     }
-    
-//     // Lấy tất cả giao dịch từ bảng chính (cách mới)
-//     public List<GiaoDichKhoaHoc> getAllGiaoDich() {
-//         return giaoDichKhoaHocRepository.findAll(Sort.by(Sort.Direction.DESC, "ngayGiaoDich"));
-//     }
+    @Autowired
+    private GiaoDichKhoaHocChiTietRepository giaoDichKhoaHocChiTietRepository;
 
-//     public List<GiaoDichKhoaHocChiTiet> getLichSuGiaoDichByAccountId(Integer accountId) {
-//         return giaoDichKhoaHocChiTietRepository.findByAccountId(accountId);
-//     }
+    @Autowired
+    private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
 
-//     public List<GiaoDichKhoaHoc> findByTaiKhoanId(Integer taiKhoanId) {
-//         return giaoDichKhoaHocRepository.findByTaikhoan_Id(taiKhoanId);
-//     }
-// } 
+    public List<GiaoDichKhoaHocChiTiet> getAllGiaoDichChiTiet() {
+        return giaoDichKhoaHocChiTietRepository.findAllWithDetails();
+    }
+
+    // ✅ Sửa lại để chỉ lấy giao dịch trạng thái HOAN_THANH
+    public List<GiaoDichKhoaHoc> getAllGiaoDich() {
+        return giaoDichKhoaHocRepository.findAllHoanThanhWithDetails();
+    }
+
+    public GiaoDichKhoaHoc getGiaoDichById(Integer id) {
+        Optional<GiaoDichKhoaHoc> giaoDichOptional = giaoDichKhoaHocRepository.findByIdWithDetails(id);
+        return giaoDichOptional.orElse(null);
+    }
+
+    public List<GiaoDichKhoaHocChiTiet> getLichSuGiaoDichByAccountId(Integer accountId) {
+        return giaoDichKhoaHocChiTietRepository.findByAccountId(accountId);
+    }
+
+    public List<GiaoDichKhoaHoc> findByTaiKhoanId(Integer taiKhoanId) {
+        return giaoDichKhoaHocRepository.findByTaikhoan_TaikhoanId(taiKhoanId);
+    }
+}

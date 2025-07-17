@@ -10,9 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
-import com.duantn.services.TaiKhoanService;
-
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.DefaultRedirectStrategy;
 
@@ -27,6 +24,9 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private TaiKhoanService taiKhoanService;
+
+    @Autowired
+    private GiangVienService giangVienService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -43,6 +43,11 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
+
+            if ("ROLE_GIANGVIEN".equals(role)) {
+                var giangVien = giangVienService.getByTaiKhoan(taiKhoan);
+                request.getSession().setAttribute("giangVien", giangVien);
+            }
 
             switch (role) {
                 case "ROLE_ADMIN":

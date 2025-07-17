@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- File: views/giangvien/vi-giang-vien.html -->
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
@@ -235,3 +236,249 @@
     </body>
 
 </html>
+=======
+<!-- File: views/giangvien/vi-giang-vien.html -->
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Ví Giảng Viên</title>
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/css/giangVien/home.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{views/layouts/header}"></header>
+<nav th:replace="~{views/layouts/navgiangvien}" sec:authorize="hasRole('ROLE_GIANGVIEN')"></nav>
+
+<div class="container mt-4">
+    <h2>Ví Giảng Viên</h2>
+
+    <!-- Số dư -->
+    <div class="card mb-3">
+        <div class="card-header">Số Dư Hiện Tại</div>
+        <div class="card-body">
+            <h4 class="text-success">
+                <span th:text="${#numbers.formatDecimal(soDu, 0, 'COMMA', 0, 'POINT')}"></span> VNĐ
+            </h4>
+        </div>
+    </div>
+
+    <!-- Form rút tiền -->
+    <div class="card mb-3">
+        <div class="card-header">Yêu Cầu Rút Tiền</div>
+        <div class="card-body">
+            <form th:action="@{/giangvien/vi-giang-vien/rut-tien}" method="post" id="formRutTien">
+                <div class="mb-3">
+                    <label class="form-label">Số tiền muốn rút (tối thiểu 100.000 VNĐ)</label>
+                    <input type="number" name="soTienRut" class="form-control" min="100000" required>
+                </div>
+                <button type="button" class="btn btn-success" onclick="handleRutTien()">Gửi yêu cầu</button>
+            </form>
+
+      
+<!-- Modal thông tin ngân hàng -->
+<div class="modal fade" id="modalSTK" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5>Nhập thông tin ngân hàng</h5></div>
+      <div class="modal-body">
+        <input id="soTaiKhoan" class="form-control mb-2" placeholder="Số tài khoản" />
+
+        <!-- Input có datalist ngân hàng -->
+        <input list="dsNganHang" id="tenNganHang" class="form-control mb-2" placeholder="Nhập hoặc chọn ngân hàng" required>
+        <datalist id="dsNganHang">
+        <option value="Vietcombank (Ngân hàng TMCP Ngoại thương Việt Nam)">
+        <option value="VietinBank (Ngân hàng TMCP Công Thương Việt Nam)">
+        <option value="BIDV (Ngân hàng TMCP Đầu tư và Phát triển Việt Nam)">
+        <option value="Agribank (Ngân hàng Nông nghiệp và Phát triển Nông thôn)">
+        <option value="ACB (Ngân hàng TMCP Á Châu)">
+        <option value="Techcombank (Ngân hàng TMCP Kỹ Thương Việt Nam)">
+        <option value="MB Bank (Ngân hàng TMCP Quân đội)">
+        <option value="Sacombank (Ngân hàng TMCP Sài Gòn Thương Tín)">
+        <option value="VPBank (Ngân hàng TMCP Việt Nam Thịnh Vượng)">
+        <option value="HDBank (Ngân hàng TMCP Phát triển TP.HCM)">
+        <option value="SeABank (Ngân hàng TMCP Đông Nam Á)">
+        <option value="TPBank (Ngân hàng TMCP Tiên Phong)">
+        <option value="Eximbank (Ngân hàng TMCP Xuất nhập khẩu Việt Nam)">
+        <option value="OCB (Ngân hàng TMCP Phương Đông)">
+        <option value="VIB (Ngân hàng TMCP Quốc tế Việt Nam)">
+        <option value="SHB (Ngân hàng TMCP Sài Gòn – Hà Nội)">
+        <option value="SCB (Ngân hàng TMCP Sài Gòn)">
+        <option value="Nam A Bank (Ngân hàng TMCP Nam Á)">
+        <option value="ABBANK (Ngân hàng TMCP An Bình)">
+        <option value="MSB (Ngân hàng TMCP Hàng Hải Việt Nam)">
+        <option value="PGBank (Ngân hàng TMCP Xăng dầu Petrolimex)">
+        <option value="BaoViet Bank (Ngân hàng TMCP Bảo Việt)">
+        <option value="Bac A Bank (Ngân hàng TMCP Bắc Á)">
+        <option value="PVcomBank (Ngân hàng TMCP Đại Chúng Việt Nam)">
+        <option value="DongA Bank (Ngân hàng TMCP Đông Á)">
+        <option value="LienVietPostBank (Ngân hàng TMCP Bưu điện Liên Việt)">
+        <option value="OceanBank (Ngân hàng TNHH MTV Đại Dương)">
+        <option value="GPBank (Ngân hàng TNHH MTV Dầu khí Toàn cầu)">
+        <option value="CB Bank (Ngân hàng TNHH MTV Xây dựng Việt Nam)">
+        <option value="NCB (Ngân hàng TMCP Quốc Dân)">
+        <option value="CIMB Bank (Ngân hàng CIMB Việt Nam)">
+        <option value="Hong Leong Bank Việt Nam">
+        <option value="Public Bank Việt Nam">
+        <option value="UOB Việt Nam">
+        <option value="HSBC Việt Nam">
+        <option value="Standard Chartered Việt Nam">
+        <option value="Shinhan Bank Việt Nam">
+        <option value="Woori Bank Việt Nam">
+        <option value="KEB Hana Bank Việt Nam">
+        <option value="Indovina Bank">
+        <option value="IBK Bank (Industrial Bank of Korea)">
+        <option value="Krungsri Bank Việt Nam">
+        <option value="United Overseas Bank (UOB)">
+        <option value="Saigon Bank (Ngân hàng TMCP Sài Gòn Công Thương)">
+        <option value="VRB (Ngân hàng Liên doanh Việt - Nga)">
+        <option value="VID Public Bank">
+        <option value="Ban Viet Bank (Ngân hàng TMCP Bản Việt)">
+        <option value="Ngân hàng Nhà nước Việt Nam (Chỉ sử dụng cho cơ quan)">
+        <option value="Ngân hàng Chính sách Xã hội">
+        </datalist>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="submitThongTinNganHang()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+            <div th:if="${param.success}" class="alert alert-success mt-3">Yêu cầu rút tiền đã gửi thành công!</div>
+            <div th:if="${param.error}" class="alert alert-danger mt-3">Số tiền rút không hợp lệ hoặc vượt quá số dư!</div>
+        </div>
+    </div>
+
+    <!-- Lịch sử nhận tiền -->
+    <div class="card mb-3">
+        <div class="card-header">Lịch Sử Nhận Tiền</div>
+        <div class="card-body">
+            <table class="table">
+                <thead><tr><th>Mã</th><th>Số tiền</th><th>Ngày</th><th>Khóa học</th></tr></thead>
+                <tbody>
+                    <tr th:each="item : ${lichSuThuNhap}">
+                        <td th:text="${item.doanhthuId}"></td>
+                        <td th:text="${#numbers.formatDecimal(item.sotiennhan, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                        <td th:text="${#temporals.format(item.ngaynhan, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:if="${item.dangHoc != null and item.dangHoc.khoahoc != null}" th:text="${item.dangHoc.khoahoc.tenKhoaHoc}"></td>
+                        <td th:unless="${item.dangHoc != null and item.dangHoc.khoahoc != null}">Không rõ</td>
+                    </tr>
+                    <tr th:if="${lichSuThuNhap.isEmpty()}">
+                        <td colspan="4" class="text-center">Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Lịch sử rút tiền -->
+    <div class="card mb-3">
+        <div class="card-header">Lịch Sử Rút Tiền</div>
+        <div class="card-body">
+            <table class="table">
+                <thead><tr><th>Mã</th><th>Số tiền</th><th>Ngày</th><th>Trạng thái</th></tr></thead>
+                <tbody>
+                    <tr th:each="item : ${lichSuRutTien}">
+                        <td th:text="${item.rutTienId}"></td>
+                        <td th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                        <td th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:switch="${item.trangthai.name()}">
+                            <span th:case="'DANG_CHO_XU_LY'" class="text-warning">Đang chờ xử lý</span>
+                            <span th:case="'THANH_CONG'" class="text-success">Thành công</span>
+                            <span th:case="'TU_CHOI'" class="text-danger">Từ chối</span>
+                            <span th:case="*">Không xác định</span>
+                        </td>
+
+                    </tr>
+                    <tr th:if="${lichSuRutTien.isEmpty()}">
+                        <td colspan="4" class="text-center">Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Yêu cầu đang chờ xử lý -->
+    <div class="card mb-3">
+        <div class="card-header">Yêu Cầu Đang Chờ Xử Lý</div>
+        <div class="card-body">
+            <table class="table">
+                <thead><tr><th>Mã</th><th>Số tiền</th><th>Ngày</th><th>Trạng thái</th></tr></thead>
+                <tbody>
+                    <tr th:each="item : ${yeuCauDangXuLy}">
+                        <td th:text="${item.rutTienId}"></td>
+                        <td th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                        <td th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:switch="${item.trangthai.name()}">
+                            <span th:case="'DANG_CHO_XU_LY'" class="text-warning">Đang chờ xử lý</span>
+                            <span th:case="'THANH_CONG'" class="text-success">Thành công</span>
+                            <span th:case="'TU_CHOI'" class="text-danger">Từ chối</span>
+                            <span th:case="*">Không xác định</span>
+                        </td>
+
+                    </tr>
+                    <tr th:if="${yeuCauDangXuLy.isEmpty()}">
+                        <td colspan="4" class="text-center">Không có yêu cầu nào đang xử lý</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<footer th:replace="~{views/layouts/footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<script th:inline="javascript">
+    const giangVienId = /*[[${session.giangVien.giangvienId}]]*/ 0;
+
+    function handleRutTien() {
+        fetch(`/giangvien/vi-giang-vien/${giangVienId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.soTaiKhoan || !data.tenNganHang) {
+                    $('#modalSTK').modal('show');
+                } else {
+                    document.getElementById('formRutTien').submit();
+                }
+            });
+    }
+
+    function submitThongTinNganHang() {
+        const soTaiKhoan = document.getElementById('soTaiKhoan').value;
+        const tenNganHang = document.getElementById('tenNganHang').value;
+
+        fetch('/giangvien/vi-giang-vien/cap-nhat-ngan-hang', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                giangVienId: giangVienId,
+                soTaiKhoan: soTaiKhoan,
+                tenNganHang: tenNganHang
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                $('#modalSTK').modal('hide');
+                handleRutTien();
+            } else {
+                alert('Cập nhật thất bại!');
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>
+>>>>>>> e980eb867ad2568a9f95f59345177139d7fd0014

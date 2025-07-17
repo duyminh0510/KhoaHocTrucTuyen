@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class GiaoDichRequest {
     private String giaoDichId;
+    private String giaoDichId;
     private BigDecimal tongTien;
     private List<Integer> khoaHocIds;
 }
