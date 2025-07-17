@@ -38,8 +38,16 @@ public class ThemKhoaHocController {
 
     // Hiển thị form bước 1
     @GetMapping("/giangvien/them-moi-khoa-hoc")
-    public String showCourseForm(Model model) {
-        model.addAttribute("course", new KhoaHoc());
+    public String showCourseForm(@RequestParam(value = "khoahocId", required = false) Integer khoahocId,
+            Model model) {
+        KhoaHoc khoaHoc;
+        if (khoahocId != null) {
+            khoaHoc = khoaHocService.getKhoaHocById(khoahocId);
+        } else {
+            khoaHoc = new KhoaHoc();
+        }
+
+        model.addAttribute("course", khoaHoc);
         model.addAttribute("danhmuc", danhMucService.layTatCa());
         return "views/gdienGiangVien/them-khoa-hoc";
     }
@@ -95,6 +103,11 @@ public class ThemKhoaHocController {
     @GetMapping("/giangvien/them-moi-khoa-hoc/gia")
     public String showGiaForm(@RequestParam("khoahocId") Integer khoahocId, Model model) {
         KhoaHoc khoahoc = khoaHocService.getKhoaHocById(khoahocId);
+
+        if (khoahoc == null) {
+            return "redirect:/giangvien/khoa-hoc";
+        }
+
         model.addAttribute("course", khoahoc);
         return "views/gdienGiangVien/them-gia-khoa-hoc";
     }
@@ -103,6 +116,10 @@ public class ThemKhoaHocController {
     @PostMapping("/giangvien/them-moi-khoa-hoc/save-price")
     public String savePrice(@ModelAttribute("course") KhoaHoc khoahocUpdate) {
         KhoaHoc khoahoc = khoaHocService.getKhoaHocById(khoahocUpdate.getKhoahocId());
+
+        if (khoahoc == null) {
+            return "redirect:/giangvien/khoa-hoc";
+        }
 
         khoahoc.setGiagoc(khoahocUpdate.getGiagoc());
         khoahoc.setPhanTramGiam(khoahocUpdate.getPhanTramGiam());

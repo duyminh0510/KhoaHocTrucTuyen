@@ -36,7 +36,9 @@
 
                     <div class="d-flex justify-content-end mt-4">
                         <button type="button" class="btn custom-outline me-2"
-                            onclick="history.back()">← Quay lại</button>
+                            th:onclick="|window.location.href='/giangvien/them-moi-khoa-hoc?khoahocId=${course.khoahocId}'|">
+                            ← Quay lại
+                        </button>
                         <button class="btn custom-outline" type="submit">Hoàn
                             tất</button>
                     </div>

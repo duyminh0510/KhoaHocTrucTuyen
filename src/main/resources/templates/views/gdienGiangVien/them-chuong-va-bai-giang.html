@@ -247,11 +247,24 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-outline-primary mt-3"
-                    onclick="themChuong()">+ Phần</button>
-                <button type="submit" class="btn text-white mt-3"
-                    style="background-color: #1B263B;">Lưu bản
-                    nháp</button>
+                <div
+                    class="d-flex justify-content-between align-items-center mt-3">
+                    <!-- Nhóm 2 nút đầu bên trái -->
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary"
+                            onclick="themChuong()">+ Phần</button>
+                        <button type="submit" class="btn text-white"
+                            style="background-color: #1B263B;">Lưu bản
+                            nháp</button>
+                    </div>
+
+                    <!-- Nút bên phải -->
+                    <a
+                        th:href="@{/giangvien/them-moi-khoa-hoc/gia(khoahocId=${khoahoc.khoahocId})}"
+                        class="btn btn-secondary">
+                        Quay lại bước 2
+                    </a>
+                </div>
             </form>
 
             <!-- Modal xác nhận xóa chương -->
