@@ -34,8 +34,8 @@ public class GiangVienServiceImpl implements GiangVienService {
         Optional<GiangVien> optionalGV = giangVienRepository.findById(giangVienId);
         if (optionalGV.isPresent()) {
             GiangVien gv = optionalGV.get();
-            gv.setSoTaiKhoan(soTaiKhoan);
-            gv.setTenNganHang(tenNganHang);
+            // gv.setSoTaiKhoan(soTaiKhoan);
+            // gv.setTenNganHang(tenNganHang);
             giangVienRepository.save(gv);
             return true;
         }
