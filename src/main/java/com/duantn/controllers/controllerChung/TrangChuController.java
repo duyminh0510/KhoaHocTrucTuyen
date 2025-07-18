@@ -12,7 +12,6 @@ import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.services.KhoaHocService;
-import com.duantn.enums.TrangThaiKhoaHoc;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -24,6 +23,7 @@ public class TrangChuController {
     @RequestMapping("/")
     public String home(HttpServletRequest request, Model model,
             @ModelAttribute("taiKhoan") TaiKhoan taiKhoan) {
+
         boolean isHocVien = request.isUserInRole("ROLE_HOCVIEN");
         boolean isGiangVien = request.isUserInRole("ROLE_GIANGVIEN");
         boolean isAdmin = request.isUserInRole("ROLE_ADMIN");
@@ -35,6 +35,7 @@ public class TrangChuController {
 
         model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHocPublished());
         model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMucPublished());
+
         return "views/gdienChung/home";
     }
 

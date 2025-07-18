@@ -1,6 +1,5 @@
 package com.duantn.configs;
 
-import com.duantn.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.duantn.services.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,46 +28,40 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                http
-                                .authorizeHttpRequests(auth -> auth
-                                                // Static resources
-                                                .requestMatchers("/css/**", "/js/**", "/photos/**", "/favicon.ico")
-                                                .permitAll()
+                http.authorizeHttpRequests(auth -> auth
+                                // Static resources
+                                .requestMatchers("/css/**", "/js/**", "/photos/**", "/favicon.ico")
+                                .permitAll()
 
-                                                // Public pages
-                                                .requestMatchers("/auth/**", "/", "/home", "/dangky", "/verify")
-                                                .permitAll()
+                                // Public pages
+                                .requestMatchers("/auth/**", "/", "/home", "/dangky", "/verify")
+                                .permitAll()
 
-                                                // Role-based access
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/nhanvien/**").hasRole("NHANVIEN")
-                                                .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
-                                                .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
-                                                .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
+                                // Role-based access
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/nhanvien/**").hasRole("NHANVIEN")
+                                .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
+                                .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
+                                .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
 
-                                                // All other requests
-                                                .anyRequest().permitAll())
-                                .formLogin(form -> form
-                                                .loginPage("/auth/dangnhap")
+                                // All other requests
+                                .anyRequest().permitAll())
+                                .formLogin(form -> form.loginPage("/auth/dangnhap")
                                                 .loginProcessingUrl("/login/form")
                                                 .usernameParameter("email")
                                                 .passwordParameter("password")
                                                 .successHandler(loginSuccessHandler)
-                                                .failureHandler(customFailureHandler)
-                                                .permitAll())
-                                .rememberMe(remember -> remember
-                                                .rememberMeParameter("remember-me") // phải giống tên trong checkbox
-                                                                                    // form
+                                                .failureHandler(customFailureHandler).permitAll())
+                                .rememberMe(remember -> remember.rememberMeParameter("remember-me")
                                                 .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 ngày
-                                                .key("globaledu-secret-key-123") // khóa bí mật
-                                                .userDetailsService(userDetailsService) // quan trọng
-                                )
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
+                                                .key("globaledu-secret-key-123")
+                                                .userDetailsService(userDetailsService))
+                                .logout(logout -> logout.logoutUrl("/logout")
                                                 .logoutSuccessUrl("/auth/dangnhap?logout=true")
                                                 .deleteCookies("JSESSIONID", "remember-me")
                                                 .permitAll())
-                                .csrf(AbstractHttpConfigurer::disable);
+                                .csrf(AbstractHttpConfigurer::disable); // Tắt CSRF nếu dùng API
+                                                                        // hoặc xử lý riêng
 
                 return http.build();
         }
@@ -82,8 +76,6 @@ public class SecurityConfig {
         public AuthenticationManager authManager(HttpSecurity http) throws Exception {
                 return http.getSharedObject(AuthenticationManagerBuilder.class)
                                 .userDetailsService(userDetailsService)
-                                .passwordEncoder(passwordEncoder())
-                                .and()
-                                .build();
+                                .passwordEncoder(passwordEncoder()).and().build();
         }
 }
