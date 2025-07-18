@@ -18,10 +18,10 @@
                         class="table table-hover align-middle table-transaction">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Học viên</th>
-                                <th>Email</th>
-                                <th>Ngày giao dịch</th>
+                                <!-- <th>Email</th> -->
+                                <!-- <th>Ngày giao dịch</th> -->
                                 <th>Hình thức</th>
                                 <th>Tổng tiền</th>
                                 <th>Trạng thái</th>
@@ -34,29 +34,38 @@
                                 <td th:text="${gd.giaodichId}"></td>
                                 <td th:text="${gd.tenhocvien}"></td>
                                 <!-- <td th:text="${gd.email}"></td> -->
-                                <td th:text="${gd.taikhoan.email}"></td>
-                                <td th:text="${gd.ngayGiaoDich}"></td>
+                                <!-- <td th:text="${gd.taikhoan.email}"></td> -->
+                                <!-- <td th:text="${gd.ngayGiaoDich}"></td> -->
                                 <td th:text="${gd.hinhThucThanhToan}"></td>
                                 <td
                                     th:text="${#numbers.formatDecimal(gd.tongtien, 0, 'COMMA', 2, 'POINT')} + ' đ'"></td>
                                 <td>
                                     <span th:switch="${gd.trangthai.name()}">
-                                        <span th:case="'HOAN_THANH'" class="badge badge-success">Hoàn thành</span>
-                                        <span th:case="'CHO_XU_LY'" class="badge badge-warning">Chờ xử lý</span>
-                                        <span th:case="'THAT_BAI'" class="badge badge-danger">Thất bại</span>
-                                        <span th:case="*" class="badge badge-secondary">Không xác định</span>
+                                        <span th:case="'HOAN_THANH'"
+                                            class="badge badge-success">Hoàn
+                                            thành</span>
+                                        <span th:case="'CHO_XU_LY'"
+                                            class="badge badge-warning">Chờ xử
+                                            lý</span>
+                                        <span th:case="'THAT_BAI'"
+                                            class="badge badge-danger">Thất
+                                            bại</span>
+                                        <span th:case="*"
+                                            class="badge badge-secondary">Không
+                                            xác định</span>
                                     </span>
 
                                 </td>
                                 <td>
                                     <ul style="list-style: none; padding: 0;">
-                                        <li th:each="ct : ${gd.chiTietGiaoDich}" th:text="${ct.khoahoc?.tenKhoaHoc}"></li>
+                                        <li th:each="ct : ${gd.chiTietGiaoDich}"
+                                            th:text="${ct.khoahoc?.tenKhoaHoc}"></li>
                                     </ul>
                                 </td>
                                 <td>
-                                    <a th:href="@{/{base}/quanly-giao-dich/{id}(base=${basePath}, id=${gd.giaodichId})}"
-   class="btn btn-sm btn-outline-info">Xem</a>
-
+                                    <a
+                                        th:href="@{/{base}/quanly-giao-dich/{id}(base=${basePath}, id=${gd.giaodichId})}"
+                                        class="btn btn-sm btn-outline-info">Xem</a>
 
                                 </td>
                             </tr>

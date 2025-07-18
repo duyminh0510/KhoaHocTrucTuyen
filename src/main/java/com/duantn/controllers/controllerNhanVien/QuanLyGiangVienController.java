@@ -53,6 +53,7 @@ public class QuanLyGiangVienController {
         if (tk.getGiangVien() == null) {
             tk.setGiangVien(new GiangVien());
         }
+        System.out.println("TK ID: " + tk.getTaikhoanId());
 
         model.addAttribute("taiKhoan", tk);
         model.addAttribute("prefix", prefix);
@@ -94,7 +95,6 @@ public class QuanLyGiangVienController {
         GiangVien gv = existing.getGiangVien();
         if (gv == null) {
             gv = new GiangVien();
-            gv.setTaikhoan(existing);
         }
 
         GiangVien form = taiKhoanForm.getGiangVien();
@@ -108,6 +108,7 @@ public class QuanLyGiangVienController {
             gv.setChuyenNganh(form.getChuyenNganh());
         }
 
+        gv.setTaikhoan(existing);
         existing.setGiangVien(gv);
         taiKhoanRepository.save(existing);
 

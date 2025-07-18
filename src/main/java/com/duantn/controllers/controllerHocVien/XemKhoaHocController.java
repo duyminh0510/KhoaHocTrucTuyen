@@ -1,8 +1,7 @@
+
 package com.duantn.controllers.controllerHocVien;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.duantn.entities.BaiGiang;
 import com.duantn.entities.BinhLuan;
@@ -27,10 +27,10 @@ import com.duantn.services.ChuongService;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.DangHocService;
 import com.duantn.services.KhoaHocService;
+import com.duantn.services.TaiKhoanService;
 import com.duantn.services.TienDoHocService;
 
 @Controller
-@RequestMapping("/khoahoc")
 public class XemKhoaHocController {
 
     @Autowired
@@ -49,10 +49,28 @@ public class XemKhoaHocController {
     private DangHocService dangHocService;
 
     @Autowired
+    private TaiKhoanService taiKhoanService;
+
+    @Autowired
     private BinhLuanService binhLuanService;
 
-    @GetMapping
-    public String xemKhoaHocTrangChinh(Model model) {
+    private void addBinhLuanToModel(Integer baiGiangId, Model model) {
+        List<BinhLuan> rootComments = binhLuanService.getCommentsByBaiGiangId(baiGiangId);
+        List<BinhLuan> allComments = binhLuanService.getAllCommentsByBaiGiangId(baiGiangId);
+
+        Map<Integer, List<BinhLuan>> childrenMap = allComments.stream()
+                .filter(c -> c.getParent() != null)
+                .collect(Collectors.groupingBy(c -> c.getParent().getBinhluanId()));
+
+        String loggedInEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        model.addAttribute("rootComments", rootComments);
+        model.addAttribute("childrenMap", childrenMap);
+        model.addAttribute("loggedInEmail", loggedInEmail);
+    }
+
+    @RequestMapping("/khoa-hoc")
+    public String xemkhoahoc(Model model) {
         return "views/gdienHocVien/xem-khoa-hoc";
     }
 
@@ -67,22 +85,13 @@ public class XemKhoaHocController {
         TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         model.addAttribute("taiKhoanId", taiKhoan.getTaikhoanId());
 
-    private BinhLuanService binhLuanService;
-
-    @GetMapping
-    public String xemKhoaHocTrangChinh(Model model) {
-        return "views/gdienHocVien/xem-khoa-hoc";
-    }
-
-    @GetMapping("/slug/{slug}")
-    public String xemKhoaHocTheoSlug(@PathVariable("slug") String slug, Model model) {
         KhoaHoc khoaHoc = khoaHocService.getKhoaHocBySlug(slug);
         if (khoaHoc == null) {
             return "redirect:/khoaHoc?error=notfound";
         }
 
-        Integer khoaHocId = khoaHoc.getKhoahocId();
-        List<Chuong> chuongs = chuongService.findByKhoaHocId(khoaHocId);
+        Integer id = khoaHoc.getKhoahocId();
+        List<Chuong> chuongs = chuongService.findByKhoaHocId(id);
 
         BaiGiang baiGiangDauTien = null;
         Integer chuongDangMoId = null;
@@ -95,11 +104,6 @@ public class XemKhoaHocController {
                     break;
                 }
             }
-        }
-
-        if (baiGiangDauTien != null) {
-            addBaiGiangToModel(baiGiangDauTien, model);
-            addBinhLuanToModel(baiGiangDauTien.getBaiGiangId(), model);
         }
 
         model.addAttribute("khoaHoc", khoaHoc);
@@ -150,6 +154,7 @@ public class XemKhoaHocController {
                     model.addAttribute("tongSoCauHoi", baiGiangDauTien.getTracNghiem().getCauHoiList().size());
                 }
             }
+            addBinhLuanToModel(baiGiangDauTien.getBaiGiangId(), model);
         }
 
         return "views/gdienHocVien/xem-khoa-hoc";
@@ -166,8 +171,6 @@ public class XemKhoaHocController {
         TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         model.addAttribute("taiKhoanId", taiKhoan.getTaikhoanId());
 
-    @GetMapping("/baigiang/{id}")
-    public String xemBaiGiang(@PathVariable("id") Integer baiGiangId, Model model) {
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);
         if (baiGiang == null) {
             return "redirect:/khoa-hoc?error=notfound";
@@ -175,7 +178,7 @@ public class XemKhoaHocController {
 
         Chuong chuong = baiGiang.getChuong();
         if (chuong == null || chuong.getKhoahoc() == null) {
-            return "redirect:/khoahoc?error=nodata";
+            return "redirect:/khoa-hoc?error=nodata";
         }
 
         KhoaHoc khoaHoc = chuong.getKhoahoc();
@@ -183,17 +186,9 @@ public class XemKhoaHocController {
 
         model.addAttribute("khoaHoc", khoaHoc);
         model.addAttribute("chuongs", chuongs);
-        model.addAttribute("chuongDangMoId", chuong.getChuongId());
-
-        addBaiGiangToModel(baiGiang, model);
-        addBinhLuanToModel(baiGiangId, model);
-
-        return "views/gdienHocVien/xem-khoa-hoc";
-    }
-
-    private void addBaiGiangToModel(BaiGiang baiGiang, Model model) {
         model.addAttribute("baiGiang", baiGiang);
-        model.addAttribute("baiGiangDangHocId", baiGiang.getBaiGiangId());
+        model.addAttribute("baiGiangDangHocId", baiGiangId);
+        model.addAttribute("chuongDangMoId", baiGiang.getChuong().getChuongId());
 
         switch (baiGiang.getLoaiBaiGiang()) {
             case VIDEO:
@@ -209,38 +204,9 @@ public class XemKhoaHocController {
                 model.addAttribute("tongSoCauHoi", baiGiang.getTracNghiem().getCauHoiList().size());
                 break;
         }
-    }
+        addBinhLuanToModel(baiGiangId, model);
 
-    private int tinhThuTuBaiTracNghiem(Integer baiGiangId, List<Chuong> chuongs) {
-        int stt = 0;
-        for (Chuong c : chuongs) {
-            if (c.getBaiGiangs() == null)
-                continue;
-            for (BaiGiang bg : c.getBaiGiangs()) {
-                if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TRACNGHIEM) {
-                    stt++;
-                    if (bg.getBaiGiangId().equals(baiGiangId)) {
-                        return stt;
-                    }
-                }
-            }
-        }
-        return 0;
-    }
-
-    private void addBinhLuanToModel(Integer baiGiangId, Model model) {
-        List<BinhLuan> rootComments = binhLuanService.getCommentsByBaiGiangId(baiGiangId);
-        List<BinhLuan> allComments = binhLuanService.getAllCommentsByBaiGiangId(baiGiangId);
-
-        Map<Integer, List<BinhLuan>> childrenMap = allComments.stream()
-                .filter(c -> c.getParent() != null)
-                .collect(Collectors.groupingBy(c -> c.getParent().getBinhluanId()));
-
-        String loggedInEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        model.addAttribute("rootComments", rootComments);
-        model.addAttribute("childrenMap", childrenMap);
-        model.addAttribute("loggedInEmail", loggedInEmail);
+        return "views/gdienHocVien/xem-khoa-hoc";
     }
 
     private int tinhThuTuBaiTracNghiem(Integer baiGiangId, List<Chuong> chuongs) {

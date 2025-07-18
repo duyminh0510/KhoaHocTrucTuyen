@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.core.Authentication;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -26,32 +27,35 @@ public class GiaoDichKhoaHocController {
 
     // @GetMapping("/quanly-giao-dich")
     // public String listGiaoDich(Model model) {
-    //     List<GiaoDichKhoaHoc> listGiaoDich = giaoDichService.getAllGiaoDich();
-    //     model.addAttribute("listGiaoDich", listGiaoDich);
-    //     return "views/gdienQuanLy/giaoDichKhoaHoc";
+    // List<GiaoDichKhoaHoc> listGiaoDich = giaoDichService.getAllGiaoDich();
+    // model.addAttribute("listGiaoDich", listGiaoDich);
+    // return "views/gdienQuanLy/giaoDichKhoaHoc";
     // }
 
     @GetMapping("/quanly-giao-dich")
     public String listGiaoDich(Model model) {
         List<GiaoDichKhoaHoc> listGiaoDich = giaoDichService.getAllGiaoDich();
+
+        // ✅ Sắp xếp theo ID tăng dần (1 → 2 → 3...)
+        listGiaoDich.sort(Comparator.comparing(GiaoDichKhoaHoc::getGiaodichId));
+
         model.addAttribute("listGiaoDich", listGiaoDich);
 
-        // Thêm basePath để biết là /admin hay /nhanvien
-        String basePath = "admin"; // mặc định
+        String basePath = "admin";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_NHANVIEN"))) {
             basePath = "nhanvien";
         }
-        model.addAttribute("basePath", basePath); // gửi sang view
+        model.addAttribute("basePath", basePath);
 
         return "views/gdienQuanLy/giaoDichKhoaHoc";
     }
 
     // @GetMapping("/quanly-giao-dich/{id}")
     // public String detailGiaoDich(@PathVariable Integer id, Model model) {
-    //     GiaoDichKhoaHoc detail = giaoDichService.getGiaoDichById(id);
-    //     model.addAttribute("gd", detail);
-    //     return "views/gdienQuanLy/giaoDichKhoaHocDetail";
+    // GiaoDichKhoaHoc detail = giaoDichService.getGiaoDichById(id);
+    // model.addAttribute("gd", detail);
+    // return "views/gdienQuanLy/giaoDichKhoaHocDetail";
     // }
     @GetMapping("/quanly-giao-dich/{id}")
     public String detailGiaoDich(@PathVariable Integer id, Model model) {
