@@ -25,4 +25,7 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
 
     @Query("SELECT COUNT(tk) FROM TaiKhoan tk WHERE tk.role.name = 'HOCVIEN'")
     int countHocVien();
+
+    @Query("SELECT COUNT(tk) FROM TaiKhoan tk WHERE tk.role.name = 'ROLE_NHANVIEN'")
+    int countNhanVien();
 }

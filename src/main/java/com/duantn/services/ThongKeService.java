@@ -17,4 +17,8 @@ public interface ThongKeService {
     Map<String, Integer> getTiLeDanhMuc();
 
     List<Object> getChiTietKhoaHoc(); // Có thể tạo DTO riêng nếu cần
+
+    double tongTienNenTang();
+
+    int tongNhanVien();
 }

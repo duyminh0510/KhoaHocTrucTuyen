@@ -47,7 +47,7 @@
 
         <div class="chart-placeholder" style="margin-top: 32px;">
             <h3>Biểu đồ doanh thu theo khóa học</h3>
-            <canvas id="doanhThuChart" width="600" height="250"></canvas>
+
         </div>
 
         <div class="table-container" style="margin-top: 32px;">
@@ -75,54 +75,7 @@
         </div>
         </div>
 
-        <!-- Biểu đồ doanh thu -->
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            var doanhThuKhoaHoc = /*[[${doanhThuKhoaHoc}]]*/[];
 
-            var labels = doanhThuKhoaHoc.map(function (item) {
-                return item.tenKhoaHoc;
-            });
-
-            var data = doanhThuKhoaHoc.map(function (item) {
-                return item.tongTienNhan;
-            });
-
-            console.log("labels:", labels);
-            console.log("data:", data);
-
-            var ctx = document.getElementById('doanhThuChart').getContext('2d');
-            if (labels.length > 0 && data.length > 0) {
-                var doanhThuChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Doanh thu nhận được',
-                            data: data,
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function (value) {
-                                        return value.toLocaleString('vi-VN') + '₫';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            } else {
-                console.log("Không có dữ liệu để vẽ biểu đồ");
-            }
-            /*]]>*/
         </script>
     </main>
 </body>

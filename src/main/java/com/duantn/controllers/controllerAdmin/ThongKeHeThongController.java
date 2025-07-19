@@ -22,6 +22,8 @@ public class ThongKeHeThongController {
         model.addAttribute("revenueData", thongKeService.getDoanhThu6Thang());
         model.addAttribute("categoryData", thongKeService.getTiLeDanhMuc());
         model.addAttribute("chiTietKhoaHoc", thongKeService.getChiTietKhoaHoc());
+        model.addAttribute("tongTienNenTang", thongKeService.tongTienNenTang());
+        model.addAttribute("tongNhanVien", thongKeService.tongNhanVien());
         return "views/gdienQuanLy/quanly-thong-ke-he-thong";
     }
 

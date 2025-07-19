@@ -2,75 +2,155 @@ body {
     background-color: #f5f6f8;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #16203b;
+    line-height: 1.6;
 }
 
+/* Container chính */
 .thongke .thongke-container {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 40px auto;
     background: #fff;
-    padding: 30px;
-    margin-bottom: 40px;
-    margin-top: 40px;
+    padding: 40px 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
+/* Header */
 .thongke .thongke-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 30px;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 40px;
 }
 
 .thongke .thongke-header i {
-    font-size: 28px;
+    font-size: 36px;
     color: #16203b;
 }
 
 .thongke .thongke-header h1 {
-    font-size: 26px;
+    font-size: 32px;
     margin: 0;
+    font-weight: 700;
 }
 
+/* Grid thống kê */
 .thongke .stat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
 }
 
 .thongke .stat-card {
     background-color: #f8f9fa;
-    padding: 20px;
+    padding: 24px;
     border-radius: 10px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.thongke .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .thongke .stat-card i {
-    font-size: 28px;
+    font-size: 34px;
     margin-bottom: 10px;
     color: #28a745;
 }
 
 .thongke .stat-card h2 {
-    font-size: 22px;
-    margin: 10px 0 5px;
+    font-size: 24px;
+    margin: 6px 0 4px;
+    font-weight: 700;
+    color: #16203b;
 }
 
 .thongke .stat-card p {
-    font-size: 15px;
-    color: #666;
+    font-size: 14px;
+    color: #555;
 }
 
-.thongke .chart-placeholder {
+/* Biểu đồ */
+.chart-placeholder {
+    margin-top: 48px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.chart-placeholder h1 {
+    font-size: 32px;
+    margin: 0;
+
+    margin-bottom: 24px;
+
+    color: #16203b;
+    font-weight: 700;
+
+}
+
+/* Bảng thống kê */
+.table-container {
     margin-top: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table-container h1 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 700;
+    margin-bottom: 24px;
+
+    color: #16203b;
+
+    text-align: center;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    text-align: center;
+}
+
+.table-container thead {
     background-color: #e9ecef;
-    height: 300px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 16px;
+}
+
+.table-container th,
+.table-container td {
+    padding: 12px 16px;
+    border: 1px solid #dee2e6;
+}
+
+.table-container th {
+    color: #16203b;
+    font-weight: 600;
+}
+
+.table-container tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table-container tbody tr:hover {
+    background-color: #f8f9fc;
+}
+
+/* Responsive canvas height fix */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 400px;
+    border-radius: 6px;
 }
