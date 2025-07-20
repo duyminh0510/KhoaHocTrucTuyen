@@ -64,7 +64,7 @@ public class DanhGiaController {
         danhGia.setKhoahoc(khoaHoc);
         danhGiaService.taoHoacCapNhatDanhGia(khoaHoc.getKhoahocId(), nguoiDung, danhGia);
 
-        return "redirect:/khoa-hoc/" + khoahocId + "?danhgia=ok";
+        return "redirect:/khoaHoc/" + khoahocId + "?danhgia=ok";
     }
 
     // Xóa đánh giá
@@ -82,6 +82,6 @@ public class DanhGiaController {
 
         danhGiaService.xoaDanhGia(khoaHoc, nguoiDung);
 
-        return "redirect:/khoa-hoc/" + khoahocId + "?danhgia=deleted";
+        return "redirect:/khoaHoc/" + khoahocId + "?danhgia=deleted";
     }
 }
