@@ -3,14 +3,12 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trang chủ - Giảng Viên</title>
-
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <main class="container py-5 home">
+    <main class="container py-5">
         <h1 class="text-center mb-5">Trang quản lý giảng viên</h1>
 
         <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
@@ -24,63 +22,83 @@
                 <th:block th:each="khoaHoc : ${khoaHocList}">
                     <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <div>
-                            <h5 th:text="${khoaHoc.tenKhoaHoc}" class="mb-1"></h5>
-                            <small th:text="${khoaHoc.moTa}"></small>
+                            <h5 class="mb-1" th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h5>
+                            <small th:text="${khoaHoc.moTa}">Mô tả</small>
                         </div>
-                        <button class="btn btn-sm btn-outline-primary">Xem
-                                chi tiết</button>
+                        <a class="btn btn-sm btn-outline-primary"
+                            th:href="@{/khoahoc/xem/{id}(id=${khoaHoc.khoahocId})}">Xem chi tiết</a>
                     </div>
                 </th:block>
             </div>
 
-            <div class="add-new">
-                <a href="/giangvien/them-moi-khoa-hoc" class="btn-add">
-                        ➕ Thêm khóa học mới
-                    </a>
+            <div class="mt-3">
+                <a href="/giangvien/them-moi-khoa-hoc" class="btn btn-success">
+                    ➕ Thêm khóa học mới
+                </a>
             </div>
         </section>
 
-        <!-- KHÓA HỌC ĐƯỢC MUA NHIỀU NHẤT -->
+        <!-- DANH SÁCH KHÓA HỌC -->
         <section class="mb-5">
-            <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
-            <div class="row g-4">
-                <div class="col-md-4" th:each="khoaHoc : ${topKhoaHocList}">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}"></h5>
-                            <p class="card-text" th:text="${khoaHoc.moTa}"></p>
-                            <span class="badge bg-primary" th:text="${khoaHoc.luotMua + ' lượt mua'}"></span>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="mb-4">📋 Danh sách khóa học bạn đã tạo</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên khóa học</th>
+                            <th>Giá hiện tại</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${khoaHocs == null || #lists.isEmpty(khoaHocs)}">
+                            <td colspan="5" class="text-center">Bạn chưa tạo khóa học nào.</td>
+                        </tr>
+                        <tr th:each="khoaHoc, iterStat : ${khoaHocs}">
+                            <td th:text="${iterStat.index + 1}">1</td>
+                            <td th:text="${khoaHoc.tenKhoaHoc}">Tên KH</td>
+                            <td
+                                th:text="${khoaHoc.giaKhuyenMai != null ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc} + ' đ'">
+                                0 đ</td>
+                            <td th:text="${khoaHoc.trangThai}">TRẠNG THÁI</td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                        th:if="${#lists.contains({'DRAFT', 'REJECTED', 'HIDDEN'}, khoaHoc.trangThai.name())}"
+                                        th:href="@{/khoahoc/sua/{id}(id=${khoaHoc.khoahocId})}">📝 Sửa</a>
+
+                                    <a class="btn btn-sm btn-outline-success"
+                                        th:if="${#lists.contains({'DRAFT', 'REJECTED'}, khoaHoc.trangThai.name())}"
+                                        th:href="@{/khoahoc/gui-duyet/{id}(id=${khoaHoc.khoahocId})}">🚀 Gửi duyệt</a>
+
+                                    <a class="btn btn-sm btn-outline-danger"
+                                        th:if="${khoaHoc.trangThai.name() == 'PENDING_APPROVAL'}"
+                                        th:href="@{/khoahoc/huy-duyet/{id}(id=${khoaHoc.khoahocId})}">❌ Hủy duyệt</a>
+
+                                    <a class="btn btn-sm btn-outline-warning"
+                                        th:if="${khoaHoc.trangThai.name() == 'PUBLISHED'}"
+                                        th:href="@{/khoahoc/an/{id}(id=${khoaHoc.khoahocId})}">⛔ Ẩn</a>
+
+                                    <a class="btn btn-sm btn-outline-info"
+                                        th:if="${khoaHoc.trangThai.name() == 'HIDDEN'}"
+                                        th:href="@{/khoahoc/hien-lai/{id}(id=${khoaHoc.khoahocId})}">👁️ Hiện lại</a>
+
+                                    <a class="btn btn-sm btn-outline-primary"
+                                        th:href="@{/khoahoc/slug/{slug}(slug=${khoaHoc.slug})}">👁️ Xem</a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </section>
-
-        <!-- THÔNG BÁO MỚI -->
-        <section class="mb-5">
-            <h2 class="mb-4">🔔 Thông báo mới</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Hệ thống sẽ bảo trì vào lúc 23:00 ngày 28/06/2025.</li>
-                <li class="list-group-item">Bạn có 3 đánh giá mới từ học viên.
-                </li>
-                <li class="list-group-item">1 khóa học của bạn đã đạt 100 lượt mua.</li>
-            </ul>
-        </section>
-
-        <!-- HƯỚNG DẪN NHANH -->
-        <section>
-            <h2 class="mb-4">📖 Hướng dẫn nhanh cho giảng viên</h2>
-            <ol>
-                <li>Vào mục <strong>"Tạo khóa học"</strong> để thêm bài giảng mới.</li>
-                <li>Quản lý học viên đã đăng ký từ mục
-                    <strong>"Quản lý học viên"</strong>.</li>
-                <li>Xem và phản hồi đánh giá trong phần
-                    <strong>"Đánh giá"</strong>.</li>
-                <li>Theo dõi thống kê lượt học trong phần
-                    <strong>"Thống kê"</strong>.</li>
-            </ol>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
