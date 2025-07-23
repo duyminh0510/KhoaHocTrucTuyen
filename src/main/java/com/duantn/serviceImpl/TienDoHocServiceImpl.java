@@ -17,6 +17,7 @@ import com.duantn.services.BaiGiangService;
 import com.duantn.services.ChuongService;
 import com.duantn.services.DangHocService;
 import com.duantn.services.TienDoHocService;
+import com.duantn.repositories.DangHocRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -34,6 +35,9 @@ public class TienDoHocServiceImpl implements TienDoHocService {
 
     @Autowired
     private DangHocService dangHocService;
+
+    @Autowired
+    private DangHocRepository dangHocRepository;
 
     @Override
     public List<TienDoHoc> findByDangHocId(Integer dangHocId) {
@@ -74,18 +78,21 @@ public class TienDoHocServiceImpl implements TienDoHocService {
 
     @Override
     public void capNhatTienDoSauKhiHoc(Integer taiKhoanId, Integer baiGiangId) {
+        System.out.println("[Service] capNhatTienDoSauKhiHoc: taiKhoanId=" + taiKhoanId + ", baiGiangId=" + baiGiangId);
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);
-        if (baiGiang == null || baiGiang.getChuong() == null)
+        if (baiGiang == null || baiGiang.getChuong() == null) {
+            System.out.println("[Service] Không tìm thấy bài giảng hoặc chương!");
             return;
-
+        }
         Integer khoaHocId = baiGiang.getChuong().getKhoahoc().getKhoahocId();
         DangHoc dangHoc = dangHocService.findByTaiKhoanIdAndKhoaHocId(taiKhoanId, khoaHocId);
-        if (dangHoc == null)
+        if (dangHoc == null) {
+            System.out.println("[Service] Không tìm thấy DangHoc!");
             return;
-
-        TienDoHoc tienDo = tienDoHocRepository.findByDangHoc_DanghocIdAndBaiGiang_BaiGiangId(dangHoc.getDanghocId(),
-                baiGiangId);
+        }
+        TienDoHoc tienDo = tienDoHocRepository.findByDangHoc_DanghocIdAndBaiGiang_BaiGiangId(dangHoc.getDanghocId(), baiGiangId);
         if (tienDo == null) {
+            System.out.println("[Service] Chưa có bản ghi TienDoHoc, tạo mới!");
             tienDo = TienDoHoc.builder()
                     .dangHoc(dangHoc)
                     .baiGiang(baiGiang)
@@ -95,11 +102,24 @@ public class TienDoHocServiceImpl implements TienDoHocService {
                     .tenKhoaHoc(dangHoc.getKhoahoc().getTenKhoaHoc())
                     .build();
         } else if (!tienDo.isTrangthai()) {
+            System.out.println("[Service] Đã có bản ghi, cập nhật trạng thái sang true!");
             tienDo.setTrangthai(true);
             tienDo.setNgayhoanthanh(LocalDateTime.now());
+        } else {
+            System.out.println("[Service] Bản ghi đã có trạng thái true, không cần cập nhật!");
         }
-
         tienDoHocRepository.save(tienDo);
+        System.out.println("[Service] Đã lưu tiến độ học: tiendoId=" + tienDo.getTiendoId() + ", trạng thái=" + tienDo.isTrangthai());
+
+        // Nếu tất cả các bài giảng đều đã hoàn thành, cập nhật trạng thái DangHoc
+        List<TienDoHoc> allTienDo = tienDoHocRepository.findByDangHoc_DanghocId(dangHoc.getDanghocId());
+        boolean allDone = allTienDo.stream().allMatch(TienDoHoc::isTrangthai);
+        if (allDone && !dangHoc.isTrangthai()) {
+            dangHoc.setTrangthai(true);
+            dangHocRepository.save(dangHoc);
+            System.out.println("[Service] Đã cập nhật DangHoc.trangthai = true vì đã hoàn thành 100%!");
+            
+        }
     }
 
 }

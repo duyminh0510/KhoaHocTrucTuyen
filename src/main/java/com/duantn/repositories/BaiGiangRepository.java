@@ -16,4 +16,6 @@ public interface BaiGiangRepository extends JpaRepository<BaiGiang, Integer> {
     @Query("SELECT bg FROM BaiGiang bg WHERE bg.tracNghiem.tracnghiemId = :tracnghiemId")
     BaiGiang findByTracNghiemId(@Param("tracnghiemId") Integer tracnghiemId);
 
+    @Query("SELECT bg FROM BaiGiang bg LEFT JOIN FETCH bg.videoBaiGiang WHERE bg.baiGiangId = :id")
+    BaiGiang findByIdWithVideo(@Param("id") Integer id);
 }

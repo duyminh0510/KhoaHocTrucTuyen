@@ -11,6 +11,12 @@
     <body>
         <main class="xemkhoahoc">
             <div th:if="${khoaHoc != null}">
+                <div class="container mt-3">
+                    <h2 th:text="${khoaHoc.tenKhoaHoc}" style="font-weight:bold;"></h2>
+                    <div style="font-size:1.1em; color:#007bff;">
+                        Tiến độ hoàn thành: <span th:text="${phanTramHoanThanh}"></span>%
+                    </div>
+                </div>
                 <div class="container">
                     <div class="row gx-1">
                         <div class="col-lg-8 bocucs">
@@ -21,12 +27,75 @@
                                     <!-- VIDEO -->
                                     <div
                                         th:if="${baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
-                                        <iframe class="w-100" height="348px"
-                                            th:src="${baiGiang.videoBaiGiang.url_video}"
-                                            frameborder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowfullscreen>
-                                        </iframe>
+                                        <div id="videoBaiGiang"></div>
+                                        <p style="color:red;font-weight:bold">DEBUG VIDEO URL: <span th:text="${videoBaiGiang != null ? videoBaiGiang.url_video : 'NULL'}"></span></p>
+                                        <script src="https://www.youtube.com/iframe_api"></script>
+                                        <script th:inline="javascript">
+                                            var daCapNhatTienDo = false;
+                                            var baiGiangId = /*[[${baiGiang.baiGiangId}]]*/ 0;
+                                            var khoaHocId = /*[[${khoaHoc.khoahocId}]]*/ 0;
+                                            var videoUrl = /*[[${videoBaiGiang != null ? "'" + videoBaiGiang.url_video + "'" : "''"}]]*/ '';
+                                            console.log("videoUrl:", videoUrl);
+                                            var videoId = '';
+                                            var match = videoUrl.match(/embed\/([\w-]+)/);
+                                            if (match) {
+                                                videoId = match[1];
+                                            }
+                                            console.log('videoId:', videoId);
+
+                                            console.log('videoUrl:', videoUrl);
+                                            console.log('Match:', match);
+                                            console.log('videoId:', videoId);
+                                            var player;
+                                            function onYouTubeIframeAPIReady() {
+                                                if (!videoId) {
+                                                    console.error('Không lấy được videoId!');
+                                                    return;
+                                                }
+                                                player = new YT.Player('videoBaiGiang', {
+                                                    height: '348',
+                                                    width: '100%',
+                                                    videoId: videoId,
+                                                    events: {
+                                                        'onStateChange': onPlayerStateChange
+                                                    }
+                                                });
+                                            }
+                                            // Đảm bảo player luôn được khởi tạo nếu API đã sẵn sàng
+                                            if (window.YT && window.YT.Player) {
+                                                onYouTubeIframeAPIReady();
+                                            }
+                                            window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+                                            function onPlayerStateChange(event) {
+                                                if (event.data == YT.PlayerState.PLAYING && !daCapNhatTienDo) {
+                                                    var checkProgress = setInterval(function() {
+                                                        if (!player || !player.getDuration) return;
+                                                        var duration = player.getDuration();
+                                                        var current = player.getCurrentTime();
+                                                        var percent = (current / duration) * 100;
+                                                        if (percent >= 85 && !daCapNhatTienDo) {
+                                                            daCapNhatTienDo = true;
+                                                            clearInterval(checkProgress);
+                                                            fetch('/khoa-hoc/api/tien-do-hoc/cap-nhat', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    baiGiangId: baiGiangId,
+                                                                    khoaHocId: khoaHocId
+                                                                })
+                                                            })
+                                                            .then(res => res.json())
+                                                            .then(data => {
+                                                                console.log('Đã cập nhật tiến độ học video:', data);
+                                                            });
+                                                        }
+                                                        if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                                                            clearInterval(checkProgress);
+                                                        }
+                                                    }, 1000);
+                                                }
+                                            }
+                                        </script>
                                     </div>
 
                                     <!-- BÀI VIẾT -->
@@ -35,6 +104,28 @@
                                         class="flex-grow-1 overflow-auto mt-30">
                                         <div
                                             th:utext="${baiViet.noidung}"></div>
+                                        <input type="hidden" id="baiGiangId" th:value="${baiGiang.baiGiangId}" />
+                                        <input type="hidden" id="khoaHocId" th:value="${khoaHoc.khoahocId}" />
+                                        <script th:inline="javascript">
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                setTimeout(function() {
+                                                    var baiGiangId = /*[[${baiGiang.baiGiangId}]]*/ 0;
+                                                    var khoaHocId = /*[[${khoaHoc.khoahocId}]]*/ 0;
+                                                    fetch('/khoa-hoc/api/tien-do-hoc/cap-nhat', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({
+                                                            baiGiangId: baiGiangId,
+                                                            khoaHocId: khoaHocId
+                                                        })
+                                                    })
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                                        console.log("Đã cập nhật tiến độ học:", data);
+                                                    });
+                                                }, 30000); // 30 giây
+                                            });
+                                        </script>
                                     </div>
 
                                     <!-- TRẮC NGHIỆM -->
@@ -225,10 +316,14 @@
                                                                 class="bai-giang-link">
                                                                 <i
                                                                     th:class="${baiGiang.loaiBaiGiang.name() == 'VIDEO' ? 'fas fa-play-circle text-danger me-2' : baiGiang.loaiBaiGiang.name() == 'TAILIEU' ? 'fas fa-file-alt text-success me-2' : 'fas fa-question-circle text-warning me-2'}"></i>
-                                                                <span
-                                                                    th:text="${baiGiang.tenBaiGiang}">Tên
-                                                                    bài
-                                                                    giảng</span>
+                                                                <span th:text="${baiGiang.tenBaiGiang}">Tên bài giảng</span>
+                                                                <!-- Hiển thị trạng thái hoàn thành -->
+                                                                <span th:if="${baiGiangDaHoanThanhMap != null and baiGiangDaHoanThanhMap[baiGiang.baiGiangId]} == true" class="ms-2 text-success">
+                                                                    <i class="fas fa-check-circle"></i>
+                                                                </span>
+                                                                <span th:if="${baiGiangDaHoanThanhMap == null or baiGiangDaHoanThanhMap[baiGiang.baiGiangId]} != true" class="ms-2 text-secondary">
+                                                                    <i class="far fa-circle"></i>
+                                                                </span>
                                                             </a>
                                                         </li>
                                                     </ul>

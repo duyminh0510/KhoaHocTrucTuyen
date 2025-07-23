@@ -18,7 +18,10 @@
 
                     <label>Giá khóa học (VND):</label>
                     <input type="number" th:field="*{giagoc}" name="giagoc"
-                        min="0" placeholder="500000" required />
+                        min="1000" step="1000"
+                        placeholder="Nhập giá gốc, VD: 500000" required
+                        oninvalid="this.setCustomValidity('Giá gốc phải lớn hơn 0 và chia hết cho 1000')"
+                        oninput="this.setCustomValidity('')" />
 
                     <label>Phần trăm khuyến mãi (%):</label>
                     <input type="number" th:field="*{phanTramGiam}"

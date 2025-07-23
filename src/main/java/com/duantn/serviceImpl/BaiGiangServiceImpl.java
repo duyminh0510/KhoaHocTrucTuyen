@@ -17,7 +17,7 @@ public class BaiGiangServiceImpl implements BaiGiangService {
 
     @Override
     public BaiGiang findBaiGiangById(Integer id) {
-        return baiGiangRepositories.findById(id).orElse(null);
+        return baiGiangRepositories.findByIdWithVideo(id);
     }
 
     @Override

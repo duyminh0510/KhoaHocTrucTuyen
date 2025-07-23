@@ -38,8 +38,11 @@
                     </select>
 
                     <label>Video giới thiệu:</label>
-                    <input type="text" th:field="*{urlGioiThieu}"
-                        placeholder="https://..." />
+                    <input type="text" name="urlGioiThieu"
+                        th:value="*{urlGioiThieu}" placeholder="https://..."
+                        pattern="^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$"
+                        title="Link video của bạn không hợp lệ (ví dụ: https://youtu.be/abc123)"
+                        required />
 
                     <label>Ảnh bìa khóa học:</label>
                     <input type="file" name="file" />

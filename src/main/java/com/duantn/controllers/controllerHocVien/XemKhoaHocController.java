@@ -12,6 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.security.Principal;
 
 import com.duantn.entities.BaiGiang;
 import com.duantn.entities.BinhLuan;
@@ -20,6 +24,7 @@ import com.duantn.entities.DangHoc;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.entities.TienDoHoc;
+import com.duantn.entities.VideoBaiGiang;
 import com.duantn.enums.LoaiBaiGiang;
 import com.duantn.services.BaiGiangService;
 import com.duantn.services.BinhLuanService;
@@ -29,8 +34,22 @@ import com.duantn.services.DangHocService;
 import com.duantn.services.KhoaHocService;
 import com.duantn.services.TaiKhoanService;
 import com.duantn.services.TienDoHocService;
+import com.duantn.services.VideoBaiGiangService;
+import org.springframework.http.ResponseEntity;
+
+// DTO cho request cập nhật tiến độ học
+class TienDoHocRequest {
+    private Integer baiGiangId;
+    private Integer khoaHocId;
+    // getter, setter
+    public Integer getBaiGiangId() { return baiGiangId; }
+    public void setBaiGiangId(Integer baiGiangId) { this.baiGiangId = baiGiangId; }
+    public Integer getKhoaHocId() { return khoaHocId; }
+    public void setKhoaHocId(Integer khoaHocId) { this.khoaHocId = khoaHocId; }
+}
 
 @Controller
+@RequestMapping("/khoa-hoc")
 public class XemKhoaHocController {
 
     @Autowired
@@ -54,6 +73,9 @@ public class XemKhoaHocController {
     @Autowired
     private BinhLuanService binhLuanService;
 
+    @Autowired
+    private VideoBaiGiangService videoBaiGiangService;
+
     private void addBinhLuanToModel(Integer baiGiangId, Model model) {
         List<BinhLuan> rootComments = binhLuanService.getCommentsByBaiGiangId(baiGiangId);
         List<BinhLuan> allComments = binhLuanService.getAllCommentsByBaiGiangId(baiGiangId);
@@ -69,12 +91,12 @@ public class XemKhoaHocController {
         model.addAttribute("loggedInEmail", loggedInEmail);
     }
 
-    @RequestMapping("/khoa-hoc")
+    @RequestMapping("")
     public String xemkhoahoc(Model model) {
         return "views/gdienHocVien/xem-khoa-hoc";
     }
 
-    @RequestMapping("/khoa-hoc/slug/{slug}")
+    @RequestMapping("/slug/{slug}")
     public String hocbaicungto(@PathVariable("slug") String slug, Model model,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
@@ -143,10 +165,12 @@ public class XemKhoaHocController {
             model.addAttribute("baiGiangDangHocId", baiGiangDauTien.getBaiGiangId());
 
             switch (baiGiangDauTien.getLoaiBaiGiang()) {
-                case VIDEO -> model.addAttribute("video", baiGiangDauTien.getVideoBaiGiang());
+                case VIDEO -> {
+                    model.addAttribute("video", baiGiangDauTien.getVideoBaiGiang());
+                    // Đảm bảo luôn truyền videoBaiGiang vào model để Thymeleaf render đúng
+                    model.addAttribute("videoBaiGiang", baiGiangDauTien.getVideoBaiGiang());
+                }
                 case TAILIEU -> model.addAttribute("baiViet", baiGiangDauTien.getBaiViet());
-                // case TRACNGHIEM -> model.addAttribute("baiTracNghiem",
-                // baiGiangDauTien.getTracNghiem());
                 case TRACNGHIEM -> {
                     model.addAttribute("baiTracNghiem", baiGiangDauTien.getTracNghiem());
                     int stt = tinhThuTuBaiTracNghiem(baiGiangDauTien.getBaiGiangId(), chuongs);
@@ -160,7 +184,7 @@ public class XemKhoaHocController {
         return "views/gdienHocVien/xem-khoa-hoc";
     }
 
-    @RequestMapping("/khoa-hoc/bai-giang/{id}")
+    @RequestMapping("/bai-giang/{id}")
     public String xemBaiGiang(@PathVariable("id") Integer baiGiangId, Model model,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
@@ -172,6 +196,9 @@ public class XemKhoaHocController {
         model.addAttribute("taiKhoanId", taiKhoan.getTaikhoanId());
 
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);
+        VideoBaiGiang videoBaiGiang = videoBaiGiangService.findByBaiGiangId(baiGiangId);
+        model.addAttribute("baiGiang", baiGiang);
+        model.addAttribute("videoBaiGiang", videoBaiGiang);
         if (baiGiang == null) {
             return "redirect:/khoa-hoc?error=notfound";
         }
@@ -183,6 +210,34 @@ public class XemKhoaHocController {
 
         KhoaHoc khoaHoc = chuong.getKhoahoc();
         List<Chuong> chuongs = chuongService.findByKhoaHocId(khoaHoc.getKhoahocId());
+        DangHoc dangHoc = dangHocService.findByTaiKhoanIdAndKhoaHocId(taiKhoan.getTaikhoanId(), khoaHoc.getKhoahocId());
+
+        if (dangHoc != null) {
+            List<TienDoHoc> dsTienDo = tienDoHocService.findByDangHocId(dangHoc.getDanghocId());
+
+            if (dsTienDo.isEmpty()) {
+                tienDoHocService.taoTienDoChoDangHoc(dangHoc);
+                dsTienDo = tienDoHocService.findByDangHocId(dangHoc.getDanghocId());
+            }
+
+            Map<Integer, Boolean> baiGiangDaHoanThanhMap = dsTienDo.stream()
+                    .collect(Collectors.toMap(td -> td.getBaiGiang().getBaiGiangId(), TienDoHoc::isTrangthai));
+
+            int tongSoBai = chuongs.stream()
+                    .flatMap(ch -> ch.getBaiGiangs().stream())
+                    .collect(Collectors.toList()).size();
+
+            int soBaiHoanThanh = (int) baiGiangDaHoanThanhMap.values().stream().filter(v -> v).count();
+            int phanTramHoanThanh = tongSoBai > 0 ? (int) ((double) soBaiHoanThanh / tongSoBai * 100) : 0;
+
+            model.addAttribute("phanTramHoanThanh", phanTramHoanThanh);
+            model.addAttribute("baiGiangDaHoanThanhMap", baiGiangDaHoanThanhMap);
+        } else {
+            // Khởi tạo biến mặc định để không lỗi Thymeleaf
+            model.addAttribute("phanTramHoanThanh", 0);
+            model.addAttribute("baiGiangDaHoanThanhMap", Map.of());
+        }
+
 
         model.addAttribute("khoaHoc", khoaHoc);
         model.addAttribute("chuongs", chuongs);
@@ -193,6 +248,8 @@ public class XemKhoaHocController {
         switch (baiGiang.getLoaiBaiGiang()) {
             case VIDEO:
                 model.addAttribute("video", baiGiang.getVideoBaiGiang());
+                // Đảm bảo luôn truyền videoBaiGiang vào model để Thymeleaf render đúng
+                model.addAttribute("videoBaiGiang", baiGiang.getVideoBaiGiang());
                 break;
             case TAILIEU:
                 model.addAttribute("baiViet", baiGiang.getBaiViet());
@@ -207,6 +264,25 @@ public class XemKhoaHocController {
         addBinhLuanToModel(baiGiangId, model);
 
         return "views/gdienHocVien/xem-khoa-hoc";
+    }
+
+    @PostMapping("/api/tien-do-hoc/cap-nhat")
+    @ResponseBody
+    public ResponseEntity<?> capNhatTienDoHoc(@RequestBody TienDoHocRequest request, Principal principal) {
+        String username = principal.getName();
+        Integer taiKhoanId = null;
+        TaiKhoan tk = taiKhoanService.findByEmail(username);
+        if (tk != null) {
+            taiKhoanId = tk.getTaikhoanId();
+        }
+        System.out.println("[API] capNhatTienDoHoc: baiGiangId=" + request.getBaiGiangId() + ", khoaHocId=" + request.getKhoaHocId() + ", taiKhoanId=" + taiKhoanId);
+        if (request.getBaiGiangId() != null && request.getKhoaHocId() != null && taiKhoanId != null) {
+            tienDoHocService.capNhatTienDoSauKhiHoc(taiKhoanId, request.getBaiGiangId());
+            System.out.println("[API] Đã gọi service cập nhật tiến độ học thành công.");
+            return ResponseEntity.ok("success");
+        }
+        System.out.println("[API] Thiếu thông tin hoặc chưa đăng nhập!");
+        return ResponseEntity.badRequest().body("Thiếu thông tin hoặc chưa đăng nhập");
     }
 
     private int tinhThuTuBaiTracNghiem(Integer baiGiangId, List<Chuong> chuongs) {
