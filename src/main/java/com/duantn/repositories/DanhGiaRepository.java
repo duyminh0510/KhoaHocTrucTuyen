@@ -32,4 +32,6 @@ public interface DanhGiaRepository extends JpaRepository<DanhGia, Integer> {
     @Query("SELECT d FROM DanhGia d WHERE d.khoahoc.khoahocId = :khoaHocId ORDER BY d.ngayDanhGia DESC")
     List<DanhGia> findByKhoaHocId(@Param("khoaHocId") Integer khoaHocId);
 
+    List<DanhGia> findByKhoahoc_GiangVien_GiangvienId(Integer giangvienId);
+
 }

@@ -32,4 +32,6 @@ public interface DanhGiaService {
 
     List<DanhGia> findByDanhGia(Integer khoaHocId);
 
+    List<DanhGia> findByGiangVienId(Integer giangvienId);
+
 }

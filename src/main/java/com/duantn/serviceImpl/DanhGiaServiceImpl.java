@@ -21,6 +21,7 @@ public class DanhGiaServiceImpl implements DanhGiaService {
     private final DanhGiaRepository repo;
     private final KhoaHocService khoaHocService;
     private final TaiKhoanService taiKhoanService;
+    private final DanhGiaRepository danhGiaRepository;
 
     @Override
     public List<DanhGia> findByKhoaHocId(Integer khoaHocId) {
@@ -97,6 +98,11 @@ public class DanhGiaServiceImpl implements DanhGiaService {
     @Override
     public List<DanhGia> findByDanhGia(Integer khoaHocId) {
         return repo.findByKhoaHocId(khoaHocId);
+    }
+
+    @Override
+    public List<DanhGia> findByGiangVienId(Integer giangvienId) {
+        return danhGiaRepository.findByKhoahoc_GiangVien_GiangvienId(giangvienId);
     }
 
 }

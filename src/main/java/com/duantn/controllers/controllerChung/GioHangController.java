@@ -150,4 +150,21 @@ public class GioHangController {
         }
     }
 
+    @DeleteMapping("/clear")
+    @Transactional
+    public ResponseEntity<?> clearCart() {
+        try {
+            TaiKhoan user = taiKhoanService.getCurrentUser();
+            GioHang gioHang = gioHangService.getOrCreateGioHang(user);
+
+            List<GioHangChiTiet> chiTietList = chiTietRepo.findByGiohang(gioHang);
+            chiTietRepo.deleteAll(chiTietList);
+
+            return ResponseEntity.ok("Đã xóa toàn bộ giỏ hàng");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi xóa giỏ hàng: " + e.getMessage());
+        }
+    }
+
 }

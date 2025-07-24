@@ -22,4 +22,6 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
         java.util.List<GiangVien> findByTenGiangVienContainingIgnoreCaseNative(
                         @org.springframework.data.repository.query.Param("ten") String ten);
 
+        GiangVien findByTaikhoan_Email(String email);
+
 }

@@ -50,4 +50,6 @@ public interface KhoaHocService {
 
     List<KhoaHoc> findAllByIds(List<Integer> ids);
 
+    List<KhoaHoc> findByGiangVienId(Integer giangvienId);
+
 }

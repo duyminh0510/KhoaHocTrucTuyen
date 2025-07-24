@@ -182,4 +182,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.findAllById(ids);
     }
 
+    @Override
+    public List<KhoaHoc> findByGiangVienId(Integer giangvienId) {
+        return khoaHocRepository.findByGiangVien_GiangvienId(giangvienId);
+    }
 }

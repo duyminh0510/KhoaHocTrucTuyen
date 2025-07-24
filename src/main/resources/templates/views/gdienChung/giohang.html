@@ -2,46 +2,43 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Giỏ hàng</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+</head>
 
-    <body>
-        <main class="giohang">
-            <div class="container cart-container">
-                <h2 class="cart-title-page">Giỏ hàng</h2>
+<body>
+    <main class="giohang">
+        <div class="container cart-container">
+            <h2 class="cart-title-page">Giỏ hàng</h2>
 
-                <div class="row">
-                    <!-- Danh sách khóa học -->
-                    <div class="col-lg-8">
-                        <div id="cart-box"></div>
-                    </div>
+            <div class="row">
+                <!-- Danh sách khóa học -->
+                <div class="col-lg-8">
+                    <div id="cart-box"></div>
+                </div>
 
-                    <!-- Tổng tiền và nút thanh toán -->
-                    <div class="col-lg-4">
-                        <div class="cart-summary shadow-sm">
-                            <h5 class="fw-bold">Tổng cộng:</h5>
-                            <p id="sum"
-                                class="text-danger fs-4 fw-semibold mb-1">0 ₫
-                            </p>
-                            <p id="old" class="text-muted small"></p>
+                <!-- Tổng tiền và nút thanh toán -->
+                <div class="col-lg-4">
+                    <div class="cart-summary shadow-sm">
+                        <h5 class="fw-bold">Tổng cộng:</h5>
+                        <p id="sum" class="text-danger fs-4 fw-semibold mb-1">0 ₫
+                        </p>
+                        <p id="old" class="text-muted small"></p>
 
-                            <div class="d-grid gap-2 mt-3">
-                                <a id="checkout-btn" href="#"
-                                    class="btn btn-purple disabled">Tiến hành
-                                    thanh toán</a>
-                                <button onclick="clearCart()"
-                                    class="btn btn-outline-secondary">Xóa toàn
-                                    bộ</button>
-                            </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <a id="checkout-btn" href="#" class="btn btn-purple disabled">Tiến hành
+                                thanh toán</a>
+                            <button onclick="clearCart()" class="btn btn-outline-secondary">Xóa toàn
+                                bộ</button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Script -->
-            <script th:inline="javascript">
+        <!-- Script -->
+        <script th:inline="javascript">
             const cartBox = document.getElementById('cart-box');
             const sumNode = document.getElementById('sum');
             const oldNode = document.getElementById('old');
@@ -64,8 +61,8 @@
             function removeCart(id) {
                 if (isLoggedIn) {
                     fetch(`/gio-hang/xoa/${id}`, {
-                            method: 'DELETE'
-                        })
+                        method: 'DELETE'
+                    })
                         .then(res => {
                             if (res.ok) render();
                             else alert("Lỗi khi xóa khỏi giỏ hàng");
@@ -84,8 +81,8 @@
 
                 if (isLoggedIn) {
                     fetch('/gio-hang/clear', {
-                            method: 'DELETE'
-                        })
+                        method: 'DELETE'
+                    })
                         .then(res => {
                             if (res.ok) render();
                             else alert('Không thể xóa giỏ hàng');
@@ -146,13 +143,13 @@
                 }
 
                 items.forEach(i => {
-                            const gia = i.gia || 0;
-                            const giagoc = i.giaGoc || gia;
+                    const gia = i.gia || 0;
+                    const giagoc = i.giaGoc || gia;
 
-                            const item = document.createElement('div');
-                            item.className = 'cart-item d-flex gap-3 align-items-start';
+                    const item = document.createElement('div');
+                    item.className = 'cart-item d-flex gap-3 align-items-start';
 
-                            item.innerHTML = `
+                    item.innerHTML = `
             <div class="form-check mt-2">
                 <input class="form-check-input select-one" type="checkbox"
                     value="${i.khoaHocId}" data-gia="${gia}">
@@ -180,12 +177,12 @@
             </div>
         `;
 
-        cartBox.appendChild(item);
-    });
+                    cartBox.appendChild(item);
+                });
 
-    handleCheckboxChange();
-    updateSelectedTotal(); // cập nhật ngay tổng giá trị khóa học đã chọn
-}
+                handleCheckboxChange();
+                updateSelectedTotal(); // cập nhật ngay tổng giá trị khóa học đã chọn
+            }
 
 
             function syncLocalToServer() {
@@ -225,7 +222,7 @@
                 render();
             });
         </script>
-        </main>
-    </body>
+    </main>
+</body>
 
 </html>

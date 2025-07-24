@@ -21,4 +21,10 @@ public class GiangVienServiceImpl implements GiangVienService {
         }
         return giangVienRepository.findByTenGiangVienContainingIgnoreCaseNative(ten.trim());
     }
+
+    @Override
+    public GiangVien findByEmail(String email) {
+        return giangVienRepository.findByTaikhoan_Email(email);
+    }
+
 }

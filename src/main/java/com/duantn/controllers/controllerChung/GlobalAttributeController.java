@@ -7,11 +7,12 @@ import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.KhoaHocService;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.security.core.Authentication;
 
 import java.util.Collections;
@@ -39,7 +40,9 @@ public class GlobalAttributeController {
     @ModelAttribute("taiKhoan")
     public TaiKhoan getTaiKhoan(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            return ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
+            TaiKhoan taiKhoanCu = ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
+            // Truy vấn lại bản mới nhất từ DB
+            return taiKhoanRepository.findById(taiKhoanCu.getTaikhoanId()).orElse(taiKhoanCu);
         }
         return null;
     }

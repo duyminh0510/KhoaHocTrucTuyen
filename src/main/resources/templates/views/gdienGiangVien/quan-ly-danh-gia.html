@@ -1,72 +1,163 @@
 <!DOCTYPE html>
-<html lang="vi"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Quản lý đánh giá</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Đánh giá khóa học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .review-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin-right: 15px;
+        }
 
-    <body>
-        <main class="quanlydanhgia">
-            <div class="danhgia">
-                <h1><i class="fas fa-star-half-alt"></i> Quản lý đánh giá</h1>
+        .review-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
 
-                <!-- Bộ lọc khóa học -->
-                <div class="filter-course">
-                    <label for="courseSelect"><strong>Chọn khóa học:</strong></label>
-                    <select id="courseSelect" onchange="filterByCourse()">
-                        <option value="all">Tất cả</option>
-                        <option value="java">Java Spring Boot Cơ Bản</option>
-                        <option value="react">React JS Nâng Cao</option>
+        .review-content {
+            flex-grow: 1;
+        }
+
+        .review-stars {
+            color: #ffc107;
+        }
+
+        .review-date {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <main>
+        <div class="container py-4">
+
+            <h2 th:if="${khoaHocChiTiet == null}" class="mb-4">📘 Tổng quan đánh giá khóa học của tôi</h2>
+            <h2 th:if="${khoaHocChiTiet != null}" class="mb-4">📘 Chi tiết đánh giá: <span
+                    th:text="${khoaHocChiTiet.tenKhoaHoc}"></span></h2>
+
+            <form method="get" th:action="@{/giangvien/danh-gia-tu-khoa-hoc}" class="row g-3 align-items-end mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Khóa học:</label>
+                    <select name="khoahocId" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option th:each="kh : ${dsKhoaHoc}" th:value="${kh.khoahocId}" th:text="${kh.tenKhoaHoc}"
+                            th:selected="${kh.khoahocId == khoaHocDaChon}"></option>
                     </select>
                 </div>
 
-                <!-- Danh sách đánh giá -->
-                <div class="review-list">
-                    <div class="review-card" data-course="java">
-                        <div class="review-header">
-                            <span class="name">Nguyễn Văn A</span>
-                            <span class="date">10/06/2025</span>
-                        </div>
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                        <div class="review-content">
-                            Khóa học rất dễ hiểu, giảng viên giảng chi tiết từng phần. Tuy nhiên có thể bổ sung thêm ví dụ thực tế.
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                    <label class="form-label">Số sao:</label>
+                    <select name="sao" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option th:each="i : ${#numbers.sequence(1,5)}" th:value="${i}" th:text="${i + ' sao'}"
+                            th:selected="${i == saoDaChon}"></option>
+                    </select>
+                </div>
 
-                    <div class="review-card" data-course="react">
-                        <div class="review-header">
-                            <span class="name">Trần Thị B</span>
-                            <span class="date">12/06/2025</span>
-                        </div>
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i><i class="far fa-star"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                        <div class="review-content">
-                            Nội dung ổn nhưng phần nâng cao cần thêm video giải thích rõ hơn.
-                        </div>
-                    </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <a th:href="@{/giangvien/danh-gia-tu-khoa-hoc}" class="btn btn-secondary ms-2">Xóa lọc</a>
+                </div>
+            </form>
+
+            <!-- Tổng quan -->
+            <div th:if="${khoaHocChiTiet == null}">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tên khóa học</th>
+                                <th>Số lượt đánh giá</th>
+                                <th>Điểm trung bình</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="row : ${tongQuanDanhGia}">
+                                <td th:text="${row.khoahoc.tenKhoaHoc}"></td>
+                                <td th:text="${row.tong}"></td>
+                                <td th:text="${#numbers.formatDecimal(row.diemTB, 1, 1)} + ' ⭐️'"></td>
+                                <td>
+                                    <a th:href="@{/giangvien/danh-gia-tu-khoa-hoc(khoahocId=${row.khoahoc.khoahocId})}"
+                                        class="btn btn-link btn-sm">Xem chi tiết</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <script>
-            function filterByCourse() {
-                const selected = document.getElementById("courseSelect").value;
-                const reviews = document.querySelectorAll(".review-card");
+            <!-- Chi tiết -->
+            <div th:if="${khoaHocChiTiet != null}">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">📘 Thông tin khóa học</h5>
+                        <p><strong>Mã khóa học:</strong> <span th:text="${khoaHocChiTiet.khoahocId}"></span></p>
+                        <p><strong>Tên khóa học:</strong> <span th:text="${khoaHocChiTiet.tenKhoaHoc}"></span></p>
+                        <p th:if="${khoaHocChiTiet.moTa != null}">
+                            <strong>Mô tả:</strong> <span th:text="${khoaHocChiTiet.moTa}"></span>
+                        </p>
+                        <p><strong>Tổng lượt đánh giá:</strong> <span th:text="${tongLuot}"></span></p>
+                        <p><strong>Điểm trung bình:</strong> <span
+                                th:text="${#numbers.formatDecimal(diemTrungBinh, 1, 1)} + ' ⭐️'"></span></p>
+                    </div>
+                </div>
 
-                reviews.forEach(r => {
-                    const course = r.getAttribute("data-course");
-                    r.style.display = (selected === "all" || selected === course) ? "block" : "none";
-                });
-            }
-            </script>
-        </main>
-    </body>
+                <h4 class="mb-3">📝 Danh sách đánh giá</h4>
+
+                <div th:if="${#lists.isEmpty(dsDanhGia)}">
+                    <div class="alert alert-warning">⚠️ Không có đánh giá nào phù hợp.</div>
+                </div>
+
+                <div th:each="dg : ${dsDanhGia}" class="review-item bg-white">
+                    <!-- Avatar -->
+                    <div class="d-flex align-items-center">
+                        <img th:src="${dg.taikhoan.avatar}" alt="Avatar" class="rounded-circle me-2"
+                            style="width: 40px; height: 40px; object-fit: cover;" />
+                    </div>
+
+                    <!-- Nội dung -->
+                    <div class="review-content">
+                        <div class="d-flex justify-content-between">
+                            <div class="fw-bold" th:text="${dg.taikhoan.name}">Tên người dùng</div>
+                            <div class="review-date" th:text="${#temporals.format(dg.ngayDanhGia, 'dd/MM/yyyy')}">
+                                22/07/2025
+                            </div>
+                        </div>
+
+                        <div class="review-stars my-1">
+                            <span th:each="i : ${#numbers.sequence(1, dg.diemDanhGia)}">★</span>
+                            <span th:if="${dg.diemDanhGia < 5}"
+                                th:each="j : ${#numbers.sequence(dg.diemDanhGia + 1, 5)}"
+                                style="color: #dee2e6;">★</span>
+                        </div>
+
+                        <div class="review-text" th:text="${dg.noiDung}">Nội dung đánh giá</div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a th:href="@{/giangvien/danh-gia-tu-khoa-hoc}" class="btn btn-outline-primary">← Quay lại tổng
+                        quan</a>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+</body>
+
 </html>

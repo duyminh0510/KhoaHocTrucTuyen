@@ -6,4 +6,7 @@ import com.duantn.entities.GiangVien;
 
 public interface GiangVienService {
     List<GiangVien> timKiemTheoTenIgnoreCase(String ten);
+
+    GiangVien findByEmail(String email);
+
 }

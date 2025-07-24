@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -22,30 +21,6 @@ public class DanhGiaController {
     private final KhoaHocService khoaHocService;
     private final DanhGiaService danhGiaService;
     private final TaiKhoanService taiKhoanService;
-
-    // Hiển thị form đánh giá
-    @GetMapping("/{khoahocId}")
-    public String hienThiFormDanhGia(@PathVariable("khoahocId") Integer khoahocId,
-            Model model,
-            @AuthenticationPrincipal UserDetails userDetails) {
-
-        KhoaHoc khoaHoc = khoaHocService.findById(khoahocId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học"));
-
-        model.addAttribute("khoaHoc", khoaHoc);
-
-        DanhGia danhGia = new DanhGia();
-
-        if (userDetails != null) {
-            TaiKhoan user = taiKhoanService.findByEmail(userDetails.getUsername());
-            danhGia = danhGiaService.findByTaikhoanAndKhoahoc(user, khoaHoc)
-                    .orElse(new DanhGia());
-        }
-
-        model.addAttribute("danhGiaMoi", danhGia);
-
-        return "views/gdienHocVien/danh-gia";
-    }
 
     // Gửi đánh giá
     @PostMapping("/{khoahocId}")
