@@ -10,11 +10,19 @@ import com.duantn.services.TokenService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -29,17 +37,20 @@ public class DangKyController {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    @GetMapping("/register")
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @GetMapping("/dangky")
     public String showRegistrationForm(Model model, HttpSession session) {
         model.addAttribute("user", new DangKyHocVienDto());
         return "views/gdienChung/register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/dangky")
     public String registerUser(@ModelAttribute("user") @Valid DangKyHocVienDto dto,
-                                BindingResult result,
-                                HttpSession session,
-                                Model model) {
+            BindingResult result,
+            HttpSession session,
+            Model model) {
 
         if (result.hasErrors())
             return "views/gdienChung/register";
@@ -81,10 +92,10 @@ public class DangKyController {
 
     @PostMapping("/verify")
     public String verify(@RequestParam("code") String code,
-                         @RequestParam(value = "type", required = false) String type,
-                         HttpSession session,
-                         Model model) {
-
+            @RequestParam(value = "type", required = false) String type,
+            HttpSession session,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
         if (tokenOpt.isEmpty()) {
@@ -130,6 +141,32 @@ public class DangKyController {
             session.removeAttribute("resetEmail");
             tokenService.delete(token);
             return "redirect:/auth/reset-password";
+        }
+
+        // Xử lý xác minh cập nhật email
+        String pendingEmailUpdate = (String) session.getAttribute("pendingEmailUpdate");
+        String oldEmail = (String) session.getAttribute("currentEmail");
+
+        if (pendingEmailUpdate != null && oldEmail != null && token.getEmail().equals(pendingEmailUpdate)) {
+            TaiKhoan taiKhoan = accountRepository.findByEmail(oldEmail).orElse(null);
+            if (taiKhoan != null) {
+                taiKhoan.setEmail(pendingEmailUpdate);
+                accountRepository.save(taiKhoan);
+
+                session.removeAttribute("pendingEmailUpdate");
+                session.removeAttribute("currentEmail");
+                tokenService.delete(token);
+
+                UserDetails newDetails = userDetailsService.loadUserByUsername(pendingEmailUpdate);
+                Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                        newDetails, newDetails.getPassword(), newDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+                // return "redirect:/tai-khoan?emailUpdated";
+                redirectAttributes.addFlashAttribute("message", "Cập nhật email thành công.");
+                redirectAttributes.addFlashAttribute("tab", "tab-email");
+                return "redirect:/tai-khoan";
+            }
         }
 
         model.addAttribute("error", "Phiên xác minh không hợp lệ.");

@@ -5,6 +5,7 @@
 @import url('/css/quanLy/quanly-thanh-toan.css');
 @import url('/css/quanLy/quanly-giao-dich.css');
 @import url('/css/chung/danh-muc.css');
+@import url('/css/chung/khoa-hoc-chi-tiet.css');
 @import url('/css/chung/gio-hang.css');
 @import url('/css/chung/quen-mat-khau.css');
 @import url('/css/chung/buoc2-quen-mat-khau.css');
@@ -24,6 +25,5 @@
 @import url('/css/hocVien/ket-qua.css');
 @import url('/css/hocVien/ket-qua-chi-tiet.css');
 @import url('/css/hocVien/lam-trac-nghiem.css');
-@import url('/css/chung/doiMatKhau.css');
 @import url('/css/chung/tim-kiem.css');
 @import url('/css/chung/danh-sach-danh-muc.css');

@@ -323,7 +323,7 @@
             <div class="search-bar">
                 <div class="search-wrapper">
                     <form th:action="@{/tim-kiem}" method="get">
-                        <input type="text"
+                        <input type="text" name="q"
                             placeholder="Tìm kiếm với Globaledu..." />
                         <i class="fas fa-search"></i>
                     </form>
@@ -401,11 +401,26 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item" href="/doi-mat-khau">
+                            <a class="dropdown-item"
+                                th:href="@{/tai-khoan(tab='tab-matkhau')}">
                                 <i
                                     class="fa-solid fa-key me-2 text-primary"></i>
                                 Đổi mật khẩu
                             </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                th:href="@{/tai-khoan(tab='tab-thongtin')}"><i
+                                    class="fas fa-id-card me-1"></i> Thông tin
+                                cá nhân</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                th:href="@{/tai-khoan(tab='tab-email')}"><i
+                                    class="fas fa-envelope me-1"></i>
+                                Cập nhật Email</a>
                         </li>
 
                         <li sec:authorize="!hasAnyRole('HOCVIEN','GIANGVIEN')">

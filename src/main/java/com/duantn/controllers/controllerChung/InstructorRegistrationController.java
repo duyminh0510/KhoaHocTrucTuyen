@@ -39,16 +39,16 @@ public class InstructorRegistrationController {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository tokenRepository;
 
-
     @GetMapping
     public String showEmailForm() {
         return "views/gdienChung/register_instructor_email";
     }
 
     @PostMapping("/send-otp")
-    public String sendOtp(@RequestParam("email") String email, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String sendOtp(@RequestParam("email") String email, HttpSession session,
+            RedirectAttributes redirectAttributes) {
         Optional<TaiKhoan> existingAccountOpt = taiKhoanRepository.findByEmail(email);
-        
+
         if (existingAccountOpt.isPresent()) {
             String roleName = existingAccountOpt.get().getRole().getName();
             if ("ROLE_GIANGVIEN".equals(roleName)) {
@@ -56,7 +56,8 @@ public class InstructorRegistrationController {
                 return "redirect:/dang-ky-giang-vien";
             }
             if ("ROLE_ADMIN".equals(roleName) || "ROLE_NHANVIEN".equals(roleName)) {
-                redirectAttributes.addFlashAttribute("error", "Tài khoản có vai trò Quản trị viên hoặc Nhân viên không thể đăng ký làm giảng viên.");
+                redirectAttributes.addFlashAttribute("error",
+                        "Tài khoản có vai trò Quản trị viên hoặc Nhân viên không thể đăng ký làm giảng viên.");
                 return "redirect:/dang-ky-giang-vien";
             }
         }
@@ -74,7 +75,7 @@ public class InstructorRegistrationController {
             tokenRepository.save(token);
 
             sendVerificationEmail(email, otp);
-            
+
             session.setAttribute("emailForOtp", email); // Lưu email vào session để gửi lại
 
             return "redirect:/dang-ky-giang-vien/verify-otp";
@@ -95,15 +96,16 @@ public class InstructorRegistrationController {
 
             String html = String.format(
                     """
-                        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-                            <h2>Chào bạn,</h2>
-                            <p>Cảm ơn bạn đã bắt đầu quy trình đăng ký giảng viên tại <strong>GlobalEdu</strong>.</p>
-                            <p>Mã xác minh của bạn là:</p>
-                            <div style="font-size: 24px; font-weight: bold; color: #2c3e50; text-align: center; margin: 20px 0;">%s</div>
-                            <p>Mã xác minh sẽ hết hạn sau <strong>5 phút</strong>. Vui lòng không chia sẻ mã này với người khác.</p>
-                            <p>Trân trọng,<br><strong>Đội ngũ GlobalEdu</strong></p>
-                        </div>
-                        """, otp);
+                            <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                                <h2>Chào bạn,</h2>
+                                <p>Cảm ơn bạn đã bắt đầu quy trình đăng ký giảng viên tại <strong>GlobalEdu</strong>.</p>
+                                <p>Mã xác minh của bạn là:</p>
+                                <div style="font-size: 24px; font-weight: bold; color: #2c3e50; text-align: center; margin: 20px 0;">%s</div>
+                                <p>Mã xác minh sẽ hết hạn sau <strong>5 phút</strong>. Vui lòng không chia sẻ mã này với người khác.</p>
+                                <p>Trân trọng,<br><strong>Đội ngũ GlobalEdu</strong></p>
+                            </div>
+                            """,
+                    otp);
 
             helper.setText(html, true);
             mailSender.send(mimeMessage);
@@ -149,7 +151,8 @@ public class InstructorRegistrationController {
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam("otp") String otp, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+    public String verifyOtp(@RequestParam("otp") String otp, HttpSession session, RedirectAttributes redirectAttributes,
+            Model model) {
         Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(otp);
 
         if (tokenOpt.isEmpty()) {
@@ -191,8 +194,8 @@ public class InstructorRegistrationController {
 
     @PostMapping("/register-new")
     public String processNewInstructorRegistration(@Valid @ModelAttribute("giangVienDto") GiangVienRegistrationDto dto,
-                                                     BindingResult result,
-                                                     RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "views/gdienChung/register_instructor_new";
@@ -210,7 +213,7 @@ public class InstructorRegistrationController {
             newAccount.setPassword(passwordEncoder.encode(dto.getPassword()));
             newAccount.setRole(instructorRole);
             newAccount.setStatus(true); // Active by default
-            
+
             TaiKhoan savedAccount = taiKhoanRepository.save(newAccount);
 
             // Tạo GiangVien
@@ -226,7 +229,7 @@ public class InstructorRegistrationController {
             giangVienRepository.save(newInstructor);
 
             redirectAttributes.addFlashAttribute("success", "Đăng ký giảng viên thành công! Vui lòng đăng nhập.");
-            return "views/gdienGiangVien/home"; 
+            return "views/gdienGiangVien/home";
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình đăng ký.");
@@ -236,7 +239,7 @@ public class InstructorRegistrationController {
 
     @GetMapping("/upgrade-account")
     public String showUpgradeForm(HttpSession session) {
-         String email = (String) session.getAttribute("registrationEmail");
+        String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
             return "redirect:/dang-ky-giang-vien";
         }
@@ -255,13 +258,13 @@ public class InstructorRegistrationController {
 
     @PostMapping("/upgrade-details")
     public String processUpgradeDetails(@Valid @ModelAttribute("giangVienDto") DangKyGiangVienDto dto,
-                                        BindingResult result,
-                                        HttpSession session,
-                                        RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "views/gdienChung/register_instructor_upgrade_details";
         }
-         String email = (String) session.getAttribute("registrationEmail");
+        String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");
             return "redirect:/dang-ky-giang-vien";
@@ -274,7 +277,7 @@ public class InstructorRegistrationController {
 
     @GetMapping("/verify-password")
     public String showVerifyPasswordForm(HttpSession session, RedirectAttributes redirectAttributes) {
-         String email = (String) session.getAttribute("registrationEmail");
+        String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");
             return "redirect:/dang-ky-giang-vien";
@@ -284,8 +287,8 @@ public class InstructorRegistrationController {
 
     @PostMapping("/verify-password")
     public String processVerifyPassword(@RequestParam("password") String password,
-                                        HttpSession session,
-                                        RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         String email = (String) session.getAttribute("registrationEmail");
         DangKyGiangVienDto instructorDetails = (DangKyGiangVienDto) session.getAttribute("instructorDetails");
@@ -295,11 +298,10 @@ public class InstructorRegistrationController {
             return "redirect:/dang-ky-giang-vien";
         }
 
-
         Optional<TaiKhoan> accountOpt = taiKhoanRepository.findByEmail(email);
         if (accountOpt.isEmpty()) {
-             redirectAttributes.addFlashAttribute("error", "Tài khoản không tồn tại.");
-             return "redirect:/dang-ky-giang-vien";
+            redirectAttributes.addFlashAttribute("error", "Tài khoản không tồn tại.");
+            return "redirect:/dang-ky-giang-vien";
         }
 
         TaiKhoan account = accountOpt.get();
@@ -313,7 +315,7 @@ public class InstructorRegistrationController {
             Role instructorRole = roleRepository.findByName("ROLE_GIANGVIEN")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             account.setRole(instructorRole);
-            
+
             taiKhoanRepository.save(account);
 
             // Tìm hoặc tạo mới thông tin giảng viên

@@ -1,110 +1,123 @@
 .taikhoan {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    font-family: 'Segoe UI', sans-serif;
+    --main-color: #16203b;
+    padding: 50px 50px;
 }
 
-.taikhoan-container {
-    max-width: 800px;
-    width: 100%;
-    background: #fff;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
 
-.taikhoan h1 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    color: #16203b;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+/* Tiêu đề chính */
 
 .taikhoan h2 {
-    font-size: 20px;
-    margin: 30px 0 20px;
-    color: #1c1c1c;
+    color: var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
 }
 
-.avatar-wrapper {
-    margin-bottom: 20px;
-    text-align: center;
-}
 
-.avatar-wrapper img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #ddd;
-}
+/* Tabs chính */
 
-.profile-form {
-    text-align: left;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label,
-.taikhoan label {
-    display: block;
+.taikhoan .nav-tabs .nav-link {
+    color: white;
+    background-color: var(--main-color);
     font-weight: 500;
-    margin-bottom: 6px;
-    color: #333;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="file"],
-.taikhoan input[type="text"],
-.taikhoan input[type="email"],
-.taikhoan input[type="password"],
-.taikhoan input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-.btn {
-    padding: 12px;
     border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 100%;
+    margin-right: 5px;
+    border-radius: 0.4rem 0.4rem 0 0;
 }
 
-.btn-update {
-    background-color: #16203b;
-    color: #fff;
-}
-
-.btn-update:hover {
-    background-color: #1e2a4f;
-}
-
-.btn-change {
-    background-color: #28a745;
+.taikhoan .nav-tabs .nav-link.active {
+    background-color: #1d3e98;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     color: white;
 }
 
-.btn-change:hover {
-    background-color: #218838;
+
+/* Pills phụ trong mỗi tab */
+
+.taikhoan .nav-pills .nav-link {
+    color: #f09c1f;
+    background-color: #e9ecef;
+    margin-right: 5px;
 }
 
-.alert {
-    margin-bottom: 16px;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: #e7f3fe;
-    color: #31708f;
+.taikhoan .nav-pills .nav-link.active {
+    background-color: #f09c1f;
+    color: white;
+}
+
+
+/* Form controls */
+
+.taikhoan input.form-control {
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ced4da;
+}
+
+.taikhoan label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    color: #495057;
+}
+
+.taikhoan .form-control:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 0.2rem rgba(22, 32, 59, 0.25);
+}
+
+
+/* Buttons */
+
+.taikhoan .btn {
+    border-radius: 0.4rem;
+    font-weight: 500;
+}
+
+.taikhoan .btn-primary {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.taikhoan .btn-primary:hover {
+    background-color: #0f152a;
+    border-color: #0f152a;
+}
+
+.taikhoan .btn-success {
+    background-color: #0741ac;
+    border-color: #0741ac;
+}
+
+.taikhoan .btn-success:hover {
+    background-color: #0741ac;
+    border-color: #0741ac;
+}
+
+
+/* Tab content spacing */
+
+.taikhoan .tab-pane {
+    padding: 1rem 0;
+}
+
+
+/* Alerts */
+
+.taikhoan .alert-info {
+    background-color: #e0e7ff;
+    color: #16203b;
+    border-color: #c7d2fe;
+}
+
+
+/* Avatar Image */
+
+.taikhoan img.img-thumbnail {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.taikhoan .btn,
+.taikhoan input.form-control {
+    transition: all 0.3s ease-in-out;
 }

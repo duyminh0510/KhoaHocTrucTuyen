@@ -28,4 +28,6 @@ public interface TaiKhoanService {
 
     TaiKhoan findByUsername(String username);
 
+    List<TaiKhoan> layTatCaGiangVien();
+
 }

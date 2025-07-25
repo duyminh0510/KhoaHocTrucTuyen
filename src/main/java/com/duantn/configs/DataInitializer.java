@@ -47,6 +47,7 @@ public class DataInitializer {
         TaiKhoan superAdminUser = TaiKhoan.builder()
                 .name("Super Admin")
                 .email(superAdminEmail)
+                .phone("0774132105")
                 .password(passwordEncoder.encode("superpassword"))
                 .role(adminRole)
                 .build();

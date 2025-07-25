@@ -1,22 +1,6 @@
-// package com.duantn.services;
+package com.duantn.services;
 
-// import java.util.List;
+public interface DangHocService {
+    long demSoLuongDangKy(Integer khoaHocId);
 
-
-// import org.springframework.stereotype.Service;
-
-// import com.duantn.entities.DangHoc;
-// import com.duantn.repositories.DangHocRepository;
-
-// import lombok.RequiredArgsConstructor;
-
-// @Service
-// @RequiredArgsConstructor
-// public class DangHocService {
-
-//     private final DangHocRepository dangHocRepository;
-
-//     public List<DangHoc> layDanhSachKhoaHocDaDangKy(Integer taikhoanId) {
-//         return dangHocRepository.findByTaikhoanIdAndTrangthaiTrueWithKhoaHoc(taikhoanId);
-//     }
-// }
+}

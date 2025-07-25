@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class DangNhapController {
 
-    @GetMapping("/login")
+    @GetMapping("/dangnhap")
     public String loginPage() {
         return "views/gdienChung/login";
     }

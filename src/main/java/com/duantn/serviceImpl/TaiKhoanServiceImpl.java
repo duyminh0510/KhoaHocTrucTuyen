@@ -52,8 +52,6 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
     }
 
-    
-
     @Override
     public TaiKhoan register(TaiKhoan taiKhoan) {
         // Kiểm tra email đã tồn tại chưa
@@ -63,12 +61,12 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         // TODO: mã hóa mật khẩu nếu cần
         return repository.save(taiKhoan);
     }
+
     @Override
     public TaiKhoan login(String email, String password) {
         // Tìm tài khoản theo email
         TaiKhoan tk = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
-
 
         // So sánh mật khẩu (ở đây là plain text, bạn nên dùng BCrypt để an toàn hơn)
         if (!tk.getPassword().equals(password)) {
@@ -99,4 +97,11 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
     public TaiKhoan findByUsername(String username) {
         return repository.findByEmail(username).orElse(null);
     }
+
+    //
+    @Override
+    public List<TaiKhoan> layTatCaGiangVien() {
+        return repository.findAllGiangVien();
+    }
+
 }

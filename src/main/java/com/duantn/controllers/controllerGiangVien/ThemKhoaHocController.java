@@ -19,6 +19,7 @@ import com.duantn.services.CloudinaryService;
 import com.duantn.services.DanhMucService;
 import com.duantn.services.KhoaHocService;
 import com.duantn.services.TaiKhoanService;
+import com.duantn.validators.SlugUtil;
 
 @Controller
 public class ThemKhoaHocController {
@@ -60,6 +61,12 @@ public class ThemKhoaHocController {
             khoahoc.setAnhBiaPublicId(cloudinaryService.extractPublicIdFromUrl(imageUrl));
         }
 
+        khoaHocService.save(khoahoc);
+
+        String slug = SlugUtil.toSlug(khoahoc.getTenKhoaHoc()) + khoahoc.getKhoahocId();
+        khoahoc.setSlug(slug);
+
+        // Lưu lần 2 để cập nhật slug
         khoaHocService.save(khoahoc);
 
         return "redirect:/giangvien/them-moi-khoa-hoc/gia?khoahocId=" + khoahoc.getKhoahocId();

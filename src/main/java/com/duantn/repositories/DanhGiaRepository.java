@@ -24,4 +24,12 @@ public interface DanhGiaRepository extends JpaRepository<DanhGia, Integer> {
 
     Optional<DanhGia> findByTaikhoanAndKhoahoc(TaiKhoan taikhoan, KhoaHoc khoahoc);
 
+    long countByKhoahoc_KhoahocId(Integer khoahocId);
+
+    @Query("SELECT AVG(d.diemDanhGia) FROM DanhGia d WHERE d.khoahoc.khoahocId = :khoaHocId")
+    Double tinhDiemTrungBinhTheoKhoaHoc(@Param("khoaHocId") Integer khoaHocId);
+
+    @Query("SELECT d FROM DanhGia d WHERE d.khoahoc.khoahocId = :khoaHocId ORDER BY d.ngayDanhGia DESC")
+    List<DanhGia> findByKhoaHocId(@Param("khoaHocId") Integer khoaHocId);
+
 }

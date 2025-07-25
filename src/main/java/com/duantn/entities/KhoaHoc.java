@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.duantn.enums.TrangThaiKhoaHoc;
 
@@ -57,6 +58,9 @@ public class KhoaHoc implements Serializable {
     @Column(name = "anh_bia", length = 500, columnDefinition = "NVARCHAR(MAX)")
     private String anhBia;
 
+    @Column(unique = true)
+    private String slug;
+
     @Column(name = "anh_bia_public_id", length = 500, columnDefinition = "NVARCHAR(MAX)")
     private String anhBiaPublicId; // public_id dùng để xóa ảnh
 
@@ -67,6 +71,10 @@ public class KhoaHoc implements Serializable {
     @CreationTimestamp
     @Column(name = "ngay_tao", updatable = false)
     private LocalDateTime ngayTao;
+
+    @UpdateTimestamp
+    @Column(name = "ngay_cap_nhat")
+    private LocalDateTime ngayCapNhat;
 
     @Column(length = 255, columnDefinition = "NVARCHAR(MAX)")
     private String share;
@@ -81,6 +89,9 @@ public class KhoaHoc implements Serializable {
     private DanhMuc danhMuc;
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chuong> chuongs;
+
+    @OneToMany(mappedBy = "khoahoc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DanhGia> danhGiaList;
 
     @Override
     public String toString() {
