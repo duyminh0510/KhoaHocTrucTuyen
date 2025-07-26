@@ -85,6 +85,15 @@
                       <th>Giá</th>
                     </tr>
                   </thead>
+                  <tbody>
+                    <tr th:each="khoaHoc : ${khoaHocs}">
+                      <td th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</td>
+                      <td th:text="${khoaHoc.danhMuc.tenDanhMuc}">Danh mục</td>
+                      <td th:text="${khoaHoc.giangVien.taikhoan.name}">Giảng Viên</td>
+                      <td th:text="${khoaHoc.luotThich}">0</td>
+                      <td th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')}">0</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
