@@ -25,4 +25,6 @@ public interface GiaoDichKhoaHocChiTietRepository extends JpaRepository<GiaoDich
                      "WHERE gd.taikhoan.taikhoanId = :accountId " +
                      "ORDER BY gd.ngayGiaoDich DESC")
        List<GiaoDichKhoaHocChiTiet> findByAccountId(@Param("accountId") Integer accountId);
+
+    long countByKhoahoc_KhoahocId(Integer khoahocId);
 }
