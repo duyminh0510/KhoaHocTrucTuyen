@@ -47,6 +47,10 @@ public class TrangChuController {
         if (isHocVien && taiKhoan != null) {
             Set<Integer> enrolledCourseIds = getEnrolledCourseIds(taiKhoan.getTaikhoanId());
             model.addAttribute("enrolledCourseIds", enrolledCourseIds);
+            
+            // Lấy danh sách khóa học đã mua để hiển thị trong phần "Khóa học của bạn"
+            List<KhoaHoc> enrolledCourses = getEnrolledCourses(taiKhoan.getTaikhoanId());
+            model.addAttribute("enrolledCourses", enrolledCourses);
         }
         
         return "views/gdienChung/home";
@@ -67,5 +71,12 @@ public class TrangChuController {
                 .filter(course -> dangHocService.isEnrolled(taiKhoanId, course.getKhoahocId()))
                 .map(KhoaHoc::getKhoahocId)
                 .collect(Collectors.toSet());
+    }
+    
+    private List<KhoaHoc> getEnrolledCourses(Integer taiKhoanId) {
+        List<KhoaHoc> allCourses = khoaHocService.getTatCaKhoaHoc();
+        return allCourses.stream()
+                .filter(course -> dangHocService.isEnrolled(taiKhoanId, course.getKhoahocId()))
+                .collect(Collectors.toList());
     }
 }

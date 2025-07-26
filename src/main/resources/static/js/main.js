@@ -199,3 +199,85 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// JavaScript cho phần cuộn ngang khóa học đã mua
+document.addEventListener("DOMContentLoaded", function () {
+    const enrolledCoursesScroll = document.querySelector('.enrolled-courses-scroll');
+    
+    if (enrolledCoursesScroll) {
+        // Thêm smooth scrolling
+        enrolledCoursesScroll.style.scrollBehavior = 'smooth';
+        
+        // Thêm nút điều hướng nếu có nhiều khóa học
+        const courseCards = enrolledCoursesScroll.querySelectorAll('.enrolled-course-card');
+        if (courseCards.length > 3) {
+            addScrollNavigation(enrolledCoursesScroll);
+        }
+        
+        // Thêm hiệu ứng hover cho card
+        courseCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Xử lý sự kiện click cho nút chia sẻ
+        const shareButtons = enrolledCoursesScroll.querySelectorAll('.share-btn');
+        shareButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Ngăn không cho card bị click
+            });
+        });
+    }
+});
+
+function addScrollNavigation(container) {
+    const scrollContainer = container.querySelector('.row');
+    const scrollAmount = 300; // Số pixel cuộn mỗi lần
+    
+    // Tạo nút điều hướng
+    const navContainer = document.createElement('div');
+    navContainer.className = 'scroll-nav d-flex justify-content-between align-items-center mt-3';
+    navContainer.innerHTML = `
+        <button class="btn btn-sm btn-outline-primary scroll-left" style="display: none;">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-primary scroll-right">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+    
+    container.parentNode.insertBefore(navContainer, container.nextSibling);
+    
+    const leftBtn = navContainer.querySelector('.scroll-left');
+    const rightBtn = navContainer.querySelector('.scroll-right');
+    
+    // Xử lý nút cuộn trái
+    leftBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Xử lý nút cuộn phải
+    rightBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Hiển thị/ẩn nút dựa trên vị trí cuộn
+    scrollContainer.addEventListener('scroll', () => {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        
+        leftBtn.style.display = scrollLeft > 0 ? 'block' : 'none';
+        rightBtn.style.display = scrollLeft < maxScroll ? 'block' : 'none';
+    });
+}
