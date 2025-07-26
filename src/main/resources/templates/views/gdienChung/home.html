@@ -175,17 +175,27 @@
                                                                 class="fas fa-share me-1"></i>
                                                         </button>
 
-                                                        <button
-                                                            class="btn btn-sm btn-outline-success add-to-cart-btn"
-                                                            th:attr="data-id=${khoaHoc.khoahocId},
-                                                            data-name=${khoaHoc.tenKhoaHoc},
-                                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
-                                                            data-giagoc=${khoaHoc.giagoc},
-                                                            data-anh=${khoaHoc.anhBia},
-                                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                                                            <i
-                                                                class="fas fa-cart-plus me-1"></i>
-                                                        </button>
+                                                        <!-- Hiển thị nút "Vào học" nếu đã mua, ngược lại hiển thị "Thêm vào giỏ hàng" -->
+                                                        <th:block th:if="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                                            <a th:href="@{'/khoa-hoc/slug/' + ${khoaHoc.slug}}"
+                                                                class="btn btn-sm btn-primary">
+                                                                <i class="fas fa-play-circle me-1"></i>
+                                                                Vào học
+                                                            </a>
+                                                        </th:block>
+                                                        <th:block th:unless="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                                            <button
+                                                                class="btn btn-sm btn-outline-success add-to-cart-btn"
+                                                                th:attr="data-id=${khoaHoc.khoahocId},
+                                                                data-name=${khoaHoc.tenKhoaHoc},
+                                                                data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                                                data-giagoc=${khoaHoc.giagoc},
+                                                                data-anh=${khoaHoc.anhBia},
+                                                                data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                                                                <i
+                                                                    class="fas fa-cart-plus me-1"></i>
+                                                            </button>
+                                                        </th:block>
                                                     </div>
                                                 </div>
                                             </div>
@@ -340,17 +350,27 @@
                                             </button>
                                     </form> -->
 
-                                        <button
-                                            class="btn btn-sm btn-outline-success add-to-cart-btn"
-                                            th:attr="data-id=${khoaHoc.khoahocId},
-                                            data-name=${khoaHoc.tenKhoaHoc},
-                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
-                                            data-giagoc=${khoaHoc.giagoc},
-                                            data-anh=${khoaHoc.anhBia},
-                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                                            <i
-                                                class="fas fa-cart-plus me-1"></i>
-                                        </button>
+                                        <!-- Hiển thị nút "Vào học" nếu đã mua, ngược lại hiển thị "Thêm vào giỏ hàng" -->
+                                        <th:block th:if="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                            <a th:href="@{'/khoa-hoc/slug/' + ${khoaHoc.slug}}"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-play-circle me-1"></i>
+                                                Vào học
+                                            </a>
+                                        </th:block>
+                                        <th:block th:unless="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                            <button
+                                                class="btn btn-sm btn-outline-success add-to-cart-btn"
+                                                th:attr="data-id=${khoaHoc.khoahocId},
+                                                data-name=${khoaHoc.tenKhoaHoc},
+                                                data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                                data-giagoc=${khoaHoc.giagoc},
+                                                data-anh=${khoaHoc.anhBia},
+                                                data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                                                <i
+                                                    class="fas fa-cart-plus me-1"></i>
+                                            </button>
+                                        </th:block>
                                     </div>
                                 </div>
                             </div>

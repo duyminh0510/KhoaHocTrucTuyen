@@ -4,6 +4,7 @@ import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.services.KhoaHocService;
+import com.duantn.services.DangHocService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class TrangChuController {
 
     @Autowired
     private KhoaHocService khoaHocService;
+    
+    @Autowired
+    private DangHocService dangHocService;
 
     @RequestMapping("/")
     public String home(HttpServletRequest request, Model model, @ModelAttribute("taiKhoan") TaiKhoan taiKhoan) {
@@ -36,6 +42,13 @@ public class TrangChuController {
 
         model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
         model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
+        
+        // Nếu là học viên, thêm thông tin về khóa học đã mua
+        if (isHocVien && taiKhoan != null) {
+            Set<Integer> enrolledCourseIds = getEnrolledCourseIds(taiKhoan.getTaikhoanId());
+            model.addAttribute("enrolledCourseIds", enrolledCourseIds);
+        }
+        
         return "views/gdienChung/home";
     }
 
@@ -46,5 +59,13 @@ public class TrangChuController {
             khoaHocTheoDanhMuc.put(dm.getDanhmucId(), ds);
         }
         return khoaHocTheoDanhMuc;
+    }
+    
+    private Set<Integer> getEnrolledCourseIds(Integer taiKhoanId) {
+        List<KhoaHoc> allCourses = khoaHocService.getTatCaKhoaHoc();
+        return allCourses.stream()
+                .filter(course -> dangHocService.isEnrolled(taiKhoanId, course.getKhoahocId()))
+                .map(KhoaHoc::getKhoahocId)
+                .collect(Collectors.toSet());
     }
 }

@@ -1,16 +1,23 @@
 package com.duantn.controllers.controllerChung;
 
 import com.duantn.entities.KhoaHoc;
+import com.duantn.entities.TaiKhoan;
 import com.duantn.services.KhoaHocService;
+import com.duantn.services.DangHocService;
+import com.duantn.services.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +25,7 @@ import java.util.List;
 public class TimKiemController {
 
     private final KhoaHocService khoaHocService;
+    private final DangHocService dangHocService;
 
     @GetMapping("/tim-kiem")
     public String timKiem(
@@ -34,6 +42,17 @@ public class TimKiemController {
             model.addAttribute("ketQuaTimKiem", ketQuaTimKiem);
             model.addAttribute("soLuongKetQua", ketQuaTimKiem.size());
             model.addAttribute("query", query); // để hiển thị lại từ khóa
+            
+            // Thêm thông tin về khóa học đã mua nếu người dùng đã đăng nhập
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated() && 
+                !authentication.getName().equals("anonymousUser") &&
+                authentication.getPrincipal() instanceof CustomUserDetails) {
+                CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+                TaiKhoan taiKhoan = userDetails.getTaiKhoan();
+                Set<Integer> enrolledCourseIds = getEnrolledCourseIds(taiKhoan.getTaikhoanId());
+                model.addAttribute("enrolledCourseIds", enrolledCourseIds);
+            }
 
             log.info("Tìm thấy {} kết quả", ketQuaTimKiem.size());
             log.info("=== KẾT THÚC TÌM KIẾM ===");
@@ -48,6 +67,14 @@ public class TimKiemController {
             model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHocPublished());
             return "views/gdienChung/tim-kiem";
         }
+    }
+    
+    private Set<Integer> getEnrolledCourseIds(Integer taiKhoanId) {
+        List<KhoaHoc> allCourses = khoaHocService.getTatCaKhoaHocPublished();
+        return allCourses.stream()
+                .filter(course -> dangHocService.isEnrolled(taiKhoanId, course.getKhoahocId()))
+                .map(KhoaHoc::getKhoahocId)
+                .collect(Collectors.toSet());
     }
 
 }

@@ -102,7 +102,7 @@
                                     style="width: 100%"></div>
                             </div>
                             <div class="small">Đang chờ thanh toán <span
-                                    id="countdown">00:15</span></div>
+                                    id="countdown">03:15</span></div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
                 document.getElementById("qrTien").textContent = `${parseInt(soTien).toLocaleString()} `;
                 document.getElementById("qrNoiDung").textContent = giaoDichId;
 
-                countdownSeconds = 15;
+                countdownSeconds = 180;
                 updateCountdown();
                 document.getElementById("progressBar").style.width = "100%";
 
@@ -220,10 +220,10 @@
                 const interval = setInterval(() => {
                     countdown--;
                     progress.style.width = `${(countdown / 5) * 100}%`;
-                    progress.textContent = `Trở về trang chủ sau ${countdown}s`;
+                    progress.textContent = `Trở về giỏ hàng sau ${countdown}s`;
                     if (countdown <= 0) {
                         clearInterval(interval);
-                        window.location.href = "/";
+                        window.location.href = "/gio-hang"; // ← chuyển về trang giỏ hàng
                     }
                 }, 1000);
             }

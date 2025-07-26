@@ -62,6 +62,7 @@ public class TienDoHocServiceImpl implements TienDoHocService {
                 continue;
 
             for (BaiGiang baiGiang : baiGiangs) {
+                if (baiGiang.getTrangthai() == null || !baiGiang.getTrangthai()) continue; // chỉ tạo tiến độ cho bài giảng hoạt động
                 TienDoHoc tienDo = TienDoHoc.builder()
                         .dangHoc(dangHoc)
                         .baiGiang(baiGiang)
@@ -118,7 +119,7 @@ public class TienDoHocServiceImpl implements TienDoHocService {
             dangHoc.setTrangthai(true);
             dangHocRepository.save(dangHoc);
             System.out.println("[Service] Đã cập nhật DangHoc.trangthai = true vì đã hoàn thành 100%!");
-            
+            dangHocService.capNhatTrangThaiVaTaoChungChi(dangHoc); 
         }
     }
 

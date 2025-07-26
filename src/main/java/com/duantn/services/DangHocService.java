@@ -7,4 +7,8 @@ public interface DangHocService {
 
     DangHoc findByTaiKhoanIdAndKhoaHocId(Integer taiKhoanId, Integer khoaHocId);
 
+    void capNhatTrangThaiVaTaoChungChi(DangHoc dangHoc);
+    
+    // Kiểm tra học viên đã mua khóa học hay chưa
+    boolean isEnrolled(Integer taiKhoanId, Integer khoaHocId);
 }

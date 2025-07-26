@@ -234,18 +234,28 @@
 
                   <!-- Nút hành động -->
                   <div class="d-flex gap-2 mb-3">
-                    <button
-                      class="btn flex-fill text-white fw-semibold small btn-sm add-to-cart-btn"
-                      style="background-color: #16203b;"
-                      th:attr="data-id=${khoaHoc.khoahocId},
-                                                            data-name=${khoaHoc.tenKhoaHoc},
-                                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
-                                                            data-giagoc=${khoaHoc.giagoc},
-                                                            data-anh=${khoaHoc.anhBia},
-                                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                      <i
-                        class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
-                    </button>
+                    <!-- Hiển thị nút "Vào học" nếu đã mua, ngược lại hiển thị "Thêm vào giỏ hàng" -->
+                    <th:block th:if="${isEnrolled != null and isEnrolled}">
+                      <a th:href="@{'/khoa-hoc/slug/' + ${khoaHoc.slug}}"
+                          class="btn flex-fill text-white fw-semibold small btn-sm"
+                          style="background-color: #28a745;">
+                        <i class="fas fa-play-circle me-1"></i>Vào học
+                      </a>
+                    </th:block>
+                    <th:block th:unless="${isEnrolled != null and isEnrolled}">
+                      <button
+                        class="btn flex-fill text-white fw-semibold small btn-sm add-to-cart-btn"
+                        style="background-color: #16203b;"
+                        th:attr="data-id=${khoaHoc.khoahocId},
+                        data-name=${khoaHoc.tenKhoaHoc},
+                        data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                        data-giagoc=${khoaHoc.giagoc},
+                        data-anh=${khoaHoc.anhBia},
+                        data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                        <i
+                          class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
+                      </button>
+                    </th:block>
 
                     <button type="button" class="btn btn-sm like-btn"
                       th:id="'like-btn-' + ${khoaHoc.khoahocId}"
@@ -261,9 +271,11 @@
                   </div>
 
                   <!-- Nút mua ngay -->
-                  <a href="#" class="btn btn-outline-dark w-100">
-                    <i class="fas fa-bolt me-1"></i> Mua ngay
-                  </a>
+                  <th:block th:unless="${isEnrolled != null and isEnrolled}">
+                    <a href="#" class="btn btn-outline-dark w-100">
+                      <i class="fas fa-bolt me-1"></i> Mua ngay
+                    </a>
+                  </th:block>
                 </div>
 
                 <!-- Modal Video -->
