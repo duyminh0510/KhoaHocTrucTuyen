@@ -13,5 +13,6 @@ public interface ThuNhapNenTangRepository extends CrudRepository<ThuNhapNenTang,
     BigDecimal getTongThuNhap();
 
     @Query("SELECT SUM(tn.sotiennhan) FROM ThuNhapNenTang tn WHERE tn.ngaynhan >= :start AND tn.ngaynhan <= :end")
-    BigDecimal getTongThuNhapTrongKhoang(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    BigDecimal getTongThuNhapTrongKhoang(@Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end);
 }

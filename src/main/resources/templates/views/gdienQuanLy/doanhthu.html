@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}"
+>
+  <head>
+    <title>Thống kê doanh thu</title>
+  </head>
+
+  <body>
+    <main>
+      <div class="container-fluid mt-4">
+        <h2 class="mb-4 text-center">Thống kê doanh thu nền tảng</h2>
+
+        <!-- Doanh thu tổng quát -->
+        <div class="row justify-content-center">
+          <!-- Tổng doanh thu -->
+          <div class="col-md-6 col-lg-5 mb-3">
+            <div class="card shadow">
+              <div class="card-header bg-dark text-white">Tổng doanh thu</div>
+              <div class="card-body">
+                <h4>
+                  <span
+                    class="text-success"
+                    th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  ></span>
+                </h4>
+              </div>
+            </div>
+          </div>
+
+          <!-- Doanh thu tháng này -->
+          <div class="col-md-6 col-lg-5 mb-3">
+            <div class="card shadow">
+              <div class="card-header bg-info text-white">
+                Doanh thu tháng này
+              </div>
+              <div class="card-body">
+                <h4>
+                  <span
+                    class="text-primary"
+                    th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  ></span>
+                </h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
