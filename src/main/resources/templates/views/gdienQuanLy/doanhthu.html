@@ -17,7 +17,7 @@
             <div class="card bg-primary text-white mb-4">
               <div class="card-body">Tổng doanh thu</div>
               <div
-                class="card-footer d-flex align-items-center justify-content-between"
+                class="card-footer d-flex justify-content-between align-items-center"
               >
                 <span
                   th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
@@ -32,7 +32,7 @@
             <div class="card bg-success text-white mb-4">
               <div class="card-body">Doanh thu tháng này</div>
               <div
-                class="card-footer d-flex align-items-center justify-content-between"
+                class="card-footer d-flex justify-content-between align-items-center"
               >
                 <span
                   th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
@@ -42,15 +42,14 @@
             </div>
           </div>
 
-          <!-- Doanh thu theo quý -->
+          <!-- Doanh thu quý -->
           <div class="col-xl-3 col-md-6">
             <div class="card bg-danger text-white mb-4">
               <div class="card-body">
-                Doanh thu quý
-                <span th:text="${quy}">-</span>
+                Doanh thu quý <span th:text="${quy}">-</span>
               </div>
               <div
-                class="card-footer d-flex align-items-center justify-content-between"
+                class="card-footer d-flex justify-content-between align-items-center"
               >
                 <span
                   th:if="${doanhThuQuy != null}"
@@ -69,12 +68,13 @@
             <label>Quý</label>
             <select class="form-control" name="quy" th:value="${quy}">
               <option value="">-- Chọn quý --</option>
-              <option value="1">Quý 1</option>
-              <option value="2">Quý 2</option>
-              <option value="3">Quý 3</option>
-              <option value="4">Quý 4</option>
+              <option value="1" th:selected="${quy == 1}">Quý 1</option>
+              <option value="2" th:selected="${quy == 2}">Quý 2</option>
+              <option value="3" th:selected="${quy == 3}">Quý 3</option>
+              <option value="4" th:selected="${quy == 4}">Quý 4</option>
             </select>
           </div>
+
           <div class="col-md-2 align-self-end">
             <button type="submit" class="btn btn-primary w-100">Lọc</button>
           </div>
@@ -84,6 +84,81 @@
             >
           </div>
         </form>
+
+        <!-- Bảng chi tiết doanh thu -->
+        <div
+          th:if="${chiTietDoanhThu != null and #lists.size(chiTietDoanhThu) > 0}"
+        >
+          <h3>Chi tiết doanh thu</h3>
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Tên khóa học</th>
+                <th>Giảng viên</th>
+                <th>Số tiền nhận</th>
+                <th>Ngày nhận</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="item, iterStat : ${chiTietDoanhThu}">
+                <td th:text="${iterStat.index + 1 + (currentPage * 10)}">1</td>
+                <td th:text="${item.tenKhoaHoc}">Tên khóa học</td>
+                <td th:text="${item.thuocGiangVien}">Giảng viên</td>
+                <td
+                  th:text="${#numbers.formatDecimal(item.sotiennhan, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+                >
+                  0 VNĐ
+                </td>
+                <td
+                  th:text="${#temporals.format(item.ngaynhan, 'dd/MM/yyyy HH:mm')}"
+                >
+                  01/07/2025 08:30
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Phân trang -->
+          <nav th:if="${totalPages > 1}">
+            <ul class="pagination justify-content-center">
+              <li
+                class="page-item"
+                th:classappend="${currentPage == 0} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/admin/doanhthu(page=${currentPage - 1}, start=${start}, end=${end}, quy=${quy})}"
+                  >Previous</a
+                >
+              </li>
+
+              <li
+                class="page-item"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/admin/doanhthu(page=${i}, start=${start}, end=${end}, quy=${quy})}"
+                  th:text="${i + 1}"
+                  >1</a
+                >
+              </li>
+
+              <li
+                class="page-item"
+                th:classappend="${currentPage == totalPages - 1} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/admin/doanhthu(page=${currentPage + 1}, start=${start}, end=${end}, quy=${quy})}"
+                  >Next</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </main>
   </body>
