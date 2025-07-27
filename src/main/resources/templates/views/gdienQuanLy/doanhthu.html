@@ -7,46 +7,83 @@
   <head>
     <title>Thống kê doanh thu</title>
   </head>
-
   <body>
     <main>
-      <div class="container-fluid mt-4">
-        <h2 class="mb-4 text-center">Thống kê doanh thu nền tảng</h2>
-
-        <!-- Doanh thu tổng quát -->
-        <div class="row justify-content-center">
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">Thống kê doanh thu</h1>
+        <div class="row my-4">
           <!-- Tổng doanh thu -->
-          <div class="col-md-6 col-lg-5 mb-3">
-            <div class="card shadow">
-              <div class="card-header bg-dark text-white">Tổng doanh thu</div>
-              <div class="card-body">
-                <h4>
-                  <span
-                    class="text-success"
-                    th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'"
-                  ></span>
-                </h4>
+          <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+              <div class="card-body">Tổng doanh thu</div>
+              <div
+                class="card-footer d-flex align-items-center justify-content-between"
+              >
+                <span
+                  th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+                  >0 VNĐ</span
+                >
               </div>
             </div>
           </div>
 
-          <!-- Doanh thu tháng này -->
-          <div class="col-md-6 col-lg-5 mb-3">
-            <div class="card shadow">
-              <div class="card-header bg-info text-white">
-                Doanh thu tháng này
+          <!-- Doanh thu tháng -->
+          <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+              <div class="card-body">Doanh thu tháng này</div>
+              <div
+                class="card-footer d-flex align-items-center justify-content-between"
+              >
+                <span
+                  th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+                  >0 VNĐ</span
+                >
               </div>
+            </div>
+          </div>
+
+          <!-- Doanh thu theo quý -->
+          <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
               <div class="card-body">
-                <h4>
-                  <span
-                    class="text-primary"
-                    th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + ' đ'"
-                  ></span>
-                </h4>
+                Doanh thu quý
+                <span th:text="${quy}">-</span>
+              </div>
+              <div
+                class="card-footer d-flex align-items-center justify-content-between"
+              >
+                <span
+                  th:if="${doanhThuQuy != null}"
+                  th:text="${#numbers.formatDecimal(doanhThuQuy, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+                  >0 VNĐ</span
+                >
+                <span th:if="${doanhThuQuy == null}">Chưa lọc</span>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Bộ lọc -->
+        <form class="row mb-4" method="get" action="/admin/doanhthu">
+          <div class="col-md-2">
+            <label>Quý</label>
+            <select class="form-control" name="quy" th:value="${quy}">
+              <option value="">-- Chọn quý --</option>
+              <option value="1">Quý 1</option>
+              <option value="2">Quý 2</option>
+              <option value="3">Quý 3</option>
+              <option value="4">Quý 4</option>
+            </select>
+          </div>
+          <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Lọc</button>
+          </div>
+          <div class="col-md-2 align-self-end">
+            <a href="/admin/doanhthu" class="btn btn-secondary w-100"
+              >Làm mới</a
+            >
+          </div>
+        </form>
       </div>
     </main>
   </body>
