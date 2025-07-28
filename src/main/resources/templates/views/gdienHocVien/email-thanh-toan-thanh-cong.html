@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -35,23 +35,27 @@
             color: #888;
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <div class="container">
-        <div class="header">✅ Thanh toán thành công!</div>
-        <p>Xin chào <strong th:text="${tenNguoiDung}">Người dùng</strong>,</p>
-        <p>Cảm ơn bạn đã đăng ký khóa học tại hệ thống.</p>
-        <p><strong>Thông tin giao dịch:</strong></p>
-        <ul>
-            <li><strong>Mã giao dịch:</strong> <span th:text="${giaoDichId}">ID</span></li>
-            <li><strong>Tổng tiền:</strong> <span class="highlight" th:text="${tongTien}">0</span> ₫</li>
-        </ul>
-        <p>Bạn có thể đăng nhập vào hệ thống để bắt đầu học ngay hôm nay.</p>
-        <div class="footer">
-            Trân trọng,<br> Đội ngũ hỗ trợ <strong>DuAnTN</strong>
+    <body>
+        <div class="container">
+            <div class="header">✅ Thanh toán thành công!</div>
+            <p>Xin chào <strong th:text="${tenNguoiDung}">Người
+                    dùng</strong>,</p>
+            <p>Cảm ơn bạn đã đăng ký khóa học tại hệ thống.</p>
+            <p><strong>Thông tin giao dịch:</strong></p>
+            <ul>
+                <li><strong>Mã giao dịch:</strong> <span
+                        th:text="${giaoDichId}">ID</span></li>
+                <li><strong>Tổng tiền:</strong> <span class="highlight"
+                        th:text="${tongTien}">0</span> ₫</li>
+            </ul>
+            <p>Bạn có thể đăng nhập vào hệ thống để bắt đầu học ngay hôm
+                nay.</p>
+            <div class="footer text-black">
+                Trân trọng,<br> Đội ngũ hỗ trợ <strong>GLOBALEDU</strong>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 
 </html>

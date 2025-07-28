@@ -1,113 +1,140 @@
 <!DOCTYPE html>
-<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách học viên</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --main-color: #0B1C36;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Danh sách học viên</title>
+    </head>
 
-        body {
-            background-color: #f8f9fa;
-        }
+    <body>
+        <main class="danhsachhocvien rounded shadow">
+            <div>
+                <h2><i class="fas fa-users-cog me-2"></i>Quản lý tài khoản người
+                    dùng hệ thống</h2>
 
-        main {
-            padding: 40px 20px;
-        }
+                <div th:if="${success}" class="alert alert-success"
+                    th:text="${success}"></div>
+                <div th:if="${error}" class="alert alert-danger"
+                    th:text="${error}"></div>
 
-        h2 {
-            color: var(--main-color);
-            font-weight: 700;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .table thead {
-            background-color: var(--main-color);
-            color: white;
-        }
-
-        .btn-action {
-            font-size: 14px;
-            padding: 4px 10px;
-        }
-
-        .status-active {
-            color: green;
-            font-weight: 500;
-        }
-
-        .status-locked {
-            color: red;
-            font-weight: 500;
-        }
-    </style>
-</head>
-
-<body>
-    <main>
-        <div class="container">
-            <h2>📋 Danh sách học viên</h2>
-
-            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="text-center">
-                        <tr>
-                            <th>Họ tên</th>
-                            <th>Email</th>
-                            <th>SĐT</th>
-                            <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="tk : ${hocVienList}">
-                            <td th:text="${tk.name}">Tên</td>
-                            <td th:text="${tk.email}">Email</td>
-                            <td th:text="${tk.phone}">SĐT</td>
-                            <td>
-                                <span th:text="${tk.status ? 'Hoạt động' : 'Bị khóa'}"
-                                    th:classappend="${tk.status} ? 'status-active' : 'status-locked'"></span>
-                            </td>
-                            <td th:text="${#temporals.format(tk.ngayTao, 'dd/MM/yyyy HH:mm')}"></td>
-                            <td th:text="${#temporals.format(tk.ngayCapNhat, 'dd/MM/yyyy HH:mm')}"></td>
-                            <td>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <!-- Nút Sửa -->
-                                    <a th:href="@{/{prefix}/quanly-hocvien/edit/{id}(prefix=${prefix}, id=${tk.taikhoanId})}"
-                                        class="btn btn-sm btn-outline-primary">✏️ Sửa</a>
-
-                                    <!-- Nút Khóa / Mở -->
-                                    <form
-                                        th:action="@{/{prefix}/quanly-hocvien/toggle-status/{id}(prefix=${prefix}, id=${tk.taikhoanId})}"
-                                        method="post"
-                                        onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái?')">
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                            th:utext="${tk.status} ? '&#128274; Khóa' : '&#128275; Mở'"
-                                            style="white-space: nowrap;">
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr th:if="${hocVienList.size() == 0}">
-                            <td colspan="7" class="text-center text-muted">Không có học viên nào.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table
+                        class="table table-bordered table-hover align-middle shadow-sm">
+                        <thead class="text-center">
+                            <tr>
+                                <th><i class="fas fa-user"></i> Họ tên</th>
+                                <th><i class="fas fa-envelope"></i> Email</th>
+                                <th><i class="fas fa-phone"></i> SĐT</th>
+                                <th><i class="fas fa-calendar-alt"></i> Ngày
+                                    đăng ký</th>
+                                <th><i class="fas fa-toggle-on"></i> Trạng thái
+                                </th>
+                                <th><i class="fas fa-cogs"></i> Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr th:each="tk : ${hocVienList}">
+                                <td th:text="${tk.name}">Tên</td>
+                                <td
+                                    th:text="${@textUtils.maskEmail(tk.email)}">Email</td>
+                                <td
+                                    th:text="${@textUtils.maskPhone(tk.phone)}">SĐT</td>
+                                <td
+                                    th:text="${#temporals.format(tk.ngayTao, 'dd/MM/yyyy HH:mm')}">Ngày</td>
+                                <td class="text-center">
+                                    <span
+                                        th:text="${tk.status ? 'Hoạt động' : 'Bị khóa'}"
+                                        th:classappend="${tk.status} ? 'status-active' : 'status-locked'">
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        th:data-id="${tk.taikhoanId}"
+                                        th:data-status="${tk.status}"
+                                        th:data-name="${tk.name}"
+                                        onclick="openConfirmModal(this)"
+                                        th:utext="${tk.status} ? '&#128274; Khóa' : '&#128275; Mở'">
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${hocVienList.size() == 0}">
+                                <td colspan="6" class="text-center text-muted">
+                                    <i class="fas fa-user-slash me-2"></i>Không
+                                    có học viên nào.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </main>
-</body>
+
+            <!-- Modal xác nhận -->
+            <div class="modal fade" id="confirmModal" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form id="confirmForm" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i
+                                        class="fas fa-users-cog me-2"></i>Quản
+                                    lý tài khoản người dùng
+                                </h5>
+                                <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="confirmMessage"></p>
+                            </div>
+                            <div class="modal-footer justify-content-end">
+                                <button type="button"
+                                    class="btn btn-outline-secondary me-2"
+                                    data-bs-dismiss="modal">
+                                    <i class="fas fa-times-circle me-1"></i> Hủy
+                                </button>
+                                <button type="submit"
+                                    class="btn btn-outline-danger">
+                                    <i class="fas fa-check-circle me-1"></i> Xác
+                                    nhận
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            function openConfirmModal(button) {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const isActive = button.getAttribute('data-status') === 'true';
+
+                const form = document.getElementById('confirmForm');
+                form.action = `/${'[[${prefix}]]'}/quanly-taikhoan/toggle-status/${id}`;
+
+                const msg = isActive ? `Bạn có chắc chắn muốn KHÓA tài khoản "${name}"?` :
+                    `Bạn có chắc chắn muốn MỞ tài khoản "${name}"?`;
+
+                document.getElementById('confirmMessage').innerText = msg;
+
+                const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                modal.show();
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+                const successAlert = document.querySelector('.alert-success');
+                if (successAlert) {
+                    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                    modal.show();
+                }
+            });
+        </script>
+
+        </main>
+    </body>
 
 </html>

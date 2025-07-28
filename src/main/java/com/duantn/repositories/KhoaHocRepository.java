@@ -109,4 +109,17 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
                         "GROUP BY k.tenKhoaHoc")
         List<KhoaHocDiemDto> findDiemTrungBinhTheoKhoaHocXuatBan(@Param("gvId") Integer giangVienId);
 
+        @Query("""
+                        SELECT k FROM KhoaHoc k
+                        JOIN FETCH k.giangVien gv
+                        WHERE gv.giangvienId = :giangvienId
+                        AND (:keyword IS NULL OR LOWER(k.tenKhoaHoc) LIKE LOWER(CONCAT('%', :keyword, '%')))
+                        """)
+        List<KhoaHoc> timKiemTheoTenVaGiangVien(@Param("giangvienId") Integer giangVienId,
+                        @Param("keyword") String keyword);
+
+        List<KhoaHoc> findByGiangVien_GiangvienId(Integer giangvienId);
+
+        List<KhoaHoc> findByDanhMuc_danhmucId(Integer danhMucId);
+
 }

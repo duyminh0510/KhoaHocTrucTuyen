@@ -4,6 +4,20 @@ function themChuong() {
     const chuongTemplate = document.getElementById("chuong-template").content.cloneNode(true);
     const chuongEl = chuongTemplate.querySelector(".chuong-item");
 
+    const chuongItems = chuongContainer.querySelectorAll(".chuong-item");
+
+    for (let chuongEl of chuongItems) {
+        const baiGiangs = chuongEl.querySelectorAll(".baigiang-item");
+        for (let bai of baiGiangs) {
+            const loai = bai.querySelector(".loai-bai-giang-input");
+            if (!loai || !loai.value) {
+                const toast = new bootstrap.Toast(document.getElementById("toastCanhBaoLoaiBaiGiangChuong"));
+                toast.show();
+                return;
+            }
+        }
+    }
+
     const chuongIndex = chuongContainer.querySelectorAll(".chuong-item").length;
     chuongEl.querySelector(".chuong-title").innerText = "Phần " + (chuongIndex + 1);
 
@@ -40,8 +54,23 @@ function themChuong() {
 
 function themBaiGiang(btn) {
     const chuongEl = btn.closest(".chuong-item");
-    const cIndex = Array.from(chuongContainer.children).indexOf(chuongEl);
     const baiGiangContainer = chuongEl.querySelector(".bai-giang-container");
+
+    const chuongItems = document.querySelectorAll(".chuong-item");
+
+    for (let chuongEl of chuongItems) {
+        const baiGiangs = chuongEl.querySelectorAll(".baigiang-item");
+        for (let bai of baiGiangs) {
+            const loai = bai.querySelector(".loai-bai-giang-input");
+            if (!loai || !loai.value) {
+                const toast = new bootstrap.Toast(document.getElementById("toastCanhBaoLoaiBaiGiang"));
+                toast.show();
+                return;
+            }
+        }
+    }
+
+    const cIndex = Array.from(chuongContainer.children).indexOf(chuongEl);
     const baigiangIndex = baiGiangContainer.children.length;
 
     const baigiangTemplate = document.getElementById("baigiang-template").content.cloneNode(true);
@@ -306,4 +335,66 @@ function moModalXoaBaiGiang(baiGiangId) {
     document.getElementById("inputBaiGiangIdXoa").value = baiGiangId;
     const modal = new bootstrap.Modal(document.getElementById("modalXoaBaiGiang"));
     modal.show();
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Gọi hàm khôi phục trạng thái thu gọn khi load lại trang
+    restoreChuongCollapseState();
+
+    // Gắn sự kiện toggle cho tất cả nút toggle
+    document.querySelectorAll('.btn-toggle-chuong').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            toggleChuongNoiDung(btn);
+        });
+    });
+});
+
+function toggleChuongNoiDung(button) {
+    const chuongItem = button.closest('.chuong-item');
+    const cardBody = chuongItem.querySelector('.card-body');
+    const icon = button.querySelector('i');
+    const chuongId = chuongItem.dataset.chuongId;
+
+    const collapsedChuongs = JSON.parse(localStorage.getItem('collapsedChuongs')) || [];
+
+    if (cardBody.style.display === "none") {
+        cardBody.style.display = "block";
+        icon.classList.remove('bi-chevron-right');
+        icon.classList.add('bi-chevron-down');
+
+        // Bỏ khỏi danh sách thu gọn
+        const index = collapsedChuongs.indexOf(chuongId);
+        if (index !== -1) collapsedChuongs.splice(index, 1);
+    } else {
+        cardBody.style.display = "none";
+        icon.classList.remove('bi-chevron-down');
+        icon.classList.add('bi-chevron-right');
+
+        // Thêm vào danh sách thu gọn nếu chưa có
+        if (!collapsedChuongs.includes(chuongId)) {
+            collapsedChuongs.push(chuongId);
+        }
+    }
+
+    localStorage.setItem('collapsedChuongs', JSON.stringify(collapsedChuongs));
+}
+
+function restoreChuongCollapseState() {
+    const collapsedChuongs = JSON.parse(localStorage.getItem('collapsedChuongs')) || [];
+
+    collapsedChuongs.forEach(function(chuongId) {
+        const chuongItem = document.querySelector(`.chuong-item[data-chuong-id="${chuongId}"]`);
+        if (chuongItem) {
+            const cardBody = chuongItem.querySelector('.card-body');
+            const button = chuongItem.querySelector('.btn-toggle-chuong');
+            const icon = button.querySelector('i');
+
+            if (cardBody) {
+                cardBody.style.display = "none";
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-right');
+            }
+        }
+    });
 }

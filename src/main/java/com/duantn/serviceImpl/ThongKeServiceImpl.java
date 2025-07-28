@@ -19,6 +19,9 @@ public class ThongKeServiceImpl implements ThongKeService {
     @Autowired
     private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
 
+    @Autowired
+    private ThuNhapNenTangRepository thuNhapNenTangRepository;
+
     @Override
     public int tongHocVien() {
         return taiKhoanRepository.countHocVien();
@@ -69,5 +72,16 @@ public class ThongKeServiceImpl implements ThongKeService {
     @Override
     public List<Object> getChiTietKhoaHoc() {
         return new ArrayList<>(khoaHocRepository.chiTietKhoaHoc());
+    }
+
+    @Override
+    public double tongTienNenTang() {
+        Double result = thuNhapNenTangRepository.tongTienNenTang();
+        return result != null ? result : 0.0;
+    }
+
+    @Override
+    public int tongNhanVien() {
+        return taiKhoanRepository.countNhanVien();
     }
 }

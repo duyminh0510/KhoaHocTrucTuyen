@@ -163,8 +163,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     }
 
     @Override
-    public List<KhoaHoc> getTatCaKhoaHocPublished() {
-        return khoaHocRepository.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED);
+    public List<KhoaHoc> layKhoaHocTheoTrangThai(TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.findByTrangThai(trangThai);
     }
 
     @Override
@@ -186,6 +186,11 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     public KhoaHoc layTheoId(Integer id) {
         return khoaHocRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học với ID: " + id));
+    }
+
+    @Override
+    public List<KhoaHoc> timTheoTenVaGiangVien(Integer giangvienId, String keyword) {
+        return khoaHocRepository.timKiemTheoTenVaGiangVien(giangvienId, keyword);
     }
 
 }

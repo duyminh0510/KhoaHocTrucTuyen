@@ -5,173 +5,191 @@
     <head>
         <meta charset="UTF-8">
         <title>Thống kê hệ thống</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <body>
-        <main>
+        <main class="thongkeadmin">
             <div class="container-fluid px-4">
                 <h1 class="mt-4">📊 Thống kê hệ thống</h1>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item"><a href="/admin/dashboard">Bảng
-                            điều khiển</a></li>
-                    <li class="breadcrumb-item active">Thống kê</li>
+                    <li><a href="/admin/dashboard">Bảng điều khiển</a></li>
+                    <li>/ Thống kê</li>
                 </ol>
 
                 <!-- Info Cards -->
                 <div class="row">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-primary text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <i class="fas fa-user-graduate fa-3x"></i>
-                                    <div>
-                                        <div class="fs-4"
-                                            th:text="${tongHocVien}">0</div>
-                                        <div>Tổng số học viên</div>
-                                    </div>
-                                </div>
+                    <div class="info-card bg-blue">
+                        <div class="card-content">
+                            <i class="fas fa-user-graduate"></i>
+                            <div class="card-text">
+                                <div th:text="${tongHocVien}">0</div>
+                                <a href="/admin/quanly-hocvien">Tổng số học
+                                    viên</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-warning text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <i
-                                        class="fas fa-chalkboard-teacher fa-3x"></i>
-                                    <div>
-                                        <div class="fs-4"
-                                            th:text="${tongGiangVien}">0</div>
-                                        <div>Tổng số giảng viên</div>
-                                    </div>
-                                </div>
+
+                    <div class="info-card bg-yellow">
+                        <div class="card-content">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <div class="card-text">
+                                <div th:text="${tongGiangVien}">0</div>
+                                <a href="/admin/quanly-giangvien">Tổng số giảng
+                                    viên</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-success text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <i class="fas fa-book-open fa-3x"></i>
-                                    <div>
-                                        <div class="fs-4"
-                                            th:text="${tongKhoaHoc}">0</div>
-                                        <div>Tổng số khóa học</div>
-                                    </div>
-                                </div>
+
+                    <div class="info-card bg-green">
+                        <div class="card-content">
+                            <i class="fas fa-book-open"></i>
+                            <div class="card-text">
+                                <div th:text="${tongKhoaHoc}">0</div>
+                                <a href="#">Tổng số khóa học</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-danger text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <i class="fas fa-dollar-sign fa-3x"></i>
-                                    <div>
-                                        <div class="fs-4"
-                                            th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + 'đ'">
-                                            0đ</div>
-                                        <div>Doanh thu tháng này</div>
-                                    </div>
+
+                    <div class="info-card bg-orange">
+                        <div class="card-content">
+                            <i class="fas fa-user-tie"></i>
+                            <div class="card-text">
+                                <div th:text="${tongNhanVien}">0</div>
+                                <a href="/admin/quanly-nhanvien">Tổng số nhân
+                                    viên</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card bg-red">
+                        <div class="card-content">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div class="card-text">
+                                <div
+                                    th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ
                                 </div>
+                                <a href="#">Doanh thu tháng này</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card bg-red">
+                        <div class="card-content">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div class="card-text">
+                                <div
+                                    th:text="${#numbers.formatDecimal(tongTienNenTang, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ
+                                </div>
+                                <a href="#">Tổng đã nhận</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Charts -->
-                <div class="row">
-                    <div class="col-xl-8">
-                        <div class="card mb-4">
-                            <div class="card-header"><i
-                                    class="fas fa-chart-bar me-1"></i>Doanh thu
-                                6 tháng gần nhất</div>
-                            <div class="card-body"><canvas id="revenueChart"
-                                    width="100%" height="40"></canvas></div>
-                        </div>
+                <div class="chart-container">
+                    <div class="chart-box" style="flex: 1 1 65%;">
+                        <div class="title"><i class="fas fa-chart-bar me-1"></i>
+                            Doanh thu 6 tháng gần nhất</div>
+                        <canvas id="revenueChart" width="100%"
+                            height="40"></canvas>
                     </div>
-                    <div class="col-xl-4">
-                        <div class="card mb-4">
-                            <div class="card-header"><i
-                                    class="fas fa-chart-pie me-1"></i>Tỉ lệ danh
-                                mục khóa học</div>
-                            <div class="card-body"><canvas id="categoryChart"
-                                    width="100%" height="40"></canvas></div>
-                        </div>
+                    <div class="chart-box" style="flex: 1 1 30%;">
+                        <div class="title"><i class="fas fa-chart-pie me-1"></i>
+                            Tỉ lệ danh mục khóa học</div>
+                        <canvas id="categoryChart" width="100%"
+                            height="40"></canvas>
                     </div>
                 </div>
 
-                <!-- Data Table -->
-                <div class="card mb-4">
-                    <div class="card-header"><i
-                            class="fas fa-table me-1"></i>Thống kê chi tiết khóa
-                        học
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Tên khóa học</th>
-                                    <th>Lượt mua</th>
-                                    <th>Doanh thu</th>
-                                    <th>Số lượt thích</th>
-                                    <th>Giảng viên</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="khoaHoc : ${chiTietKhoaHoc}">
-                                    <td th:text="${khoaHoc[0]}">Tên</td>
-                                    <td th:text="${khoaHoc[1]}">0</td>
-                                    <td
-                                        th:text="${#numbers.formatDecimal(khoaHoc[2], 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ
-                                    </td>
-                                    <td th:text="${khoaHoc[3]}">0</td>
-                                    <td th:text="${khoaHoc[4]}">Tên GV</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Table -->
+                <div class="table-container">
+                    <div class="title"><i class="fas fa-table me-1"></i> Thống
+                        kê chi tiết khóa học</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tên khóa học</th>
+                                <th>Lượt mua</th>
+                                <th>Doanh thu</th>
+                                <th>Số lượt thích</th>
+                                <th>Giảng viên</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="khoaHoc : ${chiTietKhoaHoc}">
+                                <td th:text="${khoaHoc[0]}">Tên</td>
+                                <td th:text="${khoaHoc[1]}">0</td>
+                                <td
+                                    th:text="${#numbers.formatDecimal(khoaHoc[2], 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ</td>
+                                <td th:text="${khoaHoc[3]}">0</td>
+                                <td th:text="${khoaHoc[4]}">Tên GV</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
             <script th:inline="javascript">
+            /*<![CDATA[*/
             var revenueData = /*[[${revenueData}]]*/ [];
             var categoryData = /*[[${categoryData}]]*/ {};
+            /*]]>*/
         </script>
+
+            <!-- Script vẽ biểu đồ -->
             <script>
-            // Bar Chart - Revenue
-            var ctxBar = document.getElementById('revenueChart').getContext('2d');
-            var revenueChart = new Chart(ctxBar, {
+            var ctx = document.getElementById('revenueChart').getContext('2d');
+            var monthLabels = [];
+            var now = new Date();
+            for (var i = 5; i >= 0; i--) {
+                var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                monthLabels.push('Tháng ' + (d.getMonth() + 1));
+            }
+            var revenueChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+                    labels: monthLabels,
                     datasets: [{
-                        label: 'Doanh thu (VND)',
-                        data: [12000000, 19000000, 30000000, 50000000, 20000000, 30000000],
-                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                        borderColor: 'rgba(0, 123, 255, 1)',
+                        label: 'Doanh thu (VNĐ)',
+                        data: revenueData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('vi-VN') + '₫';
+                                }
+                            }
                         }
                     }
                 }
             });
 
-            // Pie Chart - Categories
-            var ctxPie = document.getElementById('categoryChart').getContext('2d');
-            var categoryChart = new Chart(ctxPie, {
+            var ctx2 = document.getElementById('categoryChart').getContext('2d');
+            var categoryLabels = Object.keys(categoryData);
+            var categoryValues = Object.values(categoryData);
+            var categoryChart = new Chart(ctx2, {
                 type: 'pie',
                 data: {
-                    labels: ['Frontend', 'Backend', 'UI/UX', 'Database'],
+                    labels: categoryLabels,
                     datasets: [{
-                        label: 'Tỉ lệ',
-                        data: [40, 35, 15, 10],
-                        backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+                        data: categoryValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ]
                     }]
                 }
             });

@@ -208,6 +208,15 @@ public class DangKyGiangVienController {
             return "views/gdienChung/hoantatdangkygiangvien";
         }
 
+        // Ràng buộc độ tuổi >= 18
+        if (dto.getNgaySinh() != null) {
+            int tuoi = LocalDateTime.now().getYear() - dto.getNgaySinh().getYear();
+            if (tuoi < 18) {
+                result.rejectValue("ngaySinh", "error.giangVienDto", "Bạn phải đủ 18 tuổi để đăng ký.");
+                return "views/gdienChung/hoantatdangkygiangvien";
+            }
+        }
+
         try {
             // Tạo TaiKhoan
             Role instructorRole = roleRepository.findByName("ROLE_GIANGVIEN")
@@ -280,6 +289,16 @@ public class DangKyGiangVienController {
         if (result.hasErrors()) {
             return "views/gdienChung/thongtinnangcapchitiet";
         }
+
+        // 👉 THÊM RÀNG BUỘC TUỔI ≥ 18
+        if (dto.getNgaySinh() != null) {
+            int tuoi = LocalDateTime.now().getYear() - dto.getNgaySinh().getYear();
+            if (tuoi < 18) {
+                result.rejectValue("ngaySinh", "error.ngaySinh", "Bạn phải đủ 18 tuổi để tiếp tục.");
+                return "views/gdienChung/thongtinnangcapchitiet";
+            }
+        }
+
         String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");

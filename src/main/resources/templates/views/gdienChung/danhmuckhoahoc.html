@@ -110,18 +110,33 @@
                                                     class="fas fa-share me-1"></i>
                                             </button>
 
-                                            <form th:action="@{/gio-hang/them}"
-                                                method="post"
-                                                class="d-inline add-to-cart-form">
-                                                <input type="hidden"
-                                                    name="khoaHocId"
-                                                    th:value="${khoaHoc.khoahocId}" />
-                                                <button type="submit"
-                                                    class="btn btn-outline-success btn-sm">
+                                            <!-- Hiển thị nút "Vào học" nếu đã mua, ngược lại hiển thị "Thêm vào giỏ hàng" -->
+                                            <th:block
+                                                th:if="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                                <a
+                                                    th:href="@{'/khoa-hoc/slug/' + ${khoaHoc.slug}}"
+                                                    class="btn btn-sm btn-primary">
                                                     <i
-                                                        class="fas fa-cart-plus me-1"></i>
-                                                </button>
-                                            </form>
+                                                        class="fas fa-play-circle me-1"></i>
+                                                    Vào học
+                                                </a>
+                                            </th:block>
+                                            <th:block
+                                                th:unless="${enrolledCourseIds != null and enrolledCourseIds.contains(khoaHoc.khoahocId)}">
+                                                <form
+                                                    th:action="@{/gio-hang/them}"
+                                                    method="post"
+                                                    class="d-inline add-to-cart-form">
+                                                    <input type="hidden"
+                                                        name="khoaHocId"
+                                                        th:value="${khoaHoc.khoahocId}" />
+                                                    <button type="submit"
+                                                        class="btn btn-outline-success btn-sm">
+                                                        <i
+                                                            class="fas fa-cart-plus me-1"></i>
+                                                    </button>
+                                                </form>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>

@@ -22,4 +22,8 @@ public interface ChuongService {
     void luuChuongTheoKhoaHoc(Integer khoahocId, Chuong chuong);
 
     Chuong getReferenceById(Integer id);
+
+    //
+
+    int demSoChuong(Integer khoahocId);
 }

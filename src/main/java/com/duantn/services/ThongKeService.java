@@ -17,4 +17,8 @@ public interface ThongKeService {
     Map<String, Integer> getTiLeDanhMuc();
 
     List<Object> getChiTietKhoaHoc();
+
+    double tongTienNenTang();
+
+    int tongNhanVien();
 }

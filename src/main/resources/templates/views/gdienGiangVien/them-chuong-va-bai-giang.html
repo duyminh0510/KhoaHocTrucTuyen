@@ -40,22 +40,25 @@
                     class="alert alert-danger"></div>
             </div>
 
-            <form th:if="${chuongForm != null}"
+            <form th:if="${chuongForm != null}" id="form-tao-khoa-hoc"
                 th:action="@{/giangvien/them-moi-khoa-hoc/luu-chuong-va-baigiang}"
                 th:object="${chuongForm}" method="post">
                 <input type="hidden" name="khoahocId"
                     th:value="${khoahoc.khoahocId}" />
 
-                <div class="text-end mt-3">
-                    <button type="submit" class="btn text-white"
-                        style="background-color: #1B263B;">Lưu bản
-                        nháp</button>
+                <div class="text-end mt-3"
+                    th:if="${khoahoc.trangThai.name() == 'DRAFT'}">
+                    <button id="btnLuuBanNhaps1" type="submit"
+                        class="btn themkhoahoc-btn">
+                        <i class="fas fa-upload me-2"></i>Lưu bản nháp
+                    </button>
                 </div>
 
                 <div id="chuong-container"
                     th:if="${chuongForm.chuongs != null}">
                     <div th:each="chuong, cStat : ${chuongForm.chuongs}"
                         class="card mt-4 chuong-item"
+                        th:attr="data-chuong-id=${chuong.chuongId}"
                         style="background-color: #E9ECEF;">
                         <div
                             class="card-header d-flex justify-content-between align-items-center">
@@ -82,6 +85,13 @@
                                     class="btn btn-sm btn-danger"
                                     th:onclick="'moModalXoaChuong(' + ${chuong.chuongId} + ')'">
                                     <i class="bi bi-trash"></i>
+                                </button>
+
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-dark btn-toggle-chuong"
+                                    onclick="toggleChuongNoiDung(this)"
+                                    title="Thu gọn / Mở rộng">
+                                    <i class="bi bi-chevron-down"></i>
                                 </button>
                             </div>
                         </div>
@@ -188,11 +198,12 @@
                                             class="form-control mb-2"
                                             th:name="'chuongs[' + ${cStat.index} + '].baiGiangs[' + ${bStat.index} + '].videoBaiGiang.url_video'"
                                             th:value="${baiGiang.videoBaiGiang?.url_video}"
-                                            placeholder="hãy gắn đường dẫn video"
+                                            placeholder="https://..."
+                                            pattern="^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$"
+                                            title="Link video của bạn không hợp lệ (ví dụ: https://youtu.be/abc123)"
                                             th:disabled="${baiGiang.loaiBaiGiang?.name() != 'VIDEO'}" />
-                                        <p class="m-2"><i>Bạn có thể sử dụng
-                                                đường dẫn video hoặc gắn đường
-                                                dẫn link.</i></p>
+                                        <p class="m-2"><i>Bạn hãy gắn đường dẫn
+                                                video của bạn vào đây.</i></p>
 
                                         <label
                                             class="form-label mb-2"><strong>📝
@@ -227,9 +238,16 @@
                                     <div class="tracnghiem-fields mt-2"
                                         th:style="${baiGiang.loaiBaiGiang?.name() == 'TRACNGHIEM'} ? 'display:block;' : 'display:none;'">
 
-                                        <a
+                                        <!-- <a
                                             th:href="@{/giangvien/cau-hoi/them(baiGiangId=${baiGiang.baiGiangId})}"
                                             class="btn btn-outline-primary btn-sm">
+                                            ➕ Thêm hoặc sửa câu hỏi
+                                        </a> -->
+
+                                        <a
+                                            th:href="@{/giangvien/cau-hoi/them(baiGiangId=${baiGiang.baiGiangId})}"
+                                            class="btn btn-outline-primary btn-sm"
+                                            onclick="saveScrollPosition(this)">
                                             ➕ Thêm hoặc sửa câu hỏi
                                         </a>
 
@@ -253,19 +271,42 @@
                     <div class="d-flex gap-2">
                         <button type="button" class="btn btn-outline-primary"
                             onclick="themChuong()">+ Phần</button>
-                        <button type="submit" class="btn text-white"
-                            style="background-color: #1B263B;">Lưu bản
-                            nháp</button>
+                        <!-- <button type="submit" class="btn themkhoahoc-btn"> <i
+                                class="fas fas fa-upload me-2"></i>Lưu
+                            bản nháp</button> -->
+
+                        <div th:if="${khoahoc.trangThai.name() == 'DRAFT'}">
+                            <button id="btnLuuBanNhaps" type="submit"
+                                class="btn themkhoahoc-btn">
+                                <i class="fas fas fa-upload me-2"></i>Lưu bản
+                                nháp
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Nút bên phải -->
-                    <a
-                        th:href="@{/giangvien/them-moi-khoa-hoc/gia(khoahocId=${khoahoc.khoahocId})}"
-                        class="btn btn-secondary">
-                        Quay lại bước 2
-                    </a>
+                    <button type="button" class="btn themkhoahoc-btn"
+                        th:onclick="|window.location.href='/giangvien/them-moi-khoa-hoc/gia?khoahocId=${khoahoc.khoahocId}'|">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại bước 2
+                    </button>
                 </div>
             </form>
+
+            <div id="yeuCauDuyetContainer" style="margin-top: 30px;">
+                <button type="button" class="btn" id="btnYeuCauDuyet"
+                    style="background-color: #16203b;  color: white;"
+                    th:data-khoahoc-id="${khoahoc.khoahocId}">
+                    <i class="fas fa-paper-plane"></i>
+                    Yêu cầu duyệt
+                </button>
+                <p id="thongBaoBaiGiang"
+                    style="color: green; margin-bottom: 10px; margin-top: 20px;">
+                    <i class="fas fa-check-circle"
+                        style="margin-right: 5px;"></i>
+                    <strong>Điều kiện:</strong> Hoàn thành trên 2 chương và trên
+                    10 bài giảng mới được gửi <strong>Yêu Cầu Duyệt</strong>
+                </p>
+            </div>
 
             <!-- Modal xác nhận xóa chương -->
             <div class="modal fade" id="modalXoaChuong" tabindex="-1"
@@ -451,9 +492,11 @@
                         <input type="text"
                             name="chuongs[__cIndex__].baiGiangs[__bIndex__].videoBaiGiang.url_video"
                             class="form-control mb-2"
-                            placeholder="hãy gắn đường dẫn video">
-                        <p class="m-2"><i>Bạn có thể sử dụng đường dẫn video
-                                hoặc gắn đường dẫn link.</i></p>
+                            placeholder="https://..."
+                            pattern="^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$"
+                            title="Link video của bạn không hợp lệ (ví dụ: https://youtu.be/abc123)">
+                        <p class="m-2"><i>Bạn hãy gắn đường dẫn video của bạn
+                                vào đây.</i></p>
 
                         <label class="form-label mb-2"><strong>📝 Mô tả
                                 video:</strong></label>
@@ -515,6 +558,310 @@
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
         </style>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Gọi hàm khôi phục trạng thái thu gọn khi load lại trang
+                restoreChuongCollapseState();
+
+                // Gắn sự kiện toggle cho tất cả nút toggle
+                document.querySelectorAll('.btn-toggle-chuong').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        toggleChuongNoiDung(btn);
+                    });
+                });
+            });
+
+            function toggleChuongNoiDung(button) {
+                const chuongItem = button.closest('.chuong-item');
+                const cardBody = chuongItem.querySelector('.card-body');
+                const icon = button.querySelector('i');
+                const chuongId = chuongItem.dataset.chuongId;
+
+                const collapsedChuongs = JSON.parse(localStorage.getItem('collapsedChuongs')) || [];
+
+                if (cardBody.style.display === "none") {
+                    cardBody.style.display = "block";
+                    icon.classList.remove('bi-chevron-right');
+                    icon.classList.add('bi-chevron-down');
+
+                    // Bỏ khỏi danh sách thu gọn
+                    const index = collapsedChuongs.indexOf(chuongId);
+                    if (index !== -1) collapsedChuongs.splice(index, 1);
+                } else {
+                    cardBody.style.display = "none";
+                    icon.classList.remove('bi-chevron-down');
+                    icon.classList.add('bi-chevron-right');
+
+                    // Thêm vào danh sách thu gọn nếu chưa có
+                    if (!collapsedChuongs.includes(chuongId)) {
+                        collapsedChuongs.push(chuongId);
+                    }
+                }
+
+                localStorage.setItem('collapsedChuongs', JSON.stringify(collapsedChuongs));
+            }
+
+            function restoreChuongCollapseState() {
+                const collapsedChuongs = JSON.parse(localStorage.getItem('collapsedChuongs')) || [];
+
+                collapsedChuongs.forEach(function(chuongId) {
+                    const chuongItem = document.querySelector(`.chuong-item[data-chuong-id="${chuongId}"]`);
+                    if (chuongItem) {
+                        const cardBody = chuongItem.querySelector('.card-body');
+                        const button = chuongItem.querySelector('.btn-toggle-chuong');
+                        const icon = button.querySelector('i');
+
+                        if (cardBody) {
+                            cardBody.style.display = "none";
+                            icon.classList.remove('bi-chevron-down');
+                            icon.classList.add('bi-chevron-right');
+                        }
+                    }
+                });
+            }
+        </script>
+
+            <script>
+            function saveScrollPosition(linkElement) {
+                const scrollY = window.scrollY || document.documentElement.scrollTop;
+                // Lưu scroll và ID bài giảng (nếu cần)
+                sessionStorage.setItem("scrollY", scrollY);
+                sessionStorage.setItem("scrollBack", "true");
+
+                // Điều hướng thủ công
+                window.location.href = linkElement.getAttribute("href");
+                return false; // ngăn redirect mặc định
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+                if (sessionStorage.getItem("scrollBack") === "true") {
+                    const scrollY = sessionStorage.getItem("scrollY");
+                    if (scrollY !== null) {
+                        window.scrollTo({
+                            top: parseInt(scrollY),
+                            behavior: "smooth"
+                        });
+                    }
+                    // Clear để không scroll lại lần sau
+                    sessionStorage.removeItem("scrollBack");
+                    sessionStorage.removeItem("scrollY");
+                }
+            });
+        </script>
+
+            <!-- Modal thông báo -->
+            <div class="modal fade" id="modalThongBaoYeuCau" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="modalTitle">Thông báo
+                            </h5>
+                            <button type="button" class="btn-close"
+                                data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" id="modalBody">
+                            <!-- Nội dung sẽ được thay bằng JS -->
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/giangvien/khoa-hoc-da-tao"
+                                class="btn btn-success">Về danh sách khóa
+                                học</a>
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('btnYeuCauDuyet');
+                if (!btn) return;
+
+                btn.addEventListener('click', function() {
+                    if (btn.disabled) return;
+
+                    const khoaHocId = btn.getAttribute('data-khoahoc-id');
+                    const originalContent = btn.innerHTML;
+
+                    // Tạm thời hiển thị trạng thái gửi
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang gửi...';
+
+                    fetch('/khoa-hoc/yeu-cau-duyet?id=' + encodeURIComponent(khoaHocId), {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) return response.text();
+                            else throw new Error('Lỗi mạng hoặc server không phản hồi');
+                        })
+                        .then(msg => {
+                            // Modal thành công
+                            document.getElementById('modalTitle').textContent = 'Thành công';
+                            document.getElementById('modalBody').textContent = msg || 'Yêu cầu duyệt đã được gửi!';
+                            const modal = new bootstrap.Modal(document.getElementById('modalThongBaoYeuCau'));
+                            modal.show();
+
+                            // Cập nhật lại nút
+                            const btnLuu1 = document.getElementById('btnLuuBanNhaps1');
+                            const btnLuu2 = document.getElementById('btnLuuBanNhaps');
+
+                            if (btnLuu1) btnLuu1.style.display = 'none';
+                            if (btnLuu2) btnLuu2.style.display = 'none';
+
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Đã gửi yêu cầu duyệt';
+                            btn.classList.add('disabled');
+                        })
+                        .catch(error => {
+                            // Modal thất bại
+                            document.getElementById('modalTitle').textContent = 'Thất bại';
+                            document.getElementById('modalBody').textContent = 'Gửi yêu cầu thất bại: ' + error.message;
+                            const modal = new bootstrap.Modal(document.getElementById('modalThongBaoYeuCau'));
+                            modal.show();
+
+                            // Khôi phục lại nút
+                            btn.disabled = false;
+                            btn.innerHTML = originalContent;
+                        });
+                });
+            });
+        </script>
+
+            <script>
+            let originalFormData = "";
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const form = document.getElementById("form-tao-khoa-hoc");
+                if (form) {
+                    // Lưu lại dữ liệu ban đầu dưới dạng chuỗi JSON
+                    originalFormData = new FormData(form);
+                    originalFormData = JSON.stringify(Array.from(originalFormData.entries()));
+                }
+
+                // Gắn sự kiện cho tất cả nút submit trong form
+                form.querySelectorAll("button[type='submit']").forEach(function(btn) {
+                    btn.addEventListener("click", function(e) {
+                        const currentFormData = new FormData(form);
+                        const currentDataStr = JSON.stringify(Array.from(currentFormData.entries()));
+
+                        if (currentDataStr === originalFormData) {
+                            e.preventDefault(); // chặn submit
+                            showChuaThayDoiModal();
+                        }
+                    });
+                });
+            });
+        </script>
+
+            <!-- Modal chưa có thay đổi -->
+            <div class="modal fade" id="modalChuaThayDoi" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header"
+                            style="background-color: #2d43b1; color: #fff;">
+                            <h5 class="modal-title">Thông báo</h5>
+                            <button type="button" class="btn-close"
+                                data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn chưa thực hiện thay đổi gì mới để lưu!
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            function showChuaThayDoiModal() {
+                const modal = new bootstrap.Modal(document.getElementById("modalChuaThayDoi"));
+                modal.show();
+            }
+        </script>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const btnYeuCau = document.getElementById('btnYeuCauDuyet');
+                const chuongItems = document.querySelectorAll('.chuong-item');
+
+                let soLuongChuong = 0;
+                let tongBaiGiang = 0;
+                let coBaiGiangKhongLoai = false;
+
+                chuongItems.forEach(chuong => {
+                    soLuongChuong++;
+                    const baiGiangs = chuong.querySelectorAll('.baigiang-item');
+                    tongBaiGiang += baiGiangs.length;
+
+                    baiGiangs.forEach(baiGiang => {
+                        const loaiBaiGiang = baiGiang.querySelector('.loai-bai-giang-input'); // class của loại bài giảng (thay theo thực tế của bạn)
+                        if (!loaiBaiGiang || !loaiBaiGiang.value || loaiBaiGiang.value.trim() === '') {
+                            coBaiGiangKhongLoai = true;
+                        }
+                    });
+                });
+
+                if (soLuongChuong < 2 || tongBaiGiang < 10 || coBaiGiangKhongLoai) {
+                    btnYeuCau.disabled = true;
+                    btnYeuCau.style.opacity = 0.6;
+
+                    let lyDo = "";
+                    if (soLuongChuong < 2) lyDo += "- Cần ít nhất 2 chương\n";
+                    if (tongBaiGiang < 10) lyDo += "- Cần tổng ít nhất 10 bài giảng\n";
+                    if (coBaiGiangKhongLoai) lyDo += "- Một số bài giảng chưa có loại bài giảng\n";
+
+                    btnYeuCau.title = "Không thể gửi yêu cầu duyệt:\n" + lyDo;
+
+                    btnYeuCau.addEventListener('click', function() {
+                        alert("Không thể gửi yêu cầu duyệt:\n" + lyDo);
+                    });
+                }
+            });
+        </script>
+
+            <!-- Toast cảnh báo chưa chọn loại bài giảng -->
+            <div class="position-fixed end-0 p-3"
+                style="z-index: 9999; bottom: 100px;">
+                <div id="toastCanhBaoLoaiBaiGiang"
+                    class="toast align-items-center text-white bg-danger border-0"
+                    data-bs-delay="3000" role="alert" aria-live="assertive"
+                    aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Vui lòng hoàn thành bài giảng trước khi thêm bài
+                            giảng mới!
+                        </div>
+                        <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast" aria-label="Đóng"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast cảnh báo chưa chọn loại bài giảng mà ấn thêm chương -->
+            <div class="position-fixed end-0 p-3"
+                style="z-index: 9999; bottom: 100px;">
+                <div id="toastCanhBaoLoaiBaiGiangChuong"
+                    class="toast align-items-center text-white bg-danger border-0"
+                    data-bs-delay="3000" role="alert" aria-live="assertive"
+                    aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Vui lòng hoàn thành bài giảng trước khi thêm chương
+                            mới!
+                        </div>
+                        <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast" aria-label="Đóng"></button>
+                    </div>
+                </div>
+            </div>
         </main>
     </body>
 

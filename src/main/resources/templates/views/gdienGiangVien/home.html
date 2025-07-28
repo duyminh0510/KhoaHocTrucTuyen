@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang chủ - Giảng Viên</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trang chủ - Giảng Viên</title>
+    </head>
 
-    </style>
-</head>
+    <body>
+        <main class="container py-5 home">
+            <h1 class="text-center mb-5">Trang quản lý giảng viên</h1>
 
-<body>
-    <main class="container py-5 home">
-        <h1 class="text-center mb-5">Trang quản lý giảng viên</h1>
+            <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
+            <section class="mb-5">
+                <h1 class="text-center mb-5">Khoá học đã tạo</h1>
 
-        <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
-        <section class="mb-5">
-            <h2 class="mb-4">📚 Khóa học bạn đã tạo</h2>
-            <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Tìm kiếm khoá học...">
-            </div>
+                <div class="mb-4">
+                    <form method="get" th:action="@{/giangvien/khoa-hoc-da-tao}"
+                        class="search-form">
+                        <div class="search-group">
+                            <input type="text" class="form-control"
+                                name="keyword"
+                                placeholder="Tìm kiếm khoá học..."
+                                th:value="${keyword}" />
+                            <button class="btn btn-success"
+                                type="submit">Tìm</button>
+                        </div>
+                    </form>
 
-            <div class="list-group shadow-sm">
+                    <!-- <div class="list-group shadow-sm">
                 <th:block th:each="khoaHoc : ${khoaHocList}">
                     <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <div>
@@ -31,56 +40,271 @@
                                 chi tiết</button>
                     </div>
                 </th:block>
-            </div>
+            </div> -->
 
-            <div class="add-new">
-                <a href="/giangvien/them-moi-khoa-hoc" class="btn-add">
-                        ➕ Thêm khóa học mới
-                    </a>
-            </div>
-        </section>
+                    <div class="row courses-grid">
+                        <div th:if="${#lists.isEmpty(khoaHocList)}"
+                            class="text-center text-muted my-5">
+                            <p class="fs-5">😔 Không tìm thấy khoá học nào phù
+                                hợp với từ khoá "<span
+                                    th:text="${keyword}">...</span>".</p>
+                        </div>
+                        <th:block th:each="khoaHoc, iterStat : ${khoaHocList}"
+                            th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PUBLISHED and iterStat.index < 8}">
 
-        <!-- KHÓA HỌC ĐƯỢC MUA NHIỀU NHẤT -->
-        <section class="mb-5">
-            <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
-            <div class="row g-4">
-                <div class="col-md-4" th:each="khoaHoc : ${topKhoaHocList}">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}"></h5>
-                            <p class="card-text" th:text="${khoaHoc.moTa}"></p>
-                            <span class="badge bg-primary" th:text="${khoaHoc.luotMua + ' lượt mua'}"></span>
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
+                                <div class="card h-100 shadow-sm course-card"
+                                    th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
+                                    <img class="card-img-top"
+                                        th:src="${khoaHoc.anhBia}"
+                                        alt="Ảnh khoá học" />
+
+                                    <div
+                                        class="card-body d-flex flex-column pb-0">
+                                        <h5 class="card-title"
+                                            th:text="${khoaHoc.tenKhoaHoc}">Tên
+                                            khóa học
+                                        </h5>
+                                        <p
+                                            class="card-text small text-muted mt-auto">
+                                            <i
+                                                class="fas fa-chalkboard-teacher me-1"></i>
+                                            Giảng viên:
+                                            <span
+                                                th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên
+                                                giảng viên</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="card-footer pt-0">
+                                        <div class="mb-3">
+                                            <p
+                                                th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+                                                class="card-text mb-0">
+                                                <span
+                                                    class="fw-bold text-danger me-2"
+                                                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                                <del class="text-muted"
+                                                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
+                                            </p>
+                                            <p
+                                                th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
+                                                class="card-text fw-bold mb-0">
+                                                <span
+                                                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+                                            </p>
+                                        </div>
+
+                                        <div
+                                            class="d-flex justify-content-between align-items-center px-2 pb-3 gap-1">
+                                            <button type="button"
+                                                class="btn btn-sm like-btn"
+                                                th:id="'like-btn-' + ${khoaHoc.khoahocId}"
+                                                th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
+                                                th:attr="data-id=${khoaHoc.khoahocId}">
+                                                <i
+                                                    class="fas fa-heart me-1"></i>
+                                                <span
+                                                    th:id="'like-count-' + ${khoaHoc.khoahocId}"
+                                                    th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
+                                                </span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-outline-primary btn-sm share-btn"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
+                                                <i
+                                                    class="fas fa-share me-1"></i>
+                                            </button>
+
+                                            <!-- <form th:action="@{/gio-hang/them}" method="post" class="d-inline add-to-cart-form">
+                                        <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}" />
+                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                                <i
+                                                    class="fas fa-cart-plus me-1"></i>
+                                            </button>
+                                    </form> -->
+
+                                            <button
+                                                class="btn btn-sm btn-outline-success add-to-cart-btn"
+                                                th:attr="data-id=${khoaHoc.khoahocId},
+                                            data-name=${khoaHoc.tenKhoaHoc},
+                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
+                                            data-giagoc=${khoaHoc.giagoc},
+                                            data-anh=${khoaHoc.anhBia},
+                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
+                                                <i
+                                                    class="fas fa-cart-plus me-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal chia sẻ -->
+                                <div class="modal fade"
+                                    th:id="'shareModal-' + ${khoaHoc.khoahocId}"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Chia sẻ
+                                                    khóa học: <span
+                                                        th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
+                                                <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <form
+                                                th:action="@{/hoc-vien/share-course}"
+                                                method="post" class="ajax-form">
+                                                <div class="modal-body">
+                                                    <input type="hidden"
+                                                        name="courseId"
+                                                        th:value="${khoaHoc.khoahocId}" />
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="recipientEmail"
+                                                            class="form-label">Email
+                                                            người nhận:</label>
+                                                        <input type="email"
+                                                            name="recipientEmail"
+                                                            class="form-control"
+                                                            required
+                                                            placeholder="nhapemail@example.com">
+                                                    </div>
+                                                    <p>Một email chứa thông tin
+                                                        và liên kết đến khóa học
+                                                        này sẽ được gửi đến địa
+                                                        chỉ trên.
+                                                    </p>
+                                                </div>
+
+                                                <!-- Thông báo Ajax -->
+                                                <div
+                                                    class="ajax-message text-center px-3"></div>
+
+                                                <div class="modal-footer">
+                                                    <div
+                                                        class="d-flex justify-content-end gap-2 w-100">
+                                                        <button type="button"
+                                                            class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit"
+                                                            class="btn fw-semibold text-white"
+                                                            style="background-color: #16203b;">Gửi
+                                                            Email</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <div class="add-new">
+                        <a href="/giangvien/them-moi-khoa-hoc" class="btn-add">
+                            ➕ Thêm khóa học mới
+                        </a>
+                    </div>
+                </section>
+
+                <!-- KHÓA HỌC ĐƯỢC MUA NHIỀU NHẤT -->
+                <section class="mb-5">
+                    <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4"
+                            th:each="khoaHoc : ${topKhoaHocList}">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"
+                                        th:text="${khoaHoc.tenKhoaHoc}"></h5>
+                                    <p class="card-text"
+                                        th:text="${khoaHoc.moTa}"></p>
+                                    <span class="badge bg-primary"
+                                        th:text="${khoaHoc.luotMua + ' lượt mua'}"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
+                </section>
 
-        <!-- THÔNG BÁO MỚI -->
-        <section class="mb-5">
-            <h2 class="mb-4">🔔 Thông báo mới</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Hệ thống sẽ bảo trì vào lúc 23:00 ngày 28/06/2025.</li>
-                <li class="list-group-item">Bạn có 3 đánh giá mới từ học viên.
-                </li>
-                <li class="list-group-item">1 khóa học của bạn đã đạt 100 lượt mua.</li>
-            </ul>
-        </section>
+                <!-- THÔNG BÁO MỚI -->
+                <section class="mb-5">
+                    <h2 class="mb-4">🔔 Thông báo mới</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">Hệ thống sẽ bảo trì vào lúc
+                            23:00 ngày 28/06/2025.</li>
+                        <li class="list-group-item">Bạn có 3 đánh giá mới từ học
+                            viên.
+                        </li>
+                        <li class="list-group-item">1 khóa học của bạn đã đạt
+                            100 lượt mua.</li>
+                    </ul>
+                </section>
 
-        <!-- HƯỚNG DẪN NHANH -->
-        <section>
-            <h2 class="mb-4">📖 Hướng dẫn nhanh cho giảng viên</h2>
-            <ol>
-                <li>Vào mục <strong>"Tạo khóa học"</strong> để thêm bài giảng mới.</li>
-                <li>Quản lý học viên đã đăng ký từ mục
-                    <strong>"Quản lý học viên"</strong>.</li>
-                <li>Xem và phản hồi đánh giá trong phần
-                    <strong>"Đánh giá"</strong>.</li>
-                <li>Theo dõi thống kê lượt học trong phần
-                    <strong>"Thống kê"</strong>.</li>
-            </ol>
-        </section>
-    </main>
-</body>
+                <!-- HƯỚNG DẪN NHANH -->
+                <section>
+                    <h2 class="mb-4">📖 Hướng dẫn nhanh cho giảng viên</h2>
+                    <ol>
+                        <li>Vào mục <strong>"Tạo khóa học"</strong> để thêm bài
+                            giảng mới.</li>
+                        <li>Quản lý học viên đã đăng ký từ mục
+                            <strong>"Quản lý học viên"</strong>.</li>
+                        <li>Xem và phản hồi đánh giá trong phần
+                            <strong>"Đánh giá"</strong>.</li>
+                        <li>Theo dõi thống kê lượt học trong phần
+                            <strong>"Thống kê"</strong>.</li>
+                    </ol>
+                </section>
+                <style>
+            .search-form {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            
+            .search-group {
+                display: flex;
+                align-items: center;
+                /* border-radius: 50px; */
+                overflow: hidden;
+                /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); */
+                background-color: #fff;
+            }
+            
+            .search-group input.form-control {
+                border: none;
+                flex: 1;
+                padding: 14px 20px;
+                font-size: 16px;
+                height: 48px;
+                border-radius: 0;
+            }
+            
+            .search-group input.form-control:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            
+            .search-group .btn {
+                background-color: #198754;
+                color: white;
+                /* border: none; */
+                /* padding: 0 30px; */
+                height: 48px;
+                font-size: 16px;
+                font-weight: 500;
+                /* border-radius: 0; */
+            }
+            
+            .search-group .btn:hover {
+                background-color: #157347;
+            }
+        </style>
+            </main>
+        </body>
 
-</html>
+    </html>

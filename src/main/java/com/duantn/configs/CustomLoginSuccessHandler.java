@@ -2,21 +2,14 @@ package com.duantn.configs;
 
 import java.io.IOException;
 import java.util.Collection;
-
-import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-
-import com.duantn.services.GiangVienService;
-import com.duantn.services.TaiKhoanService;
-
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.DefaultRedirectStrategy;
-
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.stereotype.Component;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,34 +17,21 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
-    @Autowired
-    private TaiKhoanService taiKhoanService;
-
-    @Autowired
-    private GiangVienService giangVienService;
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication)
-            throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
 
+        // ✅ Gán session để hiển thị modal chính sách chỉ 1 lần sau khi đăng nhập
+        request.getSession().setAttribute("showPolicyPopup", true);
+
+        // ✅ Lấy danh sách vai trò người dùng
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String redirectUrl = null;
 
-        String email = authentication.getName();
-        var taiKhoan = taiKhoanService.findByEmail(email);
-        request.getSession().setAttribute("user", taiKhoan);
-
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
-
-            if ("ROLE_GIANGVIEN".equals(role)) {
-                var giangVien = giangVienService.getByTaiKhoan(taiKhoan);
-                request.getSession().setAttribute("giangVien", giangVien);
-            }
 
             switch (role) {
                 case "ROLE_ADMIN":
@@ -64,22 +44,24 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 case "ROLE_HOCVIEN":
                 case "ROLE_GIANGVIEN":
-                    // Kiểm tra nếu có URL trước đó người dùng cố truy cập
+                    // ✅ Nếu có trang người dùng cố truy cập trước khi đăng nhập
                     SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
                     if (savedRequest != null) {
                         String targetUrl = savedRequest.getRedirectUrl();
-                        // Tránh redirect về trang admin/nhanvien nếu không đủ quyền
+
+                        // ❌ Không cho redirect về /admin hoặc /nhanvien nếu không đủ quyền
                         if (!targetUrl.contains("/admin") && !targetUrl.contains("/nhanvien")) {
                             redirectUrl = targetUrl;
                             break;
                         }
                     }
-                    // Nếu không có URL trước hoặc bị cấm → về /
+                    // ✅ Nếu không có URL trước đó → chuyển về trang chủ
                     redirectUrl = "/";
                     break;
 
                 default:
-                    redirectUrl = "/"; // fallback
+                    // ✅ Vai trò không xác định → về trang chủ
+                    redirectUrl = "/";
             }
 
             if (redirectUrl != null) {
@@ -87,11 +69,12 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             }
         }
 
+        // ✅ Phòng trường hợp không có role nào khớp
         if (redirectUrl == null) {
             redirectUrl = "/";
         }
 
+        // ✅ Chuyển hướng đến URL phù hợp sau khi đăng nhập
         redirectStrategy.sendRedirect(request, response, redirectUrl);
     }
-
 }

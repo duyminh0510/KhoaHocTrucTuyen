@@ -129,7 +129,7 @@ public class GioHangController {
         return ResponseEntity.ok(result);
     }
 
-    // ✅ Xóa 1 mục khỏi DB nếu đã đồng bộ
+    // Xóa 1 mục khỏi DB nếu đã đồng bộ
     @DeleteMapping("/xoa/{khoaHocId}")
     public ResponseEntity<?> deleteItem(@PathVariable Integer khoaHocId) {
         try {
@@ -147,6 +147,23 @@ public class GioHangController {
             return ResponseEntity.ok("Đã xóa khỏi DB");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/clear")
+    @Transactional
+    public ResponseEntity<?> clearCart() {
+        try {
+            TaiKhoan user = taiKhoanService.getCurrentUser();
+            GioHang gioHang = gioHangService.getOrCreateGioHang(user);
+
+            List<GioHangChiTiet> chiTietList = chiTietRepo.findByGiohang(gioHang);
+            chiTietRepo.deleteAll(chiTietList);
+
+            return ResponseEntity.ok("Đã xóa toàn bộ giỏ hàng");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi xóa giỏ hàng: " + e.getMessage());
         }
     }
 

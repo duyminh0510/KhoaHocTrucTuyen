@@ -7,6 +7,7 @@ import com.duantn.enums.TrangThaiRutTien;
 import com.duantn.repositories.DoanhThuGiangVienRepository;
 import com.duantn.repositories.RutTienGiangVienRepository;
 import com.duantn.services.ViGiangVienService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,10 @@ public class ViGiangVienServiceImpl implements ViGiangVienService {
 
     @Override
     public BigDecimal tinhSoDu(TaiKhoan giangVien) {
-        // Tổng thu nhập từ bảng DoanhThuGiangVien
         BigDecimal tongThuNhap = doanhThuRepo.findByTaikhoanGV(giangVien).stream()
                 .map(DoanhThuGiangVien::getSotiennhan)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Tổng tiền đã rút có trạng thái THANH_CONG hoặc DANG_CHO_XU_LY
         List<TrangThaiRutTien> trangThaiCanTru = Arrays.asList(
                 TrangThaiRutTien.THANH_CONG,
                 TrangThaiRutTien.DANG_CHO_XU_LY);
@@ -39,7 +38,6 @@ public class ViGiangVienServiceImpl implements ViGiangVienService {
                 .map(RutTienGiangVien::getSoTienRut)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Số dư = Thu nhập - số tiền đã hoặc đang rút
         return tongThuNhap.subtract(tongDaRut);
     }
 
@@ -78,8 +76,31 @@ public class ViGiangVienServiceImpl implements ViGiangVienService {
     }
 
     @Override
+    public RutTienGiangVien getLastRutTien(TaiKhoan giangVien) {
+        return rutTienRepo.findTopByTaikhoanGVOrderByNgayrutDesc(giangVien).orElse(null);
+    }
+
+    @Override
+    public boolean guiYeuCauRutTienFull(TaiKhoan giangVien, BigDecimal soTienRut, String soTaiKhoan,
+            String tenNganHang) {
+        BigDecimal soDu = tinhSoDu(giangVien);
+        if (soTienRut.compareTo(BigDecimal.valueOf(100000)) < 0 || soTienRut.compareTo(soDu) > 0) {
+            return false;
+        }
+        RutTienGiangVien rutTien = RutTienGiangVien.builder()
+                .taikhoanGV(giangVien)
+                .soTienRut(soTienRut)
+                .tenGiangVien(giangVien.getName())
+                .soTaiKhoan(soTaiKhoan)
+                .tenNganHang(tenNganHang)
+                .trangthai(TrangThaiRutTien.DANG_CHO_XU_LY)
+                .build();
+        rutTienRepo.save(rutTien);
+        return true;
+    }
+
+    @Override
     public List<RutTienGiangVien> findRutTienTheoTrangThai(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai) {
         return rutTienRepo.findByTaikhoanGVAndTrangthaiIn(giangVien, trangThai);
     }
-
 }

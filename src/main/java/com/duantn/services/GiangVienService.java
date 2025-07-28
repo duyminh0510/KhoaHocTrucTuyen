@@ -16,6 +16,8 @@ public interface GiangVienService {
 
     GiangVien findByTaikhoan(TaiKhoan taiKhoan);
 
+    GiangVien findByTaiKhoan(TaiKhoan taiKhoan);
+
     double tinhDiemDanhGiaTrungBinh(Integer giangVienId);
 
     //

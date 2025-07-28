@@ -1,6 +1,7 @@
 package com.duantn.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,6 @@ public interface RutTienGiangVienRepository extends JpaRepository<RutTienGiangVi
     List<RutTienGiangVien> findByTaikhoanGVAndTrangthai(TaiKhoan taiKhoan, TrangThaiRutTien trangthai);
 
     List<RutTienGiangVien> findByTaikhoanGVAndTrangthaiIn(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai);
+
+    Optional<RutTienGiangVien> findTopByTaikhoanGVOrderByNgayrutDesc(TaiKhoan giangVien);
 }

@@ -1,91 +1,99 @@
 <!DOCTYPE html>
-<html lang="vi" th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Quản lý học viên</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Quản lý học viên</title>
+    </head>
 
-<body>
-    <main class="hocvien">
-        <div class="quanlyhocvien">
-            <h1><i class="fas fa-user-graduate"></i> Quản lý học viên</h1>
+    <body>
+        <main class="hocvien">
+            <div class="quanlyhocvien fade-in">
+                <h1><i class="fas fa-user-graduate"></i> Quản lý học viên</h1>
 
-            <!-- Bộ lọc khóa học -->
-            <div class="filter-course">
-                <form method="get" action="#" id="filterForm">
-                    <label for="courseSelect"><strong>Chọn khóa học:</strong></label>
-                    <select id="courseSelect" name="khoahocId"
-                        onchange="document.getElementById('filterForm').submit()">
-                        <option th:if="${selectedKhoaHocId == null}" selected value="">-- Chọn khóa học --</option>
-                        <option th:each="khoaHoc : ${khoaHocList}" th:value="${khoaHoc.khoahocId}"
-                            th:text="${khoaHoc.tenKhoaHoc}" th:selected="${khoaHoc.khoahocId == selectedKhoaHocId}">
-                        </option>
-                    </select>
-                </form>
+                <div class="form-hang-ngang">
+                    <div class="filter-course">
+                        <form method="get" action="#" id="filterForm">
+                            <label for="courseSelect">Chọn khóa học:</label>
+                            <select id="courseSelect" name="khoahocId"
+                                onchange="document.getElementById('filterForm').submit()">
+                                <option th:if="${selectedKhoaHocId == null}"
+                                    selected value>-- Chọn khóa học --</option>
+                                <option th:each="khoaHoc : ${khoaHocList}"
+                                    th:value="${khoaHoc.khoahocId}"
+                                    th:text="${khoaHoc.tenKhoaHoc}"
+                                    th:selected="${khoaHoc.khoahocId == selectedKhoaHocId}">
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <div class="search-bar" th:if="${dangHocList != null}">
+                        <input type="text" id="searchInput"
+                            placeholder="Tìm kiếm học viên theo tên, email..."
+                            onkeyup="searchStudents()">
+                    </div>
+                </div>
+
+                <table th:if="${dangHocList != null}">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i></th>
+                            <th><i class="fas fa-user"></i> Họ và tên</th>
+                            <th><i class="fas fa-calendar-alt me-1"></i> Ngày
+                                đăng ký</th>
+                            <th>
+                                <i class="fas fa-check-circle me-1"></i> Trạng
+                                thái
+                            </th>
+                            <th><i class="fas fa-cogs"></i> Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="dangHoc, iter : ${dangHocList}">
+                            <td th:text="${iter.index + 1}">1</td>
+                            <td th:text="${dangHoc.taikhoan.name}">Nguyễn Văn A
+                            </td>
+                            <td
+                                th:text="${#temporals.format(dangHoc.ngayDangKy, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <span
+                                    th:text="${dangHoc.trangthai} ? 'Đã hoàn thành' : 'Chưa hoàn thành'"></span>
+                            </td>
+                            <td class="actions">
+                                <a href="javascript:void(0)" class="btn"
+                                    th:attr="onclick=|openModal('${dangHoc.taikhoan.name}', '${dangHoc.taikhoan.email}', '${dangHoc.khoahoc.tenKhoaHoc}', '${dangHoc.trangthai ? '100%' : 'Đang học'}')|">
+                                    Xem
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Nếu không có danh sách -->
+                <p th:if="${dangHocList == null}">Vui lòng chọn một khóa học để
+                    xem danh sách học viên.</p>
             </div>
 
-            <!-- Tìm kiếm -->
-            <div class="search-bar" th:if="${dangHocList != null}">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm học viên theo tên, email..."
-                    onkeyup="searchStudents()">
-            </div>
-
-            <!-- Bảng học viên -->
-            <table th:if="${dangHocList != null}">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Khóa học</th>
-                        <th>Tiến độ</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="dangHoc, iter : ${dangHocList}">
-                        <td th:text="${iter.index + 1}">1</td>
-                        <td th:text="${dangHoc.taikhoan.name}">Nguyễn Văn A</td>
-                        <td th:text="${dangHoc.taikhoan.email}">email@example.com</td>
-                        <td th:text="${dangHoc.khoahoc.tenKhoaHoc}">Java Web</td>
-                        <td>
-                            <span th:text="${dangHoc.trangthai} ? '100%' : 'Đang học'"></span>
-                        </td>
-                        <td class="actions">
-                            <a href="javascript:void(0)" class="btn"
-                                th:attr="onclick=|openModal('${dangHoc.taikhoan.name}', '${dangHoc.taikhoan.email}', '${dangHoc.khoahoc.tenKhoaHoc}', '${dangHoc.trangthai ? '100%' : 'Đang học'}')|">
-                                Xem
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Nếu không có danh sách -->
-            <p th:if="${dangHocList == null}">Vui lòng chọn một khóa học để xem danh sách học viên.</p>
-        </div>
-
-        <!-- Modal -->
-        <div id="studentModal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <div class="modal-header">Chi tiết học viên</div>
-                <div class="modal-body">
-                    <p><strong>Họ và tên:</strong> <span id="modalTen"></span></p>
-                    <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-                    <p><strong>Khóa học:</strong> <span id="modalKhoaHoc"></span></p>
-                    <p><strong>Tiến độ:</strong> <span id="modalTienDo"></span></p>
+            <!-- Modal -->
+            <div id="studentModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div class="modal-header">Chi tiết học viên</div>
+                    <div class="modal-body">
+                        <p><strong>Họ và tên:</strong> <span
+                                id="modalTen"></span></p>
+                        <p><strong>Tiến độ:</strong> <span
+                                id="modalTienDo"></span></p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Scripts -->
-        <script>
-            function openModal(ten, email, khoaHoc, tienDo) {
+            <!-- Scripts -->
+            <script>
+            function openModal(ten, tienDo) {
                 document.getElementById('modalTen').textContent = ten;
-                document.getElementById('modalEmail').textContent = email;
-                document.getElementById('modalKhoaHoc').textContent = khoaHoc;
                 document.getElementById('modalTienDo').textContent = tienDo;
                 document.getElementById('studentModal').style.display = "block";
             }
@@ -94,7 +102,7 @@
                 document.getElementById('studentModal').style.display = "none";
             }
 
-            window.onclick = function (event) {
+            window.onclick = function(event) {
                 if (event.target === document.getElementById('studentModal')) {
                     closeModal();
                 }
@@ -111,7 +119,7 @@
                 });
             }
         </script>
-    </main>
-</body>
+        </main>
+    </body>
 
 </html>

@@ -96,8 +96,8 @@
         
         .search-wrapper input {
             width: 100%;
-            border: 1px solid #cccccc !important;
-            background-color: #e5e5e5;
+            border: 1px solid #c6c8c9 !important;
+            background-color: #ffffff;
             padding: 6px 32px 6px 10px;
             border-radius: 4px;
             font-size: 14px;
@@ -287,10 +287,10 @@
 <body>
     <!-- Top bar -->
     <div class="top-bar">
-        <h6>Chào mừng bạn đến với hệ thống học tập trực tuyến!</h6>
+        <h6><i>Chào mừng bạn đến với hệ thống học tập trực tuyến!</i></h6>
         <div class="contact">
-            <span><i class="fas fa-phone"></i>035 593 0136</span>
-            <span><i class="fas fa-envelope"></i>duantotnghiep@gmail.com</span>
+            <span><i class="fas fa-phone"></i><i>0353 441 036</i></span>
+            <span><i class="fas fa-envelope"></i><i>globaledu237@gmail.com</i></span>
         </div>
     </div>
 
@@ -325,6 +325,10 @@
         <div class="icon-group" sec:authorize="isAuthenticated()">
 
             <!-- Nếu là ADMIN -->
+            <a th:href="@{/quan-ly/thong-bao-he-thong}" class="icon-link" sec:authorize="hasRole('ROLE_ADMIN')">
+                <i class="fas fa-bell"></i>
+            </a>
+
             <a th:href="@{/admin/quanly-nhanvien}" class="icon-link" sec:authorize="hasRole('ROLE_ADMIN')">
                 <i class="fas fa-users"></i> <span>Nhân Viên</span>
             </a>
@@ -339,10 +343,6 @@
             </a>
             <a th:href="@{/nhanvien/quanly-hocvien}" class="icon-link" sec:authorize="hasRole('ROLE_NHANVIEN')">
                 <i class="fas fa-book"></i> <span>Học Viên</span>
-            </a>
-            <a th:href="@{/nhanvien/thong-ke-he-thong}" class="icon-link" sec:authorize="hasRole('ROLE_NHANVIEN')">
-                <i class="fas fa-headset"></i> <span>
-                        Thống kê hệ thống</span>
             </a>
 
             <!-- Nếu là giảng viên thì hiện thêm mục Trang giảng viên -->
@@ -362,7 +362,7 @@
                 <a th:href="@{/gio-hang}" class="icon-link">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
-                <a th:href="@{/thong-bao}" class="icon-link">
+                <a th:href="@{/giang-vien/thong-bao}" class="icon-link">
                     <i class="fas fa-bell"></i>
                 </a>
             </div>

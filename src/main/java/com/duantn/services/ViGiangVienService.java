@@ -21,4 +21,7 @@ public interface ViGiangVienService {
 
     List<RutTienGiangVien> findRutTienTheoTrangThai(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai);
 
+    RutTienGiangVien getLastRutTien(TaiKhoan giangVien);
+
+    boolean guiYeuCauRutTienFull(TaiKhoan giangVien, BigDecimal soTienRut, String soTaiKhoan, String tenNganHang);
 }

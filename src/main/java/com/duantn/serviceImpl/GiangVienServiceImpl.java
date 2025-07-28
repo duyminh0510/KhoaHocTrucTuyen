@@ -108,8 +108,6 @@ public class GiangVienServiceImpl implements GiangVienService {
         Optional<GiangVien> optionalGV = giangVienRepository.findById(giangVienId);
         if (optionalGV.isPresent()) {
             GiangVien gv = optionalGV.get();
-            gv.setSoTaiKhoan(soTaiKhoan);
-            gv.setTenNganHang(tenNganHang);
             giangVienRepository.save(gv);
             return true;
         }
@@ -124,6 +122,11 @@ public class GiangVienServiceImpl implements GiangVienService {
     @Override
     public GiangVien getById(Integer id) {
         return giangVienRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public GiangVien findByTaiKhoan(TaiKhoan taiKhoan) {
+        return giangVienRepository.findByTaikhoan(taiKhoan).orElse(null);
     }
 
 }

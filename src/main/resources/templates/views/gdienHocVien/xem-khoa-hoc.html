@@ -9,11 +9,76 @@
     </head>
 
     <body>
-        <main class="xemkhoahoc">
+
+        <div th:fragment="commentBlock(comment)">
+            <div class="d-flex mb-3"
+                th:classappend="${comment.parent != null ? 'ms-4' : ''}">
+                <!-- Avatar -->
+                <img
+                    th:src="${#strings.isEmpty(comment.taikhoan.avatar) ? '/images/default-avatar.png' : comment.taikhoan.avatar}"
+                    alt="avatar" class="rounded-circle me-3"
+                    style="width: 40px; height: 40px; object-fit: cover;">
+
+                <!-- Nội dung bình luận -->
+                <div class="flex-grow-1">
+                    <div class="bg-light rounded px-3 py-2 shadow-sm">
+                        <div class="d-flex align-items-center gap-2">
+                            <strong class="me-1"
+                                th:text="${comment.taikhoan.name}">Tên người
+                                dùng</strong>
+                            <span
+                                th:if="${comment.taikhoan.role.name == 'ROLE_GIANGVIEN'}"
+                                class="badge bg-primary">Tác
+                                giả</span>
+                        </div>
+                        <p class="mb-1 mt-1" th:text="${comment.noiDung}">Nội
+                            dung bình luận</p>
+                    </div>
+
+                    <!-- Nút hành động -->
+                    <div class="d-flex gap-3 mt-1 ps-2 small text-muted">
+                        <button
+                            class="btn btn-link p-0 text-decoration-none text-muted"
+                            onclick="showReplyForm(this)"
+                            th:attr="data-comment-id=${comment.binhluanId}, data-commenter-name=${comment.taikhoan.name}">
+                            Trả lời
+                        </button>
+
+                        <button
+                            class="btn btn-link p-0 text-decoration-none text-danger"
+                            th:if="${loggedInEmail == comment.taikhoan.email}"
+                            th:attr="onclick='deleteComment(' + ${comment.binhluanId} + ')'">
+                            Xóa
+                        </button>
+                    </div>
+
+                    <!-- Form trả lời -->
+                    <div th:id="'reply-container-' + ${comment.binhluanId}"
+                        class="mt-2 ps-2"></div>
+
+                    <!-- Đệ quy bình luận con -->
+                    <div th:if="${childrenMap[comment.binhluanId] != null}"
+                        class="mt-3 ps-3 border-start">
+                        <div
+                            th:each="child : ${childrenMap[comment.binhluanId]}">
+                            <div
+                                th:replace="~{::commentBlock(comment=${child})}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="xemkhoahoc"
+            th:attr="data-bai-giang-id=${baiGiang.baiGiangId}">
+            <input type="hidden" id="baiGiangId"
+                th:value="${baiGiang.baiGiangId}" />
+            <input type="hidden" id="khoaHocId"
+                th:value="${khoaHoc.khoahocId}" />
             <div th:if="${khoaHoc != null}">
                 <div class="container">
                     <div class="row gx-1">
-                        <div class="col-lg-8 bocucs">
+                        <div class="col-lg-8">
                             <div class="border d-flex flex-column shadow-box"
                                 id="noiDungKhoaHoc"
                                 style="height: 350px; overflow-y: auto;">
@@ -21,12 +86,12 @@
                                     <!-- VIDEO -->
                                     <div
                                         th:if="${baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
-                                        <iframe class="w-100" height="348px"
-                                            th:src="${baiGiang.videoBaiGiang.url_video}"
-                                            frameborder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowfullscreen>
-                                        </iframe>
+                                        <div id="videoBaiGiang"
+                                            th:data-video-url="${videoBaiGiang != null ? videoBaiGiang.url_video : ''}"
+                                            th:data-bai-giang-id="${baiGiang.baiGiangId}"
+                                            th:data-khoa-hoc-id="${khoaHoc.khoahocId}">
+                                        </div>
+
                                     </div>
 
                                     <!-- BÀI VIẾT -->
@@ -175,12 +240,87 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="binh-luan-wrapper mt-3">
+                                <!-- Form thêm bình luận -->
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h2 class="h5 text-primary"
+                                            th:text="'Bình luận về: ' + ${baiGiang.tenBaiGiang}"></h2>
+
+                                        <div th:if="${successMessage}"
+                                            class="alert alert-success mt-3"
+                                            th:text="${successMessage}">
+                                        </div>
+                                        <div th:if="${errorMessage}"
+                                            class="alert alert-danger mt-3"
+                                            th:text="${errorMessage}">
+                                        </div>
+
+                                        <form class="mt-3"
+                                            th:action="@{/bai-giang/{baiGiangId}/binh-luan/add(baiGiangId=${baiGiang.baiGiangId})}"
+                                            method="post">
+                                            <div class="mb-3">
+                                                <textarea name="noiDung"
+                                                    class="form-control"
+                                                    rows="4" required
+                                                    placeholder="Nhập bình luận..."></textarea>
+                                            </div>
+                                            <button type="submit"
+                                                class="btn btn-success">Gửi bình
+                                                luận</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Danh sách bình luận -->
+                                <div class="mt-3">
+                                    <h5 class="text-primary mb-3">Bình luận</h5>
+                                    <div
+                                        th:if="${#lists.isEmpty(rootComments)}">
+                                        <p class="text-muted fst-italic">Chưa có
+                                            bình luận nào.</p>
+                                    </div>
+                                    <div th:each="comment : ${rootComments}">
+                                        <div
+                                            th:replace="~{::commentBlock(comment=${comment})}"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Cột danh sách chương và bài giảng -->
                         <div class="col-lg-4">
                             <div class="card shadow-sm rounded-4 mb-4 border-0">
+                                <!-- Thanh tiến độ -->
+                                <div class="progress-wrapper my-4 px-3">
+                                    <!-- px-3 = padding left/right 15px -->
+                                    <div
+                                        class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i
+                                                class="bi bi-graph-up-arrow text-primary me-2 fs-5"></i>
+                                            <span
+                                                class="fw-semibold text-dark">Tiến
+                                                độ hoàn thành</span>
+                                        </div>
+                                        <span class="fw-bold text-success"
+                                            th:text="${phanTramHoanThanh} + '%'">0%</span>
+                                    </div>
+                                    <div class="progress rounded-pill shadow-sm"
+                                        style="height: 20px;">
+                                        <div
+                                            class="progress-bar bg-gradient-purple-blue"
+                                            role="progressbar"
+                                            style="width: 0%; transition: width 0.6s ease-in-out;"
+                                            th:style="'width:' + ${phanTramHoanThanh} + '%'"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="card-body" id="chuong-list">
+
                                     <div th:if="${#lists.isEmpty(chuongs)}">
                                         <p class="text-muted fst-italic">Chưa có
                                             chương nào cho khóa học này.</p>
@@ -229,6 +369,14 @@
                                                                     th:text="${baiGiang.tenBaiGiang}">Tên
                                                                     bài
                                                                     giảng</span>
+                                                                <span
+                                                                    th:id="'check-baiGiang-' + ${baiGiang.baiGiangId}"
+                                                                    class="ms-2 check-status"
+                                                                    th:classappend="${baiGiangDaHoanThanhMap != null and baiGiangDaHoanThanhMap[baiGiang.baiGiangId]} ? 'text-success' : 'text-secondary'">
+                                                                    <i
+                                                                        th:class="${baiGiangDaHoanThanhMap != null and baiGiangDaHoanThanhMap[baiGiang.baiGiangId]} ? 'fas fa-check-circle' : 'far fa-circle'"></i>
+                                                                </span>
+
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -251,318 +399,6 @@
                     </div>
                 </div>
             </div>
-
-            <script th:inline="javascript">
-            let ketQuaId = null;
-
-            function dinhDangNgayGio(date) {
-                const pad = (n) => n.toString().padStart(2, '0');
-                const gio = pad(date.getHours());
-                const phut = pad(date.getMinutes());
-                const ngay = pad(date.getDate());
-                const thang = pad(date.getMonth() + 1);
-                const nam = date.getFullYear();
-                return `${gio}:${phut} - ${ngay}/${thang}/${nam}`;
-            }
-            document.addEventListener("DOMContentLoaded", () => {
-                const btnBatDau = document.getElementById("batDauBtn");
-                const noiDung = document.getElementById("noiDungBaiTracNghiem");
-                const btnNext = document.getElementById("btnTiepTuc");
-                const btnPrev = document.getElementById("btnCauTruoc");
-                const ketQuaContainer = document.getElementById("ketQuaContainer");
-                const cauHoiContainer = document.getElementById("cauHoiContainer");
-                const cauHoiList = Array.from(document.querySelectorAll(".cau-hoi"));
-
-                const btnLamLai = document.getElementById("btnLamLai");
-                const btnChiTiet = document.getElementById("btnChiTiet");
-
-                let idx = 0;
-                let thoiGianBatDau = null;
-
-                if (btnBatDau && noiDung) {
-                    btnBatDau.addEventListener("click", () => {
-                        btnBatDau.classList.add("d-none");
-                        noiDung.style.display = "block";
-                        thoiGianBatDau = new Date();
-                    });
-                }
-
-                function isAllAnswered() {
-                    return cauHoiList.every(cauHoi => {
-                        const radio = cauHoi.querySelector("input[type='radio']");
-                        const name = radio ? radio.name : null;
-                        return name && document.querySelector(`input[name='${name}']:checked`);
-                    });
-                }
-
-                function updateView() {
-                    cauHoiList.forEach((c, i) => c.classList.toggle("d-none", i !== idx));
-                    btnPrev.classList.toggle("d-none", idx === 0);
-
-                    if (idx === cauHoiList.length - 1) {
-                        btnNext.innerText = "Xem kết quả";
-                        btnNext.disabled = !isAllAnswered();
-                    } else {
-                        btnNext.innerText = "Câu tiếp theo";
-                        btnNext.disabled = false;
-                    }
-                }
-
-                if (btnNext && btnPrev && cauHoiList.length) {
-                    btnNext.addEventListener("click", () => {
-                        if (idx < cauHoiList.length - 1) {
-                            idx++;
-                            updateView();
-                        } else {
-                            let dung = 0;
-                            cauHoiList.forEach(cauHoi => {
-                                const dapAnDung = cauHoi.querySelector("input[type='radio'][data-dung='true']");
-                                const daChon = cauHoi.querySelector("input[type='radio']:checked");
-                                if (dapAnDung && daChon && dapAnDung.value === daChon.value) dung++;
-                            });
-
-                            const tongCau = cauHoiList.length;
-                            const tongDiem = parseFloat(((dung / tongCau) * 10).toFixed(2));
-                            const diemMoiCau = 10 / tongCau;
-                            const thoiGianHoanThanh = new Date();
-
-                            // document.getElementById("diemSo").innerText = dung;
-                            // document.getElementById("soDung").innerText = dung;
-                            // document.getElementById("tongCau").innerText = cauHoiList.length;
-
-                            document.getElementById("diemSo").innerText = tongDiem;
-                            document.getElementById("soDung").innerText = dung;
-                            document.getElementById("tongCau").innerText = tongCau;
-
-                            if (thoiGianBatDau) {
-                                document.getElementById("thoiGianBatDau").innerText = dinhDangNgayGio(thoiGianBatDau);
-                            }
-                            document.getElementById("thoiGianHoanThanh").innerText = dinhDangNgayGio(thoiGianHoanThanh);
-
-                            cauHoiContainer.classList.add("d-none");
-                            btnNext.classList.add("d-none");
-                            btnPrev.classList.add("d-none");
-                            ketQuaContainer.classList.remove("d-none");
-                            window.scrollTo({
-                                top: 0,
-                                behavior: "smooth"
-                            });
-
-                            const baiTracNghiemInput = document.getElementById("baiTracNghiemId");
-                            const baiTracNghiemId = baiTracNghiemInput ? parseInt(baiTracNghiemInput.value) : null;
-
-                            const taiKhoanInput = document.getElementById("taiKhoanId");
-                            const taiKhoanId = taiKhoanInput ? parseInt(taiKhoanInput.value) : null;
-
-                            const chiTietCauHoi = cauHoiList.map(cauHoi => {
-                                const cauHoiId = parseInt(cauHoi.getAttribute("data-cauhoi-id"));
-
-
-                                const daChon = cauHoi.querySelector("input[type='radio']:checked");
-                                const dapAnChonId = daChon ? parseInt(daChon.value) : null;
-                                const dapAnDung = daChon ? daChon.getAttribute("data-dung") === "true" : false;
-
-                                return {
-                                    cauHoiId: cauHoiId,
-                                    dapAnId: dapAnChonId,
-                                    dapAnChon: dapAnChonId,
-                                    dungHaySai: dapAnDung,
-                                    diem: dapAnDung ? parseFloat(diemMoiCau.toFixed(2)) : 0
-                                };
-                            }).filter(ct => ct.cauHoiId !== null && ct.dapAnId !== null);
-
-                            // Log ra để kiểm tra dữ liệu gửi đi
-                            console.log({
-                                baiTracNghiemId,
-                                taiKhoanId,
-                                soCauDung: dung,
-                                tongDiem: tongDiem,
-                                tongCauHoi: tongCau,
-                                thoiGianBatDau: thoiGianBatDau.toISOString(),
-                                thoiGianKetThuc: thoiGianHoanThanh.toISOString(),
-                                chiTietList: chiTietCauHoi
-                            });
-
-                            fetch('/ket-qua/luu', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        baiTracNghiemId,
-                                        taiKhoanId,
-                                        soCauDung: dung,
-                                        tongDiem: tongDiem,
-                                        tongCauHoi: tongCau,
-                                        thoiGianBatDau: thoiGianBatDau.toISOString(),
-                                        thoiGianKetThuc: thoiGianHoanThanh.toISOString(),
-                                        chiTietList: chiTietCauHoi
-                                    })
-                                })
-                                .then(res => res.json())
-                                .then(data => {
-                                    console.log("✅ Đã lưu kết quả:", data);
-                                    ketQuaId = data.ketQuaId || data;
-                                })
-                                .catch(err => {
-                                    console.error("❌ Lỗi khi lưu kết quả:", err);
-                                });
-                        }
-                    });
-
-                    btnPrev.addEventListener("click", () => {
-                        if (idx > 0) {
-                            idx--;
-                            updateView();
-                        }
-                    });
-
-                    document.querySelectorAll("input[type='radio']").forEach(input => {
-                        input.addEventListener("change", () => {
-                            if (idx === cauHoiList.length - 1) {
-                                btnNext.disabled = !isAllAnswered();
-                            }
-                        });
-                    });
-
-                    updateView();
-                }
-
-                if (btnLamLai) {
-                    btnLamLai.addEventListener("click", () => {
-                        // Reset biến
-                        idx = 0;
-                        thoiGianBatDau = new Date(); // Gán lại thời gian bắt đầu mới
-
-                        // Bỏ chọn tất cả đáp án
-                        document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
-                            radio.checked = false;
-                        });
-
-                        // Ẩn kết quả, hiện lại nội dung làm bài
-                        ketQuaContainer.classList.add("d-none");
-                        cauHoiContainer.classList.remove("d-none");
-                        btnNext.classList.remove("d-none");
-                        btnPrev.classList.add("d-none"); // quay về câu 0 thì ẩn nút "trước"
-                        btnNext.innerText = "Câu tiếp theo";
-                        btnNext.disabled = false;
-
-                        // Reset hiển thị thời gian và điểm
-                        document.getElementById("thoiGianBatDau").innerText = "--:--";
-                        document.getElementById("thoiGianHoanThanh").innerText = "--:--";
-                        document.getElementById("diemSo").innerText = "0";
-                        document.getElementById("soDung").innerText = "0";
-                        document.getElementById("tongCau").innerText = "0";
-
-                        // Cập nhật lại hiển thị câu hỏi
-                        updateView();
-
-                        // Cuộn lên đầu phần nội dung
-                        window.scrollTo({
-                            top: 0,
-                            behavior: "smooth"
-                        });
-                    });
-                }
-
-
-
-                if (btnChiTiet) {
-                    btnChiTiet.addEventListener("click", () => {
-                        if (!ketQuaId) {
-                            alert("❌ Không tìm thấy kết quả. Vui lòng làm bài lại.");
-                            return;
-                        }
-
-                        fetch(`/ket-qua/chi-tiet/${ketQuaId}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                const modalContent = document.getElementById("chiTietNoiDung");
-                                if (!modalContent) return;
-
-                                // Giao diện đẹp cho từng câu hỏi
-                                let html = `<div class="list-group">`;
-
-                                data.forEach((item, index) => {
-                                    html += `
-                        <div class="list-group-item shadow-sm rounded mb-3">
-                            <h6 class="mb-2">
-                                📝 <strong>Câu ${index + 1}:</strong> ${item.noiDungCauHoi}
-                            </h6>
-                            <p class="mb-1">
-                                ✅ <strong>Đáp án đúng:</strong> 
-                                <span class="text-success">${item.noiDungDapAnDung}</span><br/>
-                                🔘 <strong>Bạn chọn:</strong> 
-                                <span class="${item.dungHaySai ? 'text-success' : 'text-danger'}">
-                                    ${item.noiDungDapAnChon || 'Không chọn'}
-                                </span>
-                            </p>
-                            <p class="mb-1">
-                                ${item.dungHaySai 
-                                    ? '<span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Đúng</span>' 
-                                    : '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Sai</span>'}
-                                <span class="ms-2">🎯 Điểm: <strong>${item.diem}</strong></span>
-                            </p>
-                            <p class="mb-0 mt-2">
-                                <i class="fas fa-lightbulb text-warning me-1"></i>
-                                <strong>Giải thích:</strong>
-                                <span>${item.giaiThich || 'Chưa có giải thích.'}</span>
-                            </p>
-                        </div>
-                    `;
-                                });
-
-                                html += `</div>`;
-                                modalContent.innerHTML = html;
-
-                                // Hiển thị modal Bootstrap
-                                const modal = new bootstrap.Modal(document.getElementById('chiTietModal'));
-                                modal.show();
-                            })
-                            .catch(err => {
-                                console.error("❌ Lỗi khi lấy chi tiết kết quả:", err);
-                                alert("❌ Có lỗi xảy ra khi xem kết quả chi tiết.");
-                            });
-                    });
-                }
-
-                (function kiemTraKetQuaDaLam() {
-                    const baiTracNghiemInput = document.getElementById("baiTracNghiemId");
-                    const baiTracNghiemId = baiTracNghiemInput ? parseInt(baiTracNghiemInput.value) : null;
-
-                    const taiKhoanInput = document.getElementById("taiKhoanId");
-                    const taiKhoanId = taiKhoanInput ? parseInt(taiKhoanInput.value) : null;
-
-
-                    if (!taiKhoanId || !baiTracNghiemId) return;
-
-                    fetch(`/ket-qua/kiemtra?taiKhoanId=${taiKhoanId}&baiTracNghiemId=${baiTracNghiemId}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.daLam) {
-                                ketQuaId = data.ketQuaId;
-                                document.getElementById("batDauBtn").classList.add("d-none");
-                                document.getElementById("noiDungBaiTracNghiem").style.display = "block";
-                                document.getElementById("cauHoiContainer").classList.add("d-none");
-                                btnNext.classList.add("d-none");
-                                btnPrev.classList.add("d-none");
-                                ketQuaContainer.classList.remove("d-none");
-
-                                document.getElementById("diemSo").innerText = data.tongDiem;
-                                document.getElementById("soDung").innerText = data.soCauDung;
-                                document.getElementById("tongCau").innerText = data.tongCauHoi;
-                                document.getElementById("thoiGianBatDau").innerText = data.thoiGianBatDau;
-                                document.getElementById("thoiGianHoanThanh").innerText = data.thoiGianKetThuc;
-                            }
-                        })
-                        .catch(err => {
-                            console.error("❌ Lỗi kiểm tra đã làm:", err);
-                        });
-                })();
-
-
-            });
-        </script>
 
             <!-- Modal kết quả chi tiết -->
             <div class="modal fade" id="chiTietModal" tabindex="-1"
@@ -597,7 +433,11 @@
                 transform: scale(1.01);
             }
         </style>
-
+            <script src="https://www.youtube.com/iframe_api"></script>
+            <script th:src="@{/js/video-player.js}"></script>
+            <script th:src="@{/js/tai-lieu.js}"></script>
+            <script th:src="@{/js/binh-luan.js}"></script>
+            <script th:src="@{/js/lamtracnghiem.js}"></script>
         </main>
     </body>
 

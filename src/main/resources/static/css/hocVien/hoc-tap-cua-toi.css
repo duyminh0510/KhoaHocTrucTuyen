@@ -96,3 +96,35 @@
     color: #126ffc !important;
     font-weight: bold;
 }
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUpAnimation 0.6s ease-out forwards;
+}
+
+@keyframes fadeUpAnimation {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Tạo hiệu ứng delay giữa các card cho mượt hơn */
+
+.fade-up-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.fade-up-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.fade-up-delay-3 {
+    animation-delay: 0.3s;
+}
+
+.fade-up-delay-4 {
+    animation-delay: 0.4s;
+}

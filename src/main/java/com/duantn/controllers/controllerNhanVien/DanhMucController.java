@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.services.DanhMucService;
@@ -30,15 +31,28 @@ public class DanhMucController {
     public String trangDanhSach(HttpServletRequest request, Model model) {
         List<DanhMuc> danhmucs = service.layTatCa();
         model.addAttribute("danhmucs", danhmucs);
+
         model.addAttribute("danhmuc", new DanhMuc());
         model.addAttribute("prefixPath", getPrefix(request));
         return "views/gdienQuanLy/danhmuc";
     }
 
     @PostMapping("/danhmuc/add")
-    public String them(@ModelAttribute("danhmuc") DanhMuc danhMuc, HttpServletRequest request, Model model) {
+    public String them(@ModelAttribute("danhmuc") DanhMuc danhMuc, HttpServletRequest request,
+            RedirectAttributes redirect, Model model) {
+
+        String ten = danhMuc.getTenDanhMuc();
+        if (ten == null || ten.trim().length() < 6) {
+            model.addAttribute("error", "Tên danh mục phải có ít nhất 6 ký tự.");
+            model.addAttribute("danhmucs", service.layTatCa());
+            model.addAttribute("danhmuc", danhMuc);
+            model.addAttribute("prefixPath", getPrefix(request));
+            return "views/gdienQuanLy/danhmuc";
+        }
+
         try {
             service.taoDanhMuc(danhMuc);
+            redirect.addFlashAttribute("success", "Đã thêm danh mục thành công!");
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("danhmucs", service.layTatCa());
@@ -46,6 +60,7 @@ public class DanhMucController {
             model.addAttribute("prefixPath", getPrefix(request));
             return "views/gdienQuanLy/danhmuc";
         }
+
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 
@@ -59,8 +74,19 @@ public class DanhMucController {
     }
 
     @PostMapping("/danhmuc/edit")
-    public String capNhat(@ModelAttribute("danhmuc") DanhMuc danhMuc, HttpServletRequest request, Model model) {
-        if (service.daTonTaiTenKhacId(danhMuc.getTenDanhMuc(), danhMuc.getDanhmucId())) {
+    public String capNhat(@ModelAttribute("danhmuc") DanhMuc danhMuc, HttpServletRequest request,
+            RedirectAttributes redirect, Model model) {
+
+        String ten = danhMuc.getTenDanhMuc();
+        if (ten == null || ten.trim().length() < 6) {
+            model.addAttribute("error", "Tên danh mục phải có ít nhất 6 ký tự.");
+            model.addAttribute("danhmucs", service.layTatCa());
+            model.addAttribute("danhmuc", danhMuc);
+            model.addAttribute("prefixPath", getPrefix(request));
+            return "views/gdienQuanLy/danhmuc";
+        }
+
+        if (service.daTonTaiTenKhacId(ten, danhMuc.getDanhmucId())) {
             model.addAttribute("error", "Tên danh mục đã tồn tại!");
             model.addAttribute("danhmucs", service.layTatCa());
             model.addAttribute("danhmuc", danhMuc);
@@ -69,18 +95,22 @@ public class DanhMucController {
         }
 
         service.capNhat(danhMuc.getDanhmucId(), danhMuc);
+        redirect.addFlashAttribute("success", "Cập nhật danh mục thành công!");
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 
     @PostMapping("/vohieuhoa/{id}")
-    public String xoa(@PathVariable Integer id, HttpServletRequest request) {
+    public String xoa(@PathVariable Integer id, HttpServletRequest request, RedirectAttributes redirect) {
         service.voHieuHoa(id);
+        redirect.addFlashAttribute("success", "Đã vô hiệu hóa danh mục!");
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 
     @PostMapping("/kichhoat/{id}")
-    public String kichHoat(@PathVariable Integer id, HttpServletRequest request) {
+    public String kichHoat(@PathVariable Integer id, HttpServletRequest request,
+            RedirectAttributes redirect) {
         service.kichHoat(id);
+        redirect.addFlashAttribute("success", "Đã khôi phục danh mục!");
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 }
