@@ -30,9 +30,10 @@ public class ThongKeDoanhThuController {
             @RequestParam(name = "end",
                     required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
             @RequestParam(name = "quy", required = false) Integer quy,
+            @RequestParam(name = "nam", required = false) Integer nam,
             @RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
-        int pageSize = 10; // 10 dòng mỗi trang
+        int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Tổng doanh thu
@@ -43,24 +44,25 @@ public class ThongKeDoanhThuController {
         LocalDateTime endOfMonth = LocalDateTime.now();
         BigDecimal doanhThuThang = thuNhapRepo.getTongThuNhapTrongKhoang(startOfMonth, endOfMonth);
 
-        // Biến doanh thu theo quý và chi tiết
         BigDecimal doanhThuQuy = null;
         Page<ThuNhapNenTang> chiTietPage;
 
-        if (quy != null && quy >= 1 && quy <= 4) {
-            int year = LocalDate.now().getYear();
-            int startMonthValue = (quy - 1) * 3 + 1;
-            int endMonthValue = startMonthValue + 2;
+        // Nếu có quý và có năm
+        if (quy != null && quy >= 1 && quy <= 4 && nam != null) {
+            int startMonth = (quy - 1) * 3 + 1;
+            int endMonth = startMonth + 2;
 
-            LocalDateTime startQuy = LocalDate.of(year, startMonthValue, 1).atStartOfDay();
-            LocalDateTime endQuy =
-                    YearMonth.of(year, endMonthValue).atEndOfMonth().atTime(LocalTime.MAX);
+            LocalDateTime startQuy = LocalDate.of(nam, startMonth, 1).atStartOfDay();
+            LocalDateTime endQuy = YearMonth.of(nam, endMonth).atEndOfMonth().atTime(LocalTime.MAX);
 
             doanhThuQuy = thuNhapRepo.getTongThuNhapTrongKhoang(startQuy, endQuy);
             chiTietPage = thuNhapRepo.findByNgaynhanBetween(startQuy, endQuy, pageable);
 
             model.addAttribute("quy", quy);
+            model.addAttribute("nam", nam);
+
         } else if (start != null && end != null) {
+            // Nếu có lọc theo khoảng thời gian
             LocalDateTime startDateTime = start.atStartOfDay();
             LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
 
@@ -70,6 +72,7 @@ public class ThongKeDoanhThuController {
             model.addAttribute("start", start);
             model.addAttribute("end", end);
         } else {
+            // Không có lọc, lấy tất cả
             doanhThuQuy = null;
             chiTietPage = thuNhapRepo.findAll(pageable);
         }
