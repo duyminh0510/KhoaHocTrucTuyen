@@ -136,7 +136,6 @@ public class ThongTinCaNhanController {
         return "redirect:/tai-khoan";
     }
 
-    @SuppressWarnings("null")
     @PostMapping("/tai-khoan/cap-nhat-email")
     public String capNhatEmail(
             @Valid @ModelAttribute("emailDto") TaiKhoanEmailDto dto,
@@ -153,7 +152,7 @@ public class ThongTinCaNhanController {
         }
 
         if (taiKhoanRepository.findByEmail(dto.getEmail()).isPresent()) {
-            result.rejectValue("email", null, "Email đã tồn tại.");
+            result.rejectValue("email", "Email đã tồn tại.");
         }
 
         if (result.hasErrors()) {
@@ -173,7 +172,6 @@ public class ThongTinCaNhanController {
         return "redirect:/auth/verify?type=update-email";
     }
 
-    @SuppressWarnings("null")
     @PostMapping("/tai-khoan/doi-mat-khau")
     public String doiMatKhau(
             @Valid @ModelAttribute("passwordDto") TaiKhoanPasswordDto dto,
@@ -189,11 +187,11 @@ public class ThongTinCaNhanController {
         }
 
         if (!passwordEncoder.matches(dto.getOldPassword(), tk.getPassword())) {
-            result.rejectValue("oldPassword", null, "Mật khẩu hiện tại không đúng.");
+            result.rejectValue("oldPassword", "Mật khẩu hiện tại không đúng.");
         }
 
         if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-            result.rejectValue("confirmPassword", null, "Mật khẩu xác nhận không khớp.");
+            result.rejectValue("confirmPassword", "Mật khẩu xác nhận không khớp.");
         }
 
         if (result.hasErrors()) {

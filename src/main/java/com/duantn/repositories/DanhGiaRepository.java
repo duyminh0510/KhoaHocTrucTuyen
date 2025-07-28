@@ -34,4 +34,5 @@ public interface DanhGiaRepository extends JpaRepository<DanhGia, Integer> {
 
     List<DanhGia> findByKhoahoc_GiangVien_GiangvienId(Integer giangvienId);
 
+
 }

@@ -105,4 +105,8 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         return danhGiaRepository.findByKhoahoc_GiangVien_GiangvienId(giangvienId);
     }
 
+    @Override
+    public Optional<DanhGia> findById(Integer id) {
+        return danhGiaRepository.findById(id);
+    }
 }

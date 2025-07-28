@@ -226,7 +226,7 @@
             </h3>
 
             <div class="row courses-grid">
-                <th:block th:each="khoaHoc, iterStat : ${khoaHocList}" th:if="${iterStat.index < 8}">
+                <th:block th:each="khoaHoc : ${khoaHocPage.content}">
                     <div class="col-12 col-sm-6 col-lg-3 mb-4">
                         <div class="card h-100 shadow-sm course-card"
                             th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
@@ -342,21 +342,41 @@
                     </div>
                 </th:block>
             </div>
+            <!-- Phân trang -->
+            <div class="d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${khoaHocPage.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/(page=${khoaHocPage.number - 1})}">&laquo;</a>
+                    </li>
 
-            <div th:if="${khoaHocList == null or #lists.isEmpty(khoaHocList)}">
-                <p>Không có khóa học nổi bật nào.</p>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, khoaHocPage.totalPages - 1)}"
+                        th:classappend="${i == khoaHocPage.number} ? 'active'">
+                        <a class="page-link" th:href="@{/(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${khoaHocPage.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/(page=${khoaHocPage.number + 1})}">&raquo;</a>
+                    </li>
+                </ul>
             </div>
 
-            <div th:if="${share_success}"
-                class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
-                <strong th:text="${share_success}"></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <div th:if="${share_error}"
-                class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
-                <strong th:text="${share_error}"></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        </div>
+
+        <div th:if="${khoaHocList == null or #lists.isEmpty(khoaHocList)}" style="text-align: center;">
+            <p>Không có khóa học nổi bật nào.</p>
+        </div>
+
+
+        <div th:if="${share_success}"
+            class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+            <strong th:text="${share_success}"></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${share_error}"
+            class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
+            <strong th:text="${share_error}"></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         </div>
 
         <section class="container py-5">

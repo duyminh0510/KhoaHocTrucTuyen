@@ -3,6 +3,9 @@ package com.duantn.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
 
@@ -51,5 +54,13 @@ public interface KhoaHocService {
     List<KhoaHoc> findAllByIds(List<Integer> ids);
 
     List<KhoaHoc> findByGiangVienId(Integer giangvienId);
+
+    Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable);
+
+    // Phân trang theo danh mục
+    Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable);
+
+    // Lấy danh mục theo ID
+    DanhMuc getDanhMucById(Integer id);
 
 }

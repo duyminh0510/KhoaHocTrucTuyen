@@ -8,10 +8,14 @@ import com.duantn.services.KhoaHocService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +28,10 @@ public class TrangChuController {
     private KhoaHocService khoaHocService;
 
     @RequestMapping("/")
-    public String home(HttpServletRequest request, Model model, @ModelAttribute("taiKhoan") TaiKhoan taiKhoan) {
+    public String home(HttpServletRequest request,
+            Model model,
+            @ModelAttribute("taiKhoan") TaiKhoan taiKhoan,
+            @RequestParam(defaultValue = "0") int page) {
         boolean isHocVien = request.isUserInRole("ROLE_HOCVIEN");
         boolean isGiangVien = request.isUserInRole("ROLE_GIANGVIEN");
         boolean isAdmin = request.isUserInRole("ROLE_ADMIN");
@@ -33,9 +40,13 @@ public class TrangChuController {
         if (isAdmin || isNhanVien) {
             return "redirect:/auth/dangnhap?error=unauthorized";
         }
+        int pageSize = 12; // 12 khóa học mỗi trang
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<KhoaHoc> khoaHocPage = khoaHocService.getTatCaKhoaHocPage(pageable);
 
-        model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
+        model.addAttribute("khoaHocPage", khoaHocPage);
         model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
+
         return "views/gdienChung/home";
     }
 

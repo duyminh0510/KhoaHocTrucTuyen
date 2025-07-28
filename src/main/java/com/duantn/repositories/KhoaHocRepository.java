@@ -5,6 +5,7 @@ import com.duantn.entities.KhoaHoc;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.enums.TrangThaiKhoaHoc;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -91,5 +92,7 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
         List<KhoaHoc> findAllByKhoahocIdIn(List<Integer> ids);
 
         List<KhoaHoc> findByGiangVien_GiangvienId(Integer giangvienId);
+
+        Page<KhoaHoc> findByDanhMuc_DanhmucId(Integer danhMucId, Pageable pageable);
 
 }

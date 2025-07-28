@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -185,5 +186,21 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     @Override
     public List<KhoaHoc> findByGiangVienId(Integer giangvienId) {
         return khoaHocRepository.findByGiangVien_GiangvienId(giangvienId);
+    }
+
+    @Override
+    public Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable) {
+        return khoaHocRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable) {
+        return khoaHocRepository.findByDanhMuc_DanhmucId(danhMucId, pageable);
+    }
+
+    @Override
+    public DanhMuc getDanhMucById(Integer id) {
+        Optional<DanhMuc> danhMuc = danhMucRepository.findById(id);
+        return danhMuc.orElse(null);
     }
 }
