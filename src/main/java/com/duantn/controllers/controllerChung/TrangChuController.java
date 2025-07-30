@@ -34,6 +34,12 @@ public class TrangChuController {
             return "redirect:/auth/dangnhap?error=unauthorized";
         }
 
+        Object popupFlag = request.getSession().getAttribute("showPolicyPopup");
+        if (popupFlag != null && popupFlag.equals(true)) {
+            model.addAttribute("showPolicyPopup", true);
+            request.getSession().removeAttribute("showPolicyPopup");
+        }
+
         model.addAttribute("khoaHocList", khoaHocService.getTatCaKhoaHoc());
         model.addAttribute("khoaHocTheoDanhMuc", getKhoaHocTheoDanhMuc());
         return "views/gdienChung/home";

@@ -1,0 +1,84 @@
+.gv-register {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom,
+            hsl(0, 0%, 82%) 0%,
+            #f8f9fa 2%);
+}
+
+.gv-register__full-height {
+    height: 70vh;
+}
+
+.gv-register__img {
+    max-width: 900px;
+
+    height: auto;
+}
+
+.gv-register h3 {
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gv-register__form-wrapper {
+    background-color: transparent;
+    padding: 40px;
+    /* tăng từ 30px */
+    border: none;
+    box-shadow: none;
+}
+
+.gv-register .form-control {
+    border-radius: 8px;
+    padding: 14px;
+    /* trước là 12px */
+    font-size: 1.05rem;
+}
+
+.gv-register__btn {
+    background-color: #1b2a4e;
+    border: none;
+    padding: 14px;
+    /* tăng từ 12px */
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    color: white;
+}
+
+.gv-register__btn:hover {
+    background-color: #12203a;
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.gv-register__form-wrapper {
+    animation: slideInLeft 1s ease-out;
+}
+
+.gv-register__img {
+    animation: slideInRight 1s ease-out;
+}

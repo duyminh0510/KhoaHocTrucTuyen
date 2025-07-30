@@ -17,4 +17,11 @@ public interface BaiGiangService {
     Optional<BaiGiang> findById(Integer id);
 
     BaiGiang findByTracNghiemId(Integer baiTracNghiemId);
+
+    BaiGiang getById(Integer baiGiangId);
+
+    //
+    int countByChuongId(Integer chuongId);
+
+    int demSoBaiGiang(Integer khoahocId);
 }

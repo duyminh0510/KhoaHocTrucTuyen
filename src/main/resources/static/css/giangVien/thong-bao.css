@@ -1,47 +1,83 @@
-        .thongbao {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            padding: 40px 20px;
-            color: #16203b;
-        }
-        
-        .thongbao .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-        
-        .thongbao h1 {
-            font-size: 28px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #16203b;
-            padding-bottom: 10px;
-        }
-        
-        .thongbao .notice {
-            padding: 20px;
-            border-left: 5px solid #16203b;
-            background-color: #f1f3f5;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .thongbao .notice h3 {
-            margin: 0 0 10px;
-            font-size: 20px;
-        }
-        
-        .thongbao .notice p {
-            margin: 0;
-            color: #555;
-        }
-        
-        .thongbao .notice time {
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #888;
-        }
+.thongbao {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+
+/* Tiêu đề danh sách thông báo */
+
+.thongbao-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ffc107 !important;
+}
+
+
+/* Khối "Không có thông báo nào" */
+
+.thongbao-empty {
+    border: 1px dashed #ffc107;
+    color: #ffc107;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+
+/* Card thông báo */
+
+.thongbao-card {
+    border-left: 5px solid #ffc107;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    margin: 0px 50px;
+}
+
+
+/* Hiệu ứng khi hover */
+
+.thongbao-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Ngày gửi */
+
+.thongbao-date {
+    font-size: 0.9rem;
+    color: #adb5bd;
+}
+
+
+/* Tiêu đề trong từng card */
+
+.thongbao-card .card-title {
+    color: #0dcaf0;
+    /* Bootstrap info màu xanh nhạt */
+}
+
+
+/* Nội dung thông báo */
+
+.thongbao-card .card-text {
+    color: #dee2e6;
+}
+
+
+/* Responsive nhỏ gọn trên mobile */
+
+@media (max-width: 576px) {
+    .thongbao-title {
+        font-size: 1.4rem;
+    }
+    .thongbao-card {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .thongbao-title {
+        font-size: 1.4rem;
+    }
+}

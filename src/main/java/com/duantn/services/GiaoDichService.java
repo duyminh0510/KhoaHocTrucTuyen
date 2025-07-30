@@ -23,7 +23,7 @@ public class GiaoDichService {
         return giaoDichKhoaHocChiTietRepository.findAllWithDetails();
     }
 
-    // ✅ Sửa lại để chỉ lấy giao dịch trạng thái HOAN_THANH
+    // Sửa lại để chỉ lấy giao dịch trạng thái HOAN_THANH
     public List<GiaoDichKhoaHoc> getAllGiaoDich() {
         return giaoDichKhoaHocRepository.findAllHoanThanhWithDetails();
     }

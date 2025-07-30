@@ -23,4 +23,10 @@ public class DangHocServiceImpl implements DangHocService {
         return dangHocRepository.findByTaikhoan_TaikhoanIdAndKhoahoc_KhoahocId(taiKhoanId, khoaHocId);
     }
 
+    @Override
+    public boolean isEnrolled(Integer taiKhoanId, Integer khoaHocId) {
+        DangHoc dangHoc = findByTaiKhoanIdAndKhoaHocId(taiKhoanId, khoaHocId);
+        return dangHoc != null;
+    }
+
 }

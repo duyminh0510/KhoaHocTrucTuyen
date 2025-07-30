@@ -1,0 +1,103 @@
+.xacthuc-matkhau {
+    background: linear-gradient(to bottom, #d1dfe9 0%, #ffffff 10%, #f7ecec 66.66%, #eaf3fa 100%);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.xacthuc-matkhau .card {
+    border: none;
+    border-radius: 20px;
+    background-color: transparent;
+
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.xacthuc-matkhau .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.15);
+}
+
+.xacthuc-matkhau .card-header {
+    background: linear-gradient(to right, #0f097c, #3b82f6);
+    color: white;
+    padding: 24px 16px;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.xacthuc-matkhau .card-header h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.xacthuc-matkhau .card-header p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    opacity: 0.95;
+}
+
+.xacthuc-matkhau .form-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.xacthuc-matkhau .form-control {
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    padding: 10px 14px;
+    background-color: #f9fafb;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.xacthuc-matkhau .form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    background-color: #fff;
+}
+
+.xacthuc-matkhau .btn-primary {
+    background-color: #4f46e5;
+    border-color: #ffffff;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.xacthuc-matkhau .btn-primary:hover {
+    background-color: #f28042;
+    box-shadow: 0 6px 16px rgba(255, 151, 77, 0.3);
+    transform: translateY(-2px);
+}
+
+.xacthuc-matkhau .alert-danger {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #b91c1c;
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+}
+
+.xacthuc-matkhau .card-footer {
+    background-color: #f9fafb;
+    padding: 12px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.xacthuc-matkhau .card-footer a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.xacthuc-matkhau .card-footer a:hover {
+    text-decoration: underline;
+}

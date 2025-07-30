@@ -1,0 +1,58 @@
+.dakiemduyet {
+    background-color: #f5f8fb;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.dakiemduyet .card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dakiemduyet .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(11, 28, 54, 0.15);
+}
+
+.dakiemduyet .nav-tabs .nav-link {
+    background-color: #e8edf3;
+    color: #0b1c36;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 600;
+}
+
+.dakiemduyet .nav-tabs .nav-link.active {
+    background-color: #0b1c36;
+    color: white;
+}
+
+.dakiemduyet .instructor-link {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.dakiemduyet .instructor-link:hover {
+    text-decoration: underline;
+    color: #0b1c36;
+}
+
+.dakiemduyet h3 {
+    color: #0b1c36;
+    font-weight: bold;
+}
+
+.dakiemduyet .tab-pane {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

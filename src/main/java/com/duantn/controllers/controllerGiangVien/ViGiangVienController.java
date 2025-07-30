@@ -1,6 +1,8 @@
 package com.duantn.controllers.controllerGiangVien;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.duantn.entities.GiangVien;
 import com.duantn.entities.TaiKhoan;
+import com.duantn.entities.RutTienGiangVien;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.GiangVienService;
 import com.duantn.services.ViGiangVienService;
+import com.duantn.services.TokenService;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -31,6 +36,9 @@ public class ViGiangVienController {
 
     @Autowired
     private GiangVienService giangVienService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @GetMapping
     public String hienThiVi(Model model) {
@@ -73,7 +81,15 @@ public class ViGiangVienController {
             @RequestParam("giangVienId") Integer giangVienId,
             @RequestParam("soTaiKhoan") String soTaiKhoan,
             @RequestParam("tenNganHang") String tenNganHang,
+            @RequestParam("otp") String otp,
             HttpServletResponse response) {
+
+        boolean valid = tokenService.verifyToken(otp).isPresent();
+        if (!valid) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            return;
+        }
+
         boolean success = giangVienService.capNhatThongTinNganHang(giangVienId, soTaiKhoan, tenNganHang);
         if (success) {
             response.setStatus(HttpServletResponse.SC_OK); // 200
@@ -81,4 +97,76 @@ public class ViGiangVienController {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
         }
     }
+
+    // API lấy thông tin tài khoản/ngân hàng gần nhất
+    @GetMapping("/thong-tin-ngan-hang")
+    @ResponseBody
+    public ResponseEntity<?> getThongTinNganHang() {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        RutTienGiangVien last = viGiangVienService.getLastRutTien(giangVien);
+        if (last != null && last.getSoTaiKhoan() != null && last.getTenNganHang() != null) {
+            Map<String, String> result = new HashMap<>();
+            result.put("soTaiKhoan", last.getSoTaiKhoan());
+            result.put("tenNganHang", last.getTenNganHang());
+            result.put("readonly", "true");
+            return ResponseEntity.ok(result);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    // API gửi OTP về email khi rút tiền
+    @PostMapping("/gui-otp")
+    @ResponseBody
+    public ResponseEntity<?> guiOtpRutTien(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        String email = giangVien.getEmail();
+        String name = giangVien.getName();
+        String subject = "Mã xác thực rút tiền";
+        String contentPrefix = "Mã xác thực rút tiền cho tài khoản ngân hàng: " + soTaiKhoan + ", ngân hàng: "
+                + tenNganHang;
+        tokenService.generateAndSendToken(email, name, subject, contentPrefix);
+        return ResponseEntity.ok().build();
+    }
+
+    // API xác thực OTP và tạo yêu cầu rút tiền
+    @PostMapping("/xac-thuc-otp")
+    @ResponseBody
+    public ResponseEntity<?> xacThucOtpRutTien(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang,
+            @RequestParam BigDecimal soTienRut, @RequestParam String otp) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        boolean valid = tokenService.verifyToken(otp).isPresent();
+        if (!valid) {
+            return ResponseEntity.badRequest().body("Mã xác thực không đúng hoặc đã hết hạn!");
+        }
+        boolean success = viGiangVienService.guiYeuCauRutTienFull(giangVien, soTienRut, soTaiKhoan, tenNganHang);
+        if (success) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().body("Số tiền rút không hợp lệ hoặc vượt quá số dư!");
+    }
+
+    // ✅ API gửi OTP khi đổi STK (khác với rút tiền)
+    @PostMapping("/gui-otp-doi-stk")
+    @ResponseBody
+    public ResponseEntity<?> guiOtpDoiSTK(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        String email = giangVien.getEmail();
+        String name = giangVien.getName();
+
+        String subject = "Mã xác thực đổi tài khoản ngân hàng";
+        String contentPrefix = "Mã xác thực để đổi tài khoản ngân hàng thành: " + soTaiKhoan + ", ngân hàng: "
+                + tenNganHang;
+
+        tokenService.generateAndSendToken(email, name, subject, contentPrefix);
+        return ResponseEntity.ok().build();
+    }
+
 }

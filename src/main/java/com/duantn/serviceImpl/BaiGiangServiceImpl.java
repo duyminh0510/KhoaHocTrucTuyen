@@ -10,6 +10,8 @@ import com.duantn.entities.BaiGiang;
 import com.duantn.repositories.BaiGiangRepository;
 import com.duantn.services.BaiGiangService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class BaiGiangServiceImpl implements BaiGiangService {
     @Autowired
@@ -45,6 +47,22 @@ public class BaiGiangServiceImpl implements BaiGiangService {
     @Override
     public BaiGiang findByTracNghiemId(Integer baiTracNghiemId) {
         return baiGiangRepositories.findByTracNghiemId(baiTracNghiemId);
+    }
+
+    @Override
+    public BaiGiang getById(Integer baiGiangId) {
+        return baiGiangRepositories.findById(baiGiangId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bài giảng với ID: " + baiGiangId));
+    }
+
+    @Override
+    public int countByChuongId(Integer chuongId) {
+        return baiGiangRepositories.countByChuong_ChuongId(chuongId);
+    }
+
+    @Override
+    public int demSoBaiGiang(Integer khoahocId) {
+        return baiGiangRepositories.countByKhoahocId(khoahocId);
     }
 
 }

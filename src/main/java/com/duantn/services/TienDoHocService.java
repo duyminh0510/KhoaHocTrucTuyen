@@ -12,4 +12,5 @@ public interface TienDoHocService {
 
     void capNhatTienDoSauKhiHoc(Integer taiKhoanId, Integer baiGiangId);
 
+    int tinhTienDoPhanTram(Integer taiKhoanId, Integer khoaHocId);
 }

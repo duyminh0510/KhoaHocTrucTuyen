@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping({"/admin/yeu-cau-rut-tien", "/nhanvien/yeu-cau-rut-tien"})
+@RequestMapping({ "/admin/yeu-cau-rut-tien", "/nhanvien/yeu-cau-rut-tien" })
 @PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
 public class YeuCauRutTienController {
     private final RutTienGiangVienRepository rutTienRepo;
@@ -31,29 +31,29 @@ public class YeuCauRutTienController {
     public String xemChiTiet(@PathVariable Integer id, Model model) {
         RutTienGiangVien yeuCau = rutTienRepo.findById(id).orElse(null);
         if (yeuCau == null) {
-            return "redirect:../yeu-cau-rut-tien";
+            return "redirect:./"; // về danh sách
         }
         model.addAttribute("yeuCau", yeuCau);
         return "views/gdienQuanLy/chi-tiet-yeu-cau-rut-tien";
     }
 
     @PostMapping("/{id}/duyet")
-    public String duyetYeuCauChiTiet(@PathVariable Integer id) {
+    public String duyetYeuCauChiTiet(@PathVariable Integer id, @RequestHeader("referer") String referer) {
         RutTienGiangVien yeuCau = rutTienRepo.findById(id).orElse(null);
         if (yeuCau != null && yeuCau.getTrangthai() == TrangThaiRutTien.DANG_CHO_XU_LY) {
             yeuCau.setTrangthai(TrangThaiRutTien.THANH_CONG);
             rutTienRepo.save(yeuCau);
         }
-        return "redirect:../yeu-cau-rut-tien";
+        return "redirect:" + referer;
     }
 
     @PostMapping("/{id}/tuchoi")
-    public String tuChoiYeuCauChiTiet(@PathVariable Integer id) {
+    public String tuChoiYeuCauChiTiet(@PathVariable Integer id, @RequestHeader("referer") String referer) {
         RutTienGiangVien yeuCau = rutTienRepo.findById(id).orElse(null);
         if (yeuCau != null && yeuCau.getTrangthai() == TrangThaiRutTien.DANG_CHO_XU_LY) {
             yeuCau.setTrangthai(TrangThaiRutTien.TU_CHOI);
             rutTienRepo.save(yeuCau);
         }
-        return "redirect:../yeu-cau-rut-tien";
+        return "redirect:" + referer;
     }
 }

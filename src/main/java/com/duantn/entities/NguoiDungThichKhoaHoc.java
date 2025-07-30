@@ -1,5 +1,7 @@
 package com.duantn.entities;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NguoiDungThichKhoaHoc {
+public class NguoiDungThichKhoaHoc implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

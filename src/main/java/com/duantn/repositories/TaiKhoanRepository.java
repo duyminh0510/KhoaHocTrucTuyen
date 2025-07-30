@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.duantn.entities.Role;
 import com.duantn.entities.TaiKhoan;
 
+@Repository
 public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     Optional<TaiKhoan> findByEmail(String email);
 
@@ -28,5 +30,10 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
 
     //
     TaiKhoan findByGiangVien_GiangvienId(Integer giangVienId);
+
+    @Query("SELECT COUNT(tk) FROM TaiKhoan tk WHERE tk.role.name = 'ROLE_NHANVIEN'")
+    int countNhanVien();
+
+    List<TaiKhoan> findByRole_Name(String roleName);
 
 }

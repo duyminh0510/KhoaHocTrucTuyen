@@ -84,6 +84,9 @@ public class TaiKhoan implements Serializable {
     @ToString.Exclude
     private List<KetQua> ketqua;
 
+    @ManyToMany(mappedBy = "nguoiNhan")
+    private List<ThongBao> thongBaos;
+
     @Override
     public String toString() {
         return "TaiKhoan{" +
@@ -99,4 +102,3 @@ public class TaiKhoan implements Serializable {
                 '}';
     }
 }
-

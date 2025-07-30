@@ -47,12 +47,6 @@ public class GiangVien implements Serializable {
     @Column(name = "chuyenNganh", columnDefinition = "NVARCHAR(255)")
     private String chuyenNganh;
 
-    @Column(name = "so_tai_khoan", columnDefinition = "NVARCHAR(50)", nullable = true)
-    private String soTaiKhoan;
-
-    @Column(name = "ten_ngan_hang", columnDefinition = "NVARCHAR(100)", nullable = true)
-    private String tenNganHang;
-
     @CreationTimestamp
     @Column(name = "ngaythamgia", updatable = false)
     private LocalDateTime ngayThamGia;
@@ -76,8 +70,6 @@ public class GiangVien implements Serializable {
                 ", ngaySinh=" + ngaySinh +
                 ", gioiTinh='" + gioiTinh + '\'' +
                 ", chuyenNganh='" + chuyenNganh + '\'' +
-                ", soTaiKhoan='" + soTaiKhoan + '\'' +
-                ", tenNganHang='" + tenNganHang + '\'' +
                 ", ngayThamGia=" + ngayThamGia +
                 ", ngayCapNhat=" + ngayCapNhat +
                 ", taikhoanId=" + (taikhoan != null ? taikhoan.getTaikhoanId() : "null") +

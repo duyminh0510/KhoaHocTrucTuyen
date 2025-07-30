@@ -1,6 +1,7 @@
 package com.duantn.repositories;
 
-
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,5 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
     Optional<VerificationToken> findByEmailAndToken(String email, String token);
 
+    List<VerificationToken> findByExpiryTimeBefore(LocalDateTime time);
 }

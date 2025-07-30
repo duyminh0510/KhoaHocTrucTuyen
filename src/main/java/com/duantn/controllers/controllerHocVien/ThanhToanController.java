@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.duantn.dtos.GiaoDichRequest;
 import com.duantn.entities.DangHoc;
 import com.duantn.entities.DoanhThuGiangVien;
-import com.duantn.entities.DangHoc;
-import com.duantn.entities.DoanhThuGiangVien;
 import com.duantn.entities.GiaoDichKhoaHoc;
 import com.duantn.entities.GiaoDichKhoaHocChiTiet;
 import com.duantn.entities.KhoaHoc;
@@ -27,14 +25,11 @@ import com.duantn.enums.HinhThucThanhToan;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.repositories.DangHocRepository;
 import com.duantn.repositories.DoanhThuGiangVienRepository;
-import com.duantn.repositories.DangHocRepository;
-import com.duantn.repositories.DoanhThuGiangVienRepository;
 import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.GiaoDichKhoaHocRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.ThuNhapNenTangRepository;
 import com.duantn.services.CustomUserDetails;
-import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.KhoaHocService;
 
@@ -124,7 +119,7 @@ public class ThanhToanController {
 
         GiaoDichKhoaHoc giaoDichKH = optionalGDKH.get();
 
-        // ✅ Cập nhật trạng thái giao dịch thành HOAN_THANH
+        // Cập nhật trạng thái giao dịch thành HOAN_THANH
         giaoDichKH.setTrangthai(TrangThaiGiaoDich.HOAN_THANH);
         giaoDichKhoaHocRepository.save(giaoDichKH);
 
@@ -142,7 +137,7 @@ public class ThanhToanController {
 
                 giaoDichChiTietRepo.save(chiTiet);
 
-                // ✅ Tạo bản ghi vào bảng DangHoc
+                // Tạo bản ghi vào bảng DangHoc
                 DangHoc dangHoc = DangHoc.builder()
                         .taikhoan(taiKhoan)
                         .khoahoc(kh)
@@ -163,14 +158,28 @@ public class ThanhToanController {
                         .dangHoc(dangHoc) // Gắn với học viên đang học khóa đó
                         .build();
 
-                doanhThuGiangVienRepository.save(doanhThu); // ✅ Lưu vào DB
+                doanhThuGiangVienRepository.save(doanhThu); // Lưu vào DB
+
+                // ✅ Tính phần thu nhập nền tảng (30%)
+                BigDecimal tiLeNenTang = BigDecimal.valueOf(0.3);
+                BigDecimal tienNenTang = kh.getGiaHienTai().multiply(tiLeNenTang);
+
+                // ✅ Tạo bản ghi thu nhập nền tảng
+                ThuNhapNenTang thuNhapNenTang = ThuNhapNenTang.builder()
+                        .sotiennhan(tienNenTang)
+                        .dangHoc(dangHoc)
+                        .tenKhoaHoc(kh.getTenKhoaHoc())
+                        .thuocGiangVien(kh.getGiangVien().getTaikhoan().getName())
+                        .build();
+
+                thuNhapNenTangRepository.save(thuNhapNenTang); // ✅ Lưu vào DB
 
             }
         }
 
-        // ✅ Lấy danh sách khóa học từ danh sách ID gửi lên
+        // Lấy danh sách khóa học từ danh sách ID gửi lên
         List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(request.getKhoaHocIds());
-        // ✅ Gửi email xác nhận
+        // Gửi email xác nhận
         emailThanhToanThanhCongService.sendPaymentSuccessEmail(
                 taiKhoan.getEmail(),
                 taiKhoan.getName(),
@@ -193,7 +202,7 @@ public class ThanhToanController {
 
         GiaoDichKhoaHoc giaoDichKH = optionalGDKH.get();
 
-        // ❌ Cập nhật trạng thái giao dịch thành THAT_BAI
+        // Cập nhật trạng thái giao dịch thành THAT_BAI
         giaoDichKH.setTrangthai(TrangThaiGiaoDich.THAT_BAI);
         giaoDichKhoaHocRepository.save(giaoDichKH);
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác thực Mật khẩu')}">
+    th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác thực Mật khẩu')}">
 
-<main>
+<main class="xacthuc-matkhau">
+
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -12,7 +13,7 @@
                         <p>Để hoàn tất, vui lòng nhập mật khẩu hiện tại của bạn.</p>
                     </div>
                     <div class="card-body">
-                         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
                         <form th:action="@{/dang-ky-giang-vien/verify-password}" method="post">
                             <div class="mb-3">
@@ -32,4 +33,5 @@
         </div>
     </div>
 </main>
+
 </html>

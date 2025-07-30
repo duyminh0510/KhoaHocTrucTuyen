@@ -64,4 +64,6 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, Integer> {
         @Query("SELECT COUNT(gv) FROM GiangVien gv")
         int countGiangVien();
 
+        GiangVien findByTaikhoan_Email(String email);
+
 }

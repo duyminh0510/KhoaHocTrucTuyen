@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác nhận nâng cấp tài khoản')}">
+    th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác nhận nâng cấp tài khoản')}">
 
-<main>
+<main class="xacnhan-nangcap">
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -11,7 +11,8 @@
                         <h3>Nâng cấp tài khoản</h3>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Email <strong th:text="${session.registrationEmail}"></strong> đã được đăng ký với vai trò là một học viên.</p>
+                        <p class="card-text">Email <strong th:text="${session.registrationEmail}"></strong> đã được đăng
+                            ký với vai trò là một học viên.</p>
                         <p>Bạn có muốn nâng cấp tài khoản này lên thành Giảng viên không?</p>
                         <a th:href="@{/dang-ky-giang-vien/upgrade-details}" class="btn btn-primary">Đồng ý nâng cấp</a>
                         <a th:href="@{/}" class="btn btn-secondary">Hủy bỏ</a>
@@ -22,4 +23,4 @@
     </div>
 </main>
 
-</html> 
+</html>

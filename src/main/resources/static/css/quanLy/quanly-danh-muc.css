@@ -1,199 +1,154 @@
-/* Main container styles */
-.dashboard-body {
-    padding: 2rem;
-    background-color: #f0f2f5;
-    min-height: 100vh;
+.danhmuc {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f2f5f9;
+    margin: 0;
+    padding: 0;
 }
 
-.form-container {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    transition: transform 0.3s ease;
-}
-
-.form-container:hover {
-    transform: translateY(-5px);
-}
-
-.form-container h2 {
-    color: #1a237e;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
+.danhmuc .title-section {
     font-weight: 700;
-    position: relative;
-    padding-bottom: 0.75rem;
+    font-size: 28px;
+    color: #34495e;
+    margin-bottom: 30px;
+    animation: fadeInDown 0.5s ease;
 }
 
-.form-container h2::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 60px;
-    background: linear-gradient(90deg, #1a237e, #3949ab);
-    border-radius: 3px;
+.danhmuc .form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Form styles */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    max-width: 600px;
-}
-
-label {
+.danhmuc .form-danh-muc label {
     font-weight: 600;
-    color: #37474f;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 6px;
+    color: #2c3e50;
 }
 
-input[type="text"] {
-    padding: 1rem;
-    border: 2px solid #e0e0e0;
+.danhmuc .form-danh-muc input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 1rem;
+    margin-bottom: 20px;
     transition: all 0.3s ease;
-    background-color: #f8f9fa;
 }
 
-input[type="text"]:focus {
+.danhmuc .form-danh-muc input:focus {
     outline: none;
-    border-color: #1a237e;
-    box-shadow: 0 0 0 4px rgba(26, 35, 126, 0.1);
-    background-color: #fff;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-/* Button styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.8rem 1.8rem;
+.danhmuc .btn-submit {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 10px;
+    width: 100%;
     border: none;
     border-radius: 8px;
     font-weight: 600;
+    transition: 0.3s ease;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    gap: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.9rem;
 }
 
-button.btn {
-    background: linear-gradient(135deg, #1a237e, #3949ab);
-    color: white;
-    box-shadow: 0 4px 15px rgba(26, 35, 126, 0.2);
+.danhmuc .btn-submit:hover {
+    background: linear-gradient(135deg, #2980b9, #2471a3);
+    transform: scale(1.03);
 }
 
-button.btn:hover {
-    background: linear-gradient(135deg, #3949ab, #1a237e);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(26, 35, 126, 0.3);
+.danhmuc .list-card {
+    margin: 50px 30px;
+    padding: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.6s ease;
 }
 
-/* Table styles */
-table {
+.danhmuc .table-danhmuc {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 1.5rem;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-collapse: collapse;
 }
 
-thead {
-    background: linear-gradient(135deg, #1a237e, #3949ab);
+.danhmuc .table-danhmuc thead {
+    background: #344785;
     color: white;
 }
 
-th {
-    padding: 1.2rem;
-    text-align: left;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.9rem;
+.danhmuc .table-danhmuc th,
+.danhmuc .table-danhmuc td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
-td {
-    padding: 1.2rem;
-    border-bottom: 1px solid #e0e0e0;
-    color: #37474f;
-    font-size: 0.95rem;
+.danhmuc .table-danhmuc tbody tr:hover {
+    background-color: #f9f9f9;
 }
 
-tr:last-child td {
-    border-bottom: none;
-}
-
-tr:hover td {
-    background-color: #f5f7fa;
-}
-
-/* Action buttons in table */
-td .btn {
-    padding: 0.6rem;
-    margin-right: 0.8rem;
+.danhmuc .btn-table {
+    padding: 6px 12px;
+    border: none;
     border-radius: 6px;
-    font-size: 1rem;
-}
-
-td .btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #d32f2f, #f44336);
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.3s ease;
     color: white;
-    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.2);
 }
 
-.btn-danger:hover {
-    background: linear-gradient(135deg, #f44336, #d32f2f);
-    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
+.danhmuc .btn-table.edit {
+    background-color: #fdaa25;
+    color: white;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .dashboard-body {
-        padding: 1rem;
-    }
-
-    .form-container {
-        padding: 1.5rem;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    td, th {
-        padding: 1rem;
-    }
-
-    .form-container h2 {
-        font-size: 1.5rem;
-    }
+.danhmuc .btn-table.edit:hover {
+    background-color: #e28e07;
+    color: white;
 }
 
-/* Animation for new items */
+.danhmuc .btn-table.enable {
+    background-color: white;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+.danhmuc .btn-table.enable:hover {
+    background-color: #20914f;
+    color: white !important;
+}
+
+.danhmuc .btn-table.disable {
+    background-color: white;
+    color: rgb(215, 6, 6);
+    border: 1px solid rgb(215, 6, 6);
+}
+
+.danhmuc .btn-table.disable:hover {
+    background-color: rgb(215, 6, 6);
+    color: white !important;
+}
+
+.danhmuc .btn-table:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.danhmuc .empty-note {
+    margin-top: 40px;
+    padding: 15px;
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+
+/* Animation */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -205,6 +160,45 @@ td .btn:hover {
     }
 }
 
-tr {
-    animation: fadeIn 0.5s ease forwards;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.danhmuc .row-disabled {
+    background-color: #ffffff;
+    color: black;
+}
+
+.danhmuc .row-disabled td {
+    color: black;
+}
+
+.danhmuc .row-active {
+    background-color: #ccc;
+}
+
+.danhmuc .table-danhmuc tbody tr:hover {
+    background-color: #b8b6b6;
+}
+
+.danhmuc .table-danhmuc tbody tr.row-disabled:hover {
+    background-color: #b7b2b2;
 }

@@ -1,0 +1,98 @@
+  .danhsachgiangvien {
+      background-color: #f8f9fa;
+      padding: 50px 70px;
+      font-family: 'Segoe UI', sans-serif;
+      animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  .danhsachgiangvien h2 {
+      color: #16203b;
+      margin-bottom: 25px;
+      font-weight: bold;
+  }
+  
+  .danhsachgiangvien .table th {
+      background-color: #16203b;
+      color: white;
+      vertical-align: middle;
+  }
+  
+  .danhsachgiangvien .btn-lock {
+      color: #dc3545;
+      border: 1px solid #dc3545;
+      background-color: white;
+  }
+  
+  .danhsachgiangvien .btn-lock:hover {
+      background-color: #dc3545;
+      color: white;
+  }
+  
+  .danhsachgiangvien .btn-unlock {
+      color: #198754;
+      border: 1px solid #198754;
+      background-color: white;
+  }
+  
+  .danhsachgiangvien .btn-unlock:hover {
+      background-color: #198754;
+      color: white;
+  }
+  
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  @keyframes fadeInDown {
+      from {
+          opacity: 0;
+          transform: translateY(-20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  .danhsachgiangvien .modal-header-custom {
+      background-color: #1f3b64;
+      color: white;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+  }
+  
+  .danhsachgiangvien .modal-content-custom {
+      border-radius: 0.5rem;
+      overflow: hidden;
+  }
+  
+  .danhsachgiangvien .info-item {
+      background-color: #f8f9fa;
+      padding: 12px 16px;
+      border-radius: 0.4rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+  }
+  
+  .danhsachgiangvien .info-item strong {
+      min-width: 100px;
+  }
+  
+  .danhsachgiangvien .info-item span {
+      flex: 1;
+      color: #333;
+  }
+  
+  .danhsachgiangvien .btn-close {
+      display: none !important;
+      /* Ẩn nút X */
+  }

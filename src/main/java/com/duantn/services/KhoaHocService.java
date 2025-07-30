@@ -5,8 +5,12 @@ import java.util.Optional;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
+import com.duantn.enums.TrangThaiKhoaHoc;
 
 public interface KhoaHocService {
+
+    List<KhoaHoc> timTheoTenVaGiangVien(Integer giangvienId, String keyword);
+
     List<KhoaHoc> getTatCaKhoaHoc();
 
     KhoaHoc getKhoaHocById(Integer id);
@@ -42,7 +46,7 @@ public interface KhoaHocService {
     //
     List<KhoaHoc> timKiemTheoTenPublished(String keyword);
 
-    List<KhoaHoc> getTatCaKhoaHocPublished();
+    List<KhoaHoc> layKhoaHocTheoTrangThai(TrangThaiKhoaHoc trangThai);
 
     KhoaHoc getKhoaHocBySlug(String slug);
 

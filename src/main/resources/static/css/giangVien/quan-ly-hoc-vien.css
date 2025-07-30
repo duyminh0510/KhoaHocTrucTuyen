@@ -139,3 +139,55 @@
         transform: translateY(0);
     }
 }
+
+.hocvien .form-hang-ngang {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.hocvien .filter-course {
+    flex: 1;
+}
+
+.hocvien .search-bar {
+    flex: 2;
+}
+
+.hocvien .filter-course form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.hocvien .filter-course label {
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.hocvien .filter-course select,
+.hocvien .search-bar input {
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInMoveUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInMoveUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

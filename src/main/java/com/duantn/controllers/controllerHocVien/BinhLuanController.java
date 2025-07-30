@@ -81,12 +81,12 @@ public class BinhLuanController {
         TaiKhoan user = getCurrentUser();
         if (user == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Bạn cần đăng nhập để bình luận.");
-            return "redirect:/khoahoc/baigiang/" + baiGiangId;
+            return "redirect:/khoa-hoc/bai-giang/" + baiGiangId;
         }
 
         binhLuanService.saveComment(baiGiangId, noiDung, user.getTaikhoanId());
         redirectAttributes.addFlashAttribute("successMessage", "Bình luận của bạn đã được đăng.");
-        return "redirect:/khoahoc/baigiang/" + baiGiangId;
+        return "redirect:/khoa-hoc/bai-giang/" + baiGiangId;
     }
 
     // Trả lời bình luận

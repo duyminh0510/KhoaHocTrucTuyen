@@ -7,4 +7,6 @@ public interface DangHocService {
 
     DangHoc findByTaiKhoanIdAndKhoaHocId(Integer taiKhoanId, Integer khoaHocId);
 
+    boolean isEnrolled(Integer taiKhoanId, Integer khoaHocId);
+
 }
