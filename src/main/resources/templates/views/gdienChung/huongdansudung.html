@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hướng dẫn sử dụng - GlobalEdu</title>
+    </head>
+
+    <body>
+        <main class="huongdansudung">
+            <div class="banner" data-aos="zoom-in">
+                <img th:src="@{/photos/huongdansudung.jpg}"
+                    alt="Học tập trực tuyến">
+            </div>
+            <div class="container">
+                <h1 class="text-3xl font-bold text-blue-700">
+                    <i class="fas fa-graduation-cap mr-2"></i> Hướng dẫn sử dụng
+                    hệ thống <strong>GlobalEdu</strong>
+                </h1>
+
+                <div class="feature-section" data-aos="fade-up">
+                    <div class="feature-img" data-aos="fade-right">
+                        <img th:src="@{/photos/huongdan1.jpg}"
+                            class="img-fluid rounded shadow"
+                            alt="Học tập trực tuyến">
+                    </div>
+
+                    <div class="feature-text" data-aos="fade-left">
+                        <h4>👨‍🎓 Dành cho Học viên</h4>
+                        <p style="text-align: justify;">
+                            Học viên sau khi đăng ký tài khoản sẽ có thể truy
+                            cập hàng ngàn khóa học chất lượng cao trên hệ thống
+                            GlobalEdu. Bạn có thể tìm kiếm khóa học theo lĩnh
+                            vực. Sau khi đăng ký một khóa học, bạn có thể:
+                        </p>
+
+                        <ul>
+                            <li>📚 Theo dõi tiến độ học theo từng chương và bài
+                                giảng
+                            </li>
+                            <li>📝 Làm bài kiểm tra và trắc nghiệm để đánh giá
+                                kiến thức</li>
+                            <li>💬 Thảo luận, hỏi đáp với giảng viên và học viên
+                                khác
+                            </li>
+                            <li>🌟 Viết đánh giá sau khi hoàn thành khóa học
+                            </li>
+                            <li>📥 Tải tài liệu học đi kèm (PDF, slide, bài tập)
+                            </li>
+                            <li>📆 Đặt mục tiêu học tập hàng tuần và theo dõi
+                                hoàn thành</li>
+                            <li>🎓 Nhận chứng nhận hoàn thành khóa học có giá
+                                trị sử dụng</li>
+                            <li>📈 Xem thống kê học tập (tỷ lệ hoàn thành, điểm
+                                trung bình)</li>
+                            <li>🔖 Lưu khóa học yêu thích vào danh sách “Học
+                                sau”
+                            </li>
+                            <li>💡 Xem đề xuất khóa học liên quan để tiếp tục
+                                nâng cao kỹ năng</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-section" data-aos="fade-up">
+                    <div class="feature-text">
+                        <h4 class="text-2xl font-bold text-purple-700 mb-4">
+                            <i class="fas fa-chalkboard-teacher mr-2"></i> Dành
+                            cho Giảng viên
+                        </h4>
+
+                        <p style="text-align: justify;"
+                            class="text-gray-800 leading-relaxed mb-4">
+                            Giảng viên trên <strong>GlobalEdu</strong> được cung
+                            cấp đầy đủ công cụ hiện đại để thiết kế và giảng dạy
+                            khóa học chất lượng. Sau khi đăng ký tài khoản giảng
+                            viên có quyền truy cập vào bảng điều khiển chuyên
+                            biệt, nơi có thể tạo
+                            nội dung, theo dõi tiến độ học viên và quản lý doanh
+                            thu một cách thuận tiện.
+                        </p>
+
+                        <ul class="list-none space-y-3 text-gray-800">
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-pencil-ruler text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Tạo nội dung đa dạng:</strong> Soạn
+                                    giáo trình gồm video, bài viết, tài liệu kèm
+                                    theo và câu hỏi trắc nghiệm dễ dàng, hỗ trợ
+                                    kéo-thả và chỉnh sửa trực quan.
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-layer-group text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Phân chia chương mục:</strong> Tổ
+                                    chức nội dung học theo chương và bài rõ
+                                    ràng, giúp học viên dễ theo dõi lộ trình học
+                                    tập.
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-comment-dots text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Tương tác học viên:</strong> Trả lời
+                                    câu hỏi, bình luận, hỗ trợ trực tiếp học
+                                    viên ngay trong nền tảng.
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-chart-line text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Thống kê chi tiết:</strong> Xem báo
+                                    cáo số lượng học viên, tiến độ học tập, đánh
+                                    giá chất lượng bài giảng.
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-cloud-upload-alt text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Cập nhật dễ dàng:</strong> Bổ sung,
+                                    sửa đổi bài học bất cứ lúc nào mà không gián
+                                    đoạn trải nghiệm học viên.
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    class="fas fa-wallet text-purple-600 w-6 mt-1"></i>
+                                <span class="ml-3">
+                                    <strong>Quản lý doanh thu:</strong> Theo dõi
+                                    thu nhập từ các khóa học và thực hiện yêu
+                                    cầu rút tiền nhanh chóng.
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-img">
+                        <img th:src="@{/photos/huongdan2.jpg}"
+                            class="img-fluid rounded shadow"
+                            alt="Học tập trực tuyến">
+                    </div>
+                </div>
+                <!-- vì sao chọn chúng tôi -->
+                <section class="bg-light py-5">
+                    <div class="container text-center">
+                        <h3 class="mb-4 text-primary fw-bold">
+                            <i class="fas fa-star me-2"></i>Vì sao nên chọn
+                            GlobalEdu?
+                        </h3>
+                        <div class="row g-4">
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div
+                                    class="p-4 bg-white shadow rounded h-100 feature-box"
+                                    data-aos="zoom-in">
+                                    <i
+                                        class="fas fa-chalkboard-teacher fa-2x text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Giảng viên chất lượng
+                                    </h5>
+                                    <p class="text-muted small">Hơn 500+ giảng
+                                        viên có kinh nghiệm thực chiến, giảng
+                                        dạy tận tâm.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div
+                                    class="p-4 bg-white shadow rounded h-100 feature-box"
+                                    data-aos="zoom-in">
+                                    <i
+                                        class="fas fa-clock fa-2x text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Học mọi lúc</h5>
+                                    <p class="text-muted small">Truy cập khóa
+                                        học bất kỳ lúc nào, không giới hạn thời
+                                        gian học.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div
+                                    class="p-4 bg-white shadow rounded h-100 feature-box"
+                                    data-aos="zoom-in">
+                                    <i
+                                        class="fas fa-certificate fa-2x text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Chứng chỉ uy tín</h5>
+                                    <p class="text-muted small">Cấp chứng nhận
+                                        sau khi hoàn thành khóa học, dễ dàng bổ
+                                        sung vào CV.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div
+                                    class="p-4 bg-white shadow rounded h-100 feature-box"
+                                    data-aos="zoom-in">
+                                    <i
+                                        class="fas fa-headset fa-2x text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Hỗ trợ nhanh chóng</h5>
+                                    <p class="text-muted small">Đội ngũ hỗ trợ
+                                        24/7 sẵn sàng giúp bạn giải đáp mọi thắc
+                                        mắc.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container py-5">
+                    <h3 class="text-primary fw-bold text-center mb-4">
+                        <i class="fas fa-question-circle me-2"></i>Câu hỏi
+                        thường gặp
+                    </h3>
+
+                    <div class="accordion" id="faqAccordion">
+                        <!-- FAQ 1 -->
+                        <div class="accordion-item" data-aos="fade-up"
+                            data-aos-delay="100">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button fw-bold"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapse1"
+                                    aria-expanded="true"
+                                    aria-controls="faqCollapse1">
+                                    💡 Tôi có thể học vào lúc nào?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse1"
+                                class="accordion-collapse collapse show"
+                                aria-labelledby="faq1"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Bạn có thể học bất cứ lúc nào phù hợp, vì
+                                    khóa học hoạt động 24/7 và không giới hạn
+                                    thời gian truy cập.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="accordion-item" data-aos="fade-up"
+                            data-aos-delay="100">
+                            <h2 class="accordion-header" id="faq2">
+                                <button
+                                    class="accordion-button collapsed fw-bold"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapse2"
+                                    aria-expanded="false"
+                                    aria-controls="faqCollapse2">
+                                    🧑‍🏫 Giảng viên là ai?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse2"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="faq2"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Các giảng viên đều có kinh nghiệm thực tế,
+                                    đã và đang làm việc tại các doanh nghiệp,
+                                    tập đoàn lớn.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="accordion-item" data-aos="fade-up"
+                            data-aos-delay="100">
+                            <h2 class="accordion-header" id="faq3">
+                                <button
+                                    class="accordion-button collapsed fw-bold"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapse3"
+                                    aria-expanded="false"
+                                    aria-controls="faqCollapse3">
+                                    🧾 Có cấp chứng chỉ sau khi học không?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse3"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="faq3"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Có. Sau khi hoàn thành khóa học và vượt qua
+                                    bài kiểm tra, bạn sẽ nhận được chứng chỉ từ
+                                    GlobalEdu.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 4 -->
+                        <div class="accordion-item" data-aos="fade-up"
+                            data-aos-delay="100">
+                            <h2 class="accordion-header" id="faq4">
+                                <button
+                                    class="accordion-button collapsed fw-bold"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapse4"
+                                    aria-expanded="false"
+                                    aria-controls="faqCollapse4">
+                                    💰 Làm sao để thanh toán khóa học?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse4"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="faq4"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Bạn có thể thanh toán bằng ví điện tử,
+                                    chuyển khoản ngân hàng, hoặc VNPay dễ dàng
+                                    và bảo mật.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 5 (câu mới) -->
+                        <div class="accordion-item" data-aos="fade-up"
+                            data-aos-delay="100">
+                            <h2 class="accordion-header" id="faq5">
+                                <button
+                                    class="accordion-button collapsed fw-bold"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapse5"
+                                    aria-expanded="false"
+                                    aria-controls="faqCollapse5">
+                                    🛠 Khóa học có cập nhật nội dung mới không?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse5"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="faq5"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Có! Các khóa học sẽ được cập nhật kiến thức
+                                    mới, bài giảng hoặc tài liệu bổ sung định kỳ
+                                    để phù hợp xu hướng thực tế.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </body>
+
+</html>

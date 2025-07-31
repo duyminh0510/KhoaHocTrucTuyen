@@ -31,4 +31,9 @@ public interface DanhGiaService {
     Double diemTrungBinh(Integer khoaHocId);
 
     List<DanhGia> findByDanhGia(Integer khoaHocId);
+
+    List<DanhGia> findByGiangVienId(Integer giangvienId);
+
+    Optional<DanhGia> findById(Integer id);
+
 }

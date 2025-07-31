@@ -97,6 +97,15 @@ public class KhoaHoc implements Serializable {
     @OneToMany(mappedBy = "khoahoc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DanhGia> danhGiaList;
 
+    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GiaoDichKhoaHocChiTiet> giaoDichChiTiets;
+
+    @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GioHangChiTiet> gioHangChiTiets;
+
+    @OneToMany(mappedBy = "khoaHoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<NguoiDungThichKhoaHoc> nguoiDungThichList;
+
     @Override
     public String toString() {
         return "KhoaHoc{" +

@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface GiaoDichKhoaHocChiTietRepository extends JpaRepository<GiaoDichKhoaHocChiTiet, Integer> {
 
+       // Kiểm tra xem có chi tiết giao dịch nào liên quan đến khoá học hay không
+       boolean existsByKhoahoc_KhoahocId(Integer khoahocId);
+       
        // Query đơn giản hơn để test
        @Query("SELECT gdct FROM GiaoDichKhoaHocChiTiet gdct " +
                      "JOIN FETCH gdct.giaoDichKhoaHoc gd " +

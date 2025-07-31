@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.duantn.entities.Role;
 import com.duantn.entities.TaiKhoan;
@@ -35,5 +37,7 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     int countNhanVien();
 
     List<TaiKhoan> findByRole_Name(String roleName);
+
+    Page<TaiKhoan> findByRole(Role role, Pageable pageable);
 
 }

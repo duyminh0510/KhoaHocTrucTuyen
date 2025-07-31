@@ -32,4 +32,9 @@ public interface DoanhThuGiangVienRepository extends JpaRepository<DoanhThuGiang
 
     List<DoanhThuGiangVien> findByTaikhoanGV(TaiKhoan taiKhoan);
 
+    @Query("SELECT d FROM DoanhThuGiangVien d " +
+       "LEFT JOIN FETCH d.dangHoc dh " +
+       "LEFT JOIN FETCH dh.khoahoc " +
+       "WHERE d.taikhoanGV = :taiKhoan")
+List<DoanhThuGiangVien> findWithKhoaHocByGiangVien(@Param("taiKhoan") TaiKhoan taiKhoan);
 }

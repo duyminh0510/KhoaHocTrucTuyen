@@ -4,22 +4,52 @@
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ví giảng viên</title>
+        <title>Ví Giảng Viên</title>
+        <style>
+        .modal-content {
+            margin: auto;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+        }
+        
+        .modal-body input,
+        .modal-footer button {
+            font-size: 16px;
+        }
+        
+        .modal-header {
+            border-bottom: none;
+        }
+        
+        .modal-footer {
+            border-top: none;
+        }
+        
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - 1rem);
+            /* giữa chiều dọc */
+        }
+    </style>
+
     </head>
 
     <body>
-        <main class="vigiangvien">
+        <main>
+            <div id="toastContainer" class="position-fixed top-0 end-0 p-3"
+                style="z-index: 1055;"></div>
+
             <div class="container mt-4">
                 <h2>Ví Giảng Viên</h2>
 
                 <!-- Thông báo -->
-                <div th:if="${param.success}" class="alert alert-success mt-3">
-                    Yêu cầu rút tiền đã gửi thành công!
-                </div>
-                <div th:if="${param.error}" class="alert alert-danger mt-3">
-                    Số tiền rút không hợp lệ hoặc vượt quá số dư!
-                </div>
+                <div th:if="${param.success}"
+                    class="alert alert-success mt-3">Yêu cầu rút tiền đã gửi
+                    thành công!</div>
+                <div th:if="${param.error}" class="alert alert-danger mt-3">Số
+                    tiền rút không hợp lệ hoặc vượt quá số dư!</div>
 
                 <!-- Số dư -->
                 <div class="card mb-3">
@@ -50,7 +80,7 @@
                     </div>
                 </div>
 
-                <!-- Modal STK -->
+                <!-- Modal Nhập Thông Tin Ngân Hàng -->
                 <div class="modal fade" id="modalSTK" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -80,6 +110,8 @@
                                                         <option
                                                             value="ACB (Ngân hàng TMCP Á Châu)">
                                                         </datalist>
+
+                                                        <!-- ✅ Nút đổi ngân hàng NẰM NGOÀI datalist -->
                                                         <div
                                                             class="text-end mt-1">
                                                             <button
@@ -122,200 +154,271 @@
                                                             class="form-control mb-2"
                                                             placeholder="Nhập hoặc chọn ngân hàng mới"
                                                             required>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button"
-                                                            class="btn btn-primary"
-                                                            onclick="xacNhanDoiSTK()">Xác
-                                                            nhận</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                        <datalist
+                                                            id="dsNganHang">
+                                                            <option
+                                                                value="Vietcombank (Ngân hàng TMCP Ngoại thương Việt Nam)">
+                                                                <option
+                                                                    value="VietinBank (Ngân hàng TMCP Công Thương Việt Nam)">
+                                                                    <option
+                                                                        value="BIDV (Ngân hàng TMCP Đầu tư và Phát triển Việt Nam)">
+                                                                        <option
+                                                                            value="Agribank (Ngân hàng Nông nghiệp và Phát triển Nông thôn)">
+                                                                            <option
+                                                                                value="Techcombank (Ngân hàng TMCP Kỹ Thương Việt Nam)">
+                                                                                <option
+                                                                                    value="ACB (Ngân hàng TMCP Á Châu)">
+                                                                                </datalist>
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-footer">
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    onclick="xacNhanDoiSTK()">Xác
+                                                                                    nhận</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                        <!-- Modal OTP -->
-                                        <div class="modal fade" id="modalOTP"
-                                            tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5
-                                                            class="modal-title">Xác
-                                                            thực OTP</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <input id="otp"
-                                                            type="text"
-                                                            class="form-control mb-2"
-                                                            placeholder="Nhập mã OTP vừa nhận qua email">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button"
-                                                            class="btn btn-primary"
-                                                            onclick="submitOTP()">Xác
-                                                            nhận</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                                <!-- Modal Nhập OTP -->
+                                                                <div
+                                                                    class="modal fade"
+                                                                    id="modalOTP"
+                                                                    tabindex="-1">
+                                                                    <div
+                                                                        class="modal-dialog">
+                                                                        <div
+                                                                            class="modal-content">
+                                                                            <div
+                                                                                class="modal-header">
+                                                                                <h5
+                                                                                    class="modal-title">Xác
+                                                                                    thực
+                                                                                    OTP
+                                                                                </h5>
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-body">
+                                                                                <input
+                                                                                    id="otp"
+                                                                                    type="text"
+                                                                                    class="form-control mb-2"
+                                                                                    placeholder="Nhập mã OTP vừa nhận qua email">
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-footer">
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    onclick="submitOTP()">Xác
+                                                                                    nhận</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                        <!-- Lịch sử nhận tiền -->
-                                        <div class="card mb-3">
-                                            <div class="card-header">Lịch Sử
-                                                Nhận Tiền</div>
-                                            <div class="card-body">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Mã</th>
-                                                            <th>Số tiền</th>
-                                                            <th>Ngày</th>
-                                                            <th>Khóa học</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            th:each="item : ${lichSuThuNhap}">
-                                                            <td
-                                                                th:text="${item.doanhthuId}"></td>
-                                                            <td
-                                                                th:text="${#numbers.formatDecimal(item.sotiennhan, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
-                                                            <td
-                                                                th:text="${#temporals.format(item.ngaynhan, 'dd-MM-yyyy HH:mm')}"></td>
-                                                            <td
-                                                                th:text="${item.dangHoc != null and item.dangHoc.khoahoc != null ? item.dangHoc.khoahoc.tenKhoaHoc : 'Không rõ'}"></td>
-                                                        </tr>
-                                                        <tr
-                                                            th:if="${lichSuThuNhap.isEmpty()}">
-                                                            <td colspan="4"
-                                                                class="text-center">Không
-                                                                có dữ liệu</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                                                <!-- Lịch sử nhận tiền -->
+                                                                <div
+                                                                    class="card mb-3">
+                                                                    <div
+                                                                        class="card-header">Lịch
+                                                                        Sử Nhận
+                                                                        Tiền
+                                                                    </div>
+                                                                    <div
+                                                                        class="card-body">
+                                                                        <table
+                                                                            class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Mã</th>
+                                                                                    <th>Số
+                                                                                        tiền
+                                                                                    </th>
+                                                                                    <th>Ngày</th>
+                                                                                    <th>Khóa
+                                                                                        học
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr
+                                                                                    th:each="item : ${lichSuThuNhap}">
+                                                                                    <td
+                                                                                        th:text="${item.doanhthuId}"></td>
+                                                                                    <td
+                                                                                        th:text="${#numbers.formatDecimal(item.sotiennhan, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                                                                                    <td
+                                                                                        th:text="${#temporals.format(item.ngaynhan, 'dd-MM-yyyy HH:mm')}"></td>
+                                                                                    <td
+                                                                                        th:text="${item.dangHoc != null and item.dangHoc.khoahoc != null ? item.dangHoc.khoahoc.tenKhoaHoc : 'Không rõ'}"></td>
+                                                                                </tr>
+                                                                                <tr
+                                                                                    th:if="${lichSuThuNhap.isEmpty()}">
+                                                                                    <td
+                                                                                        colspan="4"
+                                                                                        class="text-center">Không
+                                                                                        có
+                                                                                        dữ
+                                                                                        liệu
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
 
-                                        <!-- Lịch sử rút tiền -->
-                                        <div class="card mb-3">
-                                            <div class="card-header">Lịch Sử Rút
-                                                Tiền
-                                            </div>
-                                            <div class="card-body">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Mã</th>
-                                                            <th>Số tiền</th>
-                                                            <th>Ngày</th>
-                                                            <th>Trạng thái</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            th:each="item : ${lichSuRutTien}">
-                                                            <td
-                                                                th:text="${item.rutTienId}"></td>
-                                                            <td
-                                                                th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
-                                                            <td
-                                                                th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
-                                                            <td
-                                                                th:switch="${item.trangthai.name()}">
-                                                                <span
-                                                                    th:case="'DANG_CHO_XU_LY'"
-                                                                    class="text-warning">Đang
-                                                                    chờ xử
-                                                                    lý</span>
-                                                                <span
-                                                                    th:case="'THANH_CONG'"
-                                                                    class="text-success">Thành
-                                                                    công</span>
-                                                                <span
-                                                                    th:case="'TU_CHOI'"
-                                                                    class="text-danger">Từ
-                                                                    chối</span>
-                                                                <span
-                                                                    th:case="*">Không
-                                                                    xác
-                                                                    định</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr
-                                                            th:if="${lichSuRutTien.isEmpty()}">
-                                                            <td colspan="4"
-                                                                class="text-center">Không
-                                                                có dữ liệu</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                                                <!-- Lịch sử rút tiền -->
+                                                                <div
+                                                                    class="card mb-3">
+                                                                    <div
+                                                                        class="card-header">Lịch
+                                                                        Sử Rút
+                                                                        Tiền
+                                                                    </div>
+                                                                    <div
+                                                                        class="card-body">
+                                                                        <table
+                                                                            class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Mã</th>
+                                                                                    <th>Số
+                                                                                        tiền
+                                                                                    </th>
+                                                                                    <th>Ngày</th>
+                                                                                    <th>Trạng
+                                                                                        thái
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr
+                                                                                    th:each="item : ${lichSuRutTien}">
+                                                                                    <td
+                                                                                        th:text="${item.rutTienId}"></td>
+                                                                                    <td
+                                                                                        th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                                                                                    <td
+                                                                                        th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                                                                                    <td
+                                                                                        th:switch="${item.trangthai.name()}">
+                                                                                        <span
+                                                                                            th:case="'DANG_CHO_XU_LY'"
+                                                                                            class="text-warning">Đang
+                                                                                            chờ
+                                                                                            xử
+                                                                                            lý</span>
+                                                                                        <span
+                                                                                            th:case="'THANH_CONG'"
+                                                                                            class="text-success">Thành
+                                                                                            công</span>
+                                                                                        <span
+                                                                                            th:case="'TU_CHOI'"
+                                                                                            class="text-danger">Từ
+                                                                                            chối</span>
+                                                                                        <span
+                                                                                            th:case="*">Không
+                                                                                            xác
+                                                                                            định</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr
+                                                                                    th:if="${lichSuRutTien.isEmpty()}">
+                                                                                    <td
+                                                                                        colspan="4"
+                                                                                        class="text-center">Không
+                                                                                        có
+                                                                                        dữ
+                                                                                        liệu
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
 
-                                        <!-- Yêu cầu đang chờ xử lý -->
-                                        <div class="card mb-3">
-                                            <div class="card-header">Yêu Cầu
-                                                Đang Chờ Xử Lý</div>
-                                            <div class="card-body">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Mã</th>
-                                                            <th>Số tiền</th>
-                                                            <th>Ngày</th>
-                                                            <th>Trạng thái</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            th:each="item : ${yeuCauDangXuLy}">
-                                                            <td
-                                                                th:text="${item.rutTienId}"></td>
-                                                            <td
-                                                                th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
-                                                            <td
-                                                                th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
-                                                            <td
-                                                                th:switch="${item.trangthai.name()}">
-                                                                <span
-                                                                    th:case="'DANG_CHO_XU_LY'"
-                                                                    class="text-warning">Đang
-                                                                    chờ xử
-                                                                    lý</span>
-                                                                <span
-                                                                    th:case="'THANH_CONG'"
-                                                                    class="text-success">Thành
-                                                                    công</span>
-                                                                <span
-                                                                    th:case="'TU_CHOI'"
-                                                                    class="text-danger">Từ
-                                                                    chối</span>
-                                                                <span
-                                                                    th:case="*">Không
-                                                                    xác
-                                                                    định</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr
-                                                            th:if="${yeuCauDangXuLy.isEmpty()}">
-                                                            <td colspan="4"
-                                                                class="text-center">Không
-                                                                có yêu cầu nào
-                                                                đang xử lý</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                                <!-- Yêu cầu đang chờ xử lý -->
+                                                                <div
+                                                                    class="card mb-3">
+                                                                    <div
+                                                                        class="card-header">Yêu
+                                                                        Cầu Đang
+                                                                        Chờ Xử
+                                                                        Lý
+                                                                    </div>
+                                                                    <div
+                                                                        class="card-body">
+                                                                        <table
+                                                                            class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Mã</th>
+                                                                                    <th>Số
+                                                                                        tiền
+                                                                                    </th>
+                                                                                    <th>Ngày</th>
+                                                                                    <th>Trạng
+                                                                                        thái
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr
+                                                                                    th:each="item : ${yeuCauDangXuLy}">
+                                                                                    <td
+                                                                                        th:text="${item.rutTienId}"></td>
+                                                                                    <td
+                                                                                        th:text="${#numbers.formatDecimal(item.soTienRut, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                                                                                    <td
+                                                                                        th:text="${#temporals.format(item.ngayrut, 'dd-MM-yyyy HH:mm')}"></td>
+                                                                                    <td
+                                                                                        th:switch="${item.trangthai.name()}">
+                                                                                        <span
+                                                                                            th:case="'DANG_CHO_XU_LY'"
+                                                                                            class="text-warning">Đang
+                                                                                            chờ
+                                                                                            xử
+                                                                                            lý</span>
+                                                                                        <span
+                                                                                            th:case="'THANH_CONG'"
+                                                                                            class="text-success">Thành
+                                                                                            công</span>
+                                                                                        <span
+                                                                                            th:case="'TU_CHOI'"
+                                                                                            class="text-danger">Từ
+                                                                                            chối</span>
+                                                                                        <span
+                                                                                            th:case="*">Không
+                                                                                            xác
+                                                                                            định</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr
+                                                                                    th:if="${yeuCauDangXuLy.isEmpty()}">
+                                                                                    <td
+                                                                                        colspan="4"
+                                                                                        class="text-center">Không
+                                                                                        có
+                                                                                        yêu
+                                                                                        cầu
+                                                                                        nào
+                                                                                        đang
+                                                                                        xử
+                                                                                        lý
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
 
-                                    <!-- Toast Container -->
-                                    <div id="toastContainer"
-                                        class="position-fixed bottom-0 end-0 p-3"
-                                        style="z-index: 1055;"></div>
-
-                                    <script th:inline="javascript">
-            const giangVienId = /*[[${session.giangVien.giangvienId}]]*/ 0;
+                                                            </div>
+                                                            <script
+                                                                th:inline="javascript">
+            const giangVienId = /*[[${giangvienId}]]*/ 0;
             let soTaiKhoan = '';
             let tenNganHang = '';
             let isFirstTime = true;
@@ -502,11 +605,12 @@
                 const toastId = `toast-${Date.now()}`;
                 const toastHtml = `
     <div id="${toastId}" class="toast align-items-center text-white ${isSuccess ? 'bg-success' : 'bg-danger'} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
+      <div class="d-flex">
         <div class="toast-body">${message}</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
     </div>
-    </div>`;
+  `;
                 $('#toastContainer').append(toastHtml);
 
                 // Tự đóng sau 5s
@@ -515,7 +619,7 @@
                 }, 5000);
             }
         </script>
+                                                        </main>
+                                                    </body>
 
-                                </body>
-
-                            </html>
+                                                </html>

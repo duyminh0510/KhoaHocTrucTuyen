@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
@@ -18,6 +19,7 @@ import com.duantn.entities.TaiKhoan;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.repositories.DanhMucRepository;
+import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
@@ -27,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KhoaHocServiceImpl implements KhoaHocService {
+
+    @Autowired
+    private GiaoDichKhoaHocChiTietRepository giaoDichKhoaHocChiTietRepository;
+
     @Autowired
     private KhoaHocRepository khoaHocRepository;
     @Autowired
@@ -193,4 +199,54 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.timKiemTheoTenVaGiangVien(giangvienId, keyword);
     }
 
+    @Override
+    public Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable) {
+        return khoaHocRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable) {
+        return khoaHocRepository.findByDanhMuc_DanhmucId(danhMucId, pageable);
+    }
+
+    @Override
+@Transactional
+public boolean xoaKhoaHocNeuKhongCoNguoiHoc(Integer khoaHocId) {
+    Optional<KhoaHoc> optional = khoaHocRepository.findById(khoaHocId);
+    if (optional.isEmpty()) return false;
+    KhoaHoc khoaHoc = optional.get();
+
+    boolean daCoNguoiHoc = giaoDichKhoaHocChiTietRepository.existsByKhoahoc_KhoahocId(khoaHocId);
+
+    if (daCoNguoiHoc) {
+        // Có người đang học => không xoá mà chỉ ẩn khóa học
+        if (khoaHoc.getTrangThai() == TrangThaiKhoaHoc.PUBLISHED) {
+            khoaHoc.setTrangThai(TrangThaiKhoaHoc.HIDDEN);
+            khoaHocRepository.save(khoaHoc);
+            return false;
+        } else if (khoaHoc.getTrangThai() == TrangThaiKhoaHoc.DRAFT) {
+            // Nếu là bản nháp vẫn cho phép xóa
+            khoaHocRepository.deleteById(khoaHocId);
+            return true;
+        } else {
+            // Các trạng thái khác cũng cho phép xóa
+            khoaHocRepository.deleteById(khoaHocId);
+            return true;
+        }
+    } else {
+        // Không ai học => kiểm tra trạng thái
+        if (khoaHoc.getTrangThai() == TrangThaiKhoaHoc.PUBLISHED) {
+            khoaHoc.setTrangThai(TrangThaiKhoaHoc.HIDDEN);
+            khoaHocRepository.save(khoaHoc);
+            return false;
+        } else if (khoaHoc.getTrangThai() == TrangThaiKhoaHoc.DRAFT) {
+            khoaHocRepository.deleteById(khoaHocId);
+            return true;
+        } else {
+            // Các trạng thái khác cũng cho phép xóa
+            khoaHocRepository.deleteById(khoaHocId);
+            return true;
+        }
+    }
+}
 }

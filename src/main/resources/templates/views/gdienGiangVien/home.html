@@ -15,10 +15,11 @@
             <!-- KHÓA HỌC BẠN ĐÃ TẠO -->
             <section class="mb-5">
                 <h1 class="text-center mb-5">Khoá học đã tạo</h1>
+                <div th:if="${message}" class="alert alert-success text-center mb-4" th:text="${message}"></div>
+
 
                 <div class="mb-4">
-                    <form method="get" th:action="@{/giangvien/khoa-hoc-da-tao}"
-                        class="search-form">
+                    <form method="get" th:action="@{/giangvien/trang-giang-vien}" class="search-form">
                         <div class="search-group">
                             <input type="text" class="form-control"
                                 name="keyword"
@@ -49,160 +50,58 @@
                                 hợp với từ khoá "<span
                                     th:text="${keyword}">...</span>".</p>
                         </div>
-                        <th:block th:each="khoaHoc, iterStat : ${khoaHocList}"
-                            th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PUBLISHED and iterStat.index < 8}">
+                        <th:block th:if="${khoaHocList != null}" th:each="khoaHoc, iterStat : ${khoaHocList}">
+  <div th:if="${(khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PUBLISHED
+        or khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).DRAFT
+        or khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).REJECTED
+        or khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PENDING_APPROVAL)
+        and iterStat.index < 8}"
+       class="col-12 col-sm-6 col-lg-3 mb-4">
+    <div class="card h-100 shadow-sm course-card"
+         th:onclick="|window.location.href='/giangvien/khoa-hoc/chi-tiet?id=${khoaHoc.khoahocId}'|">
 
-                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
-                                <div class="card h-100 shadow-sm course-card"
-                                    th:onclick="|window.location.href='/khoaHoc/${khoaHoc.khoahocId}'|">
-                                    <img class="card-img-top"
-                                        th:src="${khoaHoc.anhBia}"
-                                        alt="Ảnh khoá học" />
+      <img class="card-img-top" th:src="${khoaHoc.anhBia}" alt="Ảnh khoá học" />
 
-                                    <div
-                                        class="card-body d-flex flex-column pb-0">
-                                        <h5 class="card-title"
-                                            th:text="${khoaHoc.tenKhoaHoc}">Tên
-                                            khóa học
-                                        </h5>
-                                        <p
-                                            class="card-text small text-muted mt-auto">
-                                            <i
-                                                class="fas fa-chalkboard-teacher me-1"></i>
-                                            Giảng viên:
-                                            <span
-                                                th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">Tên
-                                                giảng viên</span>
-                                        </p>
-                                    </div>
+      <div class="card-body d-flex flex-column pb-0">
+        <h5 class="card-title" th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h5>
+        <p class="card-text small text-muted mt-auto">
+          <i class="fas fa-chalkboard-teacher me-1"></i>
+          Giảng viên:
+          <span th:if="${khoaHoc.giangVien != null and khoaHoc.giangVien.taikhoan != null}"
+                th:text="${khoaHoc.giangVien.taikhoan.name}">Tên giảng viên</span>
+          <span th:unless="${khoaHoc.giangVien != null and khoaHoc.giangVien.taikhoan != null}">
+                Đang cập nhật
+          </span>
+        </p>
+        <!-- ✅ Trạng thái khóa học -->
+  <p class="card-text small fw-semibold">
+    Trạng thái:
+    <span th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).DRAFT}" class="text-warning">Bản nháp</span>
+    <span th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).REJECTED}" class="text-danger">Bị từ chối</span>
+    <span th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PUBLISHED}" class="text-success">Đã xuất bản</span>
+    <span th:if="${khoaHoc.trangThai == T(com.duantn.enums.TrangThaiKhoaHoc).PENDING_APPROVAL}" class="text-success">Đang chờ duyệt</span>
+  </p>
+      </div>
 
-                                    <div class="card-footer pt-0">
-                                        <div class="mb-3">
-                                            <p
-                                                th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
-                                                class="card-text mb-0">
-                                                <span
-                                                    class="fw-bold text-danger me-2"
-                                                    th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                                <del class="text-muted"
-                                                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
-                                            </p>
-                                            <p
-                                                th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
-                                                class="card-text fw-bold mb-0">
-                                                <span
-                                                    th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
-                                            </p>
-                                        </div>
+      <div class="card-footer pt-0">
+        <div class="mb-3">
+          <p th:if="${khoaHoc.giaKhuyenMai != null and khoaHoc.giaKhuyenMai.doubleValue() > 0}"
+             class="card-text mb-0">
+            <span class="fw-bold text-danger me-2"
+                  th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+            <del class="text-muted"
+                 th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></del>
+          </p>
+          <p th:if="${khoaHoc.giaKhuyenMai == null or khoaHoc.giaKhuyenMai.doubleValue() == 0}"
+             class="card-text fw-bold mb-0">
+            <span th:text="${#numbers.formatDecimal(khoaHoc.giagoc, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
 
-                                        <div
-                                            class="d-flex justify-content-between align-items-center px-2 pb-3 gap-1">
-                                            <button type="button"
-                                                class="btn btn-sm like-btn"
-                                                th:id="'like-btn-' + ${khoaHoc.khoahocId}"
-                                                th:classappend="${likedCourseIds.contains(khoaHoc.khoahocId)} ? 'btn-danger' : 'btn-outline-danger'"
-                                                th:attr="data-id=${khoaHoc.khoahocId}">
-                                                <i
-                                                    class="fas fa-heart me-1"></i>
-                                                <span
-                                                    th:id="'like-count-' + ${khoaHoc.khoahocId}"
-                                                    th:text="${khoaHoc.luotThich != null ? khoaHoc.luotThich : 0}">
-                                                </span>
-                                            </button>
-
-                                            <button type="button"
-                                                class="btn btn-outline-primary btn-sm share-btn"
-                                                data-bs-toggle="modal"
-                                                th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                                <i
-                                                    class="fas fa-share me-1"></i>
-                                            </button>
-
-                                            <!-- <form th:action="@{/gio-hang/them}" method="post" class="d-inline add-to-cart-form">
-                                        <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}" />
-                                        <button type="submit" class="btn btn-outline-success btn-sm">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                    </form> -->
-
-                                            <button
-                                                class="btn btn-sm btn-outline-success add-to-cart-btn"
-                                                th:attr="data-id=${khoaHoc.khoahocId},
-                                            data-name=${khoaHoc.tenKhoaHoc},
-                                            data-gia=${khoaHoc.giaKhuyenMai != null && khoaHoc.giaKhuyenMai > 0 ? khoaHoc.giaKhuyenMai : khoaHoc.giagoc},
-                                            data-giagoc=${khoaHoc.giagoc},
-                                            data-anh=${khoaHoc.anhBia},
-                                            data-giangvien=${khoaHoc.giangVien.taikhoan.name}">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Modal chia sẻ -->
-                                <div class="modal fade"
-                                    th:id="'shareModal-' + ${khoaHoc.khoahocId}"
-                                    tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Chia sẻ
-                                                    khóa học: <span
-                                                        th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
-                                                <button type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <form
-                                                th:action="@{/hoc-vien/share-course}"
-                                                method="post" class="ajax-form">
-                                                <div class="modal-body">
-                                                    <input type="hidden"
-                                                        name="courseId"
-                                                        th:value="${khoaHoc.khoahocId}" />
-                                                    <div class="mb-3">
-                                                        <label
-                                                            for="recipientEmail"
-                                                            class="form-label">Email
-                                                            người nhận:</label>
-                                                        <input type="email"
-                                                            name="recipientEmail"
-                                                            class="form-control"
-                                                            required
-                                                            placeholder="nhapemail@example.com">
-                                                    </div>
-                                                    <p>Một email chứa thông tin
-                                                        và liên kết đến khóa học
-                                                        này sẽ được gửi đến địa
-                                                        chỉ trên.
-                                                    </p>
-                                                </div>
-
-                                                <!-- Thông báo Ajax -->
-                                                <div
-                                                    class="ajax-message text-center px-3"></div>
-
-                                                <div class="modal-footer">
-                                                    <div
-                                                        class="d-flex justify-content-end gap-2 w-100">
-                                                        <button type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit"
-                                                            class="btn fw-semibold text-white"
-                                                            style="background-color: #16203b;">Gửi
-                                                            Email</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th:block>
                     </div>
 
                     <div class="add-new">
@@ -216,8 +115,7 @@
                 <section class="mb-5">
                     <h2 class="mb-4">🔥 Khóa học được mua nhiều nhất</h2>
                     <div class="row g-4">
-                        <div class="col-md-4"
-                            th:each="khoaHoc : ${topKhoaHocList}">
+                        <div class="col-md-4" th:if="${topKhoaHocList != null}" th:each="khoaHoc : ${topKhoaHocList}">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body">
                                     <h5 class="card-title"
@@ -232,7 +130,7 @@
                     </div>
                 </section>
 
-                <!-- THÔNG BÁO MỚI -->
+                <!-- THÔNG BÁO MỚI --> 
                 <section class="mb-5">
                     <h2 class="mb-4">🔔 Thông báo mới</h2>
                     <ul class="list-group">

@@ -47,6 +47,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
+                                                .requestMatchers("/hoc-vien/**").hasRole("HOCVIEN")
 
                                                 // All other requests
                                                 .anyRequest().permitAll())

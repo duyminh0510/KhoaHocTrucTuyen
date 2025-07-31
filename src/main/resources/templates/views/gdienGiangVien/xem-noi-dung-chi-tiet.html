@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết khóa học - Giảng viên</title>
+</head>
+
+<body>
+    <main class="xemkhoahoc" th:attr="data-bai-giang-id=${baiGiang?.baiGiangId}">
+        <div th:if="${khoaHoc != null}">
+            <div class="container">
+                <!-- Tiêu đề và nút -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</h3>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{'/khoa-hoc/chinh-sua/' + ${khoaHoc.khoahocId}}"
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit me-1"></i> Cập nhật
+                        </a>
+                        <form th:action="@{'/giangvien/khoa-hoc/xoa/' + ${khoaHoc.khoahocId}}" method="post"
+      onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này không?');">
+    <button type="submit" class="btn btn-outline-danger btn-sm">
+        <i class="fas fa-trash-alt me-1"></i> Xóa
+    </button>
+</form>
+                    </div>
+                </div>
+
+                <div class="row gx-1">
+                    <!-- Nội dung bài giảng -->
+                    <div class="col-lg-8">
+                        <div class="border d-flex flex-column shadow-box" id="noiDungKhoaHoc"
+                             style="height: 350px; overflow-y: auto;">
+                            <div th:if="${baiGiang != null}">
+                                <!-- VIDEO -->
+                                <div th:if="${baiGiang.loaiBaiGiang != null && baiGiang.loaiBaiGiang.name() == 'VIDEO'}">
+                                    <iframe class="w-100" height="348px"
+                                            th:src="${baiGiang.videoBaiGiang?.url_video}" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                </div>
+
+                                <!-- TÀI LIỆU -->
+                                <div th:if="${baiGiang.loaiBaiGiang != null && baiGiang.loaiBaiGiang.name() == 'TAILIEU'}"
+                                     class="flex-grow-1 overflow-auto mt-3">
+                                    <div th:utext="${baiViet?.noidung}"></div>
+                                </div>
+
+                                <!-- TRẮC NGHIỆM -->
+                                <div th:if="${baiGiang.loaiBaiGiang != null && baiGiang.loaiBaiGiang.name() == 'TRACNGHIEM'}"
+                                     class="flex-grow-1 overflow-auto mt-3 text-center">
+                                    <p class="fw-bold">
+                                        <i class="fas fa-clipboard-check me-2 text-primary"></i>
+                                        Bài kiểm tra số <span th:text="${thuTuBaiTracNghiem}">?</span>
+                                        - Số câu hỏi: <span th:text="${tongSoCauHoi}">0</span>
+                                    </p>
+                                    <button id="batDauBtn" class="btn">
+                                        <i class="fas fa-hourglass-start me-1"></i>
+                                        Bắt đầu làm bài kiểm tra
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danh sách chương & bài giảng -->
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm rounded-4 mb-4 border-0">
+                            <div class="card-body" id="chuong-list">
+                                <div th:if="${#lists.isEmpty(chuongs)}">
+                                    <p class="text-muted fst-italic">Chưa có chương nào cho khóa học này.</p>
+                                </div>
+
+                                <div th:if="${!#lists.isEmpty(chuongs)}" class="accordion" id="accordionChuong">
+                                    <div class="accordion-item mb-2"
+                                         th:each="chuong, iterStat : ${chuongs}">
+                                        <h2 class="accordion-header" th:attr="id='heading' + ${iterStat.index}">
+                                            <button class="accordion-button collapsed bg-light" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    th:attr="data-bs-target='#collapse' + ${iterStat.index}"
+                                                    aria-expanded="false"
+                                                    th:attrappend="aria-controls='collapse' + ${iterStat.index}">
+                                                <i class="fas fa-layer-group me-2 text-warning"></i>
+                                                <strong th:text="${chuong.tenchuong}">Tên chương</strong>
+                                            </button>
+                                        </h2>
+                                        <div th:attr="id='collapse' + ${iterStat.index}"
+                                             class="accordion-collapse collapse"
+                                             th:classappend="${chuong.chuongId == chuongDangMoId} ? ' show' : ''"
+                                             th:attrappend="aria-labelledby='heading' + ${iterStat.index}"
+                                             data-bs-parent="#accordionChuong">
+                                            <div class="accordion-body">
+                                                <ul class="list-group list-group-flush mb-0"
+                                                    th:if="${chuong.baiGiangs != null && !#lists.isEmpty(chuong.baiGiangs)}">
+                                                    <li class="list-group-item ps-4"
+                                                        th:each="baiGiang : ${chuong.baiGiangs}"
+                                                        th:classappend="${baiGiang.baiGiangId == baiGiangDangHocId} ? 'active-bai-giang' : ''">
+                                                        <a th:href="@{'/giangvien/khoa-hoc/noi-dung-bai-giang?id=' + ${baiGiang.baiGiangId}}"
+                                                           class="bai-giang-link d-flex align-items-center">
+                                                            <i th:class="${baiGiang.loaiBaiGiang != null && baiGiang.loaiBaiGiang.name() == 'VIDEO' ? 'fas fa-play-circle text-danger me-2' : baiGiang.loaiBaiGiang.name() == 'TAILIEU' ? 'fas fa-file-alt text-success me-2' : 'fas fa-question-circle text-warning me-2'}"></i>
+                                                            <span th:text="${baiGiang.tenBaiGiang}">Tên bài giảng</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <p th:if="${chuong.baiGiangs == null || #lists.isEmpty(chuong.baiGiangs)}"
+                                                   class="text-muted fst-italic mt-2 ps-2">
+                                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                                    Chưa có bài giảng nào trong chương này.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end accordion -->
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

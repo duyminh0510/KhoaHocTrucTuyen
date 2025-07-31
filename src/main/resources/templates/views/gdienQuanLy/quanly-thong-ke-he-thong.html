@@ -3,198 +3,202 @@
     th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8" />
         <title>Thống kê hệ thống</title>
     </head>
 
     <body>
-        <main class="thongkeadmin">
+        <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">📊 Thống kê hệ thống</h1>
-                <ol class="breadcrumb mb-4">
-                    <li><a href="/admin/dashboard">Bảng điều khiển</a></li>
-                    <li>/ Thống kê</li>
-                </ol>
+                <h1 class="mt-4">📋 THỐNG KÊ HỆ THỐNG</h1>
 
-                <!-- Info Cards -->
+                <!-- Học viên -->
                 <div class="row">
-                    <div class="info-card bg-blue">
-                        <div class="card-content">
-                            <i class="fas fa-user-graduate"></i>
-                            <div class="card-text">
-                                <div th:text="${tongHocVien}">0</div>
-                                <a href="/admin/quanly-hocvien">Tổng số học
-                                    viên</a>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-user-graduate me-1"></i>Học
+                                viên
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ tên</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="hv : ${pageHocViens.content}">
+                                            <td th:text="${hv.name}">Họ tên</td>
+                                            <td th:text="${hv.email}">Email</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li class="page-item"
+                                            th:classappend="${pageHocViens.first} ? 'disabled'">
+                                            <a class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number - 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageHocViens.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageHocViens.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageNum}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageHocViens.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number + 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
 
-                    <div class="info-card bg-yellow">
-                        <div class="card-content">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            <div class="card-text">
-                                <div th:text="${tongGiangVien}">0</div>
-                                <a href="/admin/quanly-giangvien">Tổng số giảng
-                                    viên</a>
+                    <!-- Giảng viên -->
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i
+                                    class="fas fa-chalkboard-teacher me-1"></i>Giảng
+                                viên
                             </div>
-                        </div>
-                    </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ tên</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="gv : ${pageGiangViens.content}">
+                                            <td th:text="${gv.name}">Họ tên</td>
+                                            <td th:text="${gv.email}">Email</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                    <div class="info-card bg-green">
-                        <div class="card-content">
-                            <i class="fas fa-book-open"></i>
-                            <div class="card-text">
-                                <div th:text="${tongKhoaHoc}">0</div>
-                                <a href="#">Tổng số khóa học</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card bg-orange">
-                        <div class="card-content">
-                            <i class="fas fa-user-tie"></i>
-                            <div class="card-text">
-                                <div th:text="${tongNhanVien}">0</div>
-                                <a href="/admin/quanly-nhanvien">Tổng số nhân
-                                    viên</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card bg-red">
-                        <div class="card-content">
-                            <i class="fas fa-dollar-sign"></i>
-                            <div class="card-text">
-                                <div
-                                    th:text="${#numbers.formatDecimal(doanhThuThang, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ
-                                </div>
-                                <a href="#">Doanh thu tháng này</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card bg-red">
-                        <div class="card-content">
-                            <i class="fas fa-dollar-sign"></i>
-                            <div class="card-text">
-                                <div
-                                    th:text="${#numbers.formatDecimal(tongTienNenTang, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ
-                                </div>
-                                <a href="#">Tổng đã nhận</a>
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageGiangViens.first} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number - 1}, pageKhoaHoc=${pageKhoaHocs.number})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageGiangViens.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageGiangViens.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageNum}, pageKhoaHoc=${pageKhoaHocs.number})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageGiangViens.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number + 1}, pageKhoaHoc=${pageKhoaHocs.number})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Charts -->
-                <div class="chart-container">
-                    <div class="chart-box" style="flex: 1 1 65%;">
-                        <div class="title"><i class="fas fa-chart-bar me-1"></i>
-                            Doanh thu 6 tháng gần nhất</div>
-                        <canvas id="revenueChart" width="100%"
-                            height="40"></canvas>
-                    </div>
-                    <div class="chart-box" style="flex: 1 1 30%;">
-                        <div class="title"><i class="fas fa-chart-pie me-1"></i>
-                            Tỉ lệ danh mục khóa học</div>
-                        <canvas id="categoryChart" width="100%"
-                            height="40"></canvas>
-                    </div>
-                </div>
+                <!-- Khóa học -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-book-open me-1"></i>Khóa học
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên khóa học</th>
+                                            <th>Danh mục</th>
+                                            <th>Giảng Viên</th>
+                                            <th>Lượt thích</th>
+                                            <th>Giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="khoaHoc : ${pageKhoaHocs.content}">
+                                            <td
+                                                th:text="${khoaHoc.tenKhoaHoc}">Tên
+                                                khóa học</td>
+                                            <td
+                                                th:text="${khoaHoc.danhMuc.tenDanhMuc}">Danh
+                                                mục</td>
+                                            <td
+                                                th:text="${khoaHoc.giangVien.taikhoan.name}">
+                                                Giảng Viên
+                                            </td>
+                                            <td
+                                                th:text="${khoaHoc.luotThich}">0</td>
+                                            <td
+                                                th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')}">
+                                                0
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                <!-- Table -->
-                <div class="table-container">
-                    <div class="title"><i class="fas fa-table me-1"></i> Thống
-                        kê chi tiết khóa học</div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tên khóa học</th>
-                                <th>Lượt mua</th>
-                                <th>Doanh thu</th>
-                                <th>Số lượt thích</th>
-                                <th>Giảng viên</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="khoaHoc : ${chiTietKhoaHoc}">
-                                <td th:text="${khoaHoc[0]}">Tên</td>
-                                <td th:text="${khoaHoc[1]}">0</td>
-                                <td
-                                    th:text="${#numbers.formatDecimal(khoaHoc[2], 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ</td>
-                                <td th:text="${khoaHoc[3]}">0</td>
-                                <td th:text="${khoaHoc[4]}">Tên GV</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageKhoaHocs.first} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number - 1})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageKhoaHocs.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageKhoaHocs.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageNum})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageKhoaHocs.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number + 1})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <script th:inline="javascript">
-            /*<![CDATA[*/
-            var revenueData = /*[[${revenueData}]]*/ [];
-            var categoryData = /*[[${categoryData}]]*/ {};
-            /*]]>*/
-        </script>
-
-            <!-- Script vẽ biểu đồ -->
-            <script>
-            var ctx = document.getElementById('revenueChart').getContext('2d');
-            var monthLabels = [];
-            var now = new Date();
-            for (var i = 5; i >= 0; i--) {
-                var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                monthLabels.push('Tháng ' + (d.getMonth() + 1));
-            }
-            var revenueChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: monthLabels,
-                    datasets: [{
-                        label: 'Doanh thu (VNĐ)',
-                        data: revenueData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString('vi-VN') + '₫';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            var ctx2 = document.getElementById('categoryChart').getContext('2d');
-            var categoryLabels = Object.keys(categoryData);
-            var categoryValues = Object.values(categoryData);
-            var categoryChart = new Chart(ctx2, {
-                type: 'pie',
-                data: {
-                    labels: categoryLabels,
-                    datasets: [{
-                        data: categoryValues,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.5)',
-                            'rgba(54, 162, 235, 0.5)',
-                            'rgba(255, 206, 86, 0.5)',
-                            'rgba(75, 192, 192, 0.5)',
-                            'rgba(153, 102, 255, 0.5)',
-                            'rgba(255, 159, 64, 0.5)'
-                        ]
-                    }]
-                }
-            });
-        </script>
         </main>
     </body>
-
 </html>

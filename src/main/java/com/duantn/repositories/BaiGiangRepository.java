@@ -27,4 +27,12 @@ public interface BaiGiangRepository extends JpaRepository<BaiGiang, Integer> {
 
     int countByChuong_Khoahoc_KhoahocId(Integer khoahocId);
 
+    @Query("""
+    SELECT bg FROM BaiGiang bg
+    LEFT JOIN FETCH bg.chuong c
+    LEFT JOIN FETCH c.khoahoc
+    LEFT JOIN FETCH bg.dapAnList
+    WHERE bg.baiGiangId = :id
+""")
+BaiGiang findByIdWithDetails(@Param("id") Integer id);
 }
