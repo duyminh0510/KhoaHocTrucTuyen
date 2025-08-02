@@ -17,11 +17,13 @@ public class DangNhapController {
     public String loginPage(@RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "error", required = false) String error, Model model) {
 
-        if (email != null && !email.trim().isEmpty()) {
+        if (email != null) {
             model.addAttribute("email", email); // giữ lại email nếu có
-            if (error != null) {
-                model.addAttribute("passwordError", "Mật khẩu không chính xác.");
-            }
+        }
+
+        if (error != null) {
+            model.addAttribute("passwordError", "Mật khẩu không chính xác."); // luôn hiển thị lỗi
+                                                                              // nếu có
         }
 
         return "views/gdienChung/login";

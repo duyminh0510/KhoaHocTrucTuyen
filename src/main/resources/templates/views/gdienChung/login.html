@@ -52,7 +52,7 @@
                       placeholder="Nhập email"
                       autocomplete="username"
                       required
-                      pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                      pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
                       title="Vui lòng nhập địa chỉ email hợp lệ"
                       th:value="${email}"
                     />
@@ -75,15 +75,20 @@
                       minlength="6"
                       title="Mật khẩu phải có ít nhất 6 ký tự"
                     />
+                    <!-- ✅ Lỗi từ server -->
                     <div
-  class="form-text text-danger"
-  id="password-error"
-  th:if="${passwordError != null}"
-  th:text="${passwordError}"
-></div>
-
-
-
+                      class="form-text text-danger"
+                      id="password-error-server"
+                      th:if="${passwordError != null}"
+                      th:text="${passwordError}"
+                    ></div>
+                    <!-- ✅ Lỗi từ client -->
+                    <div
+                      class="form-text text-danger"
+                      id="password-error-client"
+                      style="display: none"
+                    ></div>
+                  </div>
 
                   <div class="text-center">
                     <button class="btn btn-primary w-100" type="submit">
@@ -175,17 +180,26 @@
               'input[name="password"]'
             );
             const emailError = document.getElementById("email-error");
-            const passwordError = document.getElementById("password-error");
+            const passwordErrorClient = document.getElementById(
+              "password-error-client"
+            );
+            const passwordErrorServer = document.getElementById(
+              "password-error-server"
+            );
 
             let hasError = false;
 
             // Reset lỗi
             emailError.style.display = "none";
             emailError.textContent = "";
-            passwordError.style.display = "none";
-            passwordError.textContent = "";
+            passwordErrorClient.style.display = "none";
+            passwordErrorClient.textContent = "";
 
-            // Kiểm tra định dạng email
+            if (passwordErrorServer) {
+              passwordErrorServer.style.display = "none";
+            }
+
+            // Kiểm tra email
             if (!emailInput.value.trim()) {
               emailError.textContent = "Vui lòng nhập email.";
               emailError.style.display = "block";
@@ -194,19 +208,17 @@
               emailError.textContent = "Email không đúng định dạng.";
               emailError.style.display = "block";
               hasError = true;
-              e.preventDefault(); // Không gửi nếu email sai
-              return;
             }
 
             // Kiểm tra mật khẩu
             if (!passwordInput.value.trim()) {
-              passwordError.textContent = "Vui lòng nhập mật khẩu.";
-              passwordError.style.display = "block";
+              passwordErrorClient.textContent = "Vui lòng nhập mật khẩu.";
+              passwordErrorClient.style.display = "block";
               hasError = true;
             }
 
             if (hasError) {
-              e.preventDefault(); // Chặn submit nếu có lỗi
+              e.preventDefault(); // Chặn submit nếu có lỗi phía client
             }
           });
       </script>
