@@ -1,21 +1,20 @@
 .homechung .container-fluid {
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 24px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .homechung #mainBanner .carousel-inner img {
     width: 100%;
-    height: 100%;
+    max-height: 300px;
+    /* 👈 Giới hạn chiều cao */
     object-fit: cover;
-    border-radius: 8px;
+    /* 👈 Phủ kín khung, có thể crop nhẹ ảnh */
+    border-radius: 0;
 }
 
 .homechung #mainBanner {
     height: 100%;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .homechung .col-md-8 {
@@ -271,4 +270,74 @@
 
 .homechung .text-primary {
     color: #224195 !important;
+}
+
+
+/* Nút điều hướng tùy chỉnh */
+
+.homechung .custom-carousel-btn {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: none;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.homechung .custom-carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.homechung .custom-carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+    background-color: rgba(0, 0, 0, 1);
+}
+
+
+/* Tuỳ chọn vị trí nếu muốn nút sát mép */
+
+.homechung .carousel-control-prev {
+    left: 20px;
+}
+
+.homechung .carousel-control-next {
+    right: 20px;
+}
+
+
+/* Tăng kích thước icon trong nút */
+
+.homechung .carousel-control-prev-icon,
+.homechung .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+    background-size: 100% 100%;
+}
+
+#matrixCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#mainBanner {
+    position: relative;
+    overflow: hidden;
+}
+
+.homechung .feature-box {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.homechung .feature-box:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }

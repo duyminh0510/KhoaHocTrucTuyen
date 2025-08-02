@@ -1,82 +1,40 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
-<head>
-    <meta charset="UTF-8">
-    <title>Quản lý thông báo hệ thống</title>
-</head>
-<body>
-<main>
-    <div class="container-fluid px-4">
-        <h1 class="mt-4">📢 Quản lý Thông báo Hệ thống</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/admin/dashboard">Bảng điều khiển</a></li>
-            <li class="breadcrumb-item active">Quản lý thông báo</li>
-        </ol>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span><i class="fas fa-table me-1"></i> Danh sách thông báo</span>
-                <a th:href="@{/admin/quanly-thong-bao/new}" class="btn btn-primary btn-sm">+ Tạo thông báo mới</a>
+    <head>
+        <meta charset="UTF-8">
+        <title>Thông báo</title>
+    </head>
+
+    <body>
+        <main
+            class="thongbaohethong container animate__animated animate__fadeInUp">
+            <div class="thongbaohethong-header">
+                <h3><i class="fas fa-bell"></i> Thông báo hệ thống</h3>
             </div>
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="table-light">
-                    <tr>
-                        <th>STT</th>
-                        <th>Tiêu đề</th>
-                        <th>Ngày tạo</th>
-                        <th>Người gửi</th>
-                        <th>Trạng thái</th>
-                        <th>Nhóm nhận</th>
-                        <th>Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Dữ liệu giả lập 1 -->
-                    <tr>
-                        <td>1</td>
-                        <td>Cập nhật chính sách bảo mật</td>
-                        <td>25/06/2025 10:30</td>
-                        <td>Admin</td>
-                        <td><span class="badge bg-success">Đã gửi</span></td>
-                        <td>Tất cả</td>
-                        <td>
-                            <a th:href="@{/admin/quanly-thong-bao/view/1}" class="btn btn-info btn-sm" title="Xem"><i class="fas fa-eye"></i></a>
-                        </td>
-                    </tr>
-                    <!-- Dữ liệu giả lập 2 -->
-                    <tr>
-                        <td>2</td>
-                        <td>Lịch bảo trì hệ thống tháng 7</td>
-                        <td>24/06/2025 15:00</td>
-                        <td>Admin</td>
-                        <td><span class="badge bg-secondary">Nháp</span></td>
-                        <td>Giảng viên</td>
-                        <td>
-                            <a th:href="@{/admin/quanly-thong-bao/view/2}" class="btn btn-info btn-sm" title="Xem"><i class="fas fa-eye"></i></a>
-                            <a th:href="@{/admin/quanly-thong-bao/edit/2}" class="btn btn-warning btn-sm" title="Sửa"><i class="fas fa-edit"></i></a>
-                            <a href="#" class="btn btn-success btn-sm" title="Gửi"><i class="fas fa-paper-plane"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xoá?')"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                     <!-- Dữ liệu giả lập 3 -->
-                    <tr>
-                        <td>3</td>
-                        <td>Thông báo chương trình khuyến mãi hè</td>
-                        <td>23/06/2025 09:00</td>
-                        <td>Admin</td>
-                        <td><span class="badge bg-success">Đã gửi</span></td>
-                        <td>Học viên</td>
-                        <td>
-                             <a th:href="@{/admin/quanly-thong-bao/view/3}" class="btn btn-info btn-sm" title="Xem"><i class="fas fa-eye"></i></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+            <div
+                th:if="${danhSachThongBao == null or #lists.isEmpty(danhSachThongBao)}"
+                class="thongbaohethong-empty">
+                <i class="fas fa-inbox"></i> Không có thông báo nào.
             </div>
-        </div>
-    </div>
-</main>
-</body>
+
+            <div class="thongbaohethong-list">
+                <div th:each="tb : ${danhSachThongBao}"
+                    class="thongbaohethong-card">
+                    <div class="thongbaohethong-card-header">
+                        <h5 th:text="${tb.tieuDe}">Tiêu đề thông báo</h5>
+                        <span th:if="${tb.ngaygui != null}"
+                            class="thongbaohethong-date"
+                            th:text="${#temporals.format(tb.ngaygui,'dd/MM/yyyy')}">01/01/2024</span>
+                    </div>
+                    <div class="thongbaohethong-body text-black">
+                        <p th:utext="${tb.noiDung}">Nội dung thông báo</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
 </html>

@@ -1,19 +1,20 @@
 package com.duantn.repositories;
 
-import com.duantn.entities.RutTienGiangVien;
-import com.duantn.enums.TrangThaiRutTien;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.duantn.entities.RutTienGiangVien;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.enums.TrangThaiRutTien;
+
+@Repository
 public interface RutTienGiangVienRepository extends JpaRepository<RutTienGiangVien, Integer> {
-    List<RutTienGiangVien> findByTaikhoanGV_TaikhoanId(Integer id);
+    List<RutTienGiangVien> findByTaikhoanGVAndTrangthai(TaiKhoan taiKhoan, TrangThaiRutTien trangthai);
 
-    @Query("SELECT SUM(r.soTienRut) FROM RutTienGiangVien r WHERE r.taikhoanGV.taikhoanId = :id AND r.trangthai = 'DA_RUT'")
-    BigDecimal tongRutThanhCong(@Param("id") Integer id);
+    List<RutTienGiangVien> findByTaikhoanGVAndTrangthaiIn(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai);
 
-    List<RutTienGiangVien> findByTaikhoanGV_TaikhoanIdAndTrangthai(Integer id, TrangThaiRutTien trangthai);
-} 
+    Optional<RutTienGiangVien> findTopByTaikhoanGVOrderByNgayrutDesc(TaiKhoan giangVien);
+}

@@ -8,36 +8,32 @@
     </head>
 
     <body>
-        <main class="py-5 thongbao">
-            <div class="container">
-                <h1><i class="fas fa-bell"></i> Thông báo</h1>
+        <main class="thongbao container py-5 animate__animated animate__fadeIn">
+            <h3 class="thongbao-title text-white mb-4">
+                <i class="fas fa-bullhorn me-2"></i>Danh sách thông báo dành cho
+                bạn
+            </h3>
 
-                <div class="notice">
-                    <h3>Cập nhật lịch học mới</h3>
-                    <p>Lịch học tuần tới đã được cập nhật. Vui lòng kiểm tra để
-                        không bị lỡ buổi học.</p>
-                    <time>Ngày đăng: 24/06/2025</time>
-                </div>
+            <div
+                th:if="${danhSachThongBao == null or #lists.isEmpty(danhSachThongBao)}"
+                class="thongbao-empty alert alert-info text-center">
+                <i class="fas fa-inbox"></i> Không có thông báo nào.
+            </div>
 
-                <div class="notice">
-                    <h3>Bảo trì hệ thống</h3>
-                    <p>Hệ thống sẽ được bảo trì vào tối thứ 7 (29/06) từ 22h đến
-                        01h sáng.</p>
-                    <time>Ngày đăng: 22/06/2025</time>
-                </div>
-
-                <div class="notice">
-                    <h3>Thông báo nghỉ lễ</h3>
-                    <p>Trường sẽ nghỉ lễ Quốc Khánh vào ngày 02/09. Các lớp học
-                        sẽ tạm dừng trong ngày này.</p>
-                    <time>Ngày đăng: 20/06/2025</time>
-                </div>
-
-                <div class="notice">
-                    <h3>Khảo sát chất lượng giảng dạy</h3>
-                    <p>Vui lòng hoàn thành khảo sát trước ngày 30/06 để nhận quà
-                        tặng từ nhà trường.</p>
-                    <time>Ngày đăng: 18/06/2025</time>
+            <div th:each="tb : ${danhSachThongBao}"
+                class="thongbao-card card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"
+                        th:text="${tb.tieuDe}">Tiêu đề thông báo</h5>
+                    <div class="thongbao-date text-muted mb-2"
+                        th:if="${tb.ngaygui != null}">
+                        <i class="fas fa-clock me-1"></i> Gửi lúc:
+                        <span
+                            th:text="${#temporals.format(tb.ngaygui,'dd/MM/yyyy')}">01/01/2024</span>
+                    </div>
+                    <p class="card-text text-black" th:utext="${tb.noiDung}">Nội
+                        dung thông báo
+                    </p>
                 </div>
             </div>
         </main>

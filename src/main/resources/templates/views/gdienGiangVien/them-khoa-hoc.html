@@ -11,40 +11,57 @@
     <body>
         <main class="themkhoahoc">
             <div class="container">
-                <h2 class="main-title mt-5">THÊM KHOÁ HỌC - BƯỚC 1</h2>
+                <h2 class="main-title mt-5"><i
+                        class="fas fa-graduation-cap me-2 fonsomed-icon"></i>THÊM
+                    KHOÁ HỌC - BƯỚC 1</h2>
                 <form th:action="@{/giangvien/them-moi-khoa-hoc/save-info}"
                     th:object="${course}" method="post"
                     enctype="multipart/form-data" class="mb-5">
+                    <input type="hidden" th:field="*{khoahocId}" />
 
-                    <label>Tên khóa học:</label>
+                    <label><i class="fas fa-book me-1 text-primary"></i>Tên khóa
+                        học:</label>
                     <input type="text" th:field="*{tenKhoaHoc}"
-                        placeholder="VD: Java cho người mới bắt đầu" required
+                        placeholder="VD: Java cho người mới bắt đầu"
                         autocomplete="off" />
                     <p th:if="${#fields.hasErrors('tenKhoaHoc')}"
                         th:errors="*{tenKhoaHoc}" class="text-danger"></p>
 
-                    <label>Mô tả khóa học:</label>
+                    <label><i class="fas fa-align-left me-1 text-primary"></i>Mô
+                        tả khóa học:</label>
                     <textarea th:field="*{moTa}" rows="5"
                         placeholder="Mô tả chi tiết..."></textarea>
                     <p th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"
                         class="text-danger"></p>
 
-                    <label>Danh mục:</label>
+                    <label><i
+                            class="fas fa-layer-group me-1 text-primary"></i>Danh
+                        mục:</label>
                     <select th:field="*{danhMuc.danhmucId}">
                         <option th:each="c : ${danhmuc}"
                             th:value="${c.danhmucId}"
                             th:text="${c.tenDanhMuc}"></option>
                     </select>
 
-                    <label>Video giới thiệu:</label>
-                    <input type="text" th:field="*{urlGioiThieu}"
-                        placeholder="https://..." />
+                    <label><i class="fas fa-video me-1 text-primary"></i>Video
+                        giới thiệu:</label>
+                    <input type="text" name="urlGioiThieu"
+                        th:value="*{urlGioiThieu}" placeholder="https://..."
+                        pattern="^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$"
+                        title="Link video của bạn không hợp lệ (ví dụ: https://youtu.be/abc123)" />
 
-                    <label>Ảnh bìa khóa học:</label>
+                    <label><i class="fas fa-image me-1 text-primary"></i>Ảnh bìa
+                        khóa học:</label>
                     <input type="file" name="file" />
+                    <p th:if="${imageError != null}" th:text="${imageError}"
+                        class="text-danger"></p>
 
-                    <button class="btn btn-primary" type="submit">Tiếp
-                        tục</button>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn custom-outline" type="submit">Tiếp
+                            tục<i
+                                class="fas fa-arrow-right ms-2 fonsomed-icon"></i></button>
+                    </div>
+
                 </form>
             </div>
         </main>

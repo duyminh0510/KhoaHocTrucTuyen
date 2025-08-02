@@ -16,4 +16,7 @@ public class CartItem {
     private String anhBia;
     private String giangVien;
 
+    private int soLuongDanhGia;
+    private double diemTrungBinh;
+
 }

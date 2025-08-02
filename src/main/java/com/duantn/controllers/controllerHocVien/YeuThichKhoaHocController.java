@@ -7,10 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.KhoaHocService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class YeuThichKhoaHocController {
@@ -41,4 +44,12 @@ public class YeuThichKhoaHocController {
             return ResponseEntity.notFound().build();
         }).orElse(ResponseEntity.status(404).body("Không tìm thấy tài khoản."));
     }
+
+    @PostMapping("/auth/save-redirect-url")
+    @ResponseBody
+    public ResponseEntity<Void> saveRedirectUrl(HttpServletRequest request, @RequestParam String redirect) {
+        request.getSession().setAttribute("redirectAfterLogin", redirect);
+        return ResponseEntity.ok().build();
+    }
+
 }

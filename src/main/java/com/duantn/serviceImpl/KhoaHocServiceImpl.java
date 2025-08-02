@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
@@ -44,7 +45,7 @@ public class KhoaHocServiceImpl implements KhoaHocService {
 
     @Override
     public List<KhoaHoc> getKhoaHocTheoDanhMuc(Integer danhMucId) {
-        return khoaHocRepository.findByDanhMuc_danhmucId(danhMucId);
+        return khoaHocRepository.findByDanhMuc_DanhmucIdAndTrangThai(danhMucId, TrangThaiKhoaHoc.PUBLISHED);
     }
 
     @Override
@@ -163,8 +164,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     }
 
     @Override
-    public List<KhoaHoc> getTatCaKhoaHocPublished() {
-        return khoaHocRepository.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED);
+    public List<KhoaHoc> layKhoaHocTheoTrangThai(TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.findByTrangThai(trangThai);
     }
 
     @Override
@@ -173,13 +174,34 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     }
 
     @Override
-    public List<KhoaHoc> getKhoaHocTheoDanhMucAndTrangThai(Integer danhMucId, com.duantn.enums.TrangThaiKhoaHoc trangThai) {
-        return khoaHocRepository.findByDanhMuc_danhmucIdAndTrangThai(danhMucId, trangThai);
+    public List<KhoaHoc> findByIds(List<Integer> ids) {
+        return khoaHocRepository.findAllByKhoahocIdIn(ids);
     }
 
     @Override
-    public List<KhoaHoc> getPublishedKhoaHocByDanhMuc(Integer danhMucId) {
-        return khoaHocRepository.findPublishedByDanhMucId(danhMucId);
+    public List<KhoaHoc> findAllByIds(List<Integer> ids) {
+        return khoaHocRepository.findAllById(ids);
+    }
+
+    @Override
+    public KhoaHoc layTheoId(Integer id) {
+        return khoaHocRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học với ID: " + id));
+    }
+
+    @Override
+    public List<KhoaHoc> timTheoTenVaGiangVien(Integer giangvienId, String keyword) {
+        return khoaHocRepository.timKiemTheoTenVaGiangVien(giangvienId, keyword);
+    }
+
+    @Override
+    public Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable) {
+        return khoaHocRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable) {
+        return khoaHocRepository.findByDanhMuc_DanhmucId(danhMucId, pageable);
     }
 
 }

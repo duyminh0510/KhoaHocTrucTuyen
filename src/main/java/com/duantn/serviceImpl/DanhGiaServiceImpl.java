@@ -99,4 +99,14 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         return repo.findByKhoaHocId(khoaHocId);
     }
 
+    @Override
+    public List<DanhGia> findByGiangVienId(Integer giangvienId) {
+        return repo.findByKhoahoc_GiangVien_GiangvienId(giangvienId);
+    }
+
+    @Override
+    public Optional<DanhGia> findById(Integer id) {
+        return repo.findById(id);
+    }
+
 }

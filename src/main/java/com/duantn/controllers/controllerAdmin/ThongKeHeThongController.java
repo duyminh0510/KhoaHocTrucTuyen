@@ -43,10 +43,10 @@ public class ThongKeHeThongController {
 
         Page<TaiKhoan> hocViensPage = taiKhoanRepo.findByRole(hocVienRole, pageableHv);
         Page<TaiKhoan> giangViensPage = taiKhoanRepo.findByRole(giangVienRole, pageableGv);
-        Page<KhoaHoc> khoaHocsPage =
-                khoaHocRepo.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED, pageableKh);
+        Page<KhoaHoc> khoaHocsPage = khoaHocRepo.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED, pageableKh);
 
-        // Nếu bạn vẫn muốn giữ danh sách nguyên bản (ko phân trang) để hiển thị thì model vẫn giữ
+        // Nếu bạn vẫn muốn giữ danh sách nguyên bản (ko phân trang) để hiển thị thì
+        // model vẫn giữ
         // Nhưng giờ mình sẽ trả về Page để view có thể phân trang
         model.addAttribute("pageHocViens", hocViensPage);
         model.addAttribute("pageGiangViens", giangViensPage);

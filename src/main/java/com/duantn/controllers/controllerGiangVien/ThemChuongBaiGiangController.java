@@ -3,14 +3,17 @@ package com.duantn.controllers.controllerGiangVien;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.duantn.dtos.ChuongFormWrapper;
@@ -21,6 +24,7 @@ import com.duantn.entities.Chuong;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.VideoBaiGiang;
 import com.duantn.enums.LoaiBaiGiang;
+import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.services.BaiGiangService;
 import com.duantn.services.BaiTracNghiemService;
 import com.duantn.services.ChuongService;
@@ -432,6 +436,24 @@ public class ThemChuongBaiGiangController {
         return cu != null && cu.getLoaiBaiGiang() != null
                 && moi.getLoaiBaiGiang() != null
                 && !moi.getLoaiBaiGiang().equals(cu.getLoaiBaiGiang());
+    }
+
+    @PostMapping("/khoa-hoc/yeu-cau-duyet")
+    @ResponseBody
+    public ResponseEntity<String> yeuCauDuyet(@RequestParam("id") Integer khoaHocId) {
+        try {
+            Optional<KhoaHoc> opt = khoaHocService.findById(khoaHocId);
+            if (opt.isPresent()) {
+                KhoaHoc kh = opt.get();
+                kh.setTrangThai(TrangThaiKhoaHoc.PENDING_APPROVAL);
+                khoaHocService.save(kh);
+                return ResponseEntity.ok("Yêu cầu duyệt đã được gửi thành công.");
+            } else {
+                return ResponseEntity.status(404).body("Không tìm thấy khóa học.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Đã xảy ra lỗi khi gửi yêu cầu duyệt.");
+        }
     }
 
 }

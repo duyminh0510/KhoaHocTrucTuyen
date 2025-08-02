@@ -25,10 +25,8 @@ public class ThongKeDoanhThuController {
 
     @GetMapping("/admin/doanhthu")
     public String hienThiDoanhThu(
-            @RequestParam(name = "start", required = false) @DateTimeFormat(
-                    iso = DateTimeFormat.ISO.DATE) LocalDate start,
-            @RequestParam(name = "end",
-                    required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
+            @RequestParam(name = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
             @RequestParam(name = "quy", required = false) Integer quy,
             @RequestParam(name = "nam", required = false) Integer nam,
             @RequestParam(name = "page", defaultValue = "0") int page, Model model) {

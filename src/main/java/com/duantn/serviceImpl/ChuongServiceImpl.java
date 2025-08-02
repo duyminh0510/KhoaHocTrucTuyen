@@ -88,4 +88,9 @@ public class ChuongServiceImpl implements ChuongService {
     public Chuong getReferenceById(Integer id) {
         return chuongRepository.getReferenceById(id);
     }
+
+    @Override
+    public int demSoChuong(Integer khoahocId) {
+        return chuongRepository.countByKhoahoc_KhoahocId(khoahocId);
+    }
 }
