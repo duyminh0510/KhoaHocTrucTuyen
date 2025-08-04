@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.duantn.dtos.ChuongFormWrapper;
 import com.duantn.entities.BaiGiang;
 import com.duantn.entities.BaiTracNghiem;
@@ -27,9 +25,9 @@ import com.duantn.enums.LoaiBaiGiang;
 import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.services.BaiGiangService;
 import com.duantn.services.BaiTracNghiemService;
+import com.duantn.services.BaiVietService;
 import com.duantn.services.ChuongService;
 import com.duantn.services.KhoaHocService;
-import com.duantn.services.BaiVietService;
 import com.duantn.services.VideoBaiGiangService;
 
 @Controller
@@ -54,7 +52,8 @@ public class ThemChuongBaiGiangController {
     private BaiTracNghiemService baitracNghiemService;
 
     @GetMapping("/giangvien/them-moi-khoa-hoc/them-chuong")
-    public String showChuongVaBaiGiangForm(@RequestParam("khoahocId") Integer khoahocId, Model model) {
+    public String showChuongVaBaiGiangForm(@RequestParam("khoahocId") Integer khoahocId,
+            Model model) {
 
         KhoaHoc khoaHoc = khoaHocService.getKhoaHocById(khoahocId);
         List<Chuong> danhSachChuong = chuongService.findFullByKhoaHocId(khoahocId);
@@ -69,14 +68,13 @@ public class ThemChuongBaiGiangController {
 
     // thêm chương
     @PostMapping("/giangvien/them-moi-khoa-hoc/chuong-khoa-hoc")
-    public String saveChuongRieng(
-            @ModelAttribute("chuongForm") ChuongFormWrapper wrapper,
+    public String saveChuongRieng(@ModelAttribute("chuongForm") ChuongFormWrapper wrapper,
             @RequestParam("saveChuongIndex") Integer saveChuongIndex,
-            @RequestParam("khoahocId") Integer khoahocId,
-            RedirectAttributes redirectAttributes,
+            @RequestParam("khoahocId") Integer khoahocId, RedirectAttributes redirectAttributes,
             Model model) {
 
-        if (saveChuongIndex == null || saveChuongIndex < 0 || saveChuongIndex >= wrapper.getChuongs().size()) {
+        if (saveChuongIndex == null || saveChuongIndex < 0
+                || saveChuongIndex >= wrapper.getChuongs().size()) {
             redirectAttributes.addFlashAttribute("loi", "⚠ Không tìm thấy chương để lưu.");
             return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
         }
@@ -115,16 +113,15 @@ public class ThemChuongBaiGiangController {
             chuongService.save(chuong);
         }
 
-        redirectAttributes.addFlashAttribute("thongbao", "✔ Đã lưu chương: " + chuong.getTenchuong());
+        redirectAttributes.addFlashAttribute("thongbao",
+                "✔ Đã lưu chương: " + chuong.getTenchuong());
         return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
     }
 
     // thêm bài giảng
     @PostMapping("/giangvien/them-moi-khoa-hoc/chuong-bai-giang")
-    public String luuBaiGiangRieng(
-            @ModelAttribute ChuongFormWrapper chuongForm,
-            @RequestParam(required = false) String saveBaiGiang,
-            @RequestParam Integer khoahocId,
+    public String luuBaiGiangRieng(@ModelAttribute ChuongFormWrapper chuongForm,
+            @RequestParam(required = false) String saveBaiGiang, @RequestParam Integer khoahocId,
             RedirectAttributes redirectAttributes) {
 
         if (saveBaiGiang != null) {
@@ -136,8 +133,10 @@ public class ThemChuongBaiGiangController {
 
                 Chuong chuong = chuongForm.getChuongs().get(cIndex);
                 if (chuong.getChuongId() == null) {
-                    redirectAttributes.addFlashAttribute("loi", "Chương phải được lưu trước khi lưu bài giảng.");
-                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    redirectAttributes.addFlashAttribute("loi",
+                            "Chương phải được lưu trước khi lưu bài giảng.");
+                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                            + khoahocId;
                 }
 
                 BaiGiang baiGiang = chuong.getBaiGiangs().get(bIndex);
@@ -148,10 +147,13 @@ public class ThemChuongBaiGiangController {
 
                 BaiGiang entity;
                 if (baiGiang.getBaiGiangId() != null) {
-                    BaiGiang baiGiangCu = baiGiangService.findById(baiGiang.getBaiGiangId()).orElse(null);
+                    BaiGiang baiGiangCu =
+                            baiGiangService.findById(baiGiang.getBaiGiangId()).orElse(null);
                     if (daThayDoiLoaiBaiGiang(baiGiang, baiGiangCu)) {
-                        redirectAttributes.addFlashAttribute("loi", "❌ Không được thay đổi loại bài giảng đã lưu.");
-                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                        redirectAttributes.addFlashAttribute("loi",
+                                "❌ Không được thay đổi loại bài giảng đã lưu.");
+                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                                + khoahocId;
                     }
                     entity = baiGiangCu != null ? baiGiangCu : new BaiGiang();
                 } else {
@@ -168,9 +170,11 @@ public class ThemChuongBaiGiangController {
                 BaiGiang baiGiangLuu = baiGiangService.save(entity);
 
                 // VIDEO
-                if (baiGiang.getLoaiBaiGiang() == LoaiBaiGiang.VIDEO && baiGiang.getVideoBaiGiang() != null) {
+                if (baiGiang.getLoaiBaiGiang() == LoaiBaiGiang.VIDEO
+                        && baiGiang.getVideoBaiGiang() != null) {
                     VideoBaiGiang video = baiGiang.getVideoBaiGiang();
-                    VideoBaiGiang daCo = videoBaiGiangService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
+                    VideoBaiGiang daCo =
+                            videoBaiGiangService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
                     if (daCo != null) {
                         daCo.setUrl_video(video.getUrl_video());
                         daCo.setMota(video.getMota());
@@ -182,7 +186,8 @@ public class ThemChuongBaiGiangController {
                 }
 
                 // BÀI VIẾT
-                if (baiGiang.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU && baiGiang.getBaiViet() != null) {
+                if (baiGiang.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU
+                        && baiGiang.getBaiViet() != null) {
                     BaiViet baiViet = baiGiang.getBaiViet();
                     BaiViet daCo = baivietService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
                     if (daCo != null) {
@@ -207,8 +212,7 @@ public class ThemChuongBaiGiangController {
 
     @PostMapping("/giangvien/them-moi-khoa-hoc/luu-chuong-va-baigiang")
     public String saveChuongVaBaiGiang(@ModelAttribute("chuongForm") ChuongFormWrapper wrapper,
-            @RequestParam("khoahocId") Integer khoahocId,
-            Model model,
+            @RequestParam("khoahocId") Integer khoahocId, Model model,
             RedirectAttributes redirectAttributes) {
 
         List<String> danhSachLoi = kiemTraLoiDuLieu(wrapper);
@@ -242,7 +246,8 @@ public class ThemChuongBaiGiangController {
                 }
             }
 
-            Chuong chuongLuu = (chuongDaCo != null) ? chuongService.save(chuongDaCo) : chuongService.save(chuong);
+            Chuong chuongLuu = (chuongDaCo != null) ? chuongService.save(chuongDaCo)
+                    : chuongService.save(chuong);
 
             for (BaiGiang bg : chuong.getBaiGiangs()) {
                 bg.setChuong(chuongLuu);
@@ -254,8 +259,10 @@ public class ThemChuongBaiGiangController {
                     BaiGiang bgCu = baiGiangService.findBaiGiangById(bg.getBaiGiangId());
                     if (daThayDoiLoaiBaiGiang(bg, bgCu)) {
                         redirectAttributes.addFlashAttribute("loi",
-                                "❌ Không được thay đổi loại bài giảng đã lưu: " + bg.getTenBaiGiang());
-                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                                "❌ Không được thay đổi loại bài giảng đã lưu: "
+                                        + bg.getTenBaiGiang());
+                        return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                                + khoahocId;
                     }
                     if (bgCu != null) {
                         bgCu.setTenBaiGiang(bg.getTenBaiGiang());
@@ -273,10 +280,12 @@ public class ThemChuongBaiGiangController {
                 // VIDEO
                 try {
 
-                    if (bg.getLoaiBaiGiang() == LoaiBaiGiang.VIDEO && bg.getVideoBaiGiang() != null) {
+                    if (bg.getLoaiBaiGiang() == LoaiBaiGiang.VIDEO
+                            && bg.getVideoBaiGiang() != null) {
                         VideoBaiGiang newVideo = bg.getVideoBaiGiang();
 
-                        VideoBaiGiang oldVideo = videoBaiGiangService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
+                        VideoBaiGiang oldVideo =
+                                videoBaiGiangService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
 
                         if (oldVideo != null) {
 
@@ -291,7 +300,8 @@ public class ThemChuongBaiGiangController {
                     }
                 } catch (IllegalStateException e) {
                     redirectAttributes.addFlashAttribute("loi", "❌ " + e.getMessage());
-                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                            + khoahocId;
                 }
 
                 // 📄 BÀI VIẾT
@@ -303,7 +313,8 @@ public class ThemChuongBaiGiangController {
 
                         if (baiViet.getBaivietId() == null) {
 
-                            BaiViet daCo = baivietService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
+                            BaiViet daCo =
+                                    baivietService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
                             if (daCo != null) {
                                 daCo.setNoidung(baiViet.getNoidung());
                                 baivietService.save(daCo);
@@ -321,19 +332,22 @@ public class ThemChuongBaiGiangController {
                     }
                 } catch (IllegalStateException e) {
                     redirectAttributes.addFlashAttribute("loi", "❌ " + e.getMessage());
-                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                            + khoahocId;
                 }
 
                 // trắc nghiệm
                 try {
 
-                    if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TRACNGHIEM && bg.getTracNghiem() != null) {
+                    if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TRACNGHIEM
+                            && bg.getTracNghiem() != null) {
                         BaiTracNghiem tracMoi = bg.getTracNghiem();
                         baitracNghiemService.saveBaiTracNghiemVaCauHoi(tracMoi, baiGiangLuu);
                     }
                 } catch (IllegalStateException e) {
                     redirectAttributes.addFlashAttribute("loi", "❌ " + e.getMessage());
-                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
+                    return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
+                            + khoahocId;
                 }
 
             }
@@ -345,8 +359,7 @@ public class ThemChuongBaiGiangController {
     }
 
     @PostMapping("/giangvien/them-moi-khoa-hoc/xoa-chuong")
-    public String xoaChuong(
-            @RequestParam("chuongId") Integer chuongId,
+    public String xoaChuong(@RequestParam("chuongId") Integer chuongId,
             @RequestParam("khoahocId") Integer khoahocId) {
 
         Chuong chuongCanXoa = chuongService.findById(chuongId);
@@ -354,8 +367,9 @@ public class ThemChuongBaiGiangController {
 
         chuongService.deleteById(chuongId);
 
-        List<Chuong> chuongsCanCapNhat = chuongService
-                .findByKhoahocIdAndThutuchuongGreaterThanOrderByThutuchuongAsc(khoahocId, thuTuBiXoa);
+        List<Chuong> chuongsCanCapNhat =
+                chuongService.findByKhoahocIdAndThutuchuongGreaterThanOrderByThutuchuongAsc(
+                        khoahocId, thuTuBiXoa);
 
         for (Chuong c : chuongsCanCapNhat) {
             c.setThutuchuong(c.getThutuchuong() - 1);
@@ -367,13 +381,13 @@ public class ThemChuongBaiGiangController {
 
     @PostMapping("/giangvien/them-moi-khoa-hoc/xoa-baigiang")
     public String xoaBaiGiang(@RequestParam("baiGiangId") Integer baiGiangId,
-            @RequestParam("khoahocId") Integer khoahocId,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam("khoahocId") Integer khoahocId, RedirectAttributes redirectAttributes) {
         try {
             baiGiangService.xoaBaiGiangTheoId(baiGiangId);
             redirectAttributes.addFlashAttribute("thongbao", "✔ Đã xóa: bài giảng.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("loi", "⚠ Xóa: bài giảng thất bại: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("loi",
+                    "⚠ Xóa: bài giảng thất bại: " + e.getMessage());
         }
         return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId=" + khoahocId;
     }
@@ -382,24 +396,36 @@ public class ThemChuongBaiGiangController {
         List<String> danhSachLoi = new ArrayList<>();
 
         for (Chuong chuong : wrapper.getChuongs()) {
-            if (chuong.getTenchuong() == null || chuong.getTenchuong().trim().isEmpty()) {
+            String tenChuong = chuong.getTenchuong();
+            if (tenChuong == null || tenChuong.trim().isEmpty()) {
                 danhSachLoi.add("⚠ Tên chương không được để trống.");
-            } else if (chuong.getTenchuong() == null || chuong.getTenchuong().trim().length() < 5) {
+            } else if (tenChuong.trim().length() < 5) {
                 danhSachLoi.add("⚠ Tên chương học phải có ít nhất 5 ký tự.");
+            } else if (tenChuong.trim().length() > 255) {
+                danhSachLoi.add("⚠ Tên chương không được vượt quá 255 ký tự.");
             }
+
 
             for (BaiGiang bg : chuong.getBaiGiangs()) {
                 if (bg.getTenBaiGiang() == null || bg.getTenBaiGiang().trim().isEmpty()) {
                     danhSachLoi.add("⚠ Tên bài giảng không được để trống.");
                 } else if (bg.getTenBaiGiang() == null || bg.getTenBaiGiang().trim().length() < 5) {
                     danhSachLoi.add("⚠ Tên bài giảng phải có ít nhất 5 ký tự.");
+                } else if (bg.getTenBaiGiang() == null
+                        || bg.getTenBaiGiang().trim().length() > 255) {
+                    danhSachLoi.add("⚠ Tên bài giảng không được vượt quá 255 ký tự.");
                 }
 
                 if (bg.getMota() == null || bg.getMota().trim().isEmpty()) {
                     danhSachLoi.add("⚠ Nội dung mô tả bài giảng không được để trống.");
-                } else if (bg.getMota() == null || bg.getMota().trim().length() < 10) {
+                } else if (bg.getMota().trim().length() < 10) {
                     danhSachLoi.add("⚠ Mô tả bài giảng phải có ít nhất 10 ký tự.");
+                } else if (bg.getMota().trim().length() > 1000) {
+                    danhSachLoi.add("⚠ Mô tả bài giảng không được vượt quá 1000 ký tự.");
+                } else if (!bg.getMota().matches("^[\\p{L}0-9\\s.,;:!?()\"'-]+$")) {
+                    danhSachLoi.add("⚠ Mô tả bài giảng không được chứa ký tự đặc biệt.");
                 }
+
 
                 if (bg.getLoaiBaiGiang() == LoaiBaiGiang.VIDEO && bg.getVideoBaiGiang() != null) {
                     String url = bg.getVideoBaiGiang().getUrl_video();
@@ -416,7 +442,8 @@ public class ThemChuongBaiGiangController {
                     } else if (motaVideo == null || motaVideo.trim().length() < 10) {
                         danhSachLoi.add("⚠ Mô tả video phải có ít nhất 10 ký tự.");
                     }
-                } else if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU && bg.getBaiViet() != null) {
+                } else if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU
+                        && bg.getBaiViet() != null) {
                     String noidung = bg.getBaiViet().getNoidung();
 
                     if (noidung == null || noidung.trim().isEmpty()) {
@@ -433,8 +460,7 @@ public class ThemChuongBaiGiangController {
     }
 
     private boolean daThayDoiLoaiBaiGiang(BaiGiang moi, BaiGiang cu) {
-        return cu != null && cu.getLoaiBaiGiang() != null
-                && moi.getLoaiBaiGiang() != null
+        return cu != null && cu.getLoaiBaiGiang() != null && moi.getLoaiBaiGiang() != null
                 && !moi.getLoaiBaiGiang().equals(cu.getLoaiBaiGiang());
     }
 
