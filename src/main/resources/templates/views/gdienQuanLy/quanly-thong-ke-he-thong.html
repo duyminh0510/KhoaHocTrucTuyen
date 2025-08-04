@@ -1,223 +1,204 @@
 <!DOCTYPE html>
-<html
-  lang="vi"
-  xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}"
->
-  <head>
-    <meta charset="UTF-8" />
-    <title>Thống kê hệ thống</title>
-  </head>
-  <body>
-    <main>
-      <div class="container-fluid px-4">
-        <h1 class="mt-4">📋 THỐNG KÊ HỆ THỐNG</h1>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-        <!-- Học viên -->
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-user-graduate me-1"></i>Học viên
-              </div>
-              <div class="card-body p-2">
-                <table class="table table-bordered table-sm">
-                  <thead>
-                    <tr>
-                      <th>Họ tên</th>
-                      <th>Email</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="hv : ${pageHocViens.content}">
-                      <td th:text="${hv.name}">Họ tên</td>
-                      <td th:text="${hv.email}">Email</td>
-                    </tr>
-                  </tbody>
-                </table>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Thống kê hệ thống</title>
+    </head>
 
-                <!-- Phân trang -->
-                <nav>
-                  <ul class="pagination pagination-sm">
-                    <li
-                      class="page-item"
-                      th:classappend="${pageHocViens.first} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number - 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        >Previous</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:each="pageNum : ${#numbers.sequence(0, pageHocViens.totalPages - 1)}"
-                      th:classappend="${pageNum} == ${pageHocViens.number} ? 'active'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageNum}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        th:text="${pageNum + 1}"
-                        >1</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:classappend="${pageHocViens.last} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number + 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        >Next</a
-                      >
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+    <body>
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">📋 THỐNG KÊ HỆ THỐNG</h1>
+
+                <!-- Học viên -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-user-graduate me-1"></i>Học
+                                viên
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ tên</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="hv : ${pageHocViens.content}">
+                                            <td th:text="${hv.name}">Họ tên</td>
+                                            <td th:text="${hv.email}">Email</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li class="page-item"
+                                            th:classappend="${pageHocViens.first} ? 'disabled'">
+                                            <a class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number - 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageHocViens.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageHocViens.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageNum}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageHocViens.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number + 1}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Giảng viên -->
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i
+                                    class="fas fa-chalkboard-teacher me-1"></i>Giảng
+                                viên
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ tên</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="gv : ${pageGiangViens.content}">
+                                            <td th:text="${gv.name}">Họ tên</td>
+                                            <td th:text="${gv.email}">Email</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageGiangViens.first} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number - 1}, pageKhoaHoc=${pageKhoaHocs.number})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageGiangViens.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageGiangViens.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageNum}, pageKhoaHoc=${pageKhoaHocs.number})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageGiangViens.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number + 1}, pageKhoaHoc=${pageKhoaHocs.number})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Khóa học -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-book-open me-1"></i>Khóa học
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên khóa học</th>
+                                            <th>Danh mục</th>
+                                            <th>Giảng Viên</th>
+                                            <th>Lượt thích</th>
+                                            <th>Giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            th:each="khoaHoc : ${pageKhoaHocs.content}">
+                                            <td
+                                                th:text="${khoaHoc.tenKhoaHoc}">Tên
+                                                khóa học</td>
+                                            <td
+                                                th:text="${khoaHoc.danhMuc.tenDanhMuc}">Danh
+                                                mục</td>
+                                            <td
+                                                th:text="${khoaHoc.giangVien.taikhoan.name}">
+                                                Giảng Viên
+                                            </td>
+                                            <td
+                                                th:text="${khoaHoc.luotThich}">0</td>
+                                            <td
+                                                th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')}">
+                                                0
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Phân trang -->
+                                <nav>
+                                    <ul class="pagination pagination-sm">
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageKhoaHocs.first} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number - 1})}">Previous</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:each="pageNum : ${#numbers.sequence(0, pageKhoaHocs.totalPages - 1)}"
+                                            th:classappend="${pageNum} == ${pageKhoaHocs.number} ? 'active'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageNum})}"
+                                                th:text="${pageNum + 1}">1</a>
+                                        </li>
+                                        <li
+                                            class="page-item"
+                                            th:classappend="${pageKhoaHocs.last} ? 'disabled'">
+                                            <a
+                                                class="page-link"
+                                                th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number + 1})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Giảng viên -->
-          <div class="col-md-6">
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-chalkboard-teacher me-1"></i>Giảng viên
-              </div>
-              <div class="card-body p-2">
-                <table class="table table-bordered table-sm">
-                  <thead>
-                    <tr>
-                      <th>Họ tên</th>
-                      <th>Email</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="gv : ${pageGiangViens.content}">
-                      <td th:text="${gv.name}">Họ tên</td>
-                      <td th:text="${gv.email}">Email</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <!-- Phân trang -->
-                <nav>
-                  <ul class="pagination pagination-sm">
-                    <li
-                      class="page-item"
-                      th:classappend="${pageGiangViens.first} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number - 1}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        >Previous</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:each="pageNum : ${#numbers.sequence(0, pageGiangViens.totalPages - 1)}"
-                      th:classappend="${pageNum} == ${pageGiangViens.number} ? 'active'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageNum}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        th:text="${pageNum + 1}"
-                        >1</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:classappend="${pageGiangViens.last} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number + 1}, pageKhoaHoc=${pageKhoaHocs.number})}"
-                        >Next</a
-                      >
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Khóa học -->
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-book-open me-1"></i>Khóa học
-              </div>
-              <div class="card-body p-2">
-                <table class="table table-bordered table-sm">
-                  <thead>
-                    <tr>
-                      <th>Tên khóa học</th>
-                      <th>Danh mục</th>
-                      <th>Giảng Viên</th>
-                      <th>Lượt thích</th>
-                      <th>Giá</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="khoaHoc : ${pageKhoaHocs.content}">
-                      <td th:text="${khoaHoc.tenKhoaHoc}">Tên khóa học</td>
-                      <td th:text="${khoaHoc.danhMuc.tenDanhMuc}">Danh mục</td>
-                      <td th:text="${khoaHoc.giangVien.taikhoan.name}">
-                        Giảng Viên
-                      </td>
-                      <td th:text="${khoaHoc.luotThich}">0</td>
-                      <td
-                        th:text="${#numbers.formatDecimal(khoaHoc.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')}"
-                      >
-                        0
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <!-- Phân trang -->
-                <nav>
-                  <ul class="pagination pagination-sm">
-                    <li
-                      class="page-item"
-                      th:classappend="${pageKhoaHocs.first} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number - 1})}"
-                        >Previous</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:each="pageNum : ${#numbers.sequence(0, pageKhoaHocs.totalPages - 1)}"
-                      th:classappend="${pageNum} == ${pageKhoaHocs.number} ? 'active'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageNum})}"
-                        th:text="${pageNum + 1}"
-                        >1</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      th:classappend="${pageKhoaHocs.last} ? 'disabled'"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{/admin/quanly-thong-ke-he-thong(pageHocVien=${pageHocViens.number}, pageGiangVien=${pageGiangViens.number}, pageKhoaHoc=${pageKhoaHocs.number + 1})}"
-                        >Next</a
-                      >
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </body>
+        </main>
+    </body>
 </html>

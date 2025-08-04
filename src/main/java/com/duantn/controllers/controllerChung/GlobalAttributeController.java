@@ -39,7 +39,9 @@ public class GlobalAttributeController {
     @ModelAttribute("taiKhoan")
     public TaiKhoan getTaiKhoan(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            return ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Integer id = userDetails.getTaiKhoan().getTaikhoanId();
+            return taiKhoanRepository.findById(id).orElse(null);
         }
         return null;
     }
@@ -71,5 +73,4 @@ public class GlobalAttributeController {
         }
         return Collections.emptySet();
     }
-
 }

@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll("form.ajax-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
+        form.addEventListener("submit", function(e) {
             e.preventDefault(); // Ngăn submit mặc định
 
             const formData = new FormData(form);
@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
             submitBtn.disabled = true;
 
             fetch(action, {
-                method: method.toUpperCase(),
-                body: formData
-            })
+                    method: method.toUpperCase(),
+                    body: formData
+                })
                 .then(async response => {
                     const text = await response.text();
                     if (!response.ok) {
@@ -101,13 +101,22 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     function likeCourse(id) {
         fetch('/khoaHoc/' + id + '/like', {
-            method: 'POST'
-        })
+                method: 'POST'
+            })
             .then(response => {
                 if (response.status === 401 || response.status === 403) {
+                    fetch("/auth/save-redirect-url", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "redirect=" + encodeURIComponent(window.location.pathname)
+                    });
+
+                    // ✅ Hiện modal đăng nhập
                     const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
                     loginModal.show();
                     return;
@@ -146,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function bindLikeButtons() {
         document.querySelectorAll(".like-btn").forEach((btn) => {
             if (!btn.dataset.bound) {
-                btn.addEventListener("click", function (e) {
+                btn.addEventListener("click", function(e) {
                     e.stopPropagation();
                     const courseId = btn.getAttribute("data-id");
                     likeCourse(courseId);
@@ -159,20 +168,20 @@ document.addEventListener("DOMContentLoaded", function () {
     bindLikeButtons();
 
     document.querySelectorAll(".share-btn").forEach((btn) => {
-        btn.addEventListener("click", function (e) {
+        btn.addEventListener("click", function(e) {
             e.stopPropagation();
         });
     });
 
     document.querySelectorAll(".add-to-cart-form").forEach((form) => {
-        form.addEventListener("click", function (e) {
+        form.addEventListener("click", function(e) {
             e.stopPropagation();
         });
     });
 });
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll('.tab-link');
     const contents = document.querySelectorAll('.tab-content');
 

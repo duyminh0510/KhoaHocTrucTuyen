@@ -56,7 +56,7 @@ public class HocTapCuaToiController {
 
         model.addAttribute("activeTab", tab);
 
-        return "views/gdienHocVien/hoc-tap-cua-toi"; // view mới bạn đã chuẩn bị
+        return "views/gdienHocVien/hoc-tap-cua-toi";
     }
 
     @PostMapping("/khoa-hoc/{id}/like")

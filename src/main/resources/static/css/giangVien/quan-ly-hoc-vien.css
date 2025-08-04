@@ -1,141 +1,50 @@
-.hocvien .quanlyhocvien {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+body {
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.hocvien .quanlyhocvien h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
+.hocvien {
+    padding: 50px 40px;
+}
+
+.hocvien .title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #14256d;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.hocvien .search-bar,
+.hocvien .card {
+    border-radius: 12px;
+}
+
 .hocvien .filter-course {
-    margin-bottom: 20px;
-}
-
-.hocvien .search-bar input,
-.hocvien .filter-course select {
-    width: 100%;
-    padding: 10px 16px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-.hocvien table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.hocvien th,
-.hocvien td {
-    padding: 14px;
-    text-align: left;
-    border-bottom: 1px solid #e1e1e1;
-}
-
-.hocvien th {
-    background-color: #f1f3f5;
-}
-
-.hocvien td.actions {
-    text-align: center;
-}
-
-.hocvien .btn {
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    background-color: #16203b;
-    transition: background 0.3s;
-}
-
-.hocvien .btn:hover {
-    background-color: #1e2a4f;
-}
-
-.hocvien .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.hocvien .modal-content {
+    margin-bottom: 25px;
+    padding: 20px;
     background-color: #fff;
-    margin: 8% auto;
-    padding: 30px 25px;
-    border-radius: 16px;
-    width: 500px;
-    max-width: 90%;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    font-family: 'Segoe UI', sans-serif;
-    animation: fadeIn 0.3s ease-in-out;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.hocvien .modal-header {
-    font-size: 22px;
-    font-weight: 700;
-    color: #16203b;
-    margin-bottom: 20px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e0e0e0;
+.hocvien .filter-course label {
+    font-weight: 600;
+    min-width: 130px;
+    margin-top: 0px;
 }
 
-.hocvien .modal-body p {
-    margin: 12px 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
+.hocvien .form-select-sm {
+    width: 330px;
 }
 
-.hocvien .modal-body p strong {
-    color: #16203b;
-    display: inline-block;
-    width: 110px;
+.hocvien .filter-icon {
+    font-size: 1.5rem;
 }
 
-.hocvien .close {
-    position: absolute;
-    right: 18px;
-    top: 16px;
-    font-size: 22px;
-    color: #888;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.hocvien .close:hover {
-    color: #000;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.hocvien .list-group-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
 }

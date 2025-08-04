@@ -28,7 +28,7 @@ public class BaiViet implements Serializable {
     @Column(name = "tenBaiViet", columnDefinition = "NVARCHAR(MAX)")
     private String tenBaiViet;
 
-    @Column(length = 10000, columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String noidung;
 
     @CreationTimestamp

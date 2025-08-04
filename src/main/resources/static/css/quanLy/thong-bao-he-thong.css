@@ -1,0 +1,87 @@
+.thongbaohethong {
+    max-width: 950px;
+    margin: 60px auto 40px auto;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    /* padding bên trong cho nội dung */
+}
+
+.thongbaohethong-header h3 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #2bd8ff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.thongbaohethong-empty {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+
+.thongbaohethong-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.thongbaohethong-card {
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 1.2rem 1.5rem;
+    border-radius: 10px;
+    border-left: 6px solid #0d7289;
+    backdrop-filter: blur(8px);
+    /* Hiệu ứng đổ bóng */
+    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.2), /* bóng tổng thể */
+    -3px 0 8px rgba(2, 93, 114, 0.6);
+    /* bóng đổ ra từ viền trái */
+    animation: slideIn 0.6s ease forwards;
+    transform: translateY(20px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.thongbaohethong-card:hover {
+    transform: translateY(0px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 210, 255, 0.3), -4px 0 12px rgba(8, 89, 107, 0.8);
+}
+
+.thongbaohethong-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.thongbaohethong-card-header h5 {
+    font-size: 1.2rem;
+    color: #3dd9e1;
+    margin: 0;
+}
+
+.thongbaohethong-date {
+    font-size: 0.9rem;
+    color: #353535;
+}
+
+.thongbaohethong-body {
+    margin-top: 0.8rem;
+    color: #f0f0f0;
+    line-height: 1.6;
+}
+
+
+/* Animation slide in */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

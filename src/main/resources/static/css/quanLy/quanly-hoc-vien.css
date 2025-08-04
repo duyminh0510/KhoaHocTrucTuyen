@@ -1,23 +1,51 @@
-/* CSS cho các trang quản lý học viên nhân viên */
-
-.table-student th, .table-student td {
-    vertical-align: middle;
-    text-align: center;
-}
-.badge-active { background: #43a047 !important; }
-.badge-locked { background: #e53935 !important; }
-.avatar-student {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #0b1c36;
-}
-.avatar-student-detail {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #0b1c36;
-    margin-bottom: 16px;
-} 
+  .danhsachhocvien {
+      background-color: #f8f9fa;
+      padding: 50px 70px;
+      font-family: 'Segoe UI', sans-serif;
+      animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  .danhsachhocvien h2 {
+      color: #16203b;
+      margin-bottom: 25px;
+      font-weight: bold;
+  }
+  
+  .danhsachhocvien .table th {
+      background-color: #16203b;
+      color: white;
+      vertical-align: middle;
+  }
+  
+  .danhsachhocvien .status-active {
+      color: green;
+      font-weight: bold;
+  }
+  
+  .danhsachhocvien .status-locked {
+      color: red;
+      font-weight: bold;
+  }
+  
+  .danhsachhocvien .btn {
+      transition: all 0.3s ease;
+  }
+  
+  .danhsachhocvien .btn:hover {
+      transform: scale(1.05);
+  }
+  
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  .danhsachhocvien .alert {
+      animation: fadeIn 0.4s ease-in;
+  }

@@ -1,139 +1,125 @@
 <!DOCTYPE html>
-<html
-  lang="vi"
-  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang Nhân Viên</title>
-  </head>
+<html lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
 
-  <body>
-    <main class="homequanly">
-      <div class="container py-4">
-        <h2 class="mb-4 fw-bold text-primary-custom">
-          📊 Bảng điều khiển nhân viên
-        </h2>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trang Nhân Viên</title>
+    </head>
 
-        <!-- Thống kê -->
-        <div class="row g-4 mb-4 justify-content-center">
-          <div class="col-md-4">
-            <a
-              href="/admin/quanly-thong-ke-he-thong"
-              style="text-decoration: none; color: inherit"
-            >
-              <div class="highlight-box text-center">
-                <h5>📘 KHÓA HỌC ĐANG MỞ</h5>
-                <p th:text="${soKhoaHoc}"></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-4">
-            <a
-              href="/admin/quanly-thong-ke-he-thong"
-              style="text-decoration: none; color: inherit"
-            >
-              <div class="highlight-box text-center">
-                <h5>👨‍🏫 GIẢNG VIÊN</h5>
-                <p th:text="${soGiangVien}"></p>
-              </div>
-            </a>
-          </div>
+    <body>
+        <main class="homequanly">
+            <div class="container py-4">
+                <h2 class="mb-4 fw-bold text-primary-custom">
+                    📊 Bảng điều khiển nhân viên
+                </h2>
 
-          <div class="col-md-4">
-            <a
-              href="/admin/quanly-thong-ke-he-thong"
-              style="text-decoration: none; color: inherit"
-            >
-              <div class="highlight-box text-center">
-                <h5>🎓 HỌC VIÊN</h5>
-                <p th:text="${soHocVien}"></p>
-              </div>
-            </a>
-          </div>
-        </div>
+                <!-- Thống kê -->
+                <div class="row g-4 mb-4 justify-content-center">
+                    <div class="col-md-4">
+                        <a href="/admin/quanly-thong-ke-he-thong"
+                            style="text-decoration: none; color: inherit">
+                            <div class="highlight-box text-center">
+                                <h5>📘 KHÓA HỌC ĐANG MỞ</h5>
+                                <p th:text="${soKhoaHoc}"></p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/admin/quanly-thong-ke-he-thong"
+                            style="text-decoration: none; color: inherit">
+                            <div class="highlight-box text-center">
+                                <h5>👨‍🏫 GIẢNG VIÊN</h5>
+                                <p th:text="${soGiangVien}"></p>
+                            </div>
+                        </a>
+                    </div>
 
-        <!-- Doanh thu quý này -->
-        <div class="row g-4 mb-4">
-          <div class="col-md-12">
-            <a
-              href="/admin/doanhthu"
-              style="text-decoration: none; color: inherit"
-            >
-            <div class="highlight-box text-center">
-              <h5>💰 DOANH THU QUÝ NÀY</h5>
-              <p
-                th:text="${#numbers.formatDecimal(doanhThuQuyNay, 0, 'COMMA', 0, 'POINT')} + ' đ'"
-              ></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Top khoá học -->
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header card-header-custom">
-            🔥 Top 5 khóa học bán chạy
-          </div>
-          <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item"
-              th:if="${topKhoaHoc == null or #lists.isEmpty(topKhoaHoc)}"
-            >
-              Không có dữ liệu
-            </li>
-            <li
-              class="list-group-item"
-              th:each="khoaHoc, iterStat : ${topKhoaHoc}"
-            >
-              <span class="fw-bold" th:text="${iterStat.index + 1}"></span>.
-              <span th:text="${khoaHoc.tenKhoaHoc}"></span>
-              <span>-</span>
-              <span th:text="${khoaHoc.giangVien.taikhoan.name}"></span>
-              <span>-</span>
-              <span th:text="${topKhoaHocLuotMua[khoaHoc.khoahocId]}"></span>
-              lượt mua
-            </li>
-          </ul>
-        </div>
-
-        <!-- Nhiệm vụ và Thông báo -->
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card shadow-sm">
-              <div class="card-header card-header-custom">
-                📋 Nhiệm vụ hôm nay
-              </div>
-              <ul class="list-group list-group-flush">
-                <li
-                  class="list-group-item"
-                  th:each="task : ${nhiemVuHomNay}"
-                  th:text="${task}"
-                >
-                  📝 Task mẫu
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="card shadow-sm">
-              <div class="card-header card-header-custom">
-                📢 Thông báo hệ thống
-              </div>
-              <div class="card-body">
-                <div
-                  class="alert alert-info"
-                  th:each="thongBao : ${thongBaoHeThong}"
-                  th:text="${thongBao}"
-                >
-                  🔔 Thông báo mẫu
+                    <div class="col-md-4">
+                        <a href="/admin/quanly-thong-ke-he-thong"
+                            style="text-decoration: none; color: inherit">
+                            <div class="highlight-box text-center">
+                                <h5>🎓 HỌC VIÊN</h5>
+                                <p th:text="${soHocVien}"></p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </body>
-</html>
+
+                <!-- Doanh thu quý này -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <a href="/admin/doanhthu"
+                            style="text-decoration: none; color: inherit">
+                            <div class="highlight-box text-center">
+                                <h5>💰 DOANH THU QUÝ NÀY</h5>
+                                <p
+                                    th:text="${#numbers.formatDecimal(doanhThuQuyNay, 0, 'COMMA', 0, 'POINT')} + ' đ'"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top khoá học -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header card-header-custom">
+                            🔥 Top 5 khóa học bán chạy
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"
+                                th:if="${topKhoaHoc == null or #lists.isEmpty(topKhoaHoc)}">
+                                Không có dữ liệu
+                            </li>
+                            <li class="list-group-item"
+                                th:each="khoaHoc, iterStat : ${topKhoaHoc}">
+                                <span class="fw-bold"
+                                    th:text="${iterStat.index + 1}"></span>.
+                                <span th:text="${khoaHoc.tenKhoaHoc}"></span>
+                                <span>-</span>
+                                <span
+                                    th:text="${khoaHoc.giangVien.taikhoan.name}"></span>
+                                <span>-</span>
+                                <span
+                                    th:text="${topKhoaHocLuotMua[khoaHoc.khoahocId]}"></span>
+                                lượt mua
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Nhiệm vụ và Thông báo -->
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header card-header-custom">
+                                    📋 Nhiệm vụ hôm nay
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"
+                                        th:each="task : ${nhiemVuHomNay}"
+                                        th:text="${task}">
+                                        📝 Task mẫu
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header card-header-custom">
+                                    📢 Thông báo hệ thống
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info"
+                                        th:each="thongBao : ${thongBaoHeThong}"
+                                        th:text="${thongBao}">
+                                        🔔 Thông báo mẫu
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </body>
+
+    </html>

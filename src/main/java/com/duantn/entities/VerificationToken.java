@@ -33,4 +33,10 @@ public class VerificationToken {
         this.email = email;
         this.expiryTime = expiryTime;
     }
+
+    public VerificationToken(String token, String email) {
+        this.token = token;
+        this.email = email;
+        this.expiryTime = LocalDateTime.now().plusDays(2);
+    }
 }

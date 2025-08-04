@@ -3,10 +3,17 @@ package com.duantn.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
+import com.duantn.enums.TrangThaiKhoaHoc;
 
 public interface KhoaHocService {
+
+    List<KhoaHoc> timTheoTenVaGiangVien(Integer giangvienId, String keyword);
+
     List<KhoaHoc> getTatCaKhoaHoc();
 
     KhoaHoc getKhoaHocById(Integer id);
@@ -42,12 +49,20 @@ public interface KhoaHocService {
     //
     List<KhoaHoc> timKiemTheoTenPublished(String keyword);
 
-    List<KhoaHoc> getTatCaKhoaHocPublished();
+    List<KhoaHoc> layKhoaHocTheoTrangThai(TrangThaiKhoaHoc trangThai);
 
     KhoaHoc getKhoaHocBySlug(String slug);
 
-    List<KhoaHoc> getKhoaHocTheoDanhMucAndTrangThai(Integer danhMucId, com.duantn.enums.TrangThaiKhoaHoc trangThai);
+    List<KhoaHoc> findByIds(List<Integer> ids);
 
-    // Lấy khoá học PUBLISHED theo danh mục (tạo mới)
-    List<KhoaHoc> getPublishedKhoaHocByDanhMuc(Integer danhMucId);
+    List<KhoaHoc> findAllByIds(List<Integer> ids);
+
+    KhoaHoc layTheoId(Integer id);
+
+    Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable);
+
+    // Phân trang theo danh mục
+    Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable);
+
+    List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai);
 }

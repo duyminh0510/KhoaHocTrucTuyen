@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi"
+    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+
+    <head>
+        <title>Khóa học đã kiểm duyệt</title>
+    </head>
+
+    <body>
+        <main class="dakiemduyet">
+            <div class="container">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-check-double me-2 text-primary"></i> Danh
+                    sách Khóa học đã kiểm duyệt
+                </h3>
+
+                <ul class="nav nav-tabs justify-content-center"
+                    id="tabKiemDuyet" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="duyet-tab"
+                            data-bs-toggle="tab" data-bs-target="#daDuyet"
+                            type="button" role="tab">
+                            <i
+                                class="fas fa-check-circle me-1 text-success"></i>Đã
+                            duyệt
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tuChoi-tab"
+                            data-bs-toggle="tab" data-bs-target="#daTuChoi"
+                            type="button" role="tab">
+                            <i
+                                class="fas fa-times-circle me-1 text-danger"></i>Đã
+                            từ chối
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-4" id="tabKiemDuyetContent">
+                    <!-- Tab đã duyệt -->
+                    <div class="tab-pane fade show active" id="daDuyet"
+                        role="tabpanel">
+                        <div th:if="${#lists.isEmpty(daDuyet)}"
+                            class="text-center text-muted">
+                            <i class="fas fa-folder-open me-1"></i>Không có khóa
+                            học đã duyệt.
+                        </div>
+                        <div th:each="khoaHoc : ${daDuyet}"
+                            class="card mb-3 p-3 bg-light">
+                            <h5 class="fw-bold text-success mb-1"
+                                th:text="${khoaHoc.tenKhoaHoc}">
+                                Tên khóa học
+                            </h5>
+                            <div>
+                                <i class="fas fa-user me-2 text-secondary"></i>
+                                <a href="#" class="instructor-link"
+                                    th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">
+                                    Tên Giảng Viên
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab đã từ chối -->
+                    <div class="tab-pane fade" id="daTuChoi" role="tabpanel">
+                        <div th:if="${#lists.isEmpty(daTuChoi)}"
+                            class="text-center text-muted">
+                            <i class="fas fa-folder-open me-1"></i>Không có khóa
+                            học bị từ chối.
+                        </div>
+                        <div th:each="khoaHoc : ${daTuChoi}"
+                            class="card mb-3 p-3 bg-white border border-danger-subtle">
+                            <h5 class="fw-bold text-danger mb-1"
+                                th:text="${khoaHoc.tenKhoaHoc}">
+                                Tên khóa học
+                            </h5>
+                            <div>
+                                <i
+                                    class="fas fa-user-slash me-2 text-danger"></i>
+                                <a href="#" class="instructor-link"
+                                    th:text="${khoaHoc.giangVien?.taikhoan?.name ?: 'Đang cập nhật'}">
+                                    Tên Giảng Viên
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+
+</html>

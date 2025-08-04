@@ -83,3 +83,15 @@
 .themkhoahoc .box-khuyen-mai input:focus {
     border-color: #007bff;
 }
+
+.themkhoahoc .custom-outline {
+    background-color: white;
+    border: 2px solid #16203b;
+    color: #16203b;
+    transition: all 0.3s ease;
+}
+
+.themkhoahoc .custom-outline:hover {
+    background-color: #16203b;
+    color: white;
+}

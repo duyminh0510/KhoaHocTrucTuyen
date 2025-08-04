@@ -44,9 +44,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 case "ROLE_HOCVIEN":
                 case "ROLE_GIANGVIEN":
-                    // ✅ Nếu có trang người dùng cố truy cập trước khi đăng nhập
-                    SavedRequest savedRequest =
-                            new HttpSessionRequestCache().getRequest(request, response);
+                    String redirectParam = (String) request.getSession().getAttribute("redirectAfterLogin");
+                    if (redirectParam != null && !redirectParam.isBlank()
+                            && !redirectParam.contains("/admin") && !redirectParam.contains("/nhanvien")) {
+                        redirectUrl = redirectParam;
+                        request.getSession().removeAttribute("redirectAfterLogin");
+                        break;
+                    }
+
+                    SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
                     if (savedRequest != null) {
                         String targetUrl = savedRequest.getRedirectUrl();
 

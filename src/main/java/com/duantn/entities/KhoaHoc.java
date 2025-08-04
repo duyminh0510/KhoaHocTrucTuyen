@@ -86,9 +86,11 @@ public class KhoaHoc implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giangvien_id", nullable = false)
     private GiangVien giangVien;
+
     @ManyToOne
     @JoinColumn(name = "danhmuc_id") // tên cột trong bảng hiện tại trỏ đến khóa chính bên DanhMuc
     private DanhMuc danhMuc;
+
     @OneToMany(mappedBy = "khoahoc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Chuong> chuongs;
 
@@ -110,4 +112,15 @@ public class KhoaHoc implements Serializable {
                 ", danhMucId=" + (danhMuc != null ? danhMuc.getDanhmucId() : "null") +
                 '}';
     }
+
+    public BigDecimal getGiaHienTai() {
+        LocalDateTime now = LocalDateTime.now();
+        if (giaKhuyenMai != null && ngaybatdau != null && ngayketthuc != null) {
+            if (!now.isBefore(ngaybatdau) && !now.isAfter(ngayketthuc)) {
+                return giaKhuyenMai;
+            }
+        }
+        return giagoc != null ? giagoc : BigDecimal.ZERO;
+    }
+
 }

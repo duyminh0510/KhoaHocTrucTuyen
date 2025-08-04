@@ -59,3 +59,23 @@ select.form-control {
 .nut-thao-tac .btn {
     border-radius: 0 !important;
 }
+
+.tracnghiem .themkhoahoc-btn {
+    color: #16203b;
+    border: 1px solid #16203b;
+}
+
+.tracnghiem .themkhoahoc-btn:hover {
+    background-color: #16203b;
+    color: white;
+}
+
+.tracnghiem .card-cau-hoi {
+    border: 1px solid #0a398a;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.tracnghiem .card-cau-hoi:hover {
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
+}
