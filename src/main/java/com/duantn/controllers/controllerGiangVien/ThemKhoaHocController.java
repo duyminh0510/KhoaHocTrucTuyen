@@ -170,15 +170,9 @@ public class ThemKhoaHocController {
         boolean hasError = false;
         // Kiểm tra nếu cả 3 trường đều trống hoặc null
         if ((khoahocUpdate.getGiagoc() == null
-                || khoahocUpdate.getGiagoc().compareTo(BigDecimal.ZERO) == 0)
-                && (khoahocUpdate.getNgaybatdau() == null)
-                && (khoahocUpdate.getNgayketthuc() == null)) {
+                || khoahocUpdate.getGiagoc().compareTo(BigDecimal.ZERO) == 0)) {
 
             result.rejectValue("giagoc", "error.course", "Vui lòng nhập giá gốc");
-            result.rejectValue("ngaybatdau", "error.course",
-                    "Vui lòng nhập ngày bắt đầu khuyến mãi");
-            result.rejectValue("ngayketthuc", "error.course",
-                    "Vui lòng nhập ngày kết thúc khuyến mãi");
             hasError = true;
         }
 
