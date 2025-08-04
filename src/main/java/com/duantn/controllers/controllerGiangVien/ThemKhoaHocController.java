@@ -168,13 +168,33 @@ public class ThemKhoaHocController {
     public String savePrice(@ModelAttribute("course") KhoaHoc khoahocUpdate, BindingResult result,
             Model model) {
         boolean hasError = false;
+        // Kiểm tra nếu cả 3 trường đều trống hoặc null
+        if ((khoahocUpdate.getGiagoc() == null
+                || khoahocUpdate.getGiagoc().compareTo(BigDecimal.ZERO) == 0)
+                && (khoahocUpdate.getNgaybatdau() == null)
+                && (khoahocUpdate.getNgayketthuc() == null)) {
 
-        // 1. Kiểm tra giá gốc
-        if (khoahocUpdate.getGiagoc() == null
-                || khoahocUpdate.getGiagoc().compareTo(new BigDecimal("1000")) < 0) {
-            result.rejectValue("giagoc", "error.course", "Giá phải từ 1.000 VNĐ trở lên");
+            result.rejectValue("giagoc", "error.course", "Vui lòng nhập giá gốc");
+            result.rejectValue("ngaybatdau", "error.course",
+                    "Vui lòng nhập ngày bắt đầu khuyến mãi");
+            result.rejectValue("ngayketthuc", "error.course",
+                    "Vui lòng nhập ngày kết thúc khuyến mãi");
             hasError = true;
         }
+
+
+        // 1. Kiểm tra giá gốc
+        if (khoahocUpdate.getGiagoc() == null) {
+            result.rejectValue("giagoc", "error.course", "Vui lòng nhập giá gốc");
+            hasError = true;
+        } else if (khoahocUpdate.getGiagoc().compareTo(new BigDecimal("1000")) < 0) {
+            result.rejectValue("giagoc", "error.course", "Giá phải từ 1.000 VNĐ trở lên");
+            hasError = true;
+        } else if (khoahocUpdate.getGiagoc().compareTo(new BigDecimal("999999999")) > 0) {
+            result.rejectValue("giagoc", "error.course", "Giá không được vượt quá 999.999.999 VNĐ");
+            hasError = true;
+        }
+
 
         // 2. Kiểm tra phần trăm giảm
         Integer ptg = khoahocUpdate.getPhanTramGiam();
