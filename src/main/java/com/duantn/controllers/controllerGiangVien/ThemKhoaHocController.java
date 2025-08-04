@@ -88,6 +88,9 @@ public class ThemKhoaHocController {
         } else if (formCourse.getMoTa().trim().length() < 20) {
             result.rejectValue("moTa", "error.course", "Mô tả phải có ít nhất 20 ký tự");
             hasError = true;
+        } else if (formCourse.getMoTa().trim().length() > 1000) {
+            result.rejectValue("moTa", "error.course", "Mô tả không được vượt quá 1000 ký tự");
+            hasError = true;
         }
 
         boolean isCreating = formCourse.getKhoahocId() == null;
@@ -123,10 +126,18 @@ public class ThemKhoaHocController {
         khoahoc.setTrangThai(TrangThaiKhoaHoc.DRAFT);
 
         if (file != null && !file.isEmpty()) {
+            // Kiểm tra kích thước file (10MB = 10 * 1024 * 1024 bytes)
+            if (file.getSize() > 5 * 1024 * 1024) {
+                model.addAttribute("imageError", "Ảnh bìa không được vượt quá 5MB");
+                model.addAttribute("danhmuc", danhMucService.layTatCa());
+                return "views/gdienGiangVien/them-khoa-hoc";
+            }
+
             String imageUrl = cloudinaryService.uploadImage(file);
             khoahoc.setAnhBia(imageUrl);
             khoahoc.setAnhBiaPublicId(cloudinaryService.extractPublicIdFromUrl(imageUrl));
         }
+
 
         // Save
         khoaHocService.save(khoahoc);
