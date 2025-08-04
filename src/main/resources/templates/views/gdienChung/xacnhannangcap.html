@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
     th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác nhận nâng cấp tài khoản')}">
-
 <main class="xacnhan-nangcap">
-    <div class="container mt-5 mb-5">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card text-center">
-                    <div class="card-header">
-                        <h3>Nâng cấp tài khoản</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Email <strong th:text="${session.registrationEmail}"></strong> đã được đăng
-                            ký với vai trò là một học viên.</p>
-                        <p>Bạn có muốn nâng cấp tài khoản này lên thành Giảng viên không?</p>
-                        <a th:href="@{/dang-ky-giang-vien/upgrade-details}" class="btn btn-primary">Đồng ý nâng cấp</a>
-                        <a th:href="@{/}" class="btn btn-secondary">Hủy bỏ</a>
-                    </div>
-                </div>
+            <div class="col-md-8 col-lg-6">
+                <h2>🔓 Nâng cấp tài khoản</h2>
+                <p>📧 Email <strong th:text="${session.registrationEmail}"></strong> đã được đăng ký với vai trò là một
+                    <strong>học viên</strong>.
+                </p>
+                <p>🎓 Bạn có muốn nâng cấp tài khoản này lên thành <strong>giảng viên</strong> không?</p>
+                <a th:href="@{/dang-ky-giang-vien/upgrade-details}" class="btn btn-primary">Đồng ý nâng cấp</a>
+                <a th:href="@{/}" class="btn btn-secondary">Hủy bỏ</a>
             </div>
         </div>
     </div>

@@ -1,203 +1,146 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Đăng ký thông tin giảng viên')}">
-<main class="hoantat form-giangvien">
+    th:replace="~{views/gdienChung/templateChung :: view(~{::main}, ~{::title})}">
 
-    <div class="container mt-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h3>Thông tin Giảng viên</h3>
-                        <p>Hoàn tất các thông tin dưới đây để trở thành
-                            giảng viên.</p>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/dang-ky-giang-vien/register-new}" th:object="${giangVienDto}" method="post"
-                            id="formDangKy" novalidate>
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký Giảng viên</title>
+    <link rel="stylesheet" href="/css/form-giangvien.css">
+</head>
 
-                            <!-- Email (read-only) -->
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" th:field="*{email}" readonly>
+<body>
+    <main class="form-giangvien">
+        <div class="container-fluid">
+            <div class="text-center mb-4">
+                <h2>👤 Thông tin Giảng viên</h2>
+                <p class="text-muted">Hoàn tất các thông tin dưới đây để trở thành giảng viên.</p>
+            </div>
+
+            <form th:action="@{/dang-ky-giang-vien/register-new}" th:object="${giangVienDto}" method="post"
+                id="formDangKy" novalidate>
+                <!-- THÔNG TIN CÁ NHÂN -->
+                <div class="form-section">
+                    <h5 class="form-title">📌 Thông tin cá nhân</h5>
+                    <div class="form-group-row">
+                        <div class="mb-3">
+                            <label class="form-label">📧 Email</label>
+                            <input type="email" class="form-control" th:field="*{email}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">👤 Họ và Tên</label>
+                            <input type="text" class="form-control" th:field="*{hoTen}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}">
                             </div>
-
-                            <!-- Họ và Tên -->
-                            <div class="mb-3">
-                                <label class="form-label">Họ và Tên</label>
-                                <input type="text" class="form-control" th:field="*{hoTen}" required>
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    họ và tên.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('hoTen')}"
-                                    th:errors="*{hoTen}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">📞 Số điện thoại</label>
+                            <input type="text" class="form-control" th:field="*{sdt}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">🔐 Mật khẩu</label>
+                            <input type="password" class="form-control" th:field="*{password}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('password')}"
+                                th:errors="*{password}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">🪪 Số CCCD</label>
+                            <input type="text" class="form-control" th:field="*{CCCD}" required pattern="[0-9]{12}"
+                                maxlength="12" inputmode="numeric">
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('CCCD')}" th:errors="*{CCCD}">
                             </div>
-
-                            <!-- SĐT -->
-                            <div class="mb-3">
-                                <label class="form-label">Số điện
-                                    thoại</label>
-                                <input type="text" class="form-control" th:field="*{sdt}" required>
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    số điện thoại.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}">
-                                </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">📅 Ngày sinh</label>
+                            <input type="date" class="form-control" th:field="*{ngaySinh}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('ngaySinh')}"
+                                th:errors="*{ngaySinh}"></div>
+                        </div>
+                        <div class="mb-3" style="grid-column: span 2">
+                            <label class="form-label">🧑‍🤝‍🧑 Giới tính</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Nam"
+                                    required>
+                                <label class="form-check-label">Nam</label>
                             </div>
-
-                            <!-- Mật khẩu -->
-                            <div class="mb-3">
-                                <label class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control" th:field="*{password}" required>
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    mật khẩu.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('password')}"
-                                    th:errors="*{password}"></div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Nữ">
+                                <label class="form-check-label">Nữ</label>
                             </div>
-
-                            <!-- CCCD -->
-                            <div class="mb-3">
-                                <label class="form-label">Số CCCD</label>
-                                <input type="text" class="form-control" th:field="*{CCCD}" required pattern="[0-9]{12}"
-                                    title="CCCD phải là 12 chữ số." maxlength="12" inputmode="numeric">
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    số CCCD gồm 12 chữ số.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('CCCD')}" th:errors="*{CCCD}">
-                                </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Khác">
+                                <label class="form-check-label">Khác</label>
                             </div>
-
-                            <!-- Ngày sinh -->
-                            <div class="mb-3">
-                                <label class="form-label">Ngày sinh</label>
-                                <input type="date" class="form-control" th:field="*{ngaySinh}" required>
-                                <div class="invalid-feedback">Vui lòng chọn
-                                    ngày sinh hợp lệ (≥ 18 tuổi).</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('ngaySinh')}"
-                                    th:errors="*{ngaySinh}"></div>
-                            </div>
-
-                            <!-- Giới tính -->
-                            <div class="mb-3">
-                                <label class="form-label">Giới tính</label>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('gioiTinh')}"
-                                    th:errors="*{gioiTinh}"></div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Nam"
-                                        required>
-                                    <label class="form-check-label">Nam</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Nữ">
-                                    <label class="form-check-label">Nữ</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" th:field="*{gioiTinh}" value="Khác">
-                                    <label class="form-check-label">Khác</label>
-                                </div>
-                            </div>
-
-                            <!-- Công việc -->
-                            <div class="mb-3">
-                                <label class="form-label">Công việc hiện
-                                    tại</label>
-                                <input type="text" class="form-control" th:field="*{congViec}" required>
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    công việc hiện tại.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('congViec')}"
-                                    th:errors="*{congViec}"></div>
-                            </div>
-
-                            <!-- Chuyên ngành -->
-                            <div class="mb-3">
-                                <label class="form-label">Chuyên ngành bạn
-                                    đang dạy</label>
-                                <input type="text" class="form-control" th:field="*{chuyenNganh}" required>
-                                <div class="invalid-feedback">Vui lòng nhập
-                                    chuyên ngành.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('chuyenNganh')}"
-                                    th:errors="*{chuyenNganh}"></div>
-                            </div>
-
-                            <!-- Kinh nghiệm -->
-                            <div class="mb-3">
-                                <label class="form-label">Kinh
-                                    nghiệm</label>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('kinhNghiem')}"
-                                    th:errors="*{kinhNghiem}"></div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}"
-                                        value="Dưới 1 năm" required>
-                                    <label class="form-check-label">Dưới 1
-                                        năm</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}"
-                                        value="1 - 2 năm">
-                                    <label class="form-check-label">1 - 2
-                                        năm</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}"
-                                        value="2 - 5 năm">
-                                    <label class="form-check-label">2 - 5
-                                        năm</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" th:field="*{kinhNghiem}"
-                                        value="Trên 5 năm">
-                                    <label class="form-check-label">Trên 5
-                                        năm</label>
-                                </div>
-                            </div>
-
-                            <!-- Kỹ năng -->
-                            <div class="mb-3">
-                                <label class="form-label">Mô tả kỹ
-                                    năng</label>
-                                <textarea class="form-control" th:field="*{kyNang}" rows="4" required></textarea>
-                                <div class="invalid-feedback">Vui lòng mô tả
-                                    kỹ năng của bạn.</div>
-                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('kyNang')}"
-                                    th:errors="*{kyNang}"></div>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Hoàn tất đăng
-                                    ký</button>
-                            </div>
-                        </form>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('gioiTinh')}"
+                                th:errors="*{gioiTinh}"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- THÔNG TIN NGHÊ NGHIỆP -->
+                <div class="form-section">
+                    <h5 class="form-title">🏫 Thông tin nghề nghệp</h5>
+                    <div class="form-group-row">
+                        <div class="mb-3">
+                            <label class="form-label">💼 Công việc hiện tại</label>
+                            <input type="text" class="form-control" th:field="*{congViec}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('congViec')}"
+                                th:errors="*{congViec}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">📘 Chuyên ngành bạn đang dạy</label>
+                            <input type="text" class="form-control" th:field="*{chuyenNganh}" required>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('chuyenNganh')}"
+                                th:errors="*{chuyenNganh}"></div>
+                        </div>
+                        <div class="mb-3" style="grid-column: span 2">
+                            <label class="form-label">📈 Kinh nghiệm</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="Dưới 1 năm"
+                                    required>
+                                <label class="form-check-label">Dưới 1 năm</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="1 - 2 năm">
+                                <label class="form-check-label">1 - 2 năm</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{kinhNghiem}" value="2 - 5 năm">
+                                <label class="form-check-label">2 - 5 năm</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{kinhNghiem}"
+                                    value="Trên 5 năm">
+                                <label class="form-check-label">Trên 5 năm</label>
+                            </div>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('kinhNghiem')}"
+                                th:errors="*{kinhNghiem}"></div>
+                        </div>
+                        <div class="mb-3" style="grid-column: span 2">
+                            <label class="form-label">🛠️ Mô tả kỹ năng</label>
+                            <textarea class="form-control" th:field="*{kyNang}" rows="4" required></textarea>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('kyNang')}" th:errors="*{kyNang}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">📨 Gửi thông tin</button>
+                </div>
+            </form>
         </div>
-    </div>
 
-    <!-- STYLE -->
-    <style>
-        .was-validated input:invalid,
-        .was-validated textarea:invalid,
-        .was-validated select:invalid {
-            border-color: red;
-        }
-
-        .was-validated input:invalid~.invalid-feedback,
-        .was-validated textarea:invalid~.invalid-feedback {
-            display: block;
-        }
-
-        .invalid-feedback {
-            display: none;
-        }
-    </style>
-
-    <!-- SCRIPT -->
-    <script>
-        const form = document.getElementById('formDangKy');
-        form.addEventListener('submit', function (e) {
-            if (!form.checkValidity()) {
-                e.preventDefault();
-                form.classList.add('was-validated');
-            }
-        });
-    </script>
-</main>
+        <script>
+            const form = document.getElementById('formDangKy');
+            form.addEventListener('submit', function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    form.classList.add('was-validated');
+                }
+            });
+        </script>
+    </main>
+</body>
 
 </html>

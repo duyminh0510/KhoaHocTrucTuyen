@@ -2,36 +2,55 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
     th:replace="~{views/gdienChung/templateChung :: view(~{::main}, 'Xác thực Mật khẩu')}">
 
-<main class="xacthuc-matkhau">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác thực Mật khẩu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/xacthuc-matkhau.css}">
+</head>
 
-    <div class="container mt-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h3>Xác thực Mật khẩu</h3>
-                        <p>Để hoàn tất, vui lòng nhập mật khẩu hiện tại của bạn.</p>
+<body>
+    <main class="xacnhan-matkhau">
+        <section class="xacnhan-matkhau__section d-flex align-items-center justify-content-center">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <!-- Cột hình ảnh -->
+                    <div class="col-md-6 d-flex justify-content-center">
+                        <img th:src="@{/photos/khoa1.png}" class="img-fluid xacnhan-matkhau__img" alt="Khóa bảo mật">
                     </div>
-                    <div class="card-body">
-                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-                        <form th:action="@{/dang-ky-giang-vien/verify-password}" method="post">
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Mật khẩu hiện tại</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                    <!-- Cột form -->
+                    <div class="col-md-5">
+                        <div class="xacnhan-matkhau__wrapper">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold text-primary">🔐 Xác thực Mật khẩu</h3>
+                                <p>🔎 Vui lòng nhập mật khẩu hiện tại để hoàn tất nâng cấp.</p>
                             </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Hoàn tất nâng cấp</button>
+                            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                            <form th:action="@{/dang-ky-giang-vien/verify-password}" method="post">
+                                <div class="mb-3 text-start">
+                                    <label for="password" class="form-label">🔑 Mật khẩu hiện tại</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn xacnhan-matkhau__btn">✅ Hoàn tất nâng cấp</button>
+                                </div>
+                            </form>
+
+                            <div class="text-center mt-3">
+                                <a style="text-decoration: none;"
+                                    th:href="@{/quen-mat-khau(email=${session.registrationEmail})}">
+                                    Quên mật khẩu❓
+                                </a>
                             </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a th:href="@{/quen-mat-khau(email=${session.registrationEmail})}">Quên mật khẩu?</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</main>
+        </section>
+    </main>
+</body>
 
 </html>

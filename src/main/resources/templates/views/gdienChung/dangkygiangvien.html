@@ -23,30 +23,31 @@
                     <div class="col-md-5">
                         <div class="gv-register__form-wrapper">
                             <div class="text-center mb-4">
-                                <h3 class="fw-bold text-primary">Đăng ký trở thành Giảng viên</h3>
-                                <p>Bắt đầu sự nghiệp giảng dạy của bạn tại GLOBALEDU</p>
+                                <h3 class="fw-bold text-primary">🎓 Đăng ký trở thành Giảng viên</h3>
+                                <p>🚀 Bắt đầu sự nghiệp giảng dạy của bạn tại GLOBALEDU</p>
                             </div>
+
                             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
                             <form th:action="@{/dang-ky-giang-vien/send-otp}" method="post">
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Địa chỉ Email</label>
+                                    <label for="email" class="form-label">📧 Địa chỉ Email</label>
                                     <input type="email" class="form-control" id="email" name="email"
                                         placeholder="Nhập địa chỉ email của bạn" required>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn gv-register__btn">Gửi mã xác thực</button>
+                                    <button type="submit" class="btn gv-register__btn">📨 Gửi mã xác thực</button>
                                 </div>
                             </form>
-                            <div class="text-center mt-3">
-                                <a th:href="@{/auth/dangnhap}">Đã có tài khoản? Đăng nhập</a>
+
+                            <div class="text-center mt-3">🧑‍💻 Đã có tài khoản?
+                                <a style="text-decoration: none;" th:href="@{/auth/dangnhap}">Đăng nhập</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
-
     </main>
 </body>
 

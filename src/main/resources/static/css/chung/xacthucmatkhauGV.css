@@ -1,103 +1,75 @@
-.xacthuc-matkhau {
-    background: linear-gradient(to bottom, #d1dfe9 0%, #ffffff 10%, #f7ecec 66.66%, #eaf3fa 100%);
-    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    color: #333;
-    margin: 0;
-    overflow-x: hidden;
+.xacnhan-matkhau {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #e0e0e0 0%, #f8f9fa 3%);
 }
 
-.xacthuc-matkhau .card {
-    border: none;
-    border-radius: 20px;
-    background-color: transparent;
-
-    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.xacthuc-matkhau .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.15);
-}
-
-.xacthuc-matkhau .card-header {
-    background: linear-gradient(to right, #0f097c, #3b82f6);
-    color: white;
-    padding: 24px 16px;
+.xacnhan-matkhau__section {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
     text-align: center;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
 }
 
-.xacthuc-matkhau .card-header h3 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
+.xacnhan-matkhau__img {
+    max-width: 800px;
+    height: auto;
+    animation: slideInRight 1s ease-out;
 }
 
-.xacthuc-matkhau .card-header p {
-    margin: 8px 0 0;
-    font-size: 14px;
-    opacity: 0.95;
+.xacnhan-matkhau h3 {
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.xacthuc-matkhau .form-label {
-    font-weight: 600;
-    color: #374151;
+.xacnhan-matkhau__wrapper {
+    background-color: transparent;
+    padding: 40px;
+    animation: slideInLeft 1s ease-out;
 }
 
-.xacthuc-matkhau .form-control {
-    border-radius: 12px;
-    border: 1px solid #d1d5db;
-    padding: 10px 14px;
-    background-color: #f9fafb;
-    transition: border-color 0.3s, box-shadow 0.3s;
+.xacnhan-matkhau .form-control {
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 1.05rem;
 }
 
-.xacthuc-matkhau .form-control:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
-    background-color: #fff;
-}
-
-.xacthuc-matkhau .btn-primary {
-    background-color: #4f46e5;
-    border-color: #ffffff;
-    border-radius: 10px;
-    padding: 12px;
+.xacnhan-matkhau__btn {
+    background-color: #1b2a4e;
+    border: none;
+    padding: 14px;
     font-weight: bold;
-    font-size: 16px;
-    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    color: white;
 }
 
-.xacthuc-matkhau .btn-primary:hover {
-    background-color: #f28042;
-    box-shadow: 0 6px 16px rgba(255, 151, 77, 0.3);
-    transform: translateY(-2px);
+.xacnhan-matkhau__btn:hover {
+    background-color: #12203a;
 }
 
-.xacthuc-matkhau .alert-danger {
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 14px;
-    color: #b91c1c;
-    background-color: #fee2e2;
-    border: 1px solid #fca5a5;
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.xacthuc-matkhau .card-footer {
-    background-color: #f9fafb;
-    padding: 12px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
 
-.xacthuc-matkhau .card-footer a {
-    color: #4f46e5;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.xacthuc-matkhau .card-footer a:hover {
-    text-decoration: underline;
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
