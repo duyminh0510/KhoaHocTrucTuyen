@@ -1,17 +1,18 @@
 package com.duantn.controllers.controllerHocVien;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.duantn.dtos.TaiKhoanEmailDto;
 import com.duantn.dtos.TaiKhoanPasswordDto;
 import com.duantn.dtos.TaiKhoanUpdateDto;
@@ -19,7 +20,6 @@ import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.CloudinaryService;
 import com.duantn.services.TokenService;
-
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -38,10 +38,8 @@ public class ThongTinCaNhanController {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    private void addCommonModel(Model model, TaiKhoan tk,
-            TaiKhoanUpdateDto updateDto,
-            TaiKhoanEmailDto emailDto,
-            TaiKhoanPasswordDto passwordDto) {
+    private void addCommonModel(Model model, TaiKhoan tk, TaiKhoanUpdateDto updateDto,
+            TaiKhoanEmailDto emailDto, TaiKhoanPasswordDto passwordDto) {
         model.addAttribute("taiKhoan", tk);
         model.addAttribute("taiKhoanUpdateDto", updateDto);
         model.addAttribute("emailDto", emailDto);
@@ -77,8 +75,7 @@ public class ThongTinCaNhanController {
 
     @PostMapping("/tai-khoan/cap-nhat-avatar")
     public String capNhatAvatar(@RequestParam("avatar") MultipartFile avatarFile,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes) {
+            Authentication authentication, RedirectAttributes redirectAttributes) {
 
         TaiKhoan tk = taiKhoanRepository.findByEmail(authentication.getName()).orElse(null);
         if (tk == null) {
@@ -86,36 +83,50 @@ public class ThongTinCaNhanController {
             return "redirect:/tai-khoan";
         }
 
-        if (!avatarFile.isEmpty()) {
-            try {
-                String avatarUrl = tk.getAvatar();
-                if (avatarUrl != null && !avatarUrl.isBlank() && !avatarUrl.contains("default-avatar")) {
-                    String publicId = cloudinaryService.extractPublicIdFromUrl(avatarUrl);
-                    if (publicId != null)
-                        cloudinaryService.deleteImage(publicId);
-                }
-                String imageUrl = cloudinaryService.uploadImage(avatarFile);
-                tk.setAvatar(imageUrl);
-                taiKhoanRepository.save(tk);
-                redirectAttributes.addFlashAttribute("message", "Cập nhật ảnh đại diện thành công.");
-            } catch (IOException e) {
-                redirectAttributes.addFlashAttribute("message", "Lỗi khi tải ảnh lên Cloudinary.");
-            }
-        } else {
+        if (avatarFile.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Vui lòng chọn một tệp ảnh.");
+            redirectAttributes.addFlashAttribute("tab", "tab-avatar");
+            return "redirect:/tai-khoan";
         }
-        redirectAttributes.addFlashAttribute("message", "Cập nhật ảnh đại diện thành công.");
+
+        // ✅ Kiểm tra định dạng file (loại bỏ PDF hoặc không phải ảnh)
+        String contentType = avatarFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Chỉ cho phép tải lên tệp ảnh (không hỗ trợ PDF).");
+            redirectAttributes.addFlashAttribute("tab", "tab-avatar");
+            return "redirect:/tai-khoan";
+        }
+
+        try {
+            // Xóa ảnh cũ nếu có
+            String avatarUrl = tk.getAvatar();
+            if (avatarUrl != null && !avatarUrl.isBlank()
+                    && !avatarUrl.contains("default-avatar")) {
+                String publicId = cloudinaryService.extractPublicIdFromUrl(avatarUrl);
+                if (publicId != null)
+                    cloudinaryService.deleteImage(publicId);
+            }
+
+            // Upload ảnh mới
+            String imageUrl = cloudinaryService.uploadImage(avatarFile);
+            tk.setAvatar(imageUrl);
+            taiKhoanRepository.save(tk);
+
+            redirectAttributes.addFlashAttribute("message", "Cập nhật ảnh đại diện thành công.");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("message", "Lỗi khi tải ảnh lên Cloudinary.");
+        }
+
         redirectAttributes.addFlashAttribute("tab", "tab-avatar");
         return "redirect:/tai-khoan";
     }
 
+
     @PostMapping("/tai-khoan/cap-nhat")
-    public String capNhatThongTin(
-            @Valid @ModelAttribute("taiKhoanUpdateDto") TaiKhoanUpdateDto dto,
-            BindingResult result,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+    public String capNhatThongTin(@Valid @ModelAttribute("taiKhoanUpdateDto") TaiKhoanUpdateDto dto,
+            BindingResult result, Authentication authentication,
+            RedirectAttributes redirectAttributes, Model model) {
 
         TaiKhoan tk = taiKhoanRepository.findByEmail(authentication.getName()).orElse(null);
         if (tk == null) {
@@ -137,13 +148,9 @@ public class ThongTinCaNhanController {
     }
 
     @PostMapping("/tai-khoan/cap-nhat-email")
-    public String capNhatEmail(
-            @Valid @ModelAttribute("emailDto") TaiKhoanEmailDto dto,
-            BindingResult result,
-            Authentication authentication,
-            HttpSession session,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+    public String capNhatEmail(@Valid @ModelAttribute("emailDto") TaiKhoanEmailDto dto,
+            BindingResult result, Authentication authentication, HttpSession session,
+            RedirectAttributes redirectAttributes, Model model) {
 
         TaiKhoan tk = taiKhoanRepository.findByEmail(authentication.getName()).orElse(null);
         if (tk == null) {
@@ -164,8 +171,8 @@ public class ThongTinCaNhanController {
         session.setAttribute("currentEmail", tk.getEmail());
         session.setAttribute("currentUserName", tk.getName());
 
-        tokenService.generateAndSendToken(dto.getEmail(), tk.getName(),
-                "Xác minh thay đổi email", "Mã xác minh của bạn là:");
+        tokenService.generateAndSendToken(dto.getEmail(), tk.getName(), "Xác minh thay đổi email",
+                "Mã xác minh của bạn là:");
 
         redirectAttributes.addFlashAttribute("message", "Email đã được cập nhật thành công.");
         redirectAttributes.addFlashAttribute("tab", "tab-email");
@@ -173,12 +180,9 @@ public class ThongTinCaNhanController {
     }
 
     @PostMapping("/tai-khoan/doi-mat-khau")
-    public String doiMatKhau(
-            @Valid @ModelAttribute("passwordDto") TaiKhoanPasswordDto dto,
-            BindingResult result,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+    public String doiMatKhau(@Valid @ModelAttribute("passwordDto") TaiKhoanPasswordDto dto,
+            BindingResult result, Authentication authentication,
+            RedirectAttributes redirectAttributes, Model model) {
 
         TaiKhoan tk = taiKhoanRepository.findByEmail(authentication.getName()).orElse(null);
         if (tk == null) {
