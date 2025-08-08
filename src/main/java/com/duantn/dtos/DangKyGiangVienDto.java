@@ -1,16 +1,19 @@
 package com.duantn.dtos;
 
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 
 @Data
 public class DangKyGiangVienDto {
+    @NotBlank(message = "Vui lòng nhập họ và tên")
+    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "Họ và tên không được chứa ký tự đặc biệt")
+    private String hoTen;
+
     @NotBlank(message = "Vui lòng nhập kỹ năng")
     private String kyNang;
 
@@ -34,4 +37,6 @@ public class DangKyGiangVienDto {
 
     @NotBlank(message = "Vui lòng nhập chuyên ngành")
     private String chuyenNganh;
+
+
 }

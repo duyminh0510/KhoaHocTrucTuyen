@@ -132,7 +132,7 @@
       ></div>
 
       <script>
-        const TOTAL_TIME = 20;
+        const TOTAL_TIME = 120;
         const STORAGE_KEY = "verifyStartTime";
 
         const timerSpan = document.getElementById("timer");
@@ -184,7 +184,10 @@
         }
 
         function resendCode() {
-          alert("Đã gửi lại mã xác minh!");
+          // Gửi form để gọi Controller gửi lại email
+          resendForm.submit();
+
+          // Reset lại đồng hồ đếm ngược
           const now = Date.now();
           sessionStorage.setItem(STORAGE_KEY, now);
           startCountdown(now);
