@@ -1,13 +1,5 @@
 package com.duantn.controllers.controllerGiangVien;
 
-import com.duantn.entities.GiangVien;
-import com.duantn.entities.KhoaHoc;
-import com.duantn.entities.TaiKhoan;
-import com.duantn.enums.TrangThaiKhoaHoc;
-import com.duantn.repositories.GiangVienRepository;
-import com.duantn.services.KhoaHocService;
-import com.duantn.services.CustomUserDetails;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,6 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.duantn.entities.GiangVien;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.enums.TrangThaiKhoaHoc;
+import com.duantn.repositories.GiangVienRepository;
+import com.duantn.services.CustomUserDetails;
+import com.duantn.services.KhoaHocService;
 
 @Controller
 @RequestMapping("/giangvien")
@@ -42,7 +41,8 @@ public class KhoaHocDaTaoController {
             return "redirect:/auth/dangnhap";
         }
 
-        GiangVien giangVien = giangVienRepository.findByTaikhoan_TaikhoanId(taiKhoan.getTaikhoanId()).orElse(null);
+        GiangVien giangVien = giangVienRepository
+                .findByTaikhoan_TaikhoanId(taiKhoan.getTaikhoanId()).orElse(null);
         if (giangVien == null) {
             model.addAttribute("error", "Không tìm thấy thông tin giảng viên.");
             return "redirect:/auth/dangnhap";
@@ -50,14 +50,15 @@ public class KhoaHocDaTaoController {
 
         int giangVienId = giangVien.getGiangvienId();
 
-        model.addAttribute("listPublished",
-                khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.PUBLISHED));
-        model.addAttribute("listDraft",
-                khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.DRAFT));
+        model.addAttribute("listPublished", khoaHocService
+                .getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.PUBLISHED));
+        model.addAttribute("listDraft", khoaHocService
+                .getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.DRAFT));
         model.addAttribute("listPendingApproval",
-                khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.PENDING_APPROVAL));
-        model.addAttribute("listUnpublished",
-                khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.UNPUBLISHED));
+                khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(giangVienId,
+                        TrangThaiKhoaHoc.PENDING_APPROVAL));
+        model.addAttribute("listUnpublished", khoaHocService
+                .getKhoaHocByGiangVienIdAndTrangThai(giangVienId, TrangThaiKhoaHoc.UNPUBLISHED));
 
         model.addAttribute("daHuy", daHuy != null && daHuy);
 
@@ -65,7 +66,8 @@ public class KhoaHocDaTaoController {
     }
 
     @PostMapping("/huy-yeu-cau-khoa-hoc/{id}")
-    public String huyYeuCautab2(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String huyYeuCautab2(@PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes) {
         KhoaHoc khoaHoc = khoaHocService.findById(id).get();
         if (khoaHoc != null) {
             khoaHoc.setTrangThai(TrangThaiKhoaHoc.DRAFT);

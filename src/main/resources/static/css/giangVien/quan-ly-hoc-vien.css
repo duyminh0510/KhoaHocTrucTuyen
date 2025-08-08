@@ -42,9 +42,87 @@ body {
     font-size: 1.5rem;
 }
 
+<<<<<<< HEAD
 .hocvien .list-group-item img {
     width: 60px;
     height: 60px;
     object-fit: cover;
     border-radius: 50%;
+=======
+.hocvien .close {
+    position: absolute;
+    right: 18px;
+    top: 16px;
+    font-size: 22px;
+    color: #888;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.hocvien .close:hover {
+    color: #000;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hocvien .form-hang-ngang {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.hocvien .filter-course {
+    flex: 1;
+}
+
+.hocvien .search-bar {
+    flex: 2;
+}
+
+.hocvien .filter-course form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.hocvien .filter-course label {
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.hocvien .filter-course select,
+.hocvien .search-bar input {
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInMoveUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInMoveUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+>>>>>>> 4a8f6ef94a62622bec502a117a576ab907376f67
 }

@@ -1,14 +1,7 @@
 package com.duantn.controllers.controllerGiangVien;
 
-import com.duantn.entities.KhoaHoc;
-import com.duantn.entities.TaiKhoan;
-import com.duantn.entities.GiangVien;
-import com.duantn.repositories.GiangVienRepository;
-import com.duantn.repositories.TaiKhoanRepository;
-import com.duantn.services.GiangVienService;
-import com.duantn.services.KhoaHocService;
-import com.duantn.enums.TrangThaiKhoaHoc;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.duantn.entities.GiangVien;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.enums.TrangThaiKhoaHoc;
+import com.duantn.repositories.GiangVienRepository;
+import com.duantn.repositories.TaiKhoanRepository;
+import com.duantn.services.GiangVienService;
+import com.duantn.services.KhoaHocService;
 
 @Controller
 public class DashboardGiangVienController {
@@ -49,21 +47,22 @@ public class DashboardGiangVienController {
             return "redirect:/auth/dangnhap";
         }
 
-        GiangVien giangVien = giangVienRepository.findByTaikhoan_TaikhoanId(taiKhoan.getTaikhoanId()).orElse(null);
+        GiangVien giangVien = giangVienRepository
+                .findByTaikhoan_TaikhoanId(taiKhoan.getTaikhoanId()).orElse(null);
         if (giangVien == null) {
             return "redirect:/dang-ky-giang-vien";
         }
 
         Integer giangVienId = giangVien.getGiangvienId();
 
-        List<KhoaHoc> khoaHocList = khoaHocService
-                .getKhoaHocByGiangVienIdAndTrangThai(giangVien.getGiangvienId(), TrangThaiKhoaHoc.PUBLISHED);
+        List<KhoaHoc> khoaHocList = khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(
+                giangVien.getGiangvienId(), TrangThaiKhoaHoc.PUBLISHED);
 
-        List<KhoaHoc> ListDraft = khoaHocService
-                .getKhoaHocByGiangVienIdAndTrangThai(giangVien.getGiangvienId(), TrangThaiKhoaHoc.DRAFT);
+        List<KhoaHoc> ListDraft = khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(
+                giangVien.getGiangvienId(), TrangThaiKhoaHoc.DRAFT);
 
-        List<KhoaHoc> ListPendingApproval = khoaHocService
-                .getKhoaHocByGiangVienIdAndTrangThai(giangVien.getGiangvienId(), TrangThaiKhoaHoc.PENDING_APPROVAL);
+        List<KhoaHoc> ListPendingApproval = khoaHocService.getKhoaHocByGiangVienIdAndTrangThai(
+                giangVien.getGiangvienId(), TrangThaiKhoaHoc.PENDING_APPROVAL);
 
         double tongTienNhan = giangVienService.layTongTienNhan(giangVien.getGiangvienId());
         long tongHocVien = giangVienService.demHocVienTheoGiangVien(giangVienId);

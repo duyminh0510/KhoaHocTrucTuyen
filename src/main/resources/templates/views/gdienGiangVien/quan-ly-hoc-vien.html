@@ -1,237 +1,266 @@
 <!DOCTYPE html>
-<html lang="vi"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html
+  lang="vi"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quản lý học viên</title>
+  </head>
 
-    <head>
-        <meta charset="UTF-8" />
-        <title>Quản lý học viên</title>
-    </head>
+  <body>
+    <main class="hocvien">
+      <div class="container">
+        <!-- Tiêu đề -->
+        <h1 class="title">
+          <i class="fas fa-user-graduate"></i> Quản lý học viên
+        </h1>
 
-    <body>
-        <main class="hocvien">
-            <div class="container">
-                <!-- Tiêu đề -->
-                <h1 class="title">
-                    <i class="fas fa-user-graduate"></i> Quản lý học viên
-                </h1>
+        <!-- Biểu đồ -->
+        <div class="card shadow-sm p-4 mb-5">
+          <h5 class="mb-4 text-primary fw-bold">
+            <i class="bi bi-bar-chart-line me-2"></i>Top 5 khóa học được đăng ký
+            nhiều nhất
+          </h5>
+          <canvas id="khoaHocChart" height="120"></canvas>
+        </div>
 
-                <!-- Biểu đồ -->
-                <div class="card shadow-sm p-4 mb-5">
-                    <h5 class="mb-4 text-primary fw-bold">
-                        <i class="bi bi-bar-chart-line me-2"></i>Top 5 khóa học
-                        được đăng ký nhiều nhất
-                    </h5>
-                    <canvas id="khoaHocChart" height="120"></canvas>
-                </div>
+        <!-- Bộ lọc -->
+        <div class="filter-course d-flex align-items-center gap-3">
+          <i
+            style="font-size: 17px"
+            class="fas fa-graduation-cap filter-icon text-primary"
+          ></i>
+          <form
+            method="get"
+            action="#"
+            id="filterForm"
+            class="d-flex align-items-center gap-3"
+          >
+            <div class="d-flex align-items-center">
+              <label
+                for="courseSelect"
+                class="fw-semibold mb-0 text-dark me-2"
+                style="min-width: 130px"
+              >
+                Chọn khóa học:
+              </label>
+              <select
+                id="courseSelect"
+                name="khoahocId"
+                onchange="document.getElementById('filterForm').submit()"
+                class="form-select form-select-sm"
+              >
+                <option th:if="${selectedKhoaHocId == null}" selected value>
+                  -- Chọn khóa học --
+                </option>
+                <option
+                  th:each="khoaHoc : ${khoaHocList}"
+                  th:value="${khoaHoc.khoahocId}"
+                  th:text="${khoaHoc.tenKhoaHoc}"
+                  th:selected="${khoaHoc.khoahocId == selectedKhoaHocId}"
+                ></option>
+              </select>
+            </div>
+          </form>
+        </div>
 
-                <!-- Bộ lọc -->
-                <div class="filter-course d-flex align-items-center gap-3">
-                    <i style="font-size: 17px;"
-                        class="fas fa-graduation-cap filter-icon text-primary"></i>
-                    <form method="get" action="#" id="filterForm"
-                        class="d-flex align-items-center gap-3">
-                        <div class="d-flex align-items-center">
-                            <label for="courseSelect"
-                                class="fw-semibold mb-0 text-dark me-2"
-                                style="min-width: 130px;">
-                                Chọn khóa học:
-                            </label>
-                            <select id="courseSelect" name="khoahocId"
-                                onchange="document.getElementById('filterForm').submit()"
-                                class="form-select form-select-sm">
-                                <option th:if="${selectedKhoaHocId == null}"
-                                    selected value>
-                                    -- Chọn khóa học --
-                                </option>
-                                <option th:each="khoaHoc : ${khoaHocList}"
-                                    th:value="${khoaHoc.khoahocId}"
-                                    th:text="${khoaHoc.tenKhoaHoc}"
-                                    th:selected="${khoaHoc.khoahocId == selectedKhoaHocId}">
-                                </option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Danh sách học viên -->
-                <!-- Danh sách học viên -->
-                <section th:if="!${#lists.isEmpty(dangHocList)}">
-                    <ul class="list-group">
-                        <th:block th:each="dangHoc, iter : ${dangHocList}">
-                            <li class="list-group-item">
-                                <div class="row align-items-center">
-                                    <!-- CỘT TRÁI: Avatar + Thông tin -->
-                                    <div
-                                        class="col-12 col-md-6 d-flex gap-3 align-items-start">
-                                        <img
-                                            th:src="${dangHoc.taikhoan != null and dangHoc.taikhoan.avatar != null and !#strings.isEmpty(dangHoc.taikhoan.avatar) 
+        <!-- Danh sách học viên -->
+        <!-- Danh sách học viên -->
+        <section th:if="!${#lists.isEmpty(dangHocList)}">
+          <ul class="list-group">
+            <th:block th:each="dangHoc, iter : ${dangHocList}">
+              <li class="list-group-item">
+                <div class="row align-items-center">
+                  <!-- CỘT TRÁI: Avatar + Thông tin -->
+                  <div class="col-12 col-md-6 d-flex gap-3 align-items-start">
+                    <img
+                      th:src="${dangHoc.taikhoan != null and dangHoc.taikhoan.avatar != null and !#strings.isEmpty(dangHoc.taikhoan.avatar) 
                                 ? dangHoc.taikhoan.avatar 
                                 : '/photos/avartar.jpg'}"
-                                            alt="Avatar người dùng"
-                                            class="rounded-circle"
-                                            style="width: 60px; height: 60px; object-fit: cover;" />
+                      alt="Avatar người dùng"
+                      class="rounded-circle"
+                      style="width: 60px; height: 60px; object-fit: cover"
+                    />
 
-                                        <div>
-                                            <div
-                                                class="fw-semibold text-primary">
-                                                <label><i
-                                                        class="bi bi-person-fill"></i>
-                                                    Tên học viên: </label>
-                                                <span
-                                                    th:text="${dangHoc.taikhoan.name}">Tên
-                                                    học viên</span>
-                                            </div>
-                                            <div>
-                                                <label><i
-                                                        class="bi bi-envelope-fill text-secondary"></i>
-                                                    Email: </label>
-                                                <span
-                                                    th:text="${dangHoc.taikhoan.email}">email@example.com</span>
-                                            </div>
-                                            <div>
-                                                <label><i
-                                                        class="bi bi-calendar-check-fill text-info"></i>
-                                                    Ngày đăng ký: </label>
-                                                <span
-                                                    th:text="${#temporals.format(dangHoc.ngayDangKy, 'dd/MM/yyyy')}">01/01/2025</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div>
+                      <div class="fw-semibold text-primary">
+                        <label
+                          ><i class="bi bi-person-fill"></i> Tên học viên:
+                        </label>
+                        <span th:text="${dangHoc.taikhoan.name}"
+                          >Tên học viên</span
+                        >
+                      </div>
+                      <div>
+                        <label
+                          ><i class="bi bi-envelope-fill text-secondary"></i>
+                          Email:
+                        </label>
+                        <span th:text="${dangHoc.taikhoan.email}"
+                          >email@example.com</span
+                        >
+                      </div>
+                      <div>
+                        <label
+                          ><i class="bi bi-calendar-check-fill text-info"></i>
+                          Ngày đăng ký:
+                        </label>
+                        <span
+                          th:text="${#temporals.format(dangHoc.ngayDangKy, 'dd/MM/yyyy')}"
+                          >01/01/2025</span
+                        >
+                      </div>
+                    </div>
+                  </div>
 
-                                    <!-- CỘT PHẢI: Tiến độ -->
-                                    <div class="col-12 col-md-6 mt-3 mt-md-0">
-                                        <div>
-                                            <label><i
-                                                    class="bi bi-bar-chart-fill text-warning"></i>
-                                                Tiến độ: </label>
-                                            <span
-                                                th:text="${tienDoPhanTramMap != null and tienDoPhanTramMap.containsKey(dangHoc.danghocId)} ?
+                  <!-- CỘT PHẢI: Tiến độ -->
+                  <div class="col-12 col-md-6 mt-3 mt-md-0">
+                    <div>
+                      <label
+                        ><i class="bi bi-bar-chart-fill text-warning"></i> Tiến
+                        độ:
+                      </label>
+                      <span
+                        th:text="${tienDoPhanTramMap != null and tienDoPhanTramMap.containsKey(dangHoc.danghocId)} ?
                                                 |${tienDoPhanTramMap[dangHoc.danghocId]}%| :
-                                                (dangHoc.trangthai ? '100%' : 'Đang học')">
-                                                50%
-                                            </span>
-                                        </div>
-                                        <div
-                                            class="col-12 col-md-6 mt-3 mt-md-0 d-flex justify-content-md-end justify-content-start align-items-center">
-                                            <div
-                                                style="width: 80px; height: 80px;">
-                                                <canvas
-                                                    th:attr="id='chart-' + ${dangHoc.danghocId}"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </th:block>
-                    </ul>
-                </section>
+                                                (dangHoc.trangthai ? '100%' : 'Đang học')"
+                      >
+                        50%
+                      </span>
+                    </div>
+                    <div
+                      class="col-12 col-md-6 mt-3 mt-md-0 d-flex justify-content-md-end justify-content-start align-items-center"
+                    >
+                      <div style="width: 80px; height: 80px">
+                        <canvas
+                          th:attr="id='chart-' + ${dangHoc.danghocId}"
+                        ></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </th:block>
+          </ul>
+        </section>
 
-                <!-- Nếu không có danh sách -->
-                <p class="mt-4 text-muted" th:if="${dangHocList == null}">
-                    Vui lòng chọn một khóa học để xem danh sách học viên.
-                </p>
-            </div>
+        <!-- Nếu không có danh sách -->
+        <p class="mt-4 text-muted" th:if="${dangHocList == null}">
+          Vui lòng chọn một khóa học để xem danh sách học viên.
+        </p>
+      </div>
 
-            <!-- ChartJS -->
-            <script
-                src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-            <script
-                src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-            <script th:inline="javascript">
-            /*<![CDATA[*/
-            const khoaHocLabels = /*[[${topKhoaHocLabels}]]*/ ["KH1", "KH2", "KH3", "KH4", "KH5"];
-            const khoaHocData = /*[[${topKhoaHocSoLuong}]]*/ [30, 25, 22, 18, 15];
+      <!-- ChartJS -->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+      <script th:inline="javascript">
+        /*<![CDATA[*/
+        const khoaHocLabels = /*[[${topKhoaHocLabels}]]*/ [
+          "KH1",
+          "KH2",
+          "KH3",
+          "KH4",
+          "KH5",
+        ];
+        const khoaHocData = /*[[${topKhoaHocSoLuong}]]*/ [30, 25, 22, 18, 15];
 
-            const ctx = document.getElementById('khoaHocChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
+        const ctx = document.getElementById("khoaHocChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: khoaHocLabels,
+            datasets: [
+              {
+                label: "Số lượng học viên",
+                data: khoaHocData,
+                backgroundColor: "#0d6efd",
+                barThickness: 40,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Số học viên",
+                },
+              },
+              x: {
+                title: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+        /*]]>*/
+      </script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          document
+            .querySelectorAll("canvas[id^='chart-']")
+            .forEach((canvas) => {
+              const parent = canvas.closest(".col-md-6");
+              const percentSpan = parent.querySelector("span.progress-percent");
+              let percent = percentSpan
+                ? parseInt(percentSpan.textContent || "0")
+                : 0;
+
+              new Chart(canvas, {
+                type: "doughnut",
                 data: {
-                    labels: khoaHocLabels,
-                    datasets: [{
-                        label: 'Số lượng học viên',
-                        data: khoaHocData,
-                        backgroundColor: '#0d6efd',
-                        barThickness: 40,
-                    }]
+                  labels: ["Hoàn thành", "Chưa"],
+                  datasets: [
+                    {
+                      data: [percent, 100 - percent],
+                      backgroundColor: ["#facc15", "#e5e7eb"],
+                      borderWidth: 0,
+                    },
+                  ],
                 },
                 options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
+                  cutout: "70%",
+                  plugins: {
+                    legend: {
+                      display: false,
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Số học viên'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: false
-                            }
+                    tooltip: {
+                      enabled: false,
+                    },
+                    datalabels: {
+                      display: true,
+                      formatter: (value, ctx) => {
+                        if (ctx.dataIndex === 0) {
+                          return percent + "%";
                         }
-                    }
-                }
+                        return "";
+                      },
+                      color: "#000",
+                      font: {
+                        weight: "bold",
+                        size: 16,
+                      },
+                    },
+                  },
+                },
+                plugins: [ChartDataLabels],
+              });
             });
-            /*]]>*/
-        </script>
-
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll("canvas[id^='chart-']").forEach(canvas => {
-                    const parent = canvas.closest('.col-md-6');
-                    const percentSpan = parent.querySelector("span.progress-percent");
-                    let percent = percentSpan ? parseInt(percentSpan.textContent || "0") : 0;
-
-
-                    new Chart(canvas, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Hoàn thành', 'Chưa'],
-                            datasets: [{
-                                data: [percent, 100 - percent],
-                                backgroundColor: ['#facc15', '#e5e7eb'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            cutout: '70%',
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    enabled: false
-                                },
-                                datalabels: {
-                                    display: true,
-                                    formatter: (value, ctx) => {
-                                        if (ctx.dataIndex === 0) {
-                                            return percent + '%';
-                                        }
-                                        return '';
-                                    },
-                                    color: '#000',
-                                    font: {
-                                        weight: 'bold',
-                                        size: 16
-                                    }
-                                }
-                            }
-                        },
-                        plugins: [ChartDataLabels]
-                    });
-                });
-            });
-        </script>
-        </main>
-    </body>
-
+        });
+      </script>
+    </main>
+  </body>
 </html>

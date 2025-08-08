@@ -5,13 +5,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.NguoiDungThichKhoaHoc;
@@ -23,8 +22,6 @@ import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.services.KhoaHocService;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KhoaHocServiceImpl implements KhoaHocService {
@@ -45,7 +42,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
 
     @Override
     public List<KhoaHoc> getKhoaHocTheoDanhMuc(Integer danhMucId) {
-        return khoaHocRepository.findByDanhMuc_DanhmucIdAndTrangThai(danhMucId, TrangThaiKhoaHoc.PUBLISHED);
+        return khoaHocRepository.findByDanhMuc_DanhmucIdAndTrangThai(danhMucId,
+                TrangThaiKhoaHoc.PUBLISHED);
     }
 
     @Override
@@ -98,7 +96,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
 
         if (like.isPresent()) {
             nguoiDungThichKhoaHocRepository.delete(like.get());
-            khoaHoc.setLuotThich(Math.max((khoaHoc.getLuotThich() != null ? khoaHoc.getLuotThich() : 0) - 1, 0));
+            khoaHoc.setLuotThich(
+                    Math.max((khoaHoc.getLuotThich() != null ? khoaHoc.getLuotThich() : 0) - 1, 0));
             khoaHocRepository.save(khoaHoc);
             return false;
         } else {
@@ -136,9 +135,11 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     @Override
     public List<KhoaHoc> timKiemTheoTen(String tenKhoaHoc) {
         if (tenKhoaHoc == null || tenKhoaHoc.trim().isEmpty()) {
-            return khoaHocRepository.findAllActive(TrangThaiKhoaHoc.PUBLISHED); // hoặc DANG_HOAT_DONG
+            return khoaHocRepository.findAllActive(TrangThaiKhoaHoc.PUBLISHED); // hoặc
+                                                                                // DANG_HOAT_DONG
         }
-        return khoaHocRepository.findByTenKhoaHocContainingSimple(tenKhoaHoc.trim(), TrangThaiKhoaHoc.PUBLISHED);
+        return khoaHocRepository.findByTenKhoaHocContainingSimple(tenKhoaHoc.trim(),
+                TrangThaiKhoaHoc.PUBLISHED);
     }
 
     @Override
@@ -205,7 +206,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     }
 
     @Override
-    public List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai) {
+    public List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId,
+            TrangThaiKhoaHoc trangThai) {
         return khoaHocRepository.findByGiangVien_GiangvienIdAndTrangThai(giangVienId, trangThai);
     }
 }

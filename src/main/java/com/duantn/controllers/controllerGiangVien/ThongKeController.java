@@ -1,24 +1,23 @@
 package com.duantn.controllers.controllerGiangVien;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import com.duantn.services.CustomUserDetails;
-import com.duantn.services.DoanhThuGiangVienService;
-import com.duantn.services.GiangVienService;
-import com.duantn.entities.GiangVien;
-import com.duantn.entities.KhoaHoc;
-import com.duantn.dtos.DoanhThuKhoaHocGiangVienDto;
-import com.duantn.dtos.HocVienTheoKhoaHocDto;
-import com.duantn.dtos.KhoaHocDiemDto;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.duantn.dtos.DoanhThuKhoaHocGiangVienDto;
+import com.duantn.dtos.HocVienTheoKhoaHocDto;
+import com.duantn.dtos.KhoaHocDiemDto;
+import com.duantn.entities.GiangVien;
+import com.duantn.entities.KhoaHoc;
+import com.duantn.services.CustomUserDetails;
+import com.duantn.services.DoanhThuGiangVienService;
+import com.duantn.services.GiangVienService;
 
 @Controller
 @RequestMapping("/giangvien")
@@ -38,7 +37,8 @@ public class ThongKeController {
         }
 
         Integer giangVienId = giangVien.getGiangvienId();
-        List<DoanhThuKhoaHocGiangVienDto> doanhThuKhoaHoc = giangVienService.thongKeDoanhThuTheoGiangVien(giangVienId);
+        List<DoanhThuKhoaHocGiangVienDto> doanhThuKhoaHoc =
+                giangVienService.thongKeDoanhThuTheoGiangVien(giangVienId);
 
         double tongTienNhan = giangVienService.layTongTienNhan(giangVien.getGiangvienId());
 
@@ -52,10 +52,8 @@ public class ThongKeController {
         LocalDateTime startDate = thangHienTai.atDay(1).atStartOfDay();
         LocalDateTime endDate = thangHienTai.atEndOfMonth().atTime(23, 59, 59);
 
-        BigDecimal doanhThuThang = doanhThuGiangVienService.tinhDoanhThuTheoKhoangNgay(
-                giangVienId,
-                startDate,
-                endDate);
+        BigDecimal doanhThuThang = doanhThuGiangVienService.tinhDoanhThuTheoKhoangNgay(giangVienId,
+                startDate, endDate);
 
         model.addAttribute("doanhThuKhoaHoc", doanhThuKhoaHoc);
         model.addAttribute("tongTienNhan", tongTienNhan);
@@ -68,21 +66,24 @@ public class ThongKeController {
     }
 
     @GetMapping("/thong-ke-hoc-vien")
-    public String thongKeHocVienTheoKhoaHoc(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    public String thongKeHocVienTheoKhoaHoc(@AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model) {
         GiangVien giangVien = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (giangVien == null) {
             return "redirect:/giangvien/trang-giang-vien";
         }
 
         Integer giangVienId = giangVien.getGiangvienId();
-        List<HocVienTheoKhoaHocDto> hocVienList = giangVienService.thongKeHocVienTheoKhoaHoc(giangVienId);
+        List<HocVienTheoKhoaHocDto> hocVienList =
+                giangVienService.thongKeHocVienTheoKhoaHoc(giangVienId);
 
         model.addAttribute("hocVienList", hocVienList);
         return "views/gdienGiangVien/thong-ke-chi-tiet-hvien";
     }
 
     @GetMapping("/khoa-hoc-dang-day")
-    public String danhSachKhoaHocDangDay(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    public String danhSachKhoaHocDangDay(@AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model) {
         GiangVien gv = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (gv == null)
             return "redirect:/giangvien/trang-giang-vien";
@@ -94,12 +95,14 @@ public class ThongKeController {
     }
 
     @GetMapping("/danh-gia-trung-binh")
-    public String danhGiaTrungBinhTheoKhoaHoc(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    public String danhGiaTrungBinhTheoKhoaHoc(
+            @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         GiangVien gv = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (gv == null)
             return "redirect:/giangvien/trang-giang-vien";
 
-        List<KhoaHocDiemDto> danhGiaList = giangVienService.layDiemTrungBinhCacKhoaHocXuatBan(gv.getGiangvienId());
+        List<KhoaHocDiemDto> danhGiaList =
+                giangVienService.layDiemTrungBinhCacKhoaHocXuatBan(gv.getGiangvienId());
         model.addAttribute("danhGiaList", danhGiaList);
         return "views/gdienGiangVien/thong-ke-danh-gia-trung-binh";
     }
