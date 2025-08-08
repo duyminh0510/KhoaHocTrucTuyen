@@ -1,5 +1,25 @@
 package com.duantn.controllers.controllerChung;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Random;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.duantn.dtos.DangKyGiangVienDto;
 import com.duantn.dtos.GiangVienRegistrationDto;
 import com.duantn.entities.GiangVien;
@@ -14,23 +34,6 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/dang-ky-giang-vien")
@@ -53,12 +56,27 @@ public class DangKyGiangVienController {
     @PostMapping("/send-otp")
     public String sendOtp(@RequestParam("email") String email, HttpSession session,
             RedirectAttributes redirectAttributes) {
-        Optional<TaiKhoan> existingAccountOpt = taiKhoanRepository.findByEmail(email);
 
+        // ✅ Validate rỗng
+        if (email == null || email.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Vui lòng nhập email.");
+            return "redirect:/dang-ky-giang-vien";
+        }
+
+        // ✅ Validate định dạng email
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        if (!email.matches(emailRegex)) {
+            redirectAttributes.addFlashAttribute("error", "Email không hợp lệ.");
+            return "redirect:/dang-ky-giang-vien";
+        }
+
+        // ✅ Kiểm tra email đã tồn tại và role
+        Optional<TaiKhoan> existingAccountOpt = taiKhoanRepository.findByEmail(email);
         if (existingAccountOpt.isPresent()) {
             String roleName = existingAccountOpt.get().getRole().getName();
             if ("ROLE_GIANGVIEN".equals(roleName)) {
-                redirectAttributes.addFlashAttribute("error", "Email này đã được đăng ký làm giảng viên.");
+                redirectAttributes.addFlashAttribute("error",
+                        "Email này đã được đăng ký làm giảng viên.");
                 return "redirect:/dang-ky-giang-vien";
             }
             if ("ROLE_ADMIN".equals(roleName) || "ROLE_NHANVIEN".equals(roleName)) {
@@ -71,18 +89,17 @@ public class DangKyGiangVienController {
         try {
             String otp = String.format("%06d", new Random().nextInt(999999));
 
-            // Xóa token cũ nếu có
             tokenRepository.findByEmail(email).ifPresent(tokenRepository::delete);
-            // Tạo token mới
+
             VerificationToken token = new VerificationToken();
             token.setEmail(email);
             token.setToken(otp);
-            token.setExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP hết hạn sau 5 phút
+            token.setExpiryTime(LocalDateTime.now().plusMinutes(5));
             tokenRepository.save(token);
 
             sendVerificationEmail(email, otp);
 
-            session.setAttribute("emailForOtp", email); // Lưu email vào session để gửi lại
+            session.setAttribute("emailForOtp", email);
 
             return "redirect:/dang-ky-giang-vien/verify-otp";
 
@@ -91,6 +108,7 @@ public class DangKyGiangVienController {
             return "redirect:/dang-ky-giang-vien";
         }
     }
+
 
     private void sendVerificationEmail(String email, String otp) {
         try {
@@ -125,7 +143,8 @@ public class DangKyGiangVienController {
     public String resendOtp(HttpSession session, RedirectAttributes redirectAttributes) {
         String email = (String) session.getAttribute("emailForOtp");
         if (email == null) {
-            redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn, vui lòng bắt đầu lại.");
+            redirectAttributes.addFlashAttribute("error",
+                    "Phiên đã hết hạn, vui lòng bắt đầu lại.");
             return "redirect:/dang-ky-giang-vien";
         }
 
@@ -142,11 +161,13 @@ public class DangKyGiangVienController {
 
             sendVerificationEmail(email, otp);
 
-            redirectAttributes.addFlashAttribute("success", "Mã OTP mới đã được gửi đến email của bạn.");
+            redirectAttributes.addFlashAttribute("success",
+                    "Mã OTP mới đã được gửi đến email của bạn.");
             return "redirect:/dang-ky-giang-vien/verify-otp";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Không thể gửi lại mã. Vui lòng thử lại sau.");
+            redirectAttributes.addFlashAttribute("error",
+                    "Không thể gửi lại mã. Vui lòng thử lại sau.");
             return "redirect:/dang-ky-giang-vien/verify-otp";
         }
     }
@@ -157,8 +178,8 @@ public class DangKyGiangVienController {
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam("otp") String otp, HttpSession session, RedirectAttributes redirectAttributes,
-            Model model) {
+    public String verifyOtp(@RequestParam("otp") String otp, HttpSession session,
+            RedirectAttributes redirectAttributes, Model model) {
         Optional<VerificationToken> tokenOpt = tokenRepository.findByToken(otp);
 
         if (tokenOpt.isEmpty()) {
@@ -199,10 +220,9 @@ public class DangKyGiangVienController {
     }
 
     @PostMapping("/register-new")
-    public String processNewInstructorRegistration(@Valid @ModelAttribute("giangVienDto") GiangVienRegistrationDto dto,
-            BindingResult result,
-            RedirectAttributes redirectAttributes,
-            HttpSession session) {
+    public String processNewInstructorRegistration(
+            @Valid @ModelAttribute("giangVienDto") GiangVienRegistrationDto dto,
+            BindingResult result, RedirectAttributes redirectAttributes, HttpSession session) {
 
         if (result.hasErrors()) {
             return "views/gdienChung/hoantatdangkygiangvien";
@@ -212,7 +232,8 @@ public class DangKyGiangVienController {
         if (dto.getNgaySinh() != null) {
             int tuoi = LocalDateTime.now().getYear() - dto.getNgaySinh().getYear();
             if (tuoi < 18) {
-                result.rejectValue("ngaySinh", "error.giangVienDto", "Bạn phải đủ 18 tuổi để đăng ký.");
+                result.rejectValue("ngaySinh", "error.giangVienDto",
+                        "Bạn phải đủ 18 tuổi để đăng ký.");
                 return "views/gdienChung/hoantatdangkygiangvien";
             }
         }
@@ -232,13 +253,13 @@ public class DangKyGiangVienController {
 
             TaiKhoan savedAccount = taiKhoanRepository.save(newAccount);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(savedAccount.getEmail());
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(savedAccount.getEmail());
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
-            session.setAttribute(
-                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                     SecurityContextHolder.getContext());
             session.setAttribute("currentUser", savedAccount);
 
@@ -282,10 +303,9 @@ public class DangKyGiangVienController {
     }
 
     @PostMapping("/upgrade-details")
-    public String processUpgradeDetails(@Valid @ModelAttribute("giangVienDto") DangKyGiangVienDto dto,
-            BindingResult result,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+    public String processUpgradeDetails(
+            @Valid @ModelAttribute("giangVienDto") DangKyGiangVienDto dto, BindingResult result,
+            HttpSession session, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "views/gdienChung/thongtinnangcapchitiet";
         }
@@ -294,7 +314,8 @@ public class DangKyGiangVienController {
         if (dto.getNgaySinh() != null) {
             int tuoi = LocalDateTime.now().getYear() - dto.getNgaySinh().getYear();
             if (tuoi < 18) {
-                result.rejectValue("ngaySinh", "error.ngaySinh", "Bạn phải đủ 18 tuổi để tiếp tục.");
+                result.rejectValue("ngaySinh", "error.ngaySinh",
+                        "Bạn phải đủ 18 tuổi để tiếp tục.");
                 return "views/gdienChung/thongtinnangcapchitiet";
             }
         }
@@ -311,7 +332,8 @@ public class DangKyGiangVienController {
     }
 
     @GetMapping("/verify-password")
-    public String showVerifyPasswordForm(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String showVerifyPasswordForm(HttpSession session,
+            RedirectAttributes redirectAttributes) {
         String email = (String) session.getAttribute("registrationEmail");
         if (email == null) {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");
@@ -322,11 +344,11 @@ public class DangKyGiangVienController {
 
     @PostMapping("/verify-password")
     public String processVerifyPassword(@RequestParam("password") String password,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
 
         String email = (String) session.getAttribute("registrationEmail");
-        DangKyGiangVienDto instructorDetails = (DangKyGiangVienDto) session.getAttribute("instructorDetails");
+        DangKyGiangVienDto instructorDetails =
+                (DangKyGiangVienDto) session.getAttribute("instructorDetails");
 
         if (email == null || instructorDetails == null) {
             redirectAttributes.addFlashAttribute("error", "Phiên đã hết hạn. Vui lòng thử lại.");
@@ -353,13 +375,13 @@ public class DangKyGiangVienController {
 
             taiKhoanRepository.save(account);
             UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
             // Tìm hoặc tạo mới thông tin giảng viên
-            GiangVien instructor = giangVienRepository.findByTaikhoan(account)
-                    .orElse(new GiangVien());
+            GiangVien instructor =
+                    giangVienRepository.findByTaikhoan(account).orElse(new GiangVien());
 
             instructor.setTaikhoan(account);
             instructor.setKinhNghiem(instructorDetails.getKinhNghiem());
@@ -376,11 +398,13 @@ public class DangKyGiangVienController {
             session.removeAttribute("instructorDetails");
             session.removeAttribute("emailForOtp");
 
-            redirectAttributes.addFlashAttribute("success", "Nâng cấp tài khoản thành công! Vui lòng đăng nhập lại.");
+            redirectAttributes.addFlashAttribute("success",
+                    "Nâng cấp tài khoản thành công! Vui lòng đăng nhập lại.");
             return "views/gdienGiangVien/home";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình nâng cấp: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error",
+                    "Đã xảy ra lỗi trong quá trình nâng cấp: " + e.getMessage());
             return "redirect:/dang-ky-giang-vien/verify-password";
         }
     }

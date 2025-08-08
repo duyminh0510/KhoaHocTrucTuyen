@@ -2,6 +2,7 @@ package com.duantn.dtos;
 
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -38,5 +39,8 @@ public class DangKyGiangVienDto {
     @NotBlank(message = "Vui lòng nhập chuyên ngành")
     private String chuyenNganh;
 
+    @NotBlank(message = "Vui lòng nhập email")
+    @Email(message = "Email không hợp lệ")
+    private String email;
 
 }
