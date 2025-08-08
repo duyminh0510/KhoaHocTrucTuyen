@@ -1,5 +1,22 @@
 package com.duantn.controllers.controllerChung;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.duantn.dtos.DangKyHocVienDto;
 import com.duantn.entities.Role;
 import com.duantn.entities.TaiKhoan;
@@ -10,21 +27,6 @@ import com.duantn.services.TokenService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,9 +47,7 @@ public class DangKyController {
 
     @PostMapping("/dangky")
     public String registerUser(@ModelAttribute("user") @Valid DangKyHocVienDto dto,
-            BindingResult result,
-            HttpSession session,
-            Model model) {
+            BindingResult result, HttpSession session, Model model) {
 
         if (result.hasErrors())
             return "views/gdienChung/dangky";
@@ -64,17 +64,23 @@ public class DangKyController {
     }
 
     @GetMapping("/verify")
-    public String showVerifyForm(Model model, @RequestParam(value = "type", defaultValue = "register") String type) {
+    public String showVerifyForm(Model model,
+            @RequestParam(value = "type", defaultValue = "register") String type) {
         model.addAttribute("type", type);
         return "views/gdienChung/verify";
     }
 
     @PostMapping("/verify")
     public String verify(@RequestParam("code") String code,
-            @RequestParam(value = "type", required = false) String type,
-            HttpSession session,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+            @RequestParam(value = "type", required = false) String type, HttpSession session,
+            RedirectAttributes redirectAttributes, Model model) {
+
+        // ✅ Thêm kiểm tra mã có đúng 6 chữ số
+        if (!code.matches("\\d{6}")) {
+            model.addAttribute("error", "Mã xác minh phải gồm đúng 6 chữ số.");
+            model.addAttribute("type", type != null ? type : "register");
+            return "views/gdienChung/verify";
+        }
 
         Optional<VerificationToken> tokenOpt = tokenService.verifyToken(code);
 
@@ -100,14 +106,10 @@ public class DangKyController {
             Role studentRole = roleRepository.findByName("ROLE_HOCVIEN")
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy vai trò"));
 
-            TaiKhoan account = TaiKhoan.builder()
-                    .name(pending.getName())
-                    .email(pending.getEmail())
+            TaiKhoan account = TaiKhoan.builder().name(pending.getName()).email(pending.getEmail())
                     .phone(pending.getPhone())
-                    .password(passwordEncoder.encode(pending.getPassword()))
-                    .status(true)
-                    .role(studentRole)
-                    .build();
+                    .password(passwordEncoder.encode(pending.getPassword())).status(true)
+                    .role(studentRole).build();
 
             accountRepository.save(account);
 
@@ -119,8 +121,8 @@ public class DangKyController {
             // SecurityContextHolder.getContext().setAuthentication(authToken);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
-            Authentication auth = new UsernamePasswordAuthenticationToken(
-                    userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,
+                    userDetails.getPassword(), userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
@@ -136,7 +138,8 @@ public class DangKyController {
         String pendingEmailUpdate = (String) session.getAttribute("pendingEmailUpdate");
         String oldEmail = (String) session.getAttribute("currentEmail");
 
-        if (pendingEmailUpdate != null && oldEmail != null && token.getEmail().equals(pendingEmailUpdate)) {
+        if (pendingEmailUpdate != null && oldEmail != null
+                && token.getEmail().equals(pendingEmailUpdate)) {
             TaiKhoan taiKhoan = accountRepository.findByEmail(oldEmail).orElse(null);
             if (taiKhoan != null) {
                 taiKhoan.setEmail(pendingEmailUpdate);
@@ -147,8 +150,8 @@ public class DangKyController {
                 tokenService.delete(token);
 
                 UserDetails newDetails = userDetailsService.loadUserByUsername(pendingEmailUpdate);
-                Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                        newDetails, newDetails.getPassword(), newDetails.getAuthorities());
+                Authentication newAuth = new UsernamePasswordAuthenticationToken(newDetails,
+                        newDetails.getPassword(), newDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(newAuth);
 
                 redirectAttributes.addFlashAttribute("message", "Cập nhật email thành công.");
@@ -187,8 +190,10 @@ public class DangKyController {
             return "redirect:/tai-khoan";
         }
 
-        tokenService.generateAndSendToken(email, name, "Xác minh cập nhật email", "Mã xác minh của bạn là:");
+        tokenService.generateAndSendToken(email, name, "Xác minh cập nhật email",
+                "Mã xác minh của bạn là:");
         return "redirect:/auth/verify?type=update-email";
     }
+
 
 }

@@ -1,159 +1,204 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}">
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{/views/gdienChung/templateChung.html::view(~{::main}, ~{::title})}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Xác minh email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Xác minh email</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
+  <body>
+    <main class="verify">
+      <section
+        class="container mt-5"
+        style="margin-top: 35px; margin-bottom: 55px"
+      >
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <div class="card shadow rounded">
+              <div class="card-body p-4">
+                <!-- <h4 class="card-title text-center text-primary mb-4">
+                                    ✉️ Nhập mã xác minh email
+                                </h4> -->
 
-    <body>
-        <main class="verify">
-            <section class="container mt-5"
-                style="margin-top: 35px; margin-bottom: 55px;">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-5">
-                        <div class="card shadow rounded">
-                            <div class="card-body p-4">
-                                <!-- <h4 class="card-title text-center text-primary mb-4">
-                                ✉️ Nhập mã xác minh email
-                            </h4> -->
+                <h4 class="card-title text-center text-primary mb-4">
+                  <span th:if="${type == 'register'}"
+                    >✉️ Nhập mã xác minh đăng ký</span
+                  >
+                  <span th:if="${type == 'update-email'}"
+                    >📧 Xác minh thay đổi email</span
+                  >
+                  <span th:if="${type == 'forgot'}"
+                    >🔐 Nhập mã xác minh quên mật khẩu</span
+                  >
+                </h4>
 
-                                <h4
-                                    class="card-title text-center text-primary mb-4">
-                                    <span th:if="${type == 'register'}">✉️ Nhập
-                                        mã xác minh đăng ký</span>
-                                    <span th:if="${type == 'update-email'}">📧
-                                        Xác minh thay đổi email</span>
-                                    <span th:if="${type == 'forgot'}">🔐 Nhập mã
-                                        xác minh quên mật khẩu</span>
-                                </h4>
+                <!-- <p class="text-muted text-center">
+                                    Mã đã được gửi đến địa chỉ email bạn đã đăng ký
+                                </p> -->
 
-                                <!-- <p class="text-muted text-center">
-                                Mã đã được gửi đến địa chỉ email bạn đã đăng ký
-                            </p> -->
+                <p class="text-muted text-center">
+                  <span th:if="${type == 'register'}"
+                    >Mã đã được gửi đến email bạn dùng để đăng ký.</span
+                  >
+                  <span th:if="${type == 'update-email'}"
+                    >Mã đã được gửi đến email mới để xác minh thay đổi.</span
+                  >
+                  <span th:if="${type == 'forgot'}"
+                    >Mã đã được gửi đến email để đặt lại mật khẩu.</span
+                  >
+                </p>
 
-                                <p class="text-muted text-center">
-                                    <span th:if="${type == 'register'}">Mã đã
-                                        được gửi đến email bạn dùng để đăng
-                                        ký.</span>
-                                    <span th:if="${type == 'update-email'}">Mã
-                                        đã được gửi đến email mới để xác minh
-                                        thay đổi.</span>
-                                    <span th:if="${type == 'forgot'}">Mã đã được
-                                        gửi đến email để đặt lại mật
-                                        khẩu.</span>
-                                </p>
+                <form
+                  th:action="@{${type == 'forgot' ? '/lay-lai-mat-khau/verify' : '/auth/verify'}}"
+                  method="post"
+                >
+                  <div class="mb-3">
+                    <label for="code" class="form-label">Mã xác minh:</label>
+                    <input
+                      type="text"
+                      name="code"
+                      class="form-control"
+                      required
+                      placeholder="Nhập mã 6 chữ số"
+                    />
+                  </div>
 
-                                <form
-                                    th:action="@{${type == 'forgot' ? '/lay-lai-mat-khau/verify' : '/auth/verify'}}"
-                                    method="post">
-                                    <div class="mb-3">
-                                        <label for="code" class="form-label">Mã
-                                            xác minh:</label>
-                                        <input type="text" name="code"
-                                            class="form-control" required
-                                            placeholder="Nhập mã 6 chữ số" />
-                                    </div>
+                  <!-- Truyền email nếu là forgot -->
+                  <input
+                    type="hidden"
+                    name="email"
+                    th:if="${type == 'forgot'}"
+                    th:value="${session.resetEmail}"
+                  />
+                  <input type="hidden" name="type" th:value="${type}" />
 
-                                    <!-- Truyền email nếu là forgot -->
-                                    <input type="hidden" name="email"
-                                        th:if="${type == 'forgot'}"
-                                        th:value="${session.resetEmail}" />
-                                    <input type="hidden" name="type"
-                                        th:value="${type}" />
+                  <div
+                    th:if="${error}"
+                    class="alert alert-danger text-center"
+                    th:text="${error}"
+                  ></div>
 
-                                    <div th:if="${error}"
-                                        class="alert alert-danger text-center"
-                                        th:text="${error}"></div>
+                  <button
+                    id="btn-verify"
+                    type="submit"
+                    class="btn btn-primary w-100"
+                  >
+                    Xác minh
+                  </button>
+                </form>
+                <div class="text-center mt-3">
+                  <p id="countdown-text">
+                    Vui lòng kiểm tra lại email hoặc gửi lại sau
+                    <span id="timer">120</span> giây.
+                  </p>
+                  <button
+                    id="resendBtn"
+                    onclick="resendCode()"
+                    class="btn btn-outline-secondary mt-2 w-100"
+                    style="display: none"
+                  >
+                    🔄 Gửi lại mã xác thực
+                  </button>
 
-                                    <button id="btn-verify" type="submit"
-                                        class="btn btn-primary w-100">Xác
-                                        minh</button>
-
-                                </form>
-                                <div class="text-center mt-3">
-                                    <small class="text-muted"
-                                        id="countdownText">
-                                        Chưa nhận được mã? Vui lòng kiểm tra lại
-                                        email hoặc gửi lại sau
-                                        <span id="countdown">120</span> giây.
-                                    </small>
-                                    <form
-                                        th:action="@{${type == 'forgot' ? '/lay-lai-mat-khau' : (type == 'register' ? '/auth/resend-register' : '/auth/resend-update-email')}}"
-                                        method="post" id="resendForm"
-                                        style="display: none;">
-                                        <input type="hidden" name="email"
-                                            th:value="${type == 'forgot' ? session.resetEmail : session.pendingEmail}" />
-                                        <input type="hidden" name="type"
-                                            th:value="${type}" />
-                                        <button type="submit"
-                                            class="btn btn-link p-0 mt-2">🔄 Gửi
-                                            lại mã xác thực</button>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                  <form
+                    th:action="@{${type == 'forgot' ? '/lay-lai-mat-khau' : (type == 'register' ? '/auth/resend-register' : '/auth/resend-update-email')}}"
+                    method="post"
+                    id="resendForm"
+                    style="display: none"
+                  >
+                    <input
+                      type="hidden"
+                      name="email"
+                      th:value="${type == 'forgot' ? session.resetEmail : session.pendingEmail}"
+                    />
+                    <input type="hidden" name="type" th:value="${type}" />
+                  </form>
                 </div>
-            </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div id="js-vars" data-error="[[${error}]]"
-                data-reset="[[${resetVerify}]]" style="display: none;"></div>
+      <div
+        id="js-vars"
+        data-error="[[${error}]]"
+        data-reset="[[${resetVerify}]]"
+        style="display: none"
+      ></div>
 
-            <script>
-            const countdownSpan = document.getElementById("countdown");
-            const countdownText = document.getElementById("countdownText");
-            const resendForm = document.getElementById("resendForm");
-            const verifyButton = document.getElementById("btn-verify");
+      <script>
+        const TOTAL_TIME = 20;
+        const STORAGE_KEY = "verifyStartTime";
 
-            const TOTAL_TIME = 120;
-            const STORAGE_KEY = "verifyStartTime";
+        const timerSpan = document.getElementById("timer");
+        const countdownText = document.getElementById("countdown-text");
+        const resendBtn = document.getElementById("resendBtn");
+        const resendForm = document.getElementById("resendForm");
+        const verifyButton = document.getElementById("btn-verify");
 
-            const jsVars = document.getElementById("js-vars");
-            const errorMessage = jsVars && jsVars.dataset ? jsVars.dataset.error : "";
-            const isReset = jsVars && jsVars.dataset ? jsVars.dataset.reset === "true" : false;
+        const jsVars = document.getElementById("js-vars");
+        const errorMessage = jsVars?.dataset?.error || "";
+        const isReset = jsVars?.dataset?.reset === "true";
 
+        function startCountdown(startTime) {
+          const timer = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const remaining = TOTAL_TIME - elapsed;
 
-            if (!errorMessage.includes("hết hạn")) {
-                if (isReset || !sessionStorage.getItem(STORAGE_KEY)) {
-                    sessionStorage.setItem(STORAGE_KEY, Date.now());
-                }
-
-                function updateCountdown() {
-                    const startTime = parseInt(sessionStorage.getItem(STORAGE_KEY));
-                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                    const remaining = TOTAL_TIME - elapsed;
-
-                    if (remaining > 0) {
-                        countdownSpan.textContent = remaining;
-                        verifyButton.style.display = "block";
-                    } else {
-                        clearInterval(timer);
-                        countdownText.style.display = "none";
-                        resendForm.style.display = "block";
-                        verifyButton.style.display = "none";
-                        sessionStorage.removeItem(STORAGE_KEY);
-                    }
-                }
-
-                updateCountdown();
-                const timer = setInterval(updateCountdown, 1000);
+            if (remaining > 0) {
+              timerSpan.textContent = remaining;
+              countdownText.style.display = "block";
+              resendBtn.style.display = "none";
+              resendForm.style.display = "none";
+              verifyButton.style.display = "block";
             } else {
-                countdownText.style.display = "none";
-                resendForm.style.display = "block";
-                verifyButton.style.display = "none";
-                sessionStorage.removeItem(STORAGE_KEY);
+              clearInterval(timer);
+              countdownText.style.display = "none";
+              resendBtn.style.display = "inline-block";
+              resendForm.style.display = "block";
+              verifyButton.style.display = "none";
+              sessionStorage.removeItem(STORAGE_KEY);
             }
+          }, 1000);
+        }
 
-            resendForm.addEventListener("submit", () => {
-                sessionStorage.setItem(STORAGE_KEY, Date.now()); // đặt lại thời gian
-                verifyButton.style.display = "block"; // hiện lại nút xác minh
-            });
-        </script>
-        </main>
-    </body>
+        function initCountdown() {
+          if (!errorMessage.includes("hết hạn")) {
+            if (isReset || !sessionStorage.getItem(STORAGE_KEY)) {
+              sessionStorage.setItem(STORAGE_KEY, Date.now());
+            }
+            const startTime = parseInt(sessionStorage.getItem(STORAGE_KEY));
+            startCountdown(startTime);
+          } else {
+            countdownText.style.display = "none";
+            resendBtn.style.display = "inline-block";
+            resendForm.style.display = "block";
+            verifyButton.style.display = "none";
+            sessionStorage.removeItem(STORAGE_KEY);
+          }
+        }
 
+        function resendCode() {
+          alert("Đã gửi lại mã xác minh!");
+          const now = Date.now();
+          sessionStorage.setItem(STORAGE_KEY, now);
+          startCountdown(now);
+        }
+
+        // Khi gửi form → reset lại session time
+        resendForm.addEventListener("submit", () => {
+          sessionStorage.setItem(STORAGE_KEY, Date.now());
+          verifyButton.style.display = "block";
+        });
+
+        // Bắt đầu
+        initCountdown();
+      </script>
+    </main>
+  </body>
 </html>

@@ -92,8 +92,7 @@ public class ThongTinCaNhanController {
         // ✅ Kiểm tra định dạng file (loại bỏ PDF hoặc không phải ảnh)
         String contentType = avatarFile.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
-            redirectAttributes.addFlashAttribute("message",
-                    "Chỉ cho phép tải lên tệp ảnh (không hỗ trợ PDF).");
+            redirectAttributes.addFlashAttribute("message", "Định dạng ảnh không hợp lệ.");
             redirectAttributes.addFlashAttribute("tab", "tab-avatar");
             return "redirect:/tai-khoan";
         }
