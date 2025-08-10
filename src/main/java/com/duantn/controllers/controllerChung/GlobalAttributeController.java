@@ -4,15 +4,15 @@ import com.duantn.entities.DanhMuc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
+import com.duantn.services.CustomOAuth2User;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.KhoaHocService;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.security.core.Authentication;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,22 +38,31 @@ public class GlobalAttributeController {
 
     @ModelAttribute("taiKhoan")
     public TaiKhoan getTaiKhoan(Authentication authentication) {
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Integer id = userDetails.getTaiKhoan().getTaikhoanId();
-            return taiKhoanRepository.findById(id).orElse(null);
+        if (authentication == null) {
+            System.out.println("Authentication is null");
+            return null;
         }
+
+        Object principal = authentication.getPrincipal();
+        System.out.println("Principal: " + principal.getClass().getName());
+
+        if (principal instanceof CustomUserDetails userDetails) {
+            System.out.println("Logged in via username/password");
+            return userDetails.getTaiKhoan();
+        } else if (principal instanceof CustomOAuth2User oauth2User) {
+            System.out.println("Logged in via Google OAuth");
+            return oauth2User.getTaiKhoan();
+        } else {
+            System.out.println("Unknown principal type");
+        }
+
         return null;
     }
 
     @ModelAttribute("tenNguoiDung")
     public String getTenNguoiDung(Authentication authentication) {
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            TaiKhoan taiKhoanCu = ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
-            TaiKhoan taiKhoanMoi = taiKhoanRepository.findById(taiKhoanCu.getTaikhoanId()).orElse(taiKhoanCu);
-            return taiKhoanMoi.getName();
-        }
-        return null;
+        TaiKhoan taiKhoan = getTaiKhoan(authentication);
+        return taiKhoan != null ? taiKhoan.getName() : null;
     }
 
     @ModelAttribute("currentUri")

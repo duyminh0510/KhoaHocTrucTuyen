@@ -9,4 +9,6 @@ public interface DangHocService {
 
     boolean isEnrolled(Integer taiKhoanId, Integer khoaHocId);
 
+    boolean existsByKhoaHocId(Integer khoaHocId);
+
 }

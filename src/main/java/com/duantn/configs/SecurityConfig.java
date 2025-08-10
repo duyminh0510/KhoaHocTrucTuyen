@@ -1,5 +1,6 @@
 package com.duantn.configs;
 
+import com.duantn.services.CustomOAuth2UserService;
 import com.duantn.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,26 +30,22 @@ public class SecurityConfig {
         @Autowired
         private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+        @Autowired
+        private CustomOAuth2UserService customOAuth2UserService;
+
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
-                                                // Static resources
                                                 .requestMatchers("/css/**", "/js/**", "/photos/**", "/favicon.ico")
                                                 .permitAll()
-
-                                                // Public pages
                                                 .requestMatchers("/auth/**", "/", "/home", "/dangky", "/verify")
                                                 .permitAll()
-
-                                                // Role-based access
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .requestMatchers("/nhanvien/**").hasRole("NHANVIEN")
-                                                .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
+                                                .requestMatchers("/hocvien/**", "/hoc-vien/**").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
-
-                                                // All other requests
                                                 .anyRequest().permitAll())
                                 .formLogin(form -> form
                                                 .loginPage("/auth/dangnhap")
@@ -58,22 +55,23 @@ public class SecurityConfig {
                                                 .successHandler(loginSuccessHandler)
                                                 .failureHandler(customFailureHandler)
                                                 .permitAll())
+                                .oauth2Login(oauth2 -> oauth2
+                                                .loginPage("/auth/dangnhap")
+                                                .userInfoEndpoint(userInfo -> userInfo
+                                                                .userService(customOAuth2UserService))
+                                                .successHandler(loginSuccessHandler))
                                 .rememberMe(remember -> remember
-                                                .rememberMeParameter("remember-me") // phải giống tên trong checkbox
-                                                                                    // form
-                                                .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 ngày
-                                                .key("globaledu-secret-key-123") // khóa bí mật
-                                                .userDetailsService(userDetailsService) // quan trọng
-                                )
+                                                .rememberMeParameter("remember-me")
+                                                .tokenValiditySeconds(7 * 24 * 60 * 60)
+                                                .key("globaledu-secret-key-123")
+                                                .userDetailsService(userDetailsService))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/auth/dangnhap?logout=true")
                                                 .deleteCookies("JSESSIONID", "remember-me")
                                                 .permitAll())
                                 .exceptionHandling(exception -> exception
-                                                .accessDeniedHandler(customAccessDeniedHandler)
-
-                                )
+                                                .accessDeniedHandler(customAccessDeniedHandler))
                                 .csrf(AbstractHttpConfigurer::disable);
 
                 return http.build();

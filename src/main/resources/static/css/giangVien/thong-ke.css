@@ -1,76 +1,136 @@
+/* Reset và nền chính */
+
 body {
-    background-color: #f5f6f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0;
-    color: #16203b;
+    background-color: #f4f6fa;
 }
 
-.thongke .thongke-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    margin-bottom: 40px;
-    margin-top: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+/* Container thống kê */
+
+.thongke-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
-.thongke .thongke-header {
+
+/* Header Thống kê được thiết kế lại */
+
+.thongke-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 15px;
+    background-color: #ffffff;
+    color: #16203b;
+    padding: 20px 30px;
+    border-left: 5px solid #16203b;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    animation: fadeInDown 0.6s ease-in-out;
+    margin-bottom: 25px;
 }
 
-.thongke .thongke-header i {
+.thongke-header i {
     font-size: 28px;
     color: #16203b;
 }
 
-.thongke .thongke-header h1 {
-    font-size: 26px;
+.thongke-header h1 {
+    font-size: 22px;
     margin: 0;
+    font-weight: 600;
 }
 
-.thongke .stat-grid {
+
+/* Lưới thống kê */
+
+.stat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
 }
 
-.thongke .stat-card {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
+
+/* Thẻ thống kê */
+
+.stat-card2 {
+    background-color: #ffffff;
+    padding: 30px 20px;
+    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* nhẹ nhàng hơn */
+    animation: fadeInUp 0.8s ease-in-out;
 }
 
-.thongke .stat-card i {
+.stat-card2 i {
+    font-size: 36px;
+    color: #16203b;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+.stat-card2:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fc;
+}
+
+.stat-card2:hover i {
+    transform: scale(1.1);
+    color: #13c71c;
+    /* Hoặc giữ nguyên #16203b nếu không muốn đổi màu khi hover */
+}
+
+.stat-card2:hover h2 {
+    transform: scale(1.1);
+    color: #13c71c;
+    /* Hoặc giữ nguyên #16203b nếu không muốn đổi màu khi hover */
+}
+
+.stat-card2:hover p {
+    transform: scale(1.1);
+    color: #13c71c;
+    /* Hoặc giữ nguyên #16203b nếu không muốn đổi màu khi hover */
+}
+
+.stat-card2 h2 {
     font-size: 28px;
-    margin-bottom: 10px;
-    color: #28a745;
-}
-
-.thongke .stat-card h2 {
-    font-size: 22px;
+    color: #16203b;
     margin: 10px 0 5px;
 }
 
-.thongke .stat-card p {
-    font-size: 15px;
-    color: #666;
+.stat-card2 p {
+    font-size: 16px;
+    color: #555;
+    margin: 0;
 }
 
-.thongke .chart-placeholder {
-    margin-top: 40px;
-    background-color: #e9ecef;
-    height: 300px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 16px;
+
+/* Animation */
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.duantn.services.CustomUserDetails;
 import com.duantn.services.DoanhThuGiangVienService;
@@ -20,6 +21,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 @Controller
+@RequestMapping("/giangvien")
 public class ThongKeController {
 
     @Autowired
@@ -28,7 +30,7 @@ public class ThongKeController {
     @Autowired
     private DoanhThuGiangVienService doanhThuGiangVienService;
 
-    @GetMapping("/giangvien/danh-sach-thong-ke")
+    @RequestMapping("/danh-sach-thong-ke")
     public String showThongKe(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         GiangVien giangVien = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (giangVien == null) {
@@ -65,7 +67,7 @@ public class ThongKeController {
         return "views/gdienGiangVien/thong-ke";
     }
 
-    @GetMapping("/giangvien/thong-ke-hoc-vien")
+    @GetMapping("/thong-ke-hoc-vien")
     public String thongKeHocVienTheoKhoaHoc(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         GiangVien giangVien = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (giangVien == null) {
@@ -79,7 +81,7 @@ public class ThongKeController {
         return "views/gdienGiangVien/thong-ke-chi-tiet-hvien";
     }
 
-    @GetMapping("/giangvien/khoa-hoc-dang-day")
+    @GetMapping("/khoa-hoc-dang-day")
     public String danhSachKhoaHocDangDay(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         GiangVien gv = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (gv == null)
@@ -91,7 +93,7 @@ public class ThongKeController {
         return "views/gdienGiangVien/thong-ke-khoa-hoc-dang-day";
     }
 
-    @GetMapping("/giangvien/danh-gia-trung-binh")
+    @GetMapping("/danh-gia-trung-binh")
     public String danhGiaTrungBinhTheoKhoaHoc(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         GiangVien gv = giangVienService.findByTaikhoan(userDetails.getTaiKhoan());
         if (gv == null)
@@ -101,5 +103,4 @@ public class ThongKeController {
         model.addAttribute("danhGiaList", danhGiaList);
         return "views/gdienGiangVien/thong-ke-danh-gia-trung-binh";
     }
-
 }

@@ -1,7 +1,12 @@
 package com.duantn.configs;
 
-import java.io.IOException;
-import java.util.Collection;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.services.CustomOAuth2User;
+import com.duantn.services.CustomUserDetails;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -10,9 +15,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.Collection;
 
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -23,10 +28,19 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
 
-        // ✅ Gán session để hiển thị modal chính sách chỉ 1 lần sau khi đăng nhập
         request.getSession().setAttribute("showPolicyPopup", true);
 
-        // ✅ Lấy danh sách vai trò người dùng
+        // ✅ Gán TaiKhoan vào session nếu đăng nhập bằng Google (OAuth2)
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof CustomOAuth2User customOAuth2User) {
+            TaiKhoan taiKhoan = customOAuth2User.getTaiKhoan();
+            request.getSession().setAttribute("taiKhoan", taiKhoan);
+        } else if (principal instanceof CustomUserDetails customUserDetails) {
+            TaiKhoan taiKhoan = customUserDetails.getTaiKhoan();
+            request.getSession().setAttribute("taiKhoan", taiKhoan);
+        }
+
+        // Xử lý phân quyền redirect như cũ
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String redirectUrl = null;
 
@@ -37,44 +51,41 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 case "ROLE_ADMIN":
                     redirectUrl = "/admin";
                     break;
-
                 case "ROLE_NHANVIEN":
                     redirectUrl = "/nhanvien";
                     break;
-
                 case "ROLE_HOCVIEN":
                 case "ROLE_GIANGVIEN":
-                    // ✅ Nếu có trang người dùng cố truy cập trước khi đăng nhập
+                    String redirectParam = (String) request.getSession().getAttribute("redirectAfterLogin");
+                    if (redirectParam != null && !redirectParam.isBlank()
+                            && !redirectParam.contains("/admin") && !redirectParam.contains("/nhanvien")) {
+                        redirectUrl = redirectParam;
+                        request.getSession().removeAttribute("redirectAfterLogin");
+                        break;
+                    }
+
                     SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
                     if (savedRequest != null) {
                         String targetUrl = savedRequest.getRedirectUrl();
-
-                        // ❌ Không cho redirect về /admin hoặc /nhanvien nếu không đủ quyền
                         if (!targetUrl.contains("/admin") && !targetUrl.contains("/nhanvien")) {
                             redirectUrl = targetUrl;
                             break;
                         }
                     }
-                    // ✅ Nếu không có URL trước đó → chuyển về trang chủ
                     redirectUrl = "/";
                     break;
-
                 default:
-                    // ✅ Vai trò không xác định → về trang chủ
                     redirectUrl = "/";
             }
 
-            if (redirectUrl != null) {
+            if (redirectUrl != null)
                 break;
-            }
         }
 
-        // ✅ Phòng trường hợp không có role nào khớp
         if (redirectUrl == null) {
             redirectUrl = "/";
         }
 
-        // ✅ Chuyển hướng đến URL phù hợp sau khi đăng nhập
         redirectStrategy.sendRedirect(request, response, redirectUrl);
     }
 }

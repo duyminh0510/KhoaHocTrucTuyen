@@ -1,5 +1,7 @@
 package com.duantn.serviceImpl;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
@@ -191,6 +194,42 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     @Override
     public List<KhoaHoc> timTheoTenVaGiangVien(Integer giangvienId, String keyword) {
         return khoaHocRepository.timKiemTheoTenVaGiangVien(giangvienId, keyword);
+    }
+
+    @Override
+    public Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable) {
+        return khoaHocRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable) {
+        return khoaHocRepository.findByDanhMuc_DanhmucId(danhMucId, pageable);
+    }
+
+    @Override
+    public List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.findByGiangVien_GiangvienIdAndTrangThai(giangVienId, trangThai);
+    }
+
+    /**
+     * ✅ Tính giá tại thời điểm thanh toán:
+     * Nếu đang trong thời gian khuyến mãi -> lấy giá khuyến mãi
+     * Nếu hết thời gian -> luôn lấy giá gốc
+     */
+    @Override
+    public BigDecimal getGiaThanhToan(KhoaHoc kh) {
+        LocalDateTime now = LocalDateTime.now();
+        if (kh.getGiaKhuyenMai() != null && kh.getNgaybatdau() != null && kh.getNgayketthuc() != null) {
+            if (!now.isBefore(kh.getNgaybatdau()) && !now.isAfter(kh.getNgayketthuc())) {
+                return kh.getGiaKhuyenMai();
+            }
+        }
+        return kh.getGiagoc() != null ? kh.getGiagoc() : BigDecimal.ZERO;
+    }
+
+    @Override
+    public List<KhoaHoc> getKhoaHocByGiangVien(int giangVienId) {
+        return khoaHocRepository.findByGiangVien_GiangvienId(giangVienId);
     }
 
 }

@@ -21,23 +21,31 @@
             height: 20px;
         }
         
-        #sidebar {
-            position: absolute;
-            top: 152px;
-            left: 0;
-            width: 250px;
-            background-color: #0b1c36;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%);
-            z-index: 10;
-        }
-        
         #sidebar.active {
             transform: translateX(0);
         }
         
         #content {
             padding: 20px;
+        }
+        
+        #sidebar {
+            position: absolute;
+            top: 152px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 152px);
+            background-color: #0b1c36;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 10;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        #sidebar::-webkit-scrollbar {
+            display: none;
         }
         
         .nav-link {
@@ -47,20 +55,13 @@
             text-decoration: none;
         }
         
-        #sidebar {
-            position: absolute;
-            top: 152px;
-            /* 👈 Vị trí dưới thanh nav */
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 152px);
-            /* 👈 Chiều cao phần còn lại của màn hình */
-            background-color: #0b1c36;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%);
-            z-index: 10;
-            overflow-y: auto;
-            /* 👈 Cuộn nếu quá nhiều nội dung */
+        .nav-link:hover {
+            display: block;
+            padding: 8px 16px;
+            color: rgb(11, 143, 225);
+            font-weight: bold;
+            text-decoration: none;
+            background-color: aliceblue;
         }
     </style>
     </head>

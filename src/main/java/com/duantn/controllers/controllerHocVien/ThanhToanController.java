@@ -34,8 +34,9 @@ import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.KhoaHocService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -78,12 +79,19 @@ public class ThanhToanController {
 
         List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(ids);
 
-        BigDecimal tongTien = dsKhoaHoc.stream()
-                .map(KhoaHoc::getGiaHienTai)
-                .filter(Objects::nonNull)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        // ✅ Tính giá thực tế tại thời điểm thanh toán, KHÔNG ghi đè giagoc
+        BigDecimal tongTien = BigDecimal.ZERO;
+        Map<Integer, BigDecimal> giaHienTaiMap = new HashMap<>();
 
-        // Lưu giao dịch sơ bộ
+        for (KhoaHoc kh : dsKhoaHoc) {
+            BigDecimal giaThucTe = khoaHocService.getGiaThanhToan(kh);
+            giaHienTaiMap.put(kh.getKhoahocId(), giaThucTe);
+            tongTien = tongTien.add(giaThucTe);
+        }
+
+        // ✅ Truyền Map này ra để hiển thị giá hiện tại
+        model.addAttribute("giaHienTaiMap", giaHienTaiMap);
+
         GiaoDichKhoaHoc giaoDich = GiaoDichKhoaHoc.builder()
                 .tongtien(tongTien)
                 .tenhocvien(tk.getName())
@@ -94,14 +102,8 @@ public class ThanhToanController {
 
         giaoDichKhoaHocRepository.save(giaoDich);
 
-        // Truyền giaoDichId sang giao diện (nếu cần dùng lại)
         model.addAttribute("giaoDichId", giaoDich.getGiaodichId());
-
-        List<Integer> khoaHocIds = dsKhoaHoc.stream()
-                .map(KhoaHoc::getKhoahocId)
-                .toList();
-
-        model.addAttribute("khoaHocIds", khoaHocIds);
+        model.addAttribute("khoaHocIds", dsKhoaHoc.stream().map(KhoaHoc::getKhoahocId).toList());
         model.addAttribute("dsKhoaHoc", dsKhoaHoc);
         model.addAttribute("tongTien", tongTien);
 
@@ -110,7 +112,7 @@ public class ThanhToanController {
 
     @PostMapping("/api/thanh-toan/thanh-cong")
     public ResponseEntity<?> xuLyThanhToanThanhCong(@RequestBody GiaoDichRequest request) {
-        Integer giaoDichId = Integer.valueOf(request.getGiaoDichId()); // hoặc parseInt()
+        Integer giaoDichId = Integer.valueOf(request.getGiaoDichId());
         Optional<GiaoDichKhoaHoc> optionalGDKH = giaoDichKhoaHocRepository.findById(giaoDichId);
 
         if (optionalGDKH.isEmpty()) {
@@ -118,75 +120,69 @@ public class ThanhToanController {
         }
 
         GiaoDichKhoaHoc giaoDichKH = optionalGDKH.get();
-
-        // Cập nhật trạng thái giao dịch thành HOAN_THANH
         giaoDichKH.setTrangthai(TrangThaiGiaoDich.HOAN_THANH);
         giaoDichKhoaHocRepository.save(giaoDichKH);
 
-        TaiKhoan taiKhoan = giaoDichKH.getTaikhoan(); // Lấy tài khoản từ giao dịch
+        TaiKhoan taiKhoan = giaoDichKH.getTaikhoan();
 
         for (Integer khoaHocId : request.getKhoaHocIds()) {
             Optional<KhoaHoc> optionalKH = khoaHocRepo.findById(khoaHocId);
             if (optionalKH.isPresent()) {
                 KhoaHoc kh = optionalKH.get();
 
+                // ✅ Tính giá tại thời điểm hiện tại
+                BigDecimal giaThucTe = khoaHocService.getGiaThanhToan(kh);
+
                 GiaoDichKhoaHocChiTiet chiTiet = new GiaoDichKhoaHocChiTiet();
                 chiTiet.setGiaoDichKhoaHoc(giaoDichKH);
                 chiTiet.setKhoahoc(kh);
-                chiTiet.setDongia(kh.getGiaHienTai()); // hoặc kh.getGiaGoc()
-
+                chiTiet.setDongia(giaThucTe);
                 giaoDichChiTietRepo.save(chiTiet);
 
-                // Tạo bản ghi vào bảng DangHoc
+                // ✅ Ghi vào bảng DangHoc
                 DangHoc dangHoc = DangHoc.builder()
                         .taikhoan(taiKhoan)
                         .khoahoc(kh)
-                        .dongia(kh.getGiaHienTai())
+                        .dongia(giaThucTe)
                         .trangthai(false)
                         .daCap_ChungChi(false)
                         .build();
                 dangHocRepository.save(dangHoc);
 
-                // ➕ Sau khi đã lưu DangHoc, lưu luôn DoanhThu
-                BigDecimal tiLeHoaHong = BigDecimal.valueOf(0.7); // 70% hoa hồng
-                BigDecimal tienNhan = kh.getGiaHienTai().multiply(tiLeHoaHong); // Tính tiền giảng viên nhận được
+                // ✅ Ghi doanh thu giảng viên
+                BigDecimal tiLeGV = BigDecimal.valueOf(0.7);
+                BigDecimal tienNhanGV = giaThucTe.multiply(tiLeGV);
 
                 DoanhThuGiangVien doanhThu = DoanhThuGiangVien.builder()
-                        .sotiennhan(tienNhan) // Tiền sẽ trả cho giảng viên
-                        .tenGiangVien(kh.getGiangVien().getTaikhoan().getName()) // Lưu tên giảng viên để hiển thị
-                        .taikhoanGV(kh.getGiangVien().getTaikhoan()) // Liên kết tới tài khoản giảng viên
-                        .dangHoc(dangHoc) // Gắn với học viên đang học khóa đó
+                        .sotiennhan(tienNhanGV)
+                        .tenGiangVien(kh.getGiangVien().getTaikhoan().getName())
+                        .taikhoanGV(kh.getGiangVien().getTaikhoan())
+                        .dangHoc(dangHoc)
                         .build();
+                doanhThuGiangVienRepository.save(doanhThu);
 
-                doanhThuGiangVienRepository.save(doanhThu); // Lưu vào DB
-
-                // ✅ Tính phần thu nhập nền tảng (30%)
+                // ✅ Ghi thu nhập nền tảng
                 BigDecimal tiLeNenTang = BigDecimal.valueOf(0.3);
-                BigDecimal tienNenTang = kh.getGiaHienTai().multiply(tiLeNenTang);
+                BigDecimal tienNenTang = giaThucTe.multiply(tiLeNenTang);
 
-                // ✅ Tạo bản ghi thu nhập nền tảng
                 ThuNhapNenTang thuNhapNenTang = ThuNhapNenTang.builder()
                         .sotiennhan(tienNenTang)
                         .dangHoc(dangHoc)
                         .tenKhoaHoc(kh.getTenKhoaHoc())
                         .thuocGiangVien(kh.getGiangVien().getTaikhoan().getName())
                         .build();
-
-                thuNhapNenTangRepository.save(thuNhapNenTang); // ✅ Lưu vào DB
-
+                thuNhapNenTangRepository.save(thuNhapNenTang);
             }
         }
 
-        // Lấy danh sách khóa học từ danh sách ID gửi lên
+        // Gửi mail
         List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(request.getKhoaHocIds());
-        // Gửi email xác nhận
         emailThanhToanThanhCongService.sendPaymentSuccessEmail(
                 taiKhoan.getEmail(),
                 taiKhoan.getName(),
                 giaoDichKH.getGiaodichId().toString(),
                 giaoDichKH.getTongtien().toPlainString(),
-                dsKhoaHoc // List<KhoaHoc>
-        );
+                dsKhoaHoc);
 
         return ResponseEntity.ok("Đã lưu chi tiết giao dịch thành công");
     }

@@ -281,6 +281,46 @@
             color: #007bff;
             text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
+        
+        .dropdown-discover {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-discover .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            min-width: 180px;
+        }
+        
+        .dropdown-discover .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-discover .dropdown-content a:hover {
+            background-color: #14164b;
+            color: white;
+        }
+        
+        .dropdown-discover:hover .dropdown-content {
+            display: block;
+        }
+        /* Gốc: icon không có viền, màu icon ban đầu giữ nguyên */
+        
+        .icon-link i.fa-shopping-cart:hover {
+            color: #0ea5e9;
+        }
+        
+        .icon-link i.fa-bell:hover {
+            color: orange;
+        }
     </style>
 </head>
 
@@ -404,7 +444,7 @@
 
                     <!-- Ẩn nếu là ADMIN hoặc NHANVIEN -->
                     <li sec:authorize="!hasAnyRole('ADMIN','NHANVIEN')">
-                        <a class="dropdown-item" href="/thong-bao">
+                        <a class="dropdown-item" href="/giang-vien/thong-bao">
                             <i class="fas fa-bell"></i> Thông báo
                         </a>
                     </li>
@@ -414,8 +454,8 @@
                         </a>
                     </li>
                     <li sec:authorize="!hasAnyRole('ADMIN','NHANVIEN')">
-                        <a class="dropdown-item" href="/khoa-hoc-cua-toi">
-                            <i class="fa-brands fa-slack"></i> Khóa học của tôi
+                        <a class="dropdown-item" th:href="@{/hoc-vien/hoc-tap(tab='hoc-tap')}">
+                            <i class="fa-brands fa-slack"></i> Học tập của tôi
                         </a>
                     </li>
                     <li sec:authorize="!hasAnyRole('ADMIN','NHANVIEN', 'GIANGVIEN')">
@@ -440,7 +480,13 @@
 
         <!-- Nếu chưa đăng nhập -->
         <div class="icon-group guest-only" sec:authorize="!isAuthenticated()">
-            <a href="/ve-chung-toi" class="btn-light">Về chúng tôi</a>
+            <div class="dropdown-discover">
+                <a href="#" class="btn-light">Khám phá <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="/ve-chung-toi">Về chúng tôi</a>
+                    <a href="/&huong-&dan-&su-&dung">Hướng dẫn sử dụng</a>
+                </div>
+            </div>
             <a href="/gio-hang"><i class="fas fa-shopping-cart"></i></a>
             <a href="/dang-ky-giang-vien" class="btn-light">Dạy trên
                     GLoBalEdu</a>

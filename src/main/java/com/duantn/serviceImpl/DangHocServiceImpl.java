@@ -29,4 +29,9 @@ public class DangHocServiceImpl implements DangHocService {
         return dangHoc != null;
     }
 
+    @Override
+    public boolean existsByKhoaHocId(Integer khoaHocId) {
+        return dangHocRepository.existsByKhoahoc_KhoahocId(khoaHocId);
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.duantn.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
@@ -55,5 +59,16 @@ public interface KhoaHocService {
     List<KhoaHoc> findAllByIds(List<Integer> ids);
 
     KhoaHoc layTheoId(Integer id);
+
+    Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable);
+
+    // Phân trang theo danh mục
+    Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable);
+
+    List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai);
+
+    BigDecimal getGiaThanhToan(KhoaHoc kh);
+
+    List<KhoaHoc> getKhoaHocByGiangVien(int giangVienId);
 
 }

@@ -2,12 +2,15 @@ package com.duantn.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import com.duantn.dtos.HocVienTheoKhoaHocDto;
 import com.duantn.entities.DangHoc;
+import com.duantn.entities.GiangVien;
 import com.duantn.entities.KhoaHoc;
 
 @Repository
@@ -42,4 +45,15 @@ public interface DangHocRepository extends JpaRepository<DangHoc, Integer> {
             "JOIN kh.giangVien gv " +
             "WHERE gv.giangvienId = :giangVienId")
     long demSoHocVienTheoGiangVien(@Param("giangVienId") Integer giangVienId);
+
+    boolean existsByKhoahoc_KhoahocId(Integer khoahocId);
+
+    //
+    @Query("SELECT d.khoahoc.tenKhoaHoc, COUNT(d) " +
+            "FROM DangHoc d " +
+            "WHERE d.khoahoc.giangVien = :giangVien " +
+            "GROUP BY d.khoahoc.tenKhoaHoc " +
+            "ORDER BY COUNT(d) DESC")
+    List<Object[]> findTop5ByGiangVien(@Param("giangVien") GiangVien giangVien, Pageable pageable);
+
 }

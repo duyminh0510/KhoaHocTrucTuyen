@@ -46,8 +46,14 @@
                 <input type="hidden" name="khoahocId"
                     th:value="${khoahoc.khoahocId}" />
 
-                <div class="text-end mt-3"
+                <div
+                    class="d-flex justify-content-between align-items-center mt-3"
                     th:if="${khoahoc.trangThai.name() == 'DRAFT'}">
+                    <a href="#"
+                        class="text-decoration-none text-primary fw-bold"
+                        onclick="xuLyTroVeTrangChu(event)">
+                        ← Về bảng điều khiển
+                    </a>
                     <button id="btnLuuBanNhaps1" type="submit"
                         class="btn themkhoahoc-btn">
                         <i class="fas fa-upload me-2"></i>Lưu bản nháp
@@ -204,18 +210,6 @@
                                             th:disabled="${baiGiang.loaiBaiGiang?.name() != 'VIDEO'}" />
                                         <p class="m-2"><i>Bạn hãy gắn đường dẫn
                                                 video của bạn vào đây.</i></p>
-
-                                        <label
-                                            class="form-label mb-2"><strong>📝
-                                                Mô tả
-                                                video:</strong></label>
-                                        <textarea class="form-control"
-                                            th:name="'chuongs[' + ${cStat.index} + '].baiGiangs[' + ${bStat.index} + '].videoBaiGiang.mota'"
-                                            th:text="${baiGiang.videoBaiGiang?.mota}"
-                                            placeholder="Mô tả video (tùy chọn)"
-                                            th:disabled="${baiGiang.loaiBaiGiang?.name() != 'VIDEO'}"></textarea>
-                                        <p class="m-2"><i>Mô tả về video của
-                                                bạn.</i></p>
                                     </div>
 
                                     <!-- BÀI VIẾT -->
@@ -497,14 +491,6 @@
                             title="Link video của bạn không hợp lệ (ví dụ: https://youtu.be/abc123)">
                         <p class="m-2"><i>Bạn hãy gắn đường dẫn video của bạn
                                 vào đây.</i></p>
-
-                        <label class="form-label mb-2"><strong>📝 Mô tả
-                                video:</strong></label>
-                        <textarea
-                            name="chuongs[__cIndex__].baiGiangs[__bIndex__].videoBaiGiang.mota"
-                            class="form-control"
-                            placeholder="Mô tả video (tùy chọn)"></textarea>
-                        <p class="m-2"><i>Mô tả về video của bạn.</i></p>
                     </div>
 
                     <!-- BÀI VIẾT -->
@@ -859,6 +845,60 @@
                         <button type="button"
                             class="btn-close btn-close-white me-2 m-auto"
                             data-bs-dismiss="toast" aria-label="Đóng"></button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            let formChanged = false;
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const form = document.getElementById("form-tao-khoa-hoc");
+
+                if (form) {
+                    form.addEventListener("change", () => formChanged = true);
+
+                    // Khi nhấn submit (Lưu bản nháp hoặc Yêu cầu duyệt) thì reset trạng thái thay đổi
+                    form.addEventListener("submit", () => formChanged = false);
+                }
+            });
+
+            function xuLyTroVeTrangChu(event) {
+                event.preventDefault();
+
+                if (formChanged) {
+                    const modal = new bootstrap.Modal(document.getElementById('modalXacNhanTroVe'));
+                    modal.show();
+                } else {
+                    window.location.href = '/giangvien/trang-giang-vien'; // <-- thay bằng URL thật của bạn
+                }
+            }
+
+            function thucHienTroVeTrangChu() {
+                window.location.href = '/giangvien/trang-giang-vien'; // <-- thay bằng URL thật của bạn
+            }
+        </script>
+            <div class="modal fade" id="modalXacNhanTroVe" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title">Xác nhận</h5>
+                            <button type="button" class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Thông tin bạn vừa nhập chưa được lưu. Bạn có chắc
+                                chắn muốn rời khỏi trang này không?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Ở lại</button>
+                            <button type="button" class="btn btn-danger"
+                                onclick="thucHienTroVeTrangChu()">Rời
+                                khỏi</button>
+                        </div>
                     </div>
                 </div>
             </div>

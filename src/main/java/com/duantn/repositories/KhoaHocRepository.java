@@ -13,6 +13,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -121,5 +123,9 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
         List<KhoaHoc> findByGiangVien_GiangvienId(Integer giangvienId);
 
         List<KhoaHoc> findByDanhMuc_danhmucId(Integer danhMucId);
+
+        Page<KhoaHoc> findByTrangThai(TrangThaiKhoaHoc trangThai, Pageable pageable);
+
+        Page<KhoaHoc> findByDanhMuc_DanhmucId(Integer danhMucId, Pageable pageable);
 
 }
