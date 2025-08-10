@@ -431,17 +431,30 @@ public class ThemChuongBaiGiangController {
                     String url = bg.getVideoBaiGiang().getUrl_video();
                     String motaVideo = bg.getVideoBaiGiang().getMota();
 
+                    String youtubePattern =
+                            "^(https?://)?(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[A-Za-z0-9_-]{6,}$";
+
                     if (url == null || url.trim().isEmpty()) {
                         danhSachLoi.add("⚠ URL video không được để trống.");
-                    } else if (url == null || url.trim().length() < 10) {
-                        danhSachLoi.add("⚠ URL video không hợp lệ - phải có ít nhất 10 ký tự.");
+                    } else {
+                        String cleanUrl = url.trim();
+
+                        if (!cleanUrl.matches(youtubePattern)) {
+                            danhSachLoi.add("⚠ Chỉ chấp nhận link YouTube hợp lệ.");
+                        } else {
+                            // Nếu hợp lệ thì mới set lại để lưu
+                            bg.getVideoBaiGiang().setUrl_video(cleanUrl);
+                        }
                     }
 
-                    if (motaVideo == null || motaVideo.trim().isEmpty()) {
-                        danhSachLoi.add("⚠ Mô tả video không được để trống.");
-                    } else if (motaVideo == null || motaVideo.trim().length() < 10) {
-                        danhSachLoi.add("⚠ Mô tả video phải có ít nhất 10 ký tự.");
-                    }
+
+
+                    // if (motaVideo == null || motaVideo.trim().isEmpty()) {
+                    // danhSachLoi.add("⚠ Mô tả video không được để trống.");
+                    // } else if (motaVideo.trim().length() < 10) {
+                    // danhSachLoi.add("⚠ Mô tả video phải có ít nhất 10 ký tự.");
+                    // }
+
                 } else if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU
                         && bg.getBaiViet() != null) {
                     String noidung = bg.getBaiViet().getNoidung();
