@@ -306,17 +306,33 @@ public class ThemChuongBaiGiangController {
 
                 // 📄 BÀI VIẾT
                 try {
-
                     if (bg.getLoaiBaiGiang() == LoaiBaiGiang.TAILIEU && bg.getBaiViet() != null) {
                         BaiViet baiViet = bg.getBaiViet();
                         baiViet.setBaiGiang(baiGiangLuu);
 
-                        if (baiViet.getBaivietId() == null) {
+                        // Kiểm tra độ dài
+                        String noiDung = baiViet.getNoidung();
+                        if (noiDung != null) {
+                            String ndTrim = noiDung.trim();
 
+                            // 1. Giới hạn 1000 ký tự
+                            if (ndTrim.length() > 1000) {
+                                throw new IllegalStateException(
+                                        "Nội dung tài liệu không được quá dài");
+                            }
+
+                            // 2. Không cho ký tự đặc biệt (chỉ cho chữ cái, số, khoảng trắng)
+                            if (!ndTrim.matches("[\\p{L}\\p{N}\\s]+")) {
+                                throw new IllegalStateException(
+                                        "Nội dung không được chứa ký tự đặc biệt");
+                            }
+                        }
+
+                        if (baiViet.getBaivietId() == null) {
                             BaiViet daCo =
                                     baivietService.findByBaiGiangId(baiGiangLuu.getBaiGiangId());
                             if (daCo != null) {
-                                daCo.setNoidung(baiViet.getNoidung());
+                                daCo.setNoidung(noiDung);
                                 baivietService.save(daCo);
                             } else {
                                 baivietService.save(baiViet);
@@ -324,7 +340,7 @@ public class ThemChuongBaiGiangController {
                         } else {
                             BaiViet baiVietCu = baivietService.findById(baiViet.getBaivietId());
                             if (baiVietCu != null) {
-                                baiVietCu.setNoidung(baiViet.getNoidung());
+                                baiVietCu.setNoidung(noiDung);
                                 baiVietCu.setBaiGiang(baiGiangLuu);
                                 baivietService.save(baiVietCu);
                             }
@@ -335,6 +351,7 @@ public class ThemChuongBaiGiangController {
                     return "redirect:/giangvien/them-moi-khoa-hoc/them-chuong?khoahocId="
                             + khoahocId;
                 }
+
 
                 // trắc nghiệm
                 try {

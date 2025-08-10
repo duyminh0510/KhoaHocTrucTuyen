@@ -126,7 +126,16 @@ public class ThemKhoaHocController {
         khoahoc.setTrangThai(TrangThaiKhoaHoc.DRAFT);
 
         if (file != null && !file.isEmpty()) {
-            // Kiểm tra kích thước file (10MB = 10 * 1024 * 1024 bytes)
+            // Kiểm tra định dạng file (chỉ cho phép ảnh)
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                model.addAttribute("imageError",
+                        "Chỉ được tải lên file ảnh (jpg, png, jpeg, gif...)");
+                model.addAttribute("danhmuc", danhMucService.layTatCa());
+                return "views/gdienGiangVien/them-khoa-hoc";
+            }
+
+            // Kiểm tra kích thước file (<= 5MB)
             if (file.getSize() > 5 * 1024 * 1024) {
                 model.addAttribute("imageError", "Ảnh bìa không được vượt quá 5MB");
                 model.addAttribute("danhmuc", danhMucService.layTatCa());
@@ -137,6 +146,7 @@ public class ThemKhoaHocController {
             khoahoc.setAnhBia(imageUrl);
             khoahoc.setAnhBiaPublicId(cloudinaryService.extractPublicIdFromUrl(imageUrl));
         }
+
 
 
         // Save
