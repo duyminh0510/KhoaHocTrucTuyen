@@ -1,21 +1,22 @@
 package com.duantn.controllers.controllerNhanVien;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.duantn.entities.DanhMuc;
 import com.duantn.services.DanhMucService;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping({ "/admin", "/nhanvien" })
+@RequestMapping({"/admin", "/nhanvien"})
 @PreAuthorize("hasAnyRole('ADMIN', 'NHANVIEN')")
 public class DanhMucController {
 
@@ -25,6 +26,10 @@ public class DanhMucController {
     private String getPrefix(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.startsWith("/admin") ? "/admin" : "/nhanvien";
+    }
+
+    private boolean isTenDanhMucHopLe(String ten) {
+        return ten.matches("^[a-zA-Z0-9À-ỹ\\s\\-]+$");
     }
 
     @GetMapping("/danhmuc")
@@ -44,6 +49,11 @@ public class DanhMucController {
         String ten = danhMuc.getTenDanhMuc();
         if (ten == null || ten.trim().length() < 6) {
             model.addAttribute("error", "Tên danh mục phải có ít nhất 6 ký tự.");
+        } else if (!isTenDanhMucHopLe(ten)) {
+            model.addAttribute("error", "Tên danh mục không được chứa ký tự đặc biệt.");
+        }
+
+        if (model.containsAttribute("error")) {
             model.addAttribute("danhmucs", service.layTatCa());
             model.addAttribute("danhmuc", danhMuc);
             model.addAttribute("prefixPath", getPrefix(request));
@@ -64,6 +74,7 @@ public class DanhMucController {
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 
+
     @GetMapping("/danhmuc/edit/{id}")
     public String suaForm(@PathVariable Integer id, HttpServletRequest request, Model model) {
         DanhMuc dm = service.layTheoId(id);
@@ -80,14 +91,13 @@ public class DanhMucController {
         String ten = danhMuc.getTenDanhMuc();
         if (ten == null || ten.trim().length() < 6) {
             model.addAttribute("error", "Tên danh mục phải có ít nhất 6 ký tự.");
-            model.addAttribute("danhmucs", service.layTatCa());
-            model.addAttribute("danhmuc", danhMuc);
-            model.addAttribute("prefixPath", getPrefix(request));
-            return "views/gdienQuanLy/danhmuc";
+        } else if (!isTenDanhMucHopLe(ten)) {
+            model.addAttribute("error", "Tên danh mục không được chứa ký tự đặc biệt.");
+        } else if (service.daTonTaiTenKhacId(ten, danhMuc.getDanhmucId())) {
+            model.addAttribute("error", "Tên danh mục đã tồn tại!");
         }
 
-        if (service.daTonTaiTenKhacId(ten, danhMuc.getDanhmucId())) {
-            model.addAttribute("error", "Tên danh mục đã tồn tại!");
+        if (model.containsAttribute("error")) {
             model.addAttribute("danhmucs", service.layTatCa());
             model.addAttribute("danhmuc", danhMuc);
             model.addAttribute("prefixPath", getPrefix(request));
@@ -99,8 +109,10 @@ public class DanhMucController {
         return "redirect:" + getPrefix(request) + "/danhmuc";
     }
 
+
     @PostMapping("/vohieuhoa/{id}")
-    public String xoa(@PathVariable Integer id, HttpServletRequest request, RedirectAttributes redirect) {
+    public String xoa(@PathVariable Integer id, HttpServletRequest request,
+            RedirectAttributes redirect) {
         service.voHieuHoa(id);
         redirect.addFlashAttribute("success", "Đã vô hiệu hóa danh mục!");
         return "redirect:" + getPrefix(request) + "/danhmuc";
