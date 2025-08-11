@@ -210,4 +210,10 @@ public class KhoaHocServiceImpl implements KhoaHocService {
             TrangThaiKhoaHoc trangThai) {
         return khoaHocRepository.findByGiangVien_GiangvienIdAndTrangThai(giangVienId, trangThai);
     }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocPublished(Pageable pageable) {
+        return khoaHocRepository.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED, pageable);
+    }
+
 }

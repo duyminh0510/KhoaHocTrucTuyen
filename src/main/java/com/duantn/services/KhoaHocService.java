@@ -64,4 +64,7 @@ public interface KhoaHocService {
 
     List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId,
             TrangThaiKhoaHoc trangThai);
+
+    Page<KhoaHoc> getKhoaHocPublished(Pageable pageable);
+
 }
