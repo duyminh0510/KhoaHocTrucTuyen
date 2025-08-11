@@ -1,14 +1,17 @@
 package com.duantn.controllers.controllerChung;
 
-import com.duantn.entities.TaiKhoan;
-import com.duantn.repositories.TaiKhoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.duantn.entities.TaiKhoan;
+import com.duantn.repositories.TaiKhoanRepository;
 
 @Controller
 @RequestMapping("/doi-mat-khau")
@@ -28,8 +31,7 @@ public class DoiMatKhauController {
     @PostMapping
     public String doiMatKhau(@RequestParam("currentPassword") String currentPassword,
             @RequestParam("newPassword") String newPassword,
-            @RequestParam("confirmPassword") String confirmPassword,
-            Authentication authentication,
+            @RequestParam("confirmPassword") String confirmPassword, Authentication authentication,
             RedirectAttributes redirectAttributes) {
 
         String email = authentication.getName(); // Lấy email đăng nhập
@@ -51,7 +53,8 @@ public class DoiMatKhauController {
         }
 
         if (newPassword.length() < 6) {
-            redirectAttributes.addFlashAttribute("message", "Mật khẩu mới phải có ít nhất 6 ký tự.");
+            redirectAttributes.addFlashAttribute("message",
+                    "Mật khẩu mới phải có ít nhất 6 ký tự.");
             return "redirect:/doi-mat-khau";
         }
 
@@ -61,6 +64,12 @@ public class DoiMatKhauController {
                     "Mật khẩu mới phải chứa ít nhất một chữ cái, một số và một ký tự đặc biệt.");
             return "redirect:/doi-mat-khau";
         }
+        if (passwordEncoder.matches(newPassword, taiKhoan.getPassword())) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Mật khẩu mới không được trùng với mật khẩu hiện tại.");
+            return "redirect:/doi-mat-khau";
+        }
+
 
         // Mã hóa và lưu mật khẩu mới
         taiKhoan.setPassword(passwordEncoder.encode(newPassword));

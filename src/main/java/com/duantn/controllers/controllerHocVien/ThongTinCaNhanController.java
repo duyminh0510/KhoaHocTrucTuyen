@@ -189,12 +189,19 @@ public class ThongTinCaNhanController {
             return "views/gdienHocVien/tai-khoan";
         }
 
+        // Kiểm tra mật khẩu cũ đúng
         if (!passwordEncoder.matches(dto.getOldPassword(), tk.getPassword())) {
             result.rejectValue("oldPassword", null, "Mật khẩu hiện tại không đúng.");
         }
 
+        // Kiểm tra mật khẩu mới và xác nhận khớp nhau
         if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
             result.rejectValue("confirmPassword", null, "Mật khẩu xác nhận không khớp.");
+        }
+
+        // Kiểm tra mật khẩu mới không trùng mật khẩu cũ
+        if (passwordEncoder.matches(dto.getNewPassword(), tk.getPassword())) {
+            result.rejectValue("newPassword", null, "Mật khẩu mới không được trùng mật khẩu cũ.");
         }
 
         if (result.hasErrors()) {
@@ -209,4 +216,5 @@ public class ThongTinCaNhanController {
         redirectAttributes.addFlashAttribute("tab", "tab-matkhau");
         return "redirect:/tai-khoan";
     }
+
 }

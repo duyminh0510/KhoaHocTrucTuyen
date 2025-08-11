@@ -11,7 +11,9 @@ public class TaiKhoanPasswordDto {
 
     private String oldPassword;
 
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Mật khẩu mới phải có ít nhất 1 chữ in hoa, 1 số và 1 ký tự đặc biệt")
+    @NotBlank(message = "Mật khẩu mới không được để trống")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$",
+            message = "Mật khẩu mới phải có ít nhất 1 chữ in hoa, 1 số và 1 ký tự đặc biệt")
     private String newPassword;
 
     @NotBlank(message = "Xác nhận mật khẩu không được để trống")
