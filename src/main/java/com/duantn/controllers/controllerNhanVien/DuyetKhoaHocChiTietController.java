@@ -3,7 +3,8 @@ package com.duantn.controllers.controllerNhanVien;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,9 @@ import com.duantn.entities.Chuong;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.enums.LoaiBaiGiang;
+import com.duantn.services.AuthService;
 import com.duantn.services.BaiGiangService;
 import com.duantn.services.ChuongService;
-import com.duantn.services.CustomUserDetails;
 import com.duantn.services.KhoaHocService;
 
 @Controller
@@ -32,6 +33,9 @@ public class DuyetKhoaHocChiTietController {
 
     @Autowired
     BaiGiangService baiGiangService;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/{id}")
     public String chiTietKhoaHoc(
@@ -61,13 +65,13 @@ public class DuyetKhoaHocChiTietController {
     }
 
     @RequestMapping("/khoahoc/slug/{slug}")
-    public String noidung(@PathVariable("slug") String slug, Model model,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String noidung(@PathVariable("slug") String slug, Model model) {
 
-        if (userDetails == null) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(auth);
+        if (taiKhoan == null) {
             return "redirect:/auth/dangnhap";
         }
-        TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         model.addAttribute("taiKhoanId", taiKhoan.getTaikhoanId());
 
         KhoaHoc khoaHoc = khoaHocService.getKhoaHocBySlug(slug);
@@ -123,14 +127,14 @@ public class DuyetKhoaHocChiTietController {
     }
 
     @RequestMapping("/khoa-hoc/noi-dung-bai-giang/{id}")
-    public String chitietnoidung(@PathVariable("id") Integer baiGiangId, Model model,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String chitietnoidung(@PathVariable("id") Integer baiGiangId, Model model) {
 
-        if (userDetails == null) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(auth);
+        if (taiKhoan == null) {
             return "redirect:/auth/dangnhap";
         }
 
-        TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         model.addAttribute("taiKhoanId", taiKhoan.getTaikhoanId());
 
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);

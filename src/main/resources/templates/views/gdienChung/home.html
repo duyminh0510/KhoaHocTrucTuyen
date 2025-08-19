@@ -174,6 +174,100 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- Modal chia sẻ -->
+                                            <div class="modal fade"
+                                                th:id="'shareModal-' + ${khoaHoc.khoahocId}"
+                                                tabindex="-1"
+                                                aria-hidden="true">
+                                                <div
+                                                    class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div
+                                                            class="modal-header"
+                                                            style="background-color: #e9f0ff; border-bottom: 2px solid #0d6efd;">
+                                                            <h6
+                                                                class="modal-title">
+                                                                <i
+                                                                    class="fas fa-share-alt text-primary me-2"></i>
+                                                                Chia sẻ khóa
+                                                                học:
+                                                                <span
+                                                                    th:text="${khoaHoc.tenKhoaHoc}"></span>
+                                                            </h6>
+                                                            <button
+                                                                type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <form
+                                                            th:action="@{/studend/share-course}"
+                                                            method="post"
+                                                            class="ajax-form">
+                                                            <div
+                                                                class="modal-body">
+                                                                <input
+                                                                    type="hidden"
+                                                                    name="courseId"
+                                                                    th:value="${khoaHoc.khoahocId}" />
+                                                                <div
+                                                                    class="mb-3">
+                                                                    <label
+                                                                        for="recipientEmail"
+                                                                        class="form-label">
+                                                                        <i
+                                                                            class="fas fa-envelope text-primary me-2"></i>
+                                                                        Email
+                                                                        người
+                                                                        nhận:
+                                                                    </label>
+                                                                    <input
+                                                                        type="email"
+                                                                        name="recipientEmail"
+                                                                        class="form-control"
+                                                                        style="font-size: 14px;"
+                                                                        required
+                                                                        placeholder="nhapemail@example.com">
+                                                                </div>
+                                                                <p
+                                                                    style="font-size: 14px;">
+                                                                    <i
+                                                                        class="fas fa-info-circle text-info me-2"></i>
+                                                                    Email sẽ
+                                                                    được gửi kèm
+                                                                    thông tin và
+                                                                    liên kết
+                                                                    khóa học.
+                                                                </p>
+                                                            </div>
+                                                            <div
+                                                                class="ajax-message text-center px-3"></div>
+                                                            <div
+                                                                class="modal-footer">
+                                                                <div
+                                                                    class="d-flex justify-content-end gap-2 w-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-outline-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                        <i
+                                                                            class="fas fa-times me-1"></i>
+                                                                        Đóng
+                                                                    </button>
+                                                                    <button
+                                                                        type="submit"
+                                                                        class="btn btn-sm fw-semibold btn-outline-primary">
+                                                                        <i
+                                                                            class="fas fa-paper-plane me-1"></i>
+                                                                        Gửi
+                                                                        Email
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </th:block>
                                 </div>
@@ -316,17 +410,8 @@
                                             class="btn btn-outline-primary btn-sm share-btn"
                                             data-bs-toggle="modal"
                                             th:data-bs-target="'#shareModal-' + ${khoaHoc.khoahocId}">
-                                            <i
-                                                class="fas fa-share me-1"></i>
+                                            <i class="fas fa-share me-1"></i>
                                         </button>
-
-                                        <!-- <form th:action="@{/gio-hang/them}" method="post" class="d-inline add-to-cart-form">
-                                        <input type="hidden" name="khoaHocId" th:value="${khoaHoc.khoahocId}" />
-                                        <button type="submit" class="btn btn-outline-success btn-sm">
-                                                <i
-                                                    class="fas fa-cart-plus me-1"></i>
-                                            </button>
-                                    </form> -->
 
                                         <button
                                             class="btn btn-sm btn-outline-success add-to-cart-btn"
@@ -347,19 +432,24 @@
                             <div class="modal fade"
                                 th:id="'shareModal-' + ${khoaHoc.khoahocId}"
                                 tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Chia sẻ khóa
-                                                học: <span
-                                                    th:text="${khoaHoc.tenKhoaHoc}"></span></h5>
+                                        <div class="modal-header"
+                                            style="background-color: #e9f0ff; border-bottom: 2px solid #0d6efd;">
+                                            <h6 class="modal-title">
+                                                <i
+                                                    class="fas fa-share-alt text-primary me-2"></i>
+                                                Chia sẻ khóa học:
+                                                <span
+                                                    th:text="${khoaHoc.tenKhoaHoc}"></span>
+                                            </h6>
                                             <button type="button"
                                                 class="btn-close"
                                                 data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <form
-                                            th:action="@{/hoc-vien/share-course}"
+                                            th:action="@{/studend/share-course}"
                                             method="post" class="ajax-form">
                                             <div class="modal-body">
                                                 <input type="hidden"
@@ -367,34 +457,44 @@
                                                     th:value="${khoaHoc.khoahocId}" />
                                                 <div class="mb-3">
                                                     <label for="recipientEmail"
-                                                        class="form-label">Email
-                                                        người nhận:</label>
+                                                        class="form-label">
+                                                        <i
+                                                            class="fas fa-envelope text-primary me-2"></i>
+                                                        Email người
+                                                        nhận:
+                                                    </label>
                                                     <input type="email"
                                                         name="recipientEmail"
                                                         class="form-control"
+                                                        style="font-size: 14px;"
                                                         required
                                                         placeholder="nhapemail@example.com">
                                                 </div>
-                                                <p>Một email chứa thông tin và
-                                                    liên kết đến khóa học này sẽ
-                                                    được gửi đến địa chỉ trên.
+                                                <p style="font-size: 14px;">
+                                                    <i
+                                                        class="fas fa-info-circle text-info me-2"></i>
+                                                    Email sẽ được gửi kèm thông
+                                                    tin và liên kết khóa học.
                                                 </p>
                                             </div>
-
-                                            <!-- Thông báo Ajax -->
                                             <div
                                                 class="ajax-message text-center px-3"></div>
-
                                             <div class="modal-footer">
                                                 <div
                                                     class="d-flex justify-content-end gap-2 w-100">
                                                     <button type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        <i
+                                                            class="fas fa-times me-1"></i>
+                                                        Đóng
+                                                    </button>
                                                     <button type="submit"
-                                                        class="btn fw-semibold text-white"
-                                                        style="background-color: #16203b;">Gửi
-                                                        Email</button>
+                                                        class="btn btn-sm fw-semibold btn-outline-primary">
+                                                        <i
+                                                            class="fas fa-paper-plane me-1"></i>
+                                                        Gửi Email
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -595,82 +695,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="modal fade" id="welcomeModal" tabindex="-1"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered"
-                    style="max-width: 750px; margin: 40px auto;">
-                    <div class="modal-content shadow rounded-4">
-                        <div class="modal-header"
-                            style="background-color: #16203b; color: #fff; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-                            <h5 class="modal-title">
-                                <i class="fas fa-graduation-cap me-2"></i>Chào
-                                mừng bạn đến với GlobalEdu!
-                            </h5>
-                            <button type="button"
-                                class="btn-close btn-close-white"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="font-size: 0.95rem;">
-
-                            <p class="mb-3">
-                                <i class="fas fa-user text-primary me-2"></i>
-                                <strong>Xin chào bạn</strong>, Cảm ơn bạn đã tin
-                                tưởng GlobalEdu trên hành trình phát triển bản
-                                thân.
-                            </p>
-                            <p class="mb-3">
-                                <i class="fas fa-rocket text-success me-2"></i>
-                                <strong>Hãy bắt đầu với mục tiêu rõ
-                                    ràng</strong> – bạn học để làm gì? Học để
-                                thăng tiến, để chuyển ngành, hay để thỏa đam mê?
-                            </p>
-                            <p class="mb-3">
-                                <i
-                                    class="fas fa-lightbulb text-warning me-2"></i>
-                                <strong>Mẹo nhỏ:</strong> Duy trì thói quen học
-                                15-30 phút mỗi ngày giúp bạn tiến bộ đều đặn mà
-                                không bị quá tải.
-                            </p>
-                            <p class="mb-3">
-                                <i class="fas fa-comments text-info me-2"></i>
-                                <strong>Tương tác tích cực</strong>: Tham gia
-                                bình luận, đặt câu hỏi dưới mỗi bài học. Đừng
-                                ngại nói ra điều bạn chưa hiểu!
-                            </p>
-                            <p class="mb-3">
-                                <i class="fas fa-star text-danger me-2"></i>
-                                <strong>Đừng quên đánh giá khóa học</strong> để
-                                góp phần nâng cao chất lượng cho cộng đồng người
-                                học.
-                            </p>
-
-                            <p class="mb-3">
-                                <i class="fas fa-trophy text-success me-2"></i>
-                                Hoàn thành các bài học để mở khóa chứng chỉ và
-                                nâng cao kỹ năng thật sự.
-                            </p>
-                            <p class="mb-2">
-                                <i class="fas fa-headset text-info me-2"></i>
-                                <strong>Cần hỗ trợ?</strong> Đội ngũ GlobalEdu
-                                luôn sẵn sàng:
-                                <br>&emsp;📧 <a
-                                    href="mailto:globaledu237@gmail.com">globaledu237@gmail.com</a>
-                                <br>&emsp;📞 <a href="tel:0353441036">0353 411
-                                    036</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <script th:if="${showPolicyPopup}">
-            document.addEventListener("DOMContentLoaded", function() {
-                var myModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
-                myModal.show();
-            });
-        </script>
 
             <script
                 src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>

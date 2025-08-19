@@ -41,4 +41,6 @@ public interface GiangVienService {
 
     GiangVien getById(Integer id);
 
+    GiangVien findById(Integer id);
+
 }

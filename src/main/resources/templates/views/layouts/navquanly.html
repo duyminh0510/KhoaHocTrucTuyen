@@ -21,23 +21,31 @@
             height: 20px;
         }
         
-        #sidebar {
-            position: absolute;
-            top: 152px;
-            left: 0;
-            width: 250px;
-            background-color: #0b1c36;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%);
-            z-index: 10;
-        }
-        
         #sidebar.active {
             transform: translateX(0);
         }
         
         #content {
             padding: 20px;
+        }
+        
+        #sidebar {
+            position: absolute;
+            top: 152px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 152px);
+            background-color: #0b1c36;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 10;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        #sidebar::-webkit-scrollbar {
+            display: none;
         }
         
         .nav-link {
@@ -47,20 +55,13 @@
             text-decoration: none;
         }
         
-        #sidebar {
-            position: absolute;
-            top: 152px;
-            /* 👈 Vị trí dưới thanh nav */
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 152px);
-            /* 👈 Chiều cao phần còn lại của màn hình */
-            background-color: #0b1c36;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%);
-            z-index: 10;
-            overflow-y: auto;
-            /* 👈 Cuộn nếu quá nhiều nội dung */
+        .nav-link:hover {
+            display: block;
+            padding: 8px 16px;
+            color: rgb(11, 143, 225);
+            font-weight: bold;
+            text-decoration: none;
+            background-color: aliceblue;
         }
     </style>
     </head>
@@ -98,6 +99,9 @@
                     <div
                         th:if="${#authorization.expression('hasRole(''NHANVIEN'')')}">
                         <a class="nav-link"
+                            th:href="@{/nhanvien/quanly-hocvien}">🎓 Quản lý học
+                            viên</a>
+                        <a class="nav-link"
                             th:href="@{/nhanvien/quanly-taikhoan}">🧑🏻‍🎓 Quản
                             lý tài khoản</a>
                         <a class="nav-link"
@@ -124,9 +128,6 @@
                             th:href="@{/nhanvien/quanly-giao-dich}">💰 Giao dịch
                             khóa học</a>
                         <a class="nav-link"
-                            th:href="@{/nhanvien/quan-ly-thong-ke-he-thong}">📊
-                            Thống kê hệ thống</a>
-                        <a class="nav-link"
                             th:href="@{/nhanvien/quanly-danh-gia-binh-luan}">💬
                             Bình luận, đánh giá</a>
                     </div>
@@ -134,6 +135,9 @@
                     <!-- MỤC CHO ADMIN -->
                     <div
                         th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="nav-link"
+                            th:href="@{/admin/quanly-hocvien}">🎓 Quản lý học
+                            viên</a>
                         <a class="nav-link"
                             th:href="@{/admin/quanly-taikhoan}">🧑🏻‍🎓 Quản lý
                             tài khoản</a>
@@ -162,7 +166,7 @@
                             th:href="@{/admin/quanly-giao-dich}">💰 Giao dịch
                             khóa học</a>
                         <a class="nav-link"
-                            th:href="@{/admin/quan-ly-thong-ke-he-thong}">📊
+                            th:href="@{/admin/quanly-thong-ke-he-thong}">📊
                             Thống kê hệ thống</a>
                         <a class="nav-link"
                             th:href="@{/admin/quanly-danh-gia-binh-luan}">💬

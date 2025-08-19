@@ -129,4 +129,9 @@ public class GiangVienServiceImpl implements GiangVienService {
         return giangVienRepository.findByTaikhoan(taiKhoan).orElse(null);
     }
 
+    @Override
+    public GiangVien findById(Integer id) {
+        return giangVienRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy giảng viên với ID: " + id));
+    }
 }

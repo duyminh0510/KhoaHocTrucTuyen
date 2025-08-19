@@ -10,6 +10,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
+
+import com.duantn.entities.TaiKhoan;
+import com.duantn.services.CustomOAuth2User;
+import com.duantn.services.CustomUserDetails;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +30,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // ✅ Gán session để hiển thị modal chính sách chỉ 1 lần sau khi đăng nhập
         request.getSession().setAttribute("showPolicyPopup", true);
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof CustomOAuth2User customOAuth2User) {
+            TaiKhoan taiKhoan = customOAuth2User.getTaiKhoan();
+            request.getSession().setAttribute("taiKhoan", taiKhoan);
+        } else if (principal instanceof CustomUserDetails customUserDetails) {
+            TaiKhoan taiKhoan = customUserDetails.getTaiKhoan();
+            request.getSession().setAttribute("taiKhoan", taiKhoan);
+        }
 
         // ✅ Lấy danh sách vai trò người dùng
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -44,7 +58,14 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 case "ROLE_HOCVIEN":
                 case "ROLE_GIANGVIEN":
-                    // ✅ Nếu có trang người dùng cố truy cập trước khi đăng nhập
+                    String redirectParam = (String) request.getSession().getAttribute("redirectAfterLogin");
+                    if (redirectParam != null && !redirectParam.isBlank()
+                            && !redirectParam.contains("/admin") && !redirectParam.contains("/nhanvien")) {
+                        redirectUrl = redirectParam;
+                        request.getSession().removeAttribute("redirectAfterLogin");
+                        break;
+                    }
+
                     SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
                     if (savedRequest != null) {
                         String targetUrl = savedRequest.getRedirectUrl();

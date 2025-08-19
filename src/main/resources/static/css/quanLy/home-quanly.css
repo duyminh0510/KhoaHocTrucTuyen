@@ -40,6 +40,7 @@
     border-radius: 0.75rem;
     padding: 1.5rem;
     box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
+    padding-bottom: 3px;
 }
 
 .homequanly .highlight-box h5 {
@@ -47,6 +48,33 @@
 }
 
 .homequanly .highlight-box p {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 600;
+}
+
+.homequanly .highlight {
+    background: #fff;
+    color: #fdb90d;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+}
+
+.homequanly .highlight-img {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+    /* Giữ nguyên tỷ lệ, không bị méo */
+    display: block;
+    margin: 0 auto;
+    /* Căn giữa nếu có khung to hơn */
+}
+
+.homequanly .highlight h5 {
+    font-size: 1.2rem;
+}
+
+.homequanly .highlight p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #38e067;
 }

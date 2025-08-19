@@ -29,7 +29,7 @@ import com.duantn.repositories.GiaoDichKhoaHocChiTietRepository;
 import com.duantn.repositories.GiaoDichKhoaHocRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.ThuNhapNenTangRepository;
-import com.duantn.services.CustomUserDetails;
+import com.duantn.services.AuthService;
 import com.duantn.services.EmailThanhToanThanhCongService;
 import com.duantn.services.KhoaHocService;
 
@@ -66,15 +66,18 @@ public class ThanhToanController {
     @Autowired
     private ThuNhapNenTangRepository thuNhapNenTangRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @GetMapping("/thanh-toan")
     public String hienThiThanhToan(@RequestParam("khoahocId") List<Integer> ids, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan tk = authService.getTaiKhoanFromAuth(auth);
+
+        if (tk == null) {
             return "redirect:/auth/dangnhap";
         }
-
-        TaiKhoan tk = userDetails.getTaiKhoan();
 
         List<KhoaHoc> dsKhoaHoc = khoaHocService.findAllByIds(ids);
 

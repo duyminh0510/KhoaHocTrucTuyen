@@ -3,15 +3,15 @@ package com.duantn.controllers.controllerHocVien;
 import com.duantn.entities.DanhGia;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
+import com.duantn.services.AuthService;
 import com.duantn.services.DanhGiaService;
 import com.duantn.services.KhoaHocService;
-import com.duantn.services.TaiKhoanService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,18 +20,19 @@ public class DanhGiaController {
 
     private final KhoaHocService khoaHocService;
     private final DanhGiaService danhGiaService;
-    private final TaiKhoanService taiKhoanService;
+    private final AuthService authService;
 
     @PostMapping("/{khoahocId}")
     public String xuLyGuiDanhGia(@PathVariable("khoahocId") Integer khoahocId,
-            @ModelAttribute("danhGiaMoi") DanhGia danhGia,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @ModelAttribute("danhGiaMoi") DanhGia danhGia) {
 
-        if (userDetails == null) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan nguoiDung = authService.getTaiKhoanFromAuth(auth);
+
+        if (nguoiDung == null) {
             throw new RuntimeException("Người dùng chưa đăng nhập");
         }
 
-        TaiKhoan nguoiDung = taiKhoanService.findByEmail(userDetails.getUsername());
         KhoaHoc khoaHoc = khoaHocService.findById(khoahocId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học"));
 
@@ -42,14 +43,15 @@ public class DanhGiaController {
     }
 
     @GetMapping("/xoa/{khoahocId}")
-    public String xoaDanhGia(@PathVariable("khoahocId") Integer khoahocId,
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public String xoaDanhGia(@PathVariable("khoahocId") Integer khoahocId) {
 
-        if (userDetails == null) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan nguoiDung = authService.getTaiKhoanFromAuth(auth);
+
+        if (nguoiDung == null) {
             throw new RuntimeException("Bạn cần đăng nhập để xóa đánh giá.");
         }
 
-        TaiKhoan nguoiDung = taiKhoanService.findByEmail(userDetails.getUsername());
         KhoaHoc khoaHoc = khoaHocService.findById(khoahocId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học"));
 

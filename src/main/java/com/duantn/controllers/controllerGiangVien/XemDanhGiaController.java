@@ -6,36 +6,42 @@ import com.duantn.entities.GiangVien;
 import com.duantn.entities.KhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.KhoaHocRepository;
-import com.duantn.services.CustomUserDetails;
+import com.duantn.services.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 @RequestMapping("giangvien/danh-gia-tu-khoa-hoc")
 public class XemDanhGiaController {
 
     private final KhoaHocRepository khoaHocRepository;
+    private final AuthService authService;
 
     @GetMapping
     public String xemDanhGiaTongQuan(
             @RequestParam(required = false) Integer khoahocId,
             @RequestParam(required = false) Integer sao,
-            Model model,
-            @AuthenticationPrincipal CustomUserDetails currentUser) {
-        if (currentUser == null || currentUser.getTaiKhoan() == null) {
+            Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(authentication);
+        if (taiKhoan == null) {
             return "redirect:/login";
         }
 
-        TaiKhoan taiKhoan = currentUser.getTaiKhoan();
         GiangVien gv = taiKhoan.getGiangVien();
+        if (gv == null) {
+            return "redirect:/login";
+        }
 
         List<KhoaHoc> khoaHocs = khoaHocRepository.findByGiangVien(gv);
         model.addAttribute("dsKhoaHoc", khoaHocs);

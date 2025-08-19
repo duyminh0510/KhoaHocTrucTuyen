@@ -24,8 +24,7 @@
             <!-- Form đăng nhập -->
             <div class="col-md-6">
               <div style="width: 100%; max-width: 450px;">
-                <h2 class="text-center mb-4">🔑 Đăng nhập để tiếp tục học tập
-                  nào bạn</h2>
+                <h2 class="text-center mb-4">🔑 Đăng nhập để tiếp tục</h2>
                 <form action="/login/form" method="post" novalidate>
                   <div class="mb-0">
                     <label class="form-label">Email</label>
@@ -45,7 +44,8 @@
 
                   <!-- HIỂN THỊ LỖI TỪ SESSION -->
                   <div th:if="${session.error}">
-                    <p class="text-danger" th:text="${session.error}"></p>
+                    <p class="text-danger text-center"
+                      th:text="${session.error}"></p>
                   </div>
 
                   <div class="text-center">
@@ -61,7 +61,8 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                      <a href="#" class="btn-google" data-bs-toggle="tooltip"
+                      <a th:href="@{/oauth2/authorization/google}"
+                        class="btn-google" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Đăng nhập bằng Google">
                         <img th:src="@{/photos/google.png}"
                           alt="Đăng nhập với Google">

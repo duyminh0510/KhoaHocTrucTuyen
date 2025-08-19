@@ -103,4 +103,15 @@ public class ViGiangVienServiceImpl implements ViGiangVienService {
     public List<RutTienGiangVien> findRutTienTheoTrangThai(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai) {
         return rutTienRepo.findByTaikhoanGVAndTrangthaiIn(giangVien, trangThai);
     }
+
+    //
+    @Override
+    public BigDecimal getTongThuTrongThang(TaiKhoan giangVien) {
+        return doanhThuRepo.getTongThuTrongThang(giangVien);
+    }
+
+    @Override
+    public Long getSoLanNhanTrongThang(TaiKhoan giangVien) {
+        return doanhThuRepo.getSoLanNhanTrongThang(giangVien);
+    }
 }

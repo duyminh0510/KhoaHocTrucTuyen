@@ -5,5 +5,6 @@ public enum TrangThaiKhoaHoc {
     PENDING_APPROVAL, // Đang chờ duyệt
     REJECTED, // từ chối
     PUBLISHED, // Đã xuất bản
-    HIDDEN // Bị ẩn
+    HIDDEN, // Bị ẩn
+    UNPUBLISHED // đã xóa
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.duantn.entities.GiangVien;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.entities.RutTienGiangVien;
-import com.duantn.services.CustomUserDetails;
+import com.duantn.services.AuthService;
 import com.duantn.services.GiangVienService;
 import com.duantn.services.ViGiangVienService;
 import com.duantn.services.TokenService;
@@ -40,25 +41,38 @@ public class ViGiangVienController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private AuthService authService;
+
     @GetMapping
     public String hienThiVi(Model model) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(auth);
+
+        if (giangVien == null) {
+            return "redirect:/auth/dangnhap";
+        }
 
         model.addAttribute("soDu", viGiangVienService.tinhSoDu(giangVien));
         model.addAttribute("lichSuThuNhap", viGiangVienService.getLichSuThuNhap(giangVien));
         model.addAttribute("lichSuRutTien", viGiangVienService.getLichSuRutTienThanhCong(giangVien));
         model.addAttribute("yeuCauDangXuLy", viGiangVienService.getYeuCauDangXuLy(giangVien));
 
+        model.addAttribute("tongThuThang", viGiangVienService.getTongThuTrongThang(giangVien));
+        model.addAttribute("soLanNhanThang", viGiangVienService.getSoLanNhanTrongThang(giangVien));
+
         return "views/gdienGiangVien/vi-giang-vien";
     }
 
     @PostMapping("/rut-tien")
     public String guiYeuCauRutTien(@RequestParam("soTienRut") BigDecimal soTienRut) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(auth);
+
+        if (giangVien == null) {
+            return "redirect:/auth/dangnhap";
+        }
 
         if (viGiangVienService.guiYeuCauRutTien(giangVien, soTienRut)) {
             return "redirect:/giangvien/vi-giang-vien?success";
@@ -102,9 +116,13 @@ public class ViGiangVienController {
     @GetMapping("/thong-tin-ngan-hang")
     @ResponseBody
     public ResponseEntity<?> getThongTinNganHang() {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(authentication);
+
+        if (giangVien == null) {
+            return ResponseEntity.status(401).body("Bạn cần đăng nhập");
+        }
+
         RutTienGiangVien last = viGiangVienService.getLastRutTien(giangVien);
         if (last != null && last.getSoTaiKhoan() != null && last.getTenNganHang() != null) {
             Map<String, String> result = new HashMap<>();
@@ -120,9 +138,13 @@ public class ViGiangVienController {
     @PostMapping("/gui-otp")
     @ResponseBody
     public ResponseEntity<?> guiOtpRutTien(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(authentication);
+
+        if (giangVien == null) {
+            return ResponseEntity.status(401).body("Bạn cần đăng nhập");
+        }
+
         String email = giangVien.getEmail();
         String name = giangVien.getName();
         String subject = "Mã xác thực rút tiền";
@@ -137,9 +159,13 @@ public class ViGiangVienController {
     @ResponseBody
     public ResponseEntity<?> xacThucOtpRutTien(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang,
             @RequestParam BigDecimal soTienRut, @RequestParam String otp) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(authentication);
+
+        if (giangVien == null) {
+            return ResponseEntity.status(401).body("Bạn cần đăng nhập");
+        }
+
         boolean valid = tokenService.verifyToken(otp).isPresent();
         if (!valid) {
             return ResponseEntity.badRequest().body("Mã xác thực không đúng hoặc đã hết hạn!");
@@ -155,9 +181,13 @@ public class ViGiangVienController {
     @PostMapping("/gui-otp-doi-stk")
     @ResponseBody
     public ResponseEntity<?> guiOtpDoiSTK(@RequestParam String soTaiKhoan, @RequestParam String tenNganHang) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        TaiKhoan giangVien = userDetails.getTaiKhoan();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan giangVien = authService.getTaiKhoanFromAuth(authentication);
+
+        if (giangVien == null) {
+            return ResponseEntity.status(401).body("Bạn cần đăng nhập");
+        }
+
         String email = giangVien.getEmail();
         String name = giangVien.getName();
 
@@ -168,5 +198,4 @@ public class ViGiangVienController {
         tokenService.generateAndSendToken(email, name, subject, contentPrefix);
         return ResponseEntity.ok().build();
     }
-
 }

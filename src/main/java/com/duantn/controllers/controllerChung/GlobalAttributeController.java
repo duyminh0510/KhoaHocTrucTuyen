@@ -4,7 +4,7 @@ import com.duantn.entities.DanhMuc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
 import com.duantn.repositories.TaiKhoanRepository;
-import com.duantn.services.CustomUserDetails;
+import com.duantn.services.AuthService;
 import com.duantn.services.KhoaHocService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +29,9 @@ public class GlobalAttributeController {
     TaiKhoanRepository taiKhoanRepository;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
 
     @ModelAttribute("danhMucList")
@@ -38,22 +41,13 @@ public class GlobalAttributeController {
 
     @ModelAttribute("taiKhoan")
     public TaiKhoan getTaiKhoan(Authentication authentication) {
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Integer id = userDetails.getTaiKhoan().getTaikhoanId();
-            return taiKhoanRepository.findById(id).orElse(null);
-        }
-        return null;
+        return authService.getTaiKhoanFromAuth(authentication);
     }
 
     @ModelAttribute("tenNguoiDung")
     public String getTenNguoiDung(Authentication authentication) {
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            TaiKhoan taiKhoanCu = ((CustomUserDetails) authentication.getPrincipal()).getTaiKhoan();
-            TaiKhoan taiKhoanMoi = taiKhoanRepository.findById(taiKhoanCu.getTaikhoanId()).orElse(taiKhoanCu);
-            return taiKhoanMoi.getName();
-        }
-        return null;
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(authentication);
+        return (taiKhoan != null) ? taiKhoan.getName() : null;
     }
 
     @ModelAttribute("currentUri")
@@ -63,7 +57,7 @@ public class GlobalAttributeController {
 
     @ModelAttribute("likedCourseIds")
     public Set<Integer> getLikedCourseIds(Authentication authentication) {
-        TaiKhoan taiKhoan = getTaiKhoan(authentication);
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(authentication);
         if (taiKhoan != null) {
             return nguoiDungThichKhoaHocRepository
                     .findByTaiKhoan_TaikhoanId(taiKhoan.getTaikhoanId())

@@ -1,193 +1,121 @@
-.hocvien .quanlyhocvien {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.hocvien .quanlyhocvien h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.hocvien .search-bar,
-.hocvien .filter-course {
-    margin-bottom: 20px;
-}
-
-.hocvien .search-bar input,
-.hocvien .filter-course select {
-    width: 100%;
-    padding: 10px 16px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-.hocvien table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.hocvien th,
-.hocvien td {
-    padding: 14px;
-    text-align: left;
-    border-bottom: 1px solid #e1e1e1;
-}
-
-.hocvien th {
-    background-color: #f1f3f5;
-}
-
-.hocvien td.actions {
-    text-align: center;
-}
-
-.hocvien .btn {
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    background-color: #16203b;
-    transition: background 0.3s;
-}
-
-.hocvien .btn:hover {
-    background-color: #1e2a4f;
-}
-
-.hocvien .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.hocvien .modal-content {
-    background-color: #fff;
-    margin: 8% auto;
-    padding: 30px 25px;
-    border-radius: 16px;
-    width: 500px;
-    max-width: 90%;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+body {
     font-family: 'Segoe UI', sans-serif;
-    animation: fadeIn 0.3s ease-in-out;
 }
 
-.hocvien .modal-header {
-    font-size: 22px;
+.hocvien {
+    padding: 50px 40px;
+}
+
+.hocvien .title {
+    font-size: 32px;
     font-weight: 700;
-    color: #16203b;
-    margin-bottom: 20px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.hocvien .modal-body p {
-    margin: 12px 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-}
-
-.hocvien .modal-body p strong {
-    color: #16203b;
-    display: inline-block;
-    width: 110px;
-}
-
-.hocvien .close {
-    position: absolute;
-    right: 18px;
-    top: 16px;
-    font-size: 22px;
-    color: #888;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.hocvien .close:hover {
-    color: #000;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hocvien .form-hang-ngang {
+    color: #14256d;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    width: 100%;
+    gap: 12px;
+}
+
+.hocvien .card {
+    border-radius: 12px;
 }
 
 .hocvien .filter-course {
-    flex: 1;
-}
-
-.hocvien .search-bar {
-    flex: 2;
-}
-
-.hocvien .filter-course form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .hocvien .filter-course label {
-    white-space: nowrap;
-    min-width: 120px;
+    font-weight: 600;
+    min-width: 130px;
+    margin-top: 0px;
 }
 
-.hocvien .filter-course select,
-.hocvien .search-bar input {
-    height: 36px;
-    padding: 6px 12px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
+.hocvien .form-select-sm {
+    width: 330px;
 }
 
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInMoveUp 0.6s ease-out forwards;
+.hocvien .filter-icon {
+    font-size: 1.5rem;
 }
 
-@keyframes fadeInMoveUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+/* Email và ngày đăng ký xếp dọc, sát avatar */
+
+.hocvien .email-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hocvien .email-date label,
+.hocvien .progress-info label {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #555;
+}
+
+.hocvien .email-date span {
+    font-size: 15px;
+    color: #333;
+}
+
+
+/* Khoảng cách avatar + email-date */
+
+.hocvien .info-left {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .hocvien .list-group-item .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0px;
     }
+    .hocvien .email-date,
+    .hocvien .progress-info {
+        width: 100%;
+    }
+}
+
+.hocvien .student-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.hocvien .student-name label {
+    margin: 0;
+    white-space: nowrap;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgb(26, 26, 255);
+}
+
+.hocvien .student-name span {
+    font-weight: 600;
+    color: #333;
+}
+
+.hocvien .list-group-item {
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hocvien .list-group-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #deecff;
 }

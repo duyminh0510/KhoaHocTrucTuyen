@@ -12,13 +12,13 @@
             <div class="thongke-container">
                 <div class="thongke-header">
                     <i class="fas fa-chart-line"></i>
-                    <h1>Bảng điều khiển giảng viên</h1>
+                    <h1>Bảng điều khiển thống kê</h1>
                 </div>
                 <div class="stat-grid">
                     <div class="stat-card">
                         <a th:href="@{/giangvien/thong-ke-hoc-vien}"
                             style="text-decoration: none;">
-                            <div class="stat-card hoverable"
+                            <div class="stat-card2 hoverable"
                                 style="cursor: pointer;">
                                 <i class="fas fa-users"></i>
                                 <h2 th:text="${tongHocVien}">0</h2>
@@ -29,7 +29,7 @@
                     <div class="stat-card">
                         <a th:href="@{/giangvien/khoa-hoc-dang-day}"
                             style="text-decoration: none;">
-                            <div class="stat-card hoverable"
+                            <div class="stat-card2 hoverable"
                                 style="cursor: pointer;">
                                 <i class="fas fa-book"></i>
                                 <h2 th:text="${soKhoaHoc}">0</h2>
@@ -40,52 +40,26 @@
                     <div class="stat-card">
                         <a th:href="@{/giangvien/danh-gia-trung-binh}"
                             style="text-decoration: none;">
-                            <div class="stat-card hoverable"
+                            <div class="stat-card2 hoverable"
                                 style="cursor: pointer;">
                                 <i class="fas fa-star"></i>
                                 <h2>Đánh giá</h2>
                                 <p>Xem từng khóa học</p>
                             </div>
                         </a>
-
                     </div>
                     <div class="stat-card">
-                        <i class="fas fa-coins"></i>
-                        <h2
-                            th:text="${#numbers.formatDecimal(tongTienNhan, 0, 'COMMA', 0, 'POINT')} + '₫'">0₫</h2>
-                        <p>Tổng doanh thu</p>
+                        <a th:href="@{/giangvien/danh-gia-trung-binh}"
+                            style="text-decoration: none;">
+                            <div class="stat-card2 hoverable"
+                                style="cursor: pointer;">
+                                <i class="fas fa-coins"></i>
+                                <h2
+                                    th:text="${#numbers.formatDecimal(tongTienNhan, 0, 'COMMA', 0, 'POINT')} + '₫'">0₫</h2>
+                                <p>Tổng doanh thu</p>
+                            </div>
+                        </a>
                     </div>
-                </div>
-
-                <div class="chart-placeholder" style="margin-top: 32px;">
-                    <h3>Biểu đồ doanh thu theo khóa học</h3>
-
-                </div>
-
-                <div class="table-container" style="margin-top: 32px;">
-                    <h3>Thống kê doanh thu từng khóa học</h3>
-                    <table border="1" style="width:100%; text-align:center;">
-                        <thead>
-                            <tr>
-                                <th>Tên khóa học</th>
-                                <th>Số lượt đăng ký</th>
-                                <th>Tổng tiền giao dịch</th>
-                                <th>Tổng tiền nhận</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="item : ${doanhThuKhoaHoc}">
-                                <td th:text="${item.tenKhoaHoc}">Tên</td>
-                                <td th:text="${item.soLuotDangKy}">0</td>
-                                <td
-                                    th:text="${#numbers.formatDecimal(item.tongTienGiaoDich, 0, 'COMMA', 0, 'POINT')} + '₫'">
-                                    0₫</td>
-                                <td
-                                    th:text="${#numbers.formatDecimal(item.tongTienNhan, 0, 'COMMA', 0, 'POINT')} + '₫'">0₫
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </main>

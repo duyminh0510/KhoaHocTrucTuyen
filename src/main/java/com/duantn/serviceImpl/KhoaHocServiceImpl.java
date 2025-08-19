@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import com.duantn.entities.DanhMuc;
 import com.duantn.entities.KhoaHoc;
@@ -17,6 +18,7 @@ import com.duantn.entities.NguoiDungThichKhoaHoc;
 import com.duantn.entities.TaiKhoan;
 import com.duantn.enums.TrangThaiGiaoDich;
 import com.duantn.enums.TrangThaiKhoaHoc;
+import com.duantn.repositories.DangHocRepository;
 import com.duantn.repositories.DanhMucRepository;
 import com.duantn.repositories.KhoaHocRepository;
 import com.duantn.repositories.NguoiDungThichKhoaHocRepository;
@@ -33,6 +35,8 @@ public class KhoaHocServiceImpl implements KhoaHocService {
     private TaiKhoanRepository taiKhoanRepository;
     @Autowired
     private NguoiDungThichKhoaHocRepository nguoiDungThichKhoaHocRepository;
+    @Autowired
+    private DangHocRepository dangHocRepository;
 
     @Autowired
     private DanhMucRepository danhMucRepository;
@@ -193,4 +197,34 @@ public class KhoaHocServiceImpl implements KhoaHocService {
         return khoaHocRepository.timKiemTheoTenVaGiangVien(giangvienId, keyword);
     }
 
+    @Override
+    public Page<KhoaHoc> getTatCaKhoaHocPage(Pageable pageable) {
+        return khoaHocRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<KhoaHoc> getKhoaHocTheoDanhMucPaged(Integer danhMucId, Pageable pageable) {
+        return khoaHocRepository.findByDanhMuc_DanhmucId(danhMucId, pageable);
+    }
+
+    @Override
+    public List<KhoaHoc> getKhoaHocByGiangVienIdAndTrangThai(Integer giangVienId, TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.findByGiangVien_GiangvienIdAndTrangThai(giangVienId, trangThai);
+    }
+
+    @Override
+    public List<KhoaHoc> findByGiangVienId(Integer giangVienId) {
+        return khoaHocRepository.findByGiangVien_GiangvienId(giangVienId);
+    }
+
+    @Override
+    public int countHocVien(Integer khoaHocId) {
+        return dangHocRepository.countByKhoahoc_KhoahocIdAndTrangthaiTrue(khoaHocId);
+    }
+
+    @Override
+    public double tinhDoanhThu(Integer khoaHocId) {
+        Double sum = dangHocRepository.sumDoanhThuByKhoaHocId(khoaHocId);
+        return sum != null ? sum : 0.0;
+    }
 }

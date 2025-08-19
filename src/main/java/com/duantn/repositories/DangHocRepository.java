@@ -2,12 +2,15 @@ package com.duantn.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import com.duantn.dtos.HocVienTheoKhoaHocDto;
 import com.duantn.entities.DangHoc;
+import com.duantn.entities.GiangVien;
 import com.duantn.entities.KhoaHoc;
 
 @Repository
@@ -42,4 +45,38 @@ public interface DangHocRepository extends JpaRepository<DangHoc, Integer> {
             "JOIN kh.giangVien gv " +
             "WHERE gv.giangvienId = :giangVienId")
     long demSoHocVienTheoGiangVien(@Param("giangVienId") Integer giangVienId);
+
+    boolean existsByKhoahoc_KhoahocId(Integer khoahocId);
+
+    //
+    @Query("SELECT d.khoahoc.tenKhoaHoc, COUNT(d) " +
+            "FROM DangHoc d " +
+            "WHERE d.khoahoc.giangVien = :giangVien " +
+            "GROUP BY d.khoahoc.tenKhoaHoc " +
+            "ORDER BY COUNT(d) DESC")
+    List<Object[]> findTop5ByGiangVien(@Param("giangVien") GiangVien giangVien, Pageable pageable);
+
+    //
+    @Query("SELECT d.khoahoc.tenKhoaHoc, COUNT(d) " +
+            "FROM DangHoc d " +
+            "GROUP BY d.khoahoc.tenKhoaHoc " +
+            "ORDER BY COUNT(d) DESC")
+    List<Object[]> findTop5KhoaHoc(Pageable pageable);
+
+    @Query("SELECT COUNT(DISTINCT dh.taikhoan) FROM DangHoc dh")
+    int countHocVienDaDangKy();
+
+    @Query("SELECT dh.khoahoc.giangVien.taikhoan.name, COUNT(dh) " +
+            "FROM DangHoc dh " +
+            "GROUP BY dh.khoahoc.giangVien.taikhoan.name " +
+            "ORDER BY COUNT(dh) DESC")
+    List<Object[]> findTop5GiangVienHocVien(Pageable pageable);
+
+    int countByKhoahoc_KhoahocIdAndTrangthaiTrue(Integer khoaHocId);
+
+    @Query("SELECT SUM(d.dongia) FROM DangHoc d WHERE d.khoahoc.khoahocId = :khoaHocId AND d.trangthai = true")
+    Double sumDoanhThuByKhoaHocId(Integer khoaHocId);
+
+    List<DangHoc> findByTaikhoan_TaikhoanId(Integer taikhoanId);
+
 }

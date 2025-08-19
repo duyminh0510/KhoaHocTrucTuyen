@@ -13,6 +13,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,11 +92,16 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
         List<KhoaHoc> findByGiangVien(GiangVien giangVien);
 
+        @Query("SELECT SUM(d.dongia) FROM DangHoc d " +
+                        "WHERE d.khoahoc.giangVien = :giangVien " +
+                        "AND d.trangthai = true")
+        BigDecimal tinhTongDoanhThu(GiangVien giangVien);
+
         List<KhoaHoc> findAllByKhoahocIdIn(List<Integer> ids);
 
         //
-        @Query("SELECT COUNT(kh) FROM KhoaHoc kh")
-        int countKhoaHoc();
+        @Query("SELECT COUNT(kh) FROM KhoaHoc kh WHERE kh.trangThai = :trangThai")
+        int countKhoaHocByTrangThai(@Param("trangThai") TrangThaiKhoaHoc trangThai);
 
         @Query("SELECT kh.danhMuc.tenDanhMuc, COUNT(kh) FROM KhoaHoc kh GROUP BY kh.danhMuc.tenDanhMuc")
         List<Object[]> tiLeDanhMuc();
@@ -122,4 +130,14 @@ public interface KhoaHocRepository extends JpaRepository<KhoaHoc, Integer> {
 
         List<KhoaHoc> findByDanhMuc_danhmucId(Integer danhMucId);
 
+        Page<KhoaHoc> findByTrangThai(TrangThaiKhoaHoc trangThai, Pageable pageable);
+
+        Page<KhoaHoc> findByDanhMuc_DanhmucId(Integer danhMucId, Pageable pageable);
+
+        @Query("SELECT kh.danhMuc.tenDanhMuc, COUNT(kh) " +
+                        "FROM KhoaHoc kh " +
+                        "WHERE kh.trangThai = com.duantn.enums.TrangThaiKhoaHoc.PUBLISHED AND kh.danhMuc IS NOT NULL " +
+                        "GROUP BY kh.danhMuc.tenDanhMuc " +
+                        "ORDER BY COUNT(kh) DESC")
+        List<Object[]> findTopDanhMucBySoLuongKhoaHoc(Pageable pageable);
 }

@@ -2,6 +2,7 @@ package com.duantn.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,9 +30,14 @@ public class BinhLuan implements Serializable {
     @Column(name = "NgayBinhLuan", nullable = false, updatable = false)
     private LocalDateTime ngayBinhLuan;
 
+    // Comment cha
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private BinhLuan parent;
+
+    // Comment con
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BinhLuan> replies;
 
     @ManyToOne
     @JoinColumn(name = "taikhoanId", nullable = false)

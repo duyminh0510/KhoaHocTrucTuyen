@@ -17,4 +17,7 @@ public interface RutTienGiangVienRepository extends JpaRepository<RutTienGiangVi
     List<RutTienGiangVien> findByTaikhoanGVAndTrangthaiIn(TaiKhoan giangVien, List<TrangThaiRutTien> trangThai);
 
     Optional<RutTienGiangVien> findTopByTaikhoanGVOrderByNgayrutDesc(TaiKhoan giangVien);
+
+    List<RutTienGiangVien> findByTrangthai(TrangThaiRutTien trangthai);
+
 }

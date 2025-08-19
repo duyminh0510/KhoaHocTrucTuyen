@@ -11,6 +11,7 @@ import com.duantn.repositories.RoleRepository;
 import com.duantn.repositories.TaiKhoanRepository;
 import com.duantn.repositories.VerificationTokenRepository;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -323,6 +324,7 @@ public class DangKyGiangVienController {
     @PostMapping("/verify-password")
     public String processVerifyPassword(@RequestParam("password") String password,
             HttpSession session,
+            HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
         String email = (String) session.getAttribute("registrationEmail");
@@ -352,10 +354,14 @@ public class DangKyGiangVienController {
             account.setRole(instructorRole);
 
             taiKhoanRepository.save(account);
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authToken);
+            request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext());
 
             // Tìm hoặc tạo mới thông tin giảng viên
             GiangVien instructor = giangVienRepository.findByTaikhoan(account)
@@ -376,12 +382,13 @@ public class DangKyGiangVienController {
             session.removeAttribute("instructorDetails");
             session.removeAttribute("emailForOtp");
 
-            redirectAttributes.addFlashAttribute("success", "Nâng cấp tài khoản thành công! Vui lòng đăng nhập lại.");
-            return "views/gdienGiangVien/home";
+            redirectAttributes.addFlashAttribute("success", "Nâng cấp tài khoản thành công!");
+            return "redirect:/giangvien/trang-giang-vien"; // Trang chính hoặc trang dành cho giảng viên
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình nâng cấp: " + e.getMessage());
             return "redirect:/dang-ky-giang-vien/verify-password";
         }
     }
+
 }

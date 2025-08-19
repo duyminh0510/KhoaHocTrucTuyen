@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +31,8 @@ public class XemKhoaHocController {
     private DangHocService dangHocService;
     @Autowired
     private BinhLuanService binhLuanService;
+    @Autowired
+    private AuthService authService;
 
     @RequestMapping("/khoa-hoc")
     public String xemkhoahoc(Model model) {
@@ -38,13 +40,14 @@ public class XemKhoaHocController {
     }
 
     @RequestMapping("/khoa-hoc/slug/{slug}")
-    public String hocbaicungto(@PathVariable("slug") String slug, Model model,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String hocbaicungto(@PathVariable("slug") String slug, Model model) {
 
-        if (userDetails == null)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(auth);
+        if (taiKhoan == null) {
             return "redirect:/auth/dangnhap";
+        }
 
-        TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         KhoaHoc khoaHoc = khoaHocService.getKhoaHocBySlug(slug);
         if (khoaHoc == null)
             return "redirect:/khoa-hoc?error=notfound";
@@ -69,13 +72,14 @@ public class XemKhoaHocController {
     }
 
     @RequestMapping("/khoa-hoc/bai-giang/{id}")
-    public String xemBaiGiang(@PathVariable("id") Integer baiGiangId, Model model,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String xemBaiGiang(@PathVariable("id") Integer baiGiangId, Model model) {
 
-        if (userDetails == null)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TaiKhoan taiKhoan = authService.getTaiKhoanFromAuth(auth);
+        if (taiKhoan == null) {
             return "redirect:/auth/dangnhap";
+        }
 
-        TaiKhoan taiKhoan = userDetails.getTaiKhoan();
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);
         if (baiGiang == null)
             return "redirect:/khoa-hoc?error=notfound";

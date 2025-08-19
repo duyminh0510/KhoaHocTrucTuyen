@@ -1,0 +1,186 @@
+/* =============================
+   QUẢN LÝ YÊU CẦU RÚT TIỀN
+   Chủ đạo: #16203b
+   ============================= */
+
+.yeucauruttien {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6fa;
+    padding-bottom: 50px;
+}
+
+
+/* Tiêu đề */
+
+.yeucauruttien h2 {
+    font-weight: 700;
+    color: #16203b;
+    border-left: 6px solid #16203b;
+    padding-left: 12px;
+    margin-bottom: 20px;
+}
+
+
+/* Card container */
+
+.yeucauruttien .card {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Card header */
+
+.yeucauruttien .card-header {
+    background: linear-gradient(90deg, #16203b, #24345b);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+
+/* Tabs */
+
+.yeucauruttien .nav-tabs {
+    border-bottom: none;
+}
+
+.yeucauruttien .nav-tabs .nav-link {
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background-color: #e9edf5;
+    margin-right: 5px;
+    color: #16203b;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.yeucauruttien .nav-tabs .nav-link.active {
+    background: linear-gradient(90deg, #16203b, #24345b);
+    color: #fff;
+}
+
+.yeucauruttien .nav-tabs .nav-link:hover {
+    background-color: #d5dcec;
+}
+
+
+/* Table */
+
+.yeucauruttien table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.yeucauruttien table thead {
+    background-color: #16203b;
+    color: white;
+}
+
+.yeucauruttien table th,
+.yeucauruttien table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.yeucauruttien table tbody tr:hover {
+    background-color: #f2f6fc;
+    transition: 0.2s;
+}
+
+
+/* Nút hành động */
+
+.yeucauruttien .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 6px 14px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.yeucauruttien .btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.yeucauruttien .btn-success:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.yeucauruttien .btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.yeucauruttien .btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+
+/* Modal */
+
+.yeucauruttien .modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+}
+
+.yeucauruttien .modal-header {
+    background-color: #16203b;
+    color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.yeucauruttien .modal-footer .btn-primary {
+    background-color: #16203b;
+    border: none;
+}
+
+.yeucauruttien .modal-footer .btn-primary:hover {
+    background-color: #24345b;
+}
+
+
+/* Toast */
+
+.yeucauruttien .toast {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Trạng thái */
+
+.yeucauruttien .text-warning {
+    color: #ffb400 !important;
+    font-weight: 600;
+}
+
+.yeucauruttien .text-success {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.yeucauruttien .text-danger {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .yeucauruttien table {
+        font-size: 0.9rem;
+    }
+    .yeucauruttien h2 {
+        font-size: 1.2rem;
+    }
+}

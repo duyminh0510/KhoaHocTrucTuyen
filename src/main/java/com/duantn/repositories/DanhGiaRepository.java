@@ -33,5 +33,4 @@ public interface DanhGiaRepository extends JpaRepository<DanhGia, Integer> {
     List<DanhGia> findByKhoaHocId(@Param("khoaHocId") Integer khoaHocId);
 
     List<DanhGia> findByKhoahoc_GiangVien_GiangvienId(Integer giangvienId);
-
 }

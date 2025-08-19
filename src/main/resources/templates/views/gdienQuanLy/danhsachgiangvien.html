@@ -69,23 +69,12 @@
                                             th:utext="${tk.status} ? '&#128274; Khóa' : '&#128275; Mở'">
                                         </button>
 
-                                        <button type="button"
-                                            class="btn btn-outline-primary btn-sm"
-                                            th:data-id="${tk.taikhoanId}"
-                                            th:data-name="${tk.name}"
-                                            th:data-email="${tk.email}"
-                                            th:data-phone="${tk.phone}"
-                                            th:data-congviec="${tk.giangVien.congViec}"
-                                            th:data-cccd="${tk.giangVien.CCCD}"
-                                            th:data-ngaysinh="${tk.giangVien.ngaySinh}"
-                                            th:data-gioitinh="${tk.giangVien.gioiTinh}"
-                                            th:data-chuyennganh="${tk.giangVien.chuyenNganh}"
-                                            th:data-kynang="${tk.giangVien.kyNang}"
-                                            th:data-kinhnghiem="${tk.giangVien.kinhNghiem}"
-                                            onclick="openDetailModal(this)">
+                                        <a
+                                            th:href="@{/{prefix}/quanly-giangvien/giangvien/{id}/chitiet(prefix=${prefix}, id=${tk.giangVien.giangvienId})}"
+                                            class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-info-circle"></i>
                                             Chi tiết
-                                        </button>
+                                        </a>
 
                                     </div>
                                 </td>
@@ -134,120 +123,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="modal fade" id="detailModal" tabindex="-1"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content modal-content-custom shadow">
-                        <div class="modal-header modal-header-custom">
-                            <h5 class="modal-title mb-0"
-                                style="font-style: italic;">
-                                <i
-                                    class="fas fa-chalkboard-teacher me-2 text-primary"></i>
-                                Thông tin giảng viên
-                            </h5>
-                        </div>
-                        <div class="modal-body p-4">
-                            <div class="row g-3">
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-user-circle me-2 text-info"></i>
-                                    <strong>Họ tên:</strong> <span
-                                        id="detailName"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-id-card me-2 text-primary"></i>
-                                    <strong>CCCD:</strong> <span
-                                        id="detailCCCD"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-envelope me-2 text-warning"></i>
-                                    <strong>Email:</strong> <span
-                                        id="detailEmail"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-phone me-2 text-success"></i>
-                                    <strong>SĐT:</strong> <span
-                                        id="detailPhone"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-calendar-day me-2 text-danger"></i>
-                                    <strong>Ngày sinh:</strong> <span
-                                        id="detailNgaySinh"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-venus-mars me-2 text-secondary"></i>
-                                    <strong>Giới tính:</strong> <span
-                                        id="detailGioiTinh"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-briefcase me-2 text-info"></i>
-                                    <strong>Công việc:</strong> <span
-                                        id="detailCongViec"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-cogs me-2 text-success"></i>
-                                    <strong>Kỹ năng:</strong> <span
-                                        id="detailKyNang"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-clock me-2 text-danger"></i>
-                                    <strong>Kinh nghiệm:</strong> <span
-                                        id="detailKinhNghiem"></span>
-                                </div>
-                                <div class="col-md-6 info-item">
-                                    <i
-                                        class="fas fa-graduation-cap me-2 text-warning"></i>
-                                    <strong>Chuyên ngành:</strong> <span
-                                        id="detailChuyenNganh"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-            function maskEmail(email) {
-                if (!email || !email.includes("@")) return "*******";
-                const [name, domain] = email.split("@");
-                return name.substring(0, 2) + "****@" + domain;
-            }
-
-            function maskPhone(phone) {
-                if (!phone || phone.length < 4) return "******";
-                return "*******" + phone.slice(-3);
-            }
-
-            function maskCCCD(cccd) {
-                if (!cccd || cccd.length < 4) return "********";
-                return "*".repeat(cccd.length - 3) + cccd.slice(-3);
-            }
-
-            function openDetailModal(button) {
-                document.getElementById("detailName").textContent = button.getAttribute("data-name") || "";
-                document.getElementById("detailEmail").textContent = maskEmail(button.getAttribute("data-email"));
-                document.getElementById("detailPhone").textContent = maskPhone(button.getAttribute("data-phone"));
-                document.getElementById("detailCCCD").textContent = maskCCCD(button.getAttribute("data-cccd"));
-                document.getElementById("detailNgaySinh").textContent = button.getAttribute("data-ngaysinh") || "";
-                document.getElementById("detailGioiTinh").textContent = button.getAttribute("data-gioitinh") || "";
-                document.getElementById("detailCongViec").textContent = button.getAttribute("data-congviec") || "";
-                document.getElementById("detailChuyenNganh").textContent = button.getAttribute("data-chuyennganh") || "";
-                document.getElementById("detailKyNang").textContent = button.getAttribute("data-kynang") || "";
-                document.getElementById("detailKinhNghiem").textContent = button.getAttribute("data-kinhnghiem") || "";
-
-                const modal = new bootstrap.Modal(document.getElementById("detailModal"));
-                modal.show();
-            }
-        </script>
 
             <script>
             function openConfirmModal(button) {

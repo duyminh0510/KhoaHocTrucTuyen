@@ -1,89 +1,88 @@
-.vigiangvien .vigv-container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 30px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', sans-serif;
+.vigiangvien {
+    padding: 30px 70px;
 }
 
-.vigiangvien .vigv-container h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    color: #16203b;
+.vigiangvien .vigiangvien-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.vigiangvien .wallet-balance {
-    font-size: 22px;
-    font-weight: bold;
-    color: #28a745;
-    margin-bottom: 30px;
-}
-
-.vigiangvien .withdraw-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 40px;
-}
-
-.vigiangvien .withdraw-form input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.vigiangvien .withdraw-form button {
-    padding: 10px 18px;
-    background-color: #16203b;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.vigiangvien .withdraw-form button:hover {
-    background-color: #1d2a4c;
-}
-
-.vigiangvien .transaction-history h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
+    gap: 0.5rem;
     color: #16203b;
+    padding-bottom: 0.5rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #233870;
 }
 
-.vigiangvien .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
+.vigiangvien .vigiangvien-icon-vang {
+    color: #f4b400;
+    /* vàng đậm kiểu Google */
 }
 
-.vigiangvien .transaction-table th,
-.vigiangvien .transaction-table td {
-    padding: 14px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-    font-size: 14px;
+.vigiangvien .card {
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
 
-.vigiangvien .transaction-table th {
-    background-color: #f1f3f5;
+.vigiangvien .card-header {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.vigiangvien .transaction-table td.income {
-    color: #28a745;
+.vigiangvien .table th {
+    white-space: nowrap;
+}
+
+.vigiangvien .nav-tabs .nav-link {
+    color: #e9f7ef;
+    font-weight: 500;
+    border: none;
+}
+
+.vigiangvien .nav-tabs .nav-link.active {
+    background-color: #e9f7ef;
+    color: #1cc88a;
+    border-bottom: 3px solid #1cc88a;
+}
+
+.vigiangvien .form-label::before {
+    content: "\f09d";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+}
+
+.vigiangvien .btn-success {
+    background-color: #1cc88a;
+    border-color: #1cc88a;
     font-weight: 600;
 }
 
-.vigiangvien .transaction-table td.expense {
+.vigiangvien .modal-title::before {
+    content: "\f2f2";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+}
+
+.vigiangvien .text-warning::before {
+    content: "\f071";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+    color: #ffc107;
+}
+
+.vigiangvien .text-danger::before {
+    content: "\f057";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
     color: #dc3545;
-    font-weight: 600;
-}
-
-.vigiangvien .transaction-table td.status {
-    font-style: italic;
 }

@@ -3,6 +3,10 @@ package com.duantn.serviceImpl;
 import com.duantn.services.ThongKeService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+
+import com.duantn.entities.KhoaHoc;
+import com.duantn.enums.TrangThaiKhoaHoc;
 import com.duantn.repositories.*;
 import java.util.*;
 import java.time.*;
@@ -18,9 +22,12 @@ public class ThongKeServiceImpl implements ThongKeService {
     private KhoaHocRepository khoaHocRepository;
     @Autowired
     private GiaoDichKhoaHocRepository giaoDichKhoaHocRepository;
-
+    @Autowired
+    private DangHocRepository dangHocRepository;
     @Autowired
     private ThuNhapNenTangRepository thuNhapNenTangRepository;
+    @Autowired
+    private DoanhThuGiangVienRepository doanhthurep;
 
     @Override
     public int tongHocVien() {
@@ -33,8 +40,8 @@ public class ThongKeServiceImpl implements ThongKeService {
     }
 
     @Override
-    public int tongKhoaHoc() {
-        return khoaHocRepository.countKhoaHoc();
+    public int countKhoaHocByTrangThai(TrangThaiKhoaHoc trangThai) {
+        return khoaHocRepository.countKhoaHocByTrangThai(trangThai);
     }
 
     @Override
@@ -83,5 +90,86 @@ public class ThongKeServiceImpl implements ThongKeService {
     @Override
     public int tongNhanVien() {
         return taiKhoanRepository.countNhanVien();
+    }
+
+    @Override
+    public List<String> getTopKhoaHocLabels() {
+        List<Object[]> results = dangHocRepository.findTop5KhoaHoc(PageRequest.of(0, 5));
+        List<String> labels = new ArrayList<>();
+        for (Object[] row : results) {
+            labels.add((String) row[0]);
+        }
+        return labels;
+    }
+
+    @Override
+    public List<Long> getTopKhoaHocSoLuong() {
+        List<Object[]> results = dangHocRepository.findTop5KhoaHoc(PageRequest.of(0, 5));
+        List<Long> soLuong = new ArrayList<>();
+        for (Object[] row : results) {
+            soLuong.add((Long) row[1]);
+        }
+        return soLuong;
+    }
+
+    @Override
+    public Map<String, Long> thongKeTaiKhoanTheoVaiTro() {
+        List<Object[]> data = taiKhoanRepository.countUsersByRole();
+        Map<String, Long> result = new HashMap<>();
+
+        for (Object[] row : data) {
+            String role = (String) row[0];
+            Long count = (Long) row[1];
+
+            // Chỉ lấy học viên và giảng viên
+            if ("ROLE_HOCVIEN".equals(role)) {
+                result.put("Học viên", count);
+            } else if ("ROLE_GIANGVIEN".equals(role)) {
+                result.put("Giảng viên", count);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public Map<String, BigDecimal> getDoanhThuTheo6ThangGanNhat() {
+        Map<String, BigDecimal> map = new LinkedHashMap<>();
+
+        YearMonth now = YearMonth.now();
+        for (int i = 5; i >= 0; i--) {
+            YearMonth ym = now.minusMonths(i);
+            String label = "Tháng " + ym.getMonthValue();
+            BigDecimal doanhThu = thuNhapNenTangRepository
+                    .tongDoanhThuTheoThang(ym.getYear(), ym.getMonthValue());
+            map.put(label, doanhThu != null ? doanhThu : BigDecimal.ZERO);
+        }
+
+        return map;
+    }
+
+    @Override
+    public List<Object[]> getTop5DanhMuc() {
+        return khoaHocRepository.findTopDanhMucBySoLuongKhoaHoc(PageRequest.of(0, 5));
+    }
+
+    @Override
+    public int countHocVienDaDangKy() {
+        return dangHocRepository.countHocVienDaDangKy();
+    }
+
+    @Override
+    public List<KhoaHoc> getAllKhoaHocDaXuatBan() {
+        return khoaHocRepository.findByTrangThai(TrangThaiKhoaHoc.PUBLISHED);
+    }
+
+    @Override
+    public List<Object[]> getTop3GiangVienDoanhThu() {
+        return doanhthurep.findTop3GiangVienDoanhThu(PageRequest.of(0, 3));
+    }
+
+    @Override
+    public List<Object[]> getTop5GiangVienHocVien() {
+        return dangHocRepository.findTop5GiangVienHocVien(PageRequest.of(0, 5));
     }
 }

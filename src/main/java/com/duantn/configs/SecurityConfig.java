@@ -1,5 +1,6 @@
 package com.duantn.configs;
 
+import com.duantn.services.CustomOAuth2UserService;
 import com.duantn.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class SecurityConfig {
         @Autowired
         private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+        @Autowired
+        private CustomOAuth2UserService customOAuth2UserService;
+
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
@@ -47,6 +51,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/hocvien/**").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/dang-ky").hasRole("HOCVIEN")
                                                 .requestMatchers("/giang-vien/**").hasRole("GIANGVIEN")
+                                                .requestMatchers("/hoc-vien/**").hasAnyRole("HOCVIEN", "GIANGVIEN")
+                                                .requestMatchers("/giangvien/trang-giang-vien").hasAnyRole("GIANGVIEN")
 
                                                 // All other requests
                                                 .anyRequest().permitAll())
@@ -58,6 +64,11 @@ public class SecurityConfig {
                                                 .successHandler(loginSuccessHandler)
                                                 .failureHandler(customFailureHandler)
                                                 .permitAll())
+                                .oauth2Login(oauth2 -> oauth2
+                                                .loginPage("/auth/dangnhap")
+                                                .userInfoEndpoint(userInfo -> userInfo
+                                                                .userService(customOAuth2UserService))
+                                                .successHandler(loginSuccessHandler))
                                 .rememberMe(remember -> remember
                                                 .rememberMeParameter("remember-me") // phải giống tên trong checkbox
                                                                                     // form

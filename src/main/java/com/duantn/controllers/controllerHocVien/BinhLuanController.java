@@ -3,10 +3,9 @@ package com.duantn.controllers.controllerHocVien;
 import com.duantn.entities.BaiGiang;
 import com.duantn.entities.BinhLuan;
 import com.duantn.entities.TaiKhoan;
+import com.duantn.services.AuthService;
 import com.duantn.services.BaiGiangService;
 import com.duantn.services.BinhLuanService;
-import com.duantn.services.CustomUserDetails;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,100 +29,91 @@ public class BinhLuanController {
     @Autowired
     private BaiGiangService baiGiangService;
 
+    @Autowired
+    private AuthService authService;
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
     private TaiKhoan getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
-            return null;
-        }
-        return ((CustomUserDetails) auth.getPrincipal()).getTaiKhoan();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authService.getTaiKhoanFromAuth(authentication);
     }
 
+    // View page
     @GetMapping
     public String viewBinhLuan(@PathVariable("baiGiangId") Integer baiGiangId, Model model) {
         BaiGiang baiGiang = baiGiangService.findBaiGiangById(baiGiangId);
-
-        if (baiGiang == null) {
-            return "redirect:/khoahoc?error=notfound";
-        }
+        if (baiGiang == null)
+            return "redirect:/khoa-hoc?error=notfound";
 
         List<BinhLuan> rootComments = binhLuanService.getCommentsByBaiGiangId(baiGiangId);
         List<BinhLuan> allComments = binhLuanService.getAllCommentsByBaiGiangId(baiGiangId);
-
         Map<Integer, List<BinhLuan>> childrenMap = allComments.stream()
                 .filter(c -> c.getParent() != null)
                 .collect(Collectors.groupingBy(c -> c.getParent().getBinhluanId()));
 
-        String loggedInEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        TaiKhoan currentUser = getCurrentUser();
 
         model.addAttribute("baiGiang", baiGiang);
         model.addAttribute("rootComments", rootComments);
         model.addAttribute("childrenMap", childrenMap);
-        model.addAttribute("loggedInEmail", loggedInEmail);
+        model.addAttribute("loggedInEmail", currentUser != null ? currentUser.getEmail() : null);
 
-        return "views/gdienHocVien/xem-khoa-hoc"; // Hoặc đường dẫn tới view thích hợp
+        return "views/gdienHocVien/xem-khoa-hoc";
     }
 
-    // Lấy danh sách bình luận con (AJAX)
-    @GetMapping("/replies/{parentId}")
+    // Add comment or reply
+    @PostMapping({ "/add", "/reply" })
     @ResponseBody
-    public List<BinhLuan> getReplies(@PathVariable("parentId") Integer parentId) {
-        return binhLuanService.getRepliesByParentCommentId(parentId);
-    }
-
-    // Thêm bình luận mới
-    @PostMapping("/add")
-    public String addComment(@PathVariable("baiGiangId") Integer baiGiangId,
-            @RequestParam("noiDung") String noiDung,
-            RedirectAttributes redirectAttributes) {
+    public ResponseEntity<?> addOrReplyComment(@PathVariable("baiGiangId") Integer baiGiangId,
+            @RequestParam String noiDung,
+            @RequestParam(required = false) Integer parentId) {
         TaiKhoan user = getCurrentUser();
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Bạn cần đăng nhập để bình luận.");
-            return "redirect:/khoa-hoc/bai-giang/" + baiGiangId;
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập.");
+
+        BinhLuan comment;
+        if (parentId != null) {
+            comment = binhLuanService.replyToComment(baiGiangId, parentId, noiDung, user.getTaikhoanId());
+        } else {
+            comment = binhLuanService.saveComment(baiGiangId, noiDung, user.getTaikhoanId());
         }
-
-        binhLuanService.saveComment(baiGiangId, noiDung, user.getTaikhoanId());
-        redirectAttributes.addFlashAttribute("successMessage", "Bình luận của bạn đã được đăng.");
-        return "redirect:/khoa-hoc/bai-giang/" + baiGiangId;
-    }
-
-    // Trả lời bình luận
-    @PostMapping("/reply/{parentId}")
-    @ResponseBody
-    public ResponseEntity<?> replyComment(@PathVariable("baiGiangId") Integer baiGiangId,
-            @PathVariable("parentId") Integer parentId,
-            @RequestParam("noiDung") String noiDung) {
-        TaiKhoan user = getCurrentUser();
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Bạn cần đăng nhập để trả lời bình luận.");
-        }
-
-        BinhLuan reply = binhLuanService.replyToComment(baiGiangId, parentId, noiDung, user.getTaikhoanId());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("noiDung", reply.getNoiDung());
-        response.put("taikhoanName", reply.getTaikhoan().getName());
-        response.put("ngayBinhLuan", reply.getNgayBinhLuan().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
+        response.put("binhluanId", comment.getBinhluanId());
+        response.put("noiDung", comment.getNoiDung());
+        response.put("taikhoanName", comment.getTaikhoan() != null ? comment.getTaikhoan().getName() : "Ẩn danh");
+        response.put("taikhoanAvatar",
+                comment.getTaikhoan() != null ? comment.getTaikhoan().getAvatar() : "/images/default-avatar.png");
+        response.put("ngayBinhLuan", comment.getNgayBinhLuan().format(FORMATTER));
+        response.put("parentId", parentId);
+
         return ResponseEntity.ok(response);
     }
 
-    // ✅ API xoá bình luận (AJAX)
+    // Delete comment
     @DeleteMapping("/delete/{binhluanId}")
     @ResponseBody
-    public ResponseEntity<?> deleteComment(@PathVariable("baiGiangId") Integer baiGiangId,
-            @PathVariable("binhluanId") Integer binhluanId) {
+    public ResponseEntity<?> deleteComment(@PathVariable("binhluanId") Integer binhluanId) {
         TaiKhoan user = getCurrentUser();
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Bạn cần đăng nhập để xóa bình luận.");
-        }
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập.");
 
-        boolean deleted = binhLuanService.deleteComment(binhluanId, user.getTaikhoanId());
-        if (deleted) {
-            return ResponseEntity.ok().body("Bình luận đã được xóa.");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Không thể xóa bình luận này.");
+        try {
+            boolean deleted = binhLuanService.deleteComment(binhluanId, user.getTaikhoanId());
+            return deleted ? ResponseEntity.ok("Bình luận đã được xóa.")
+                    : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Không thể xóa bình luận này.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xảy ra lỗi khi xóa bình luận (có thể có reply con).");
         }
+    }
+
+    // Get replies
+    @GetMapping("/replies/{parentId}")
+    @ResponseBody
+    public List<BinhLuan> getReplies(@PathVariable Integer parentId) {
+        return binhLuanService.getRepliesByParentCommentId(parentId);
     }
 }

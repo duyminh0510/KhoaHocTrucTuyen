@@ -24,4 +24,9 @@ public interface ViGiangVienService {
     RutTienGiangVien getLastRutTien(TaiKhoan giangVien);
 
     boolean guiYeuCauRutTienFull(TaiKhoan giangVien, BigDecimal soTienRut, String soTaiKhoan, String tenNganHang);
+
+    //
+    BigDecimal getTongThuTrongThang(TaiKhoan giangVien);
+
+    Long getSoLanNhanTrongThang(TaiKhoan giangVien);
 }

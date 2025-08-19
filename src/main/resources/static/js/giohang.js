@@ -1,6 +1,18 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const cartKey = 'cart';
 
+                function showToast(message, isSuccess = true) {
+                    const toastEl = document.getElementById('toastMessage');
+                    const toastBody = document.getElementById('toastBody');
+
+                    toastBody.textContent = message;
+                    toastEl.classList.remove('bg-success', 'bg-danger');
+                    toastEl.classList.add(isSuccess ? 'bg-success' : 'bg-danger');
+
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                }
+
                 function getCart() {
                     return JSON.parse(localStorage.getItem(cartKey)) || [];
                 }
@@ -21,9 +33,9 @@
                             body: JSON.stringify(item)
                         }).then(res => {
                             if (res.ok) {
-                                alert("Đã thêm vào giỏ hàng (tài khoản)!");
+                                showToast("Đã thêm vào giỏ hàng (tài khoản)!");
                             } else {
-                                alert("Thêm giỏ hàng thất bại.");
+                                showToast("Thêm giỏ hàng thất bại.", false);
                             }
                         });
                     } else {
@@ -32,9 +44,9 @@
                         if (!exists) {
                             cart.push(item);
                             saveCart(cart);
-                            alert("Đã thêm vào giỏ hàng!");
+                            showToast("Đã thêm vào giỏ hàng!");
                         } else {
-                            alert("Khóa học đã có trong giỏ hàng.");
+                            showToast("Khóa học đã có trong giỏ hàng.", false);
                         }
                     }
                 }
